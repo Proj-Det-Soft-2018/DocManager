@@ -1,4 +1,4 @@
-package br.com.docmanager.control;
+package control;
 
 public class ProcessoController {
 	

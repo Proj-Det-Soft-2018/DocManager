@@ -1,12 +1,12 @@
 /**
  * 
  */
-package br.com.docmanager.model;
+package model;
 
-import br.com.docmanager.model.domain.Interessado;
-import br.com.docmanager.model.domain.Orgao;
-import br.com.docmanager.model.domain.Processo;
-import br.com.docmanager.model.domain.Situacao;
+import model.domain.Interessado;
+import model.domain.Orgao;
+import model.domain.Processo;
+import model.domain.Situacao;
 
 /**
  * @author clah

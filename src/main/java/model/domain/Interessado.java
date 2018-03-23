@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.com.docmanager.model.domain;
+package model.domain;
 
 /**
  * Classe representa o interessado do processo, pessoa vinculada ao processo como

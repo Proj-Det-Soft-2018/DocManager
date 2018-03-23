@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.com.docmanager.model.domain;
+package model.domain;
 
 /**
  * @author clah

@@ -1,13 +1,13 @@
 /**
  * 
  */
-package br.com.docmanager.model.dao;
+package model.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import br.com.docmanager.model.domain.Processo;
+import model.domain.Processo;
 
 /**
  * Classe representa persistencia de dados

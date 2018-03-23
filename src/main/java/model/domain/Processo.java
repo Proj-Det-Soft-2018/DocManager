@@ -1,12 +1,12 @@
 /**
  * 
  */
-package br.com.docmanager.model.domain;
+package model.domain;
 
 import java.time.LocalDateTime;
 
-import br.com.docmanager.model.dao.IDao;
-import br.com.docmanager.model.dao.HashProcessoDao;
+import model.dao.HashProcessoDao;
+import model.dao.IDao;
 
 /**
  * @author lets

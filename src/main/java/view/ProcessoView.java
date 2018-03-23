@@ -1,4 +1,4 @@
-package br.com.docmanager.view;
+package view;
 
 public class ProcessoView {
 
