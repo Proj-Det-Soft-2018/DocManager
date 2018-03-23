@@ -1,12 +1,12 @@
 /**
  * 
  */
-package model.domain;
+package negocio.dominio;
 
 import java.time.LocalDateTime;
 
-import model.dao.HashProcessoDao;
-import model.dao.IDao;
+import persistencia.HashProcessoDao;
+import persistencia.IDao;
 
 /**
  * @author lets

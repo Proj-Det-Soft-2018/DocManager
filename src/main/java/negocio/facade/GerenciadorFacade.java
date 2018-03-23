@@ -1,12 +1,12 @@
 /**
  * 
  */
-package model;
+package negocio.facade;
 
-import model.domain.Interessado;
-import model.domain.Orgao;
-import model.domain.Processo;
-import model.domain.Situacao;
+import negocio.dominio.Interessado;
+import negocio.dominio.Orgao;
+import negocio.dominio.Processo;
+import negocio.dominio.Situacao;
 
 /**
  * @author clah
@@ -23,6 +23,18 @@ public class GerenciadorFacade {
 		
 		processo.criar(processo);
 	
+	}
+	
+	public static void verProcessoSelcionado() {
+		//TODO deve-se implementar como os dados do processo vai ser recebido no parametro
+		//TODO Deve-se ver o retorno após consulta no banco de dados
+	}
+	/**
+	 * Requisição para atualizar um processo que já existe
+	 */
+	public static void atualizarProcesso() {
+		//TODO a view deve enviar as informações para que o processo seja atualizado
+		
 		
 	}
 

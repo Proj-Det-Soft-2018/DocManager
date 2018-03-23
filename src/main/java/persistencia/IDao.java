@@ -1,7 +1,7 @@
 /**
  * 
  */
-package model.dao;
+package persistencia;
 
 import java.util.List;
 

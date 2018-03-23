@@ -1,13 +1,13 @@
 /**
  * 
  */
-package model.dao;
+package persistencia;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import model.domain.Processo;
+import negocio.dominio.Processo;
 
 /**
  * Classe representa persistencia de dados

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package model.domain;
+package negocio.dominio;
 
 /**
  * Classe representa o interessado do processo, pessoa vinculada ao processo como

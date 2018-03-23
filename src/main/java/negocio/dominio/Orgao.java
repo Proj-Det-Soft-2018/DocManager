@@ -1,7 +1,7 @@
 /**
  * 
  */
-package model.domain;
+package negocio.dominio;
 
 /**
  * @author clah
