@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="540.0" prefWidth="720.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apresentacao.ControleTelaEdicao">
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="20.0" />
+   </padding>
+   <children>
+      <HBox spacing="20.0">
+         <children>
+            <RadioButton fx:id="rbProcesso" mnemonicParsing="false" selected="true" text="Processo">
+               <toggleGroup>
+                  <ToggleGroup fx:id="tgProcessoOficio" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="rbOficio" mnemonicParsing="false" text="Ofício" toggleGroup="$tgProcessoOficio" />
+         </children>
+         <VBox.margin>
+            <Insets left="10.0" right="10.0" />
+         </VBox.margin>
+      </HBox>
+      <VBox spacing="10.0" styleClass="painel-borda" stylesheets="@../css/styles.css">
+         <children>
+            <Label fx:id="lblDocumento" alignment="TOP_LEFT" styleClass="painel-titulo" stylesheets="@../css/styles.css" text="Processo">
+               <VBox.margin>
+                  <Insets left="-10.0" top="9.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label text="Número:" />
+                  <TextField fx:id="txtNumProcesso" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="240.0" promptText="0000000.00000000/0000-00" />
+               </children>
+            </HBox>
+            <GridPane hgap="8.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="60.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" percentWidth="20.0" />
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="20.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label alignment="BOTTOM_LEFT" text="Nome do Interessado" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
+                     <GridPane.margin>
+                        <Insets bottom="2.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField fx:id="txtNomeInteressado" GridPane.rowIndex="1" />
+                  <Label text="CPF" GridPane.columnIndex="1" GridPane.valignment="BOTTOM">
+                     <GridPane.margin>
+                        <Insets bottom="2.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label text="Contato" GridPane.columnIndex="2" GridPane.valignment="BOTTOM">
+                     <GridPane.margin>
+                        <Insets bottom="2.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField fx:id="txtCpfInteressado" promptText="000.000.000-00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtContatoInteressado" promptText="(00) 00000-0000" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </GridPane>
+            <GridPane hgap="8.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="492.0" minWidth="10.0" percentWidth="70.0" prefWidth="474.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="333.0" minWidth="10.0" percentWidth="30.0" prefWidth="206.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Orgão de origem" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
+                     <padding>
+                        <Insets bottom="2.0" />
+                     </padding>
+                  </Label>
+                  <ChoiceBox fx:id="cbOrgao" maxWidth="1.7976931348623157E308" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
+               </children>
+               <VBox.margin>
+                  <Insets top="-5.0" />
+               </VBox.margin>
+            </GridPane>
+            <GridPane hgap="8.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="70.0" />
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="30.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Tipo de processo" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
+                     <padding>
+                        <Insets bottom="2.0" />
+                     </padding>
+                  </Label>
+                  <ChoiceBox fx:id="cbTipoProcesso" maxWidth="1.7976931348623157E308" GridPane.rowIndex="1" />
+                  <Label text="Situação" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
+                     <GridPane.margin>
+                        <Insets bottom="2.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <ChoiceBox fx:id="cbSituacao" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </children>
+               <VBox.margin>
+                  <Insets top="-5.0" />
+               </VBox.margin>
+            </GridPane>
+            <Label text="Observação">
+               <VBox.margin>
+                  <Insets bottom="-5.0" top="5.0" />
+               </VBox.margin>
+            </Label>
+            <TextArea fx:id="txtObservacao" />
+         </children>
+         <padding>
+            <Insets bottom="15.0" left="10.0" right="10.0" top="-9.0" />
+         </padding>
+      </VBox>
+      <HBox alignment="CENTER_RIGHT" spacing="10.0">
+         <VBox.margin>
+            <Insets top="-15.0" />
+         </VBox.margin>
+         <children>
+            <Button fx:id="btnCancelar" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="Cancelar" />
+            <Button fx:id="btnCadastrar" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="Cadastrar" />
+         </children>
+      </HBox>
+   </children>
+</VBox>
