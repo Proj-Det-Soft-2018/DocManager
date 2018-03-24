@@ -8,13 +8,14 @@ package negocio.dominio;
  *
  */
 public class Orgao {
+	private int Id;
 	private String codigo;
 	private String nome;
 	private String sigla;
 	
 
-	public Orgao(String nome) {
-		// TODO Auto-generated constructor stub
+	public Orgao(String nome, String sigla) {
+		this.sigla = sigla;
 		this.nome = nome;
 	}
 

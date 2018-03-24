@@ -6,12 +6,13 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import negocio.IDao;
+import negocio.GenericoDao;
 import negocio.dominio.Interessado;
 import negocio.dominio.Orgao;
 import negocio.dominio.Processo;
 import negocio.dominio.Situacao;
-import negocio.facade.FachadaArmazenamento;
+import negocio.facade.FachadaGerenciadorProcesso;
+import negocio.servico.ProcessoServico;
 import persistencia.HashProcessoDao;
 
 /**
@@ -51,13 +52,12 @@ public class GerenciadorFacadeTeste extends TestCase{
     	String contato1 = "99992222";
     	String contato2 = "88889999";
     	
-    	FachadaArmazenamento.cadastrarNovoProcesso(numeroProcesso, assuntoProcesso, new Orgao(unidadeOrigem), situacao, nomeInteressado, cpfInteressado, contato1, contato2);
     	
-    	IDao<Processo> dao = new HashProcessoDao();
+    	FachadaGerenciadorProcesso objfacade = new FachadaGerenciadorProcesso();
+    	objfacade.criarDocumento(false, numeroProcesso, nomeInteressado, cpfInteressado, contato1, 0, 0, 0, null);
     	
-    	Processo processo = new Processo(numeroProcesso, new Interessado(nomeInteressado, cpfInteressado, contato1, contato2),assuntoProcesso, new Orgao(unidadeOrigem), new Situacao(situacao));
-    	
-        assertTrue(processo.getBanco().contem(processo));
+    	ProcessoServico dao = new ProcessoServico();
+    
         
 }
 

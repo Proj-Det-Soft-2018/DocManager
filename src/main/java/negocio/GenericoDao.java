@@ -9,7 +9,7 @@ import java.util.List;
  * @author clah
  *
  */
-public interface IDao<T> {
+public interface GenericoDao<T> {
 	
 	public void salvar(T bean);
 	public void atualizar(T bean);
