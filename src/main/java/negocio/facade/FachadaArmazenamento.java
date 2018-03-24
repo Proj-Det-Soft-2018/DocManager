@@ -25,8 +25,17 @@ public class FachadaArmazenamento {
 		orgao = new Orgao(null);
 	}
 	
-	public void cadastrarNovoProcesso(String numeroProcesso, String assuntoProcesso, String unidadeOrigemProcesso, String observacao,
-										String situacaoProcesso, String nomeInteressado, String cpfInteressado, String contato1Interessado, String contato2Interessado) {
+	public void cadastrarNovoProcesso(
+			String numeroProcesso,
+			String assuntoProcesso,
+			String unidadeOrigemProcesso,
+			String observacao,
+			String situacaoProcesso,
+			String nomeInteressado,
+			String cpfInteressado,
+			String contato1Interessado,
+			String contato2Interessado)
+	{
 		
 		this.interessado.setNome(nomeInteressado);
 		this.interessado.setCpf(cpfInteressado);
