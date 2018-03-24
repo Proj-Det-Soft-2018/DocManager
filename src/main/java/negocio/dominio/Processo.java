@@ -4,11 +4,8 @@
 package negocio.dominio;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import negocio.IDao;
 import negocio.servico.ProcessoServico;
-import persistencia.HashProcessoDao;
 
 /**
  * @author lets
@@ -37,7 +34,13 @@ public class Processo {
 	 * @param unidadeOrigem
 	 * @param situacaoAtual
 	 */
-	public Processo(String numero, Interessado interessado, String assunto, Orgao unidadeOrigem, Situacao situacaoAtual) {
+	public Processo(
+			String numero,
+			Interessado interessado,
+			String assunto,
+			Orgao unidadeOrigem,
+			Situacao situacaoAtual)
+	{
 		super();
 		this.numero = numero;
 		this.interessado = interessado;
@@ -188,9 +191,11 @@ public class Processo {
 			
 	}
 
-	private void validar(){
-		// TODO Fazer validações de negócios
-		
+	private boolean validar(){
+		if(this.numero == null){
+			return false;
+		}
+		return true;
 	}
 	
 	
