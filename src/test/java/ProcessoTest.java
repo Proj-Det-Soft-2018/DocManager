@@ -1,5 +1,3 @@
-import static org.junit.Assert.*;
-
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -12,7 +10,6 @@ import negocio.dominio.Interessado;
 import negocio.dominio.Orgao;
 import negocio.dominio.Processo;
 import negocio.dominio.Situacao;
-import negocio.servico.ProcessoServico;
 import persistencia.HashProcessoDao;
 /**
  * 

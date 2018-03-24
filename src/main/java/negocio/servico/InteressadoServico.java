@@ -5,7 +5,11 @@ import java.util.List;
 import negocio.IDao;
 import negocio.dominio.Interessado;
 import persistencia.InteressadoDao;
-
+/**
+ * 
+ * @author Allan
+ *
+ */
 public class InteressadoServico {
 	IDao<Interessado> interessadoDao = new InteressadoDao();
 	

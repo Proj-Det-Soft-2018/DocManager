@@ -14,7 +14,6 @@ public class Orgao {
 	
 
 	public Orgao(String nome) {
-		// TODO Auto-generated constructor stub
 		this.nome = nome;
 	}
 
@@ -41,8 +40,5 @@ public class Orgao {
 	public void setSigla(String sigla) {
 		this.sigla = sigla;
 	}
-	
-	
-	
 	
 }

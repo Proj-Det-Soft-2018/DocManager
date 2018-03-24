@@ -69,7 +69,6 @@ public class FachadaArmazenamento {
 	public static void atualizarProcesso() {
 		//TODO a view deve enviar as informações para que o processo seja atualizado
 		
-		
 	}
 
 }

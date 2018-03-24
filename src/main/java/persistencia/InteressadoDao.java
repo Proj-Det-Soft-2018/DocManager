@@ -13,10 +13,10 @@ import negocio.dominio.Interessado;
  */
 public class InteressadoDao implements IDao<Interessado> {
 	
-	private static final HashMap<Integer, Interessado> banco = new HashMap<Integer, Interessado>();
+	private static final HashMap<String, Interessado> banco = new HashMap<String, Interessado>();
 
 	public void salvar(Interessado bean) {
-		banco.put(bean.hashCode(), bean);
+		banco.put(bean.getCpf(), bean);
 		
 	}
 
@@ -25,20 +25,24 @@ public class InteressadoDao implements IDao<Interessado> {
 	}
 
 	public void deletar(Interessado bean) {
-		banco.remove(bean.hashCode());
-		
+		banco.remove(bean.getCpf());
 	}
 
-	public Interessado getById(int id) {
-		return banco.get(id);
+	public Interessado getByCpf(String cpf) {
+		return banco.get(cpf);
 	}
 
 	public boolean contem(Interessado bean) {
-		return banco.containsKey(bean.hashCode());
+		return banco.containsKey(bean.getCpf());
 	}
 
 	public List<Interessado> getAll() {
 		return new ArrayList<Interessado>(banco.values());
+	}
+
+	public Interessado getById(int id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
