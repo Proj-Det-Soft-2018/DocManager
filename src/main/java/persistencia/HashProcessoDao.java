@@ -7,29 +7,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import negocio.IDao;
 import negocio.dominio.Processo;
 
 /**
- * Classe representa persistencia de dados
- * @author lets
+ * @author clah
  *
  */
-public final class HashProcessoDao implements IDao<Processo> {
+public class HashProcessoDao implements IDao<Processo> {
+	private static final HashMap<Integer, Processo> banco = new HashMap<Integer, Processo>();
 	
-	private static final HashMap<String, Processo> banco = new HashMap<String, Processo>();
 	
-	
-	public Processo buscarPorChave(String numeroProcesso) {
-		return banco.get(numeroProcesso);
-	}
-	
-	public boolean existeAlgum(String key) {
-		return banco.containsKey(key);
-	}
-
 	public void salvar(Processo bean) {
-		banco.put(bean.getNumero(), bean);
-		
+		banco.put(bean.hashCode(), bean);
 		
 	}
 
@@ -38,13 +28,17 @@ public final class HashProcessoDao implements IDao<Processo> {
 		
 	}
 
-	public void deletar(Processo processo) {
-		banco.remove(processo.getNumero());
-		
+	public void deletar(Processo bean) {
+		banco.remove(bean.hashCode());
 	}
 
-	public Processo getById(Processo processo) {
-		return banco.get(processo.getNumero());
+	public Processo getById(int id) {
+		// TODO Auto-generated method stub
+		return banco.get(id);
+	}
+
+	public boolean contem(Processo bean) {
+		return banco.containsKey(bean.hashCode());
 	}
 
 	public List<Processo> getAll() {
@@ -55,5 +49,5 @@ public final class HashProcessoDao implements IDao<Processo> {
 			
 		return listaProcessos;
 	}
-	
+
 }

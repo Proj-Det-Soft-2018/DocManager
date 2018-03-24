@@ -1,7 +1,7 @@
 /**
  * 
  */
-package persistencia;
+package negocio;
 
 import java.util.List;
 
@@ -13,8 +13,9 @@ public interface IDao<T> {
 	
 	public void salvar(T bean);
 	public void atualizar(T bean);
-	public void deletar(T id);
-	public T getById(T id);
+	public void deletar(T bean);
+	public T getById(int id);
+	public boolean contem(T bean);
 	public List<T> getAll();
 
 }

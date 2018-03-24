@@ -4,9 +4,11 @@
 package negocio.dominio;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import negocio.IDao;
+import negocio.servico.ProcessoServico;
 import persistencia.HashProcessoDao;
-import persistencia.IDao;
 
 /**
  * @author lets
@@ -27,6 +29,7 @@ public class Processo {
 	private Orgao unidadeDestino; //para onde o processo é dirigido quando concluido	
 	private LocalDateTime dataSaida; //Hora que altera e grava situação para concluido
 	
+	private ProcessoServico banco;
 	/**
 	 * @param numero
 	 * @param interessado
@@ -41,6 +44,7 @@ public class Processo {
 		this.assunto = assunto;
 		this.unidadeOrigem = unidadeOrigem;
 		this.situacaoAtual = situacaoAtual;
+		this.banco = new ProcessoServico();
 	}
 	
 	public Processo() {
@@ -127,16 +131,64 @@ public class Processo {
 		this.dataSaida = dataSaida;
 	}
 	
-	public void criar(Processo processo) {
-		processo.validate();
-		IDao banco = new HashProcessoDao();
-		banco.salvar(processo);
-		
-		
-		
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((numero == null) ? 0 : numero.hashCode());
+		return result;
 	}
 
-	private void validate(){
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Processo other = (Processo) obj;
+		if (numero == null) {
+			if (other.numero != null)
+				return false;
+		} else if (!numero.equals(other.numero))
+			return false;
+		return true;
+	}
+	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Processo [numero=" + numero + ", interessado=" + interessado + ", nomeInteressado=" + nomeInteressado
+				+ ", assunto=" + assunto + ", unidadeOrigem=" + unidadeOrigem + ", dataEntrada=" + dataEntrada
+				+ ", situacaoAtual=" + situacaoAtual + ", observacao=" + observacao + ", unidadeDestino="
+				+ unidadeDestino + ", dataSaida=" + dataSaida + "]";
+	}
+
+	public void criar() {
+		this.validar();
+		//inicializar data de entrada
+		this.setDataEntrada(LocalDateTime.now());
+		this.banco.salvarProcesso(this);
+			
+	}
+	
+	public Processo selecionarPorId(int hashCode) {
+		return banco.encontrarPorId(hashCode);
+			
+	}
+
+	private void validar(){
 		// TODO Fazer validações de negócios
 		
 	}
