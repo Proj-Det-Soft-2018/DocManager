@@ -1,4 +1,4 @@
-package controller;
+package apresentacao;
 
 import java.io.IOException;
 import java.net.URL;
@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
-import business.IProcesso;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -19,7 +18,7 @@ import javafx.stage.Stage;
 
 public class ControleTelaPrincipal implements Initializable {
 	
-	private static final URL ARQUIVO_FXML = ControleTelaPrincipal.class.getResource("/view/tela_edicao.fxml");
+	private static final URL ARQUIVO_FXML = ControleTelaPrincipal.class.getResource("/visoes/tela_edicao.fxml");
 	
 	@FXML
 	private Pane painel;
@@ -37,7 +36,7 @@ public class ControleTelaPrincipal implements Initializable {
 	private Button btnBuscar;
 	
 	@FXML
-	private TableView<IProcesso> tabelaProcessosOficios;
+	private TableView<Documento> tabelaProcessosOficios;
 
 	
 	private Logger logger = Logger.getLogger(ControleTelaPrincipal.class);

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="540.0" prefWidth="720.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControleTelaEdicao">
+<VBox prefHeight="540.0" prefWidth="720.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apresentacao.ControleTelaEdicao">
    <padding>
       <Insets bottom="15.0" left="15.0" right="15.0" top="20.0" />
    </padding>

@@ -20,7 +20,7 @@ public class Main extends Application {
 	
 	@Override
 	public void start(Stage palco) {
-		URL arquivoFxml = this.getClass().getResource("/view/tela_principal.fxml");
+		URL arquivoFxml = this.getClass().getResource("/visoes/tela_principal.fxml");
 		
 		Parent fxmlParent;
 		try {
