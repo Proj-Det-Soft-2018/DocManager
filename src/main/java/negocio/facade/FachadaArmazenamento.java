@@ -25,8 +25,17 @@ public class FachadaArmazenamento {
 		orgao = new Orgao(null);
 	}
 	
-	public void cadastrarNovoProcesso(String numeroProcesso, String assuntoProcesso, String unidadeOrigemProcesso, String observacao,
-										String situacaoProcesso, String nomeInteressado, String cpfInteressado, String contato1Interessado, String contato2Interessado) {
+	public void cadastrarNovoProcesso(
+			String numeroProcesso,
+			String assuntoProcesso,
+			String unidadeOrigemProcesso,
+			String observacao,
+			String situacaoProcesso,
+			String nomeInteressado,
+			String cpfInteressado,
+			String contato1Interessado,
+			String contato2Interessado)
+	{
 		
 		this.interessado.setNome(nomeInteressado);
 		this.interessado.setCpf(cpfInteressado);
@@ -59,7 +68,6 @@ public class FachadaArmazenamento {
 	 */
 	public static void atualizarProcesso() {
 		//TODO a view deve enviar as informações para que o processo seja atualizado
-		
 		
 	}
 

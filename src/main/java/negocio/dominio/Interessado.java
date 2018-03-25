@@ -34,8 +34,6 @@ public class Interessado {
 		this.contato2 = contato2;
 	}
 
-
-
 	public String getContato1() {
 		return contato1;
 	}
