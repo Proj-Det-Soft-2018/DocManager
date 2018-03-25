@@ -5,7 +5,7 @@ package negocio.servico;
 
 import java.util.List;
 
-import negocio.IDao;
+import negocio.GenericoDao;
 import negocio.dominio.Processo;
 import persistencia.HashProcessoDao;
 
@@ -14,7 +14,7 @@ import persistencia.HashProcessoDao;
  *@since 24/03/2018
  */
 public class ProcessoServico {
-	IDao<Processo> processoDao = new HashProcessoDao();
+	GenericoDao<Processo> processoDao = new HashProcessoDao();
 	
 	public void salvarProcesso(Processo processo) {
 		processoDao.salvar(processo);

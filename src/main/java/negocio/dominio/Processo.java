@@ -11,7 +11,9 @@ import negocio.servico.ProcessoServico;
  * @author lets
  *
  */
-public class Processo {
+public class Processo implements Documento{
+	
+	private boolean tipoOficio;
 	private String numero;
 	private Interessado interessado;
 	private String nomeInteressado;
@@ -27,6 +29,7 @@ public class Processo {
 	private LocalDateTime dataSaida; //Hora que altera e grava situação para concluido
 	
 	private ProcessoServico banco;
+	
 	/**
 	 * @param numero
 	 * @param interessado
@@ -41,7 +44,9 @@ public class Processo {
 			Orgao unidadeOrigem,
 			Situacao situacaoAtual)
 	{
+	public Processo(boolean tipoOficio, String numero, Interessado interessado, String assunto, Orgao unidadeOrigem, Situacao situacaoAtual) {
 		super();
+		this.tipoOficio = tipoOficio;
 		this.numero = numero;
 		this.interessado = interessado;
 		this.assunto = assunto;
@@ -52,6 +57,21 @@ public class Processo {
 	
 	public Processo() {
 		
+	}
+	
+
+	/**
+	 * @return the tipoOficio
+	 */
+	public boolean isTipoOficio() {
+		return tipoOficio;
+	}
+
+	/**
+	 * @param tipoOficio the tipoOficio to set
+	 */
+	public void setTipoOficio(boolean tipoOficio) {
+		this.tipoOficio = tipoOficio;
 	}
 
 	public String getNumero() {
@@ -134,6 +154,20 @@ public class Processo {
 		this.dataSaida = dataSaida;
 	}
 	
+	
+	/**
+	 * @return the banco
+	 */
+	public ProcessoServico getBanco() {
+		return banco;
+	}
+
+	/**
+	 * @param banco the banco to set
+	 */
+	public void setBanco(ProcessoServico banco) {
+		this.banco = banco;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -196,6 +230,41 @@ public class Processo {
 			return false;
 		}
 		return true;
+	}
+
+	public boolean ehOficio() {
+		// TODO Auto-generated method stub
+		return this.isTipoOficio();
+	}
+
+	public String getNumDocumento() {
+		// TODO Auto-generated method stub
+		return this.getNumDocumento();
+	}
+
+	public String getCpfInteressado() {
+		// TODO Auto-generated method stub
+		return this.getInteressado().getCpf();
+	}
+
+	public String getContatoInteressado() {
+		// TODO Auto-generated method stub
+		return this.getInteressado().getContato1();
+	}
+
+	public int getOrgaoOrigemId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getTipoDocumentoId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getSituacaoId() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 	

@@ -8,7 +8,7 @@ package negocio.dominio;
  *
  */
 public class Situacao {
-	
+	private int Id;
 	private String descricao;
 
 	/**

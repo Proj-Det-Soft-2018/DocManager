@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import negocio.IDao;
+import negocio.GenericoDao;
 import negocio.dominio.Processo;
 
 /**
  * @author clah
  *
  */
-public class HashProcessoDao implements IDao<Processo> {
+public class HashProcessoDao implements GenericoDao<Processo> {
 	private static final HashMap<Integer, Processo> banco = new HashMap<Integer, Processo>();
 	
 	
