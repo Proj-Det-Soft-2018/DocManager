@@ -38,13 +38,13 @@ public class Processo implements Documento{
 	 * @param situacaoAtual
 	 */
 	public Processo(
-			String numero,
-			Interessado interessado,
-			String assunto,
-			Orgao unidadeOrigem,
-			Situacao situacaoAtual)
+		boolean tipoOficio,
+		String numero,
+		Interessado interessado,
+		String assunto,
+		Orgao unidadeOrigem,
+		Situacao situacaoAtual)
 	{
-	public Processo(boolean tipoOficio, String numero, Interessado interessado, String assunto, Orgao unidadeOrigem, Situacao situacaoAtual) {
 		super();
 		this.tipoOficio = tipoOficio;
 		this.numero = numero;
