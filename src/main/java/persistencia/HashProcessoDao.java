@@ -43,11 +43,14 @@ public class HashProcessoDao implements GenericoDao<Processo> {
 
 	public List<Processo> getAll() {
 		List<Processo> listaProcessos =  new ArrayList<Processo>(banco.values());
+		mostrarProcessos(listaProcessos);
+		return listaProcessos;
+	}
+	
+	public void mostrarProcessos(List<Processo> listaProcessos) {
 		for (Processo processo : listaProcessos) {
 		    System.out.println(processo.getNumero());
 		}
-			
-		return listaProcessos;
 	}
 
 }
