@@ -13,7 +13,10 @@ public class Orgao {
 	private String nome;
 	private String sigla;
 	
-
+	public Orgao () {
+		
+	}
+	
 	public Orgao(String nome, String sigla) {
 		this.sigla = sigla;
 		this.nome = nome;
