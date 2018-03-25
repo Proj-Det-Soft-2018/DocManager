@@ -7,14 +7,14 @@ import java.util.List;
 
 import negocio.GenericoDao;
 import negocio.dominio.Processo;
-import persistencia.HashProcessoDao;
+import persistencia.ProcessoDao;
 
 /**
  * @author clah
  *@since 24/03/2018
  */
 public class ProcessoServico {
-	GenericoDao<Processo> processoDao = new HashProcessoDao();
+	GenericoDao<Processo> processoDao = new ProcessoDao();
 	
 	public void salvarProcesso(Processo processo) {
 		processoDao.salvar(processo);

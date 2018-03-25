@@ -25,7 +25,7 @@ public class FachadaGerenciadorProcesso implements apresentacao.FachadaArmazenam
 		processo = new Processo();
 		interessado = new Interessado();
 		situacao = new Situacao(null);
-		orgao = new Orgao(null);
+		orgao = new Orgao();
 	}	
 
 	public ObservableList<Documento> getListaDocumentos() {
@@ -43,7 +43,7 @@ public class FachadaGerenciadorProcesso implements apresentacao.FachadaArmazenam
 		this.interessado.setContato1(contatoInteressado);
 		this.interessado.setContato2(null);
 		
-		//TODO criar interessado na base de dados
+		this.interessado.criar();
 		
 		this.situacao.setDescricao(null);//TODO Estrutura para guardar e metodo set por ID
 		

@@ -10,7 +10,7 @@ import negocio.dominio.Interessado;
 import negocio.dominio.Orgao;
 import negocio.dominio.Processo;
 import negocio.dominio.Situacao;
-import persistencia.HashProcessoDao;
+import persistencia.ProcessoDao;
 /**
  * 
  * @author Allan
@@ -29,7 +29,7 @@ public class ProcessoTest {
 			{"6", new Interessado("John Doe", "000.000.000-05", "1238", "1233"), "assunto", new Orgao("IMD"), new Situacao("situacao")},
 		});
 	}
-	public static HashProcessoDao banco = new HashProcessoDao();
+	public static ProcessoDao banco = new ProcessoDao();
 	
 	private String numero;
 	private Interessado interessado;

@@ -3,18 +3,22 @@
  */
 package negocio.dominio;
 
+import negocio.GenericoDao;
+import persistencia.FabricaDao;
+
 /**
  * @author clah
  *
  */
 public class Orgao {
-	private int Id;
+	private int id;
 	private String codigo;
 	private String nome;
 	private String sigla;
+	private GenericoDao<Orgao> banco;
 	
 	public Orgao () {
-		
+		this.banco = FabricaDao.criarOrgaoDao();
 	}
 	
 	public Orgao(String nome, String sigla) {
@@ -45,5 +49,32 @@ public class Orgao {
 	public void setSigla(String sigla) {
 		this.sigla = sigla;
 	}
+	
+	
+	
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void salvar() {
+		banco.salvar(this);
+		
+	}
+	
+	public void remover() {
+		banco.deletar(this);
+	}
+
+	
 	
 }

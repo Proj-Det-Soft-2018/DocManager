@@ -3,6 +3,11 @@
  */
 package negocio.dominio;
 
+import java.time.LocalDateTime;
+
+import negocio.servico.InteressadoServico;
+import negocio.servico.ProcessoServico;
+
 /**
  * Classe representa o interessado do processo, pessoa vinculada ao processo como
  * parte interessada.
@@ -15,6 +20,9 @@ public class Interessado {
 	private String cpf;
 	private String contato1;
 	private String contato2;
+	
+	private InteressadoServico banco;
+
 	
 	public Interessado() {
 		
@@ -69,6 +77,17 @@ public class Interessado {
 		this.cpf = cpf;
 	}
 	
+	public void criar() {
+		this.validar();
+		
+		this.banco.salvarInteressado(this);
+			
+	}
+
+	private void validar() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

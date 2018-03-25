@@ -5,6 +5,7 @@ package negocio.dominio;
 
 import java.time.LocalDateTime;
 
+import apresentacao.Documento;
 import negocio.servico.ProcessoServico;
 
 /**
