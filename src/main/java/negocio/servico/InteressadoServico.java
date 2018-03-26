@@ -2,7 +2,7 @@ package negocio.servico;
 
 import java.util.List;
 
-import negocio.IDao;
+import negocio.GenericoDao;
 import negocio.dominio.Interessado;
 import persistencia.InteressadoDao;
 /**
@@ -11,7 +11,7 @@ import persistencia.InteressadoDao;
  *
  */
 public class InteressadoServico {
-	IDao<Interessado> interessadoDao = new InteressadoDao();
+	GenericoDao<Interessado> interessadoDao = new InteressadoDao();
 	
 	public void salvarInteressado(Interessado interessado) {
 		interessadoDao.salvar(interessado);

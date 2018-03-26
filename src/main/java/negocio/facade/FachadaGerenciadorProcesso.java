@@ -3,9 +3,12 @@
  */
 package negocio.facade;
 
+import java.util.List;
+
 import apresentacao.Documento;
+import apresentacao.FachadaArmazenamento;
 import apresentacao.FachadaCaixasDeEscolha;
-import javafx.collections.ObservableList;
+import negocio.dominio.Assunto;
 import negocio.dominio.Interessado;
 import negocio.dominio.Orgao;
 import negocio.dominio.Processo;
@@ -15,21 +18,24 @@ import negocio.dominio.Situacao;
  * @author clah
  * 
  */
-public class FachadaGerenciadorProcesso implements apresentacao.FachadaArmazenamento, FachadaCaixasDeEscolha{
+public class FachadaGerenciadorProcesso implements FachadaArmazenamento, FachadaCaixasDeEscolha{
+	
 	private Processo processo;
 	private Interessado interessado;
 	private Situacao situacao;
 	private Orgao orgao;
+	private Assunto assunto;
+	
 	
 	public FachadaGerenciadorProcesso() {
 		processo = new Processo();
 		interessado = new Interessado();
-		situacao = new Situacao(null);
-		orgao = new Orgao(null);
+		situacao = new Situacao();
+		orgao = new Orgao();
 	}	
 
-	public ObservableList<Documento> getListaDocumentos() {
-		return null;
+	public List<? extends Documento> getListaDocumentos() {
+		return processo.getBanco().getAll();
 	}
 	
 	/**
@@ -43,19 +49,21 @@ public class FachadaGerenciadorProcesso implements apresentacao.FachadaArmazenam
 		this.interessado.setContato1(contatoInteressado);
 		this.interessado.setContato2(null);
 		
-		//TODO criar interessado na base de dados
+		this.interessado.criar();
 		
-		this.situacao.setDescricao(null);//TODO Estrutura para guardar e metodo set por ID
 		
-		this.orgao.setNome(null); //TODO Estrutura para guardar e metodo set por ID
+		this.situacao = Situacao.getDb().get(situacaoId);
 		
-		this.processo.setAssunto(null); //TODO Estrutura para guardar e metodo set por ID
+		this.orgao = Orgao.getById(orgaoOrigemId);
+		
+		this.assunto = Assunto.getById(assuntoDocumentoId);
 		
 		
 		this.processo.setInteressado(this.interessado);
 		this.processo.setNumero(numDocumento);
 		this.processo.setSituacaoAtual(this.situacao);
 		this.processo.setUnidadeOrigem(this.orgao);
+		this.processo.setAssunto(this.assunto);
 		this.processo.setObservacao(observacao);
 		
 		this.processo.criar();
@@ -68,8 +76,7 @@ public class FachadaGerenciadorProcesso implements apresentacao.FachadaArmazenam
 	public void atualizarDocumento(Documento documentoAlvo, boolean ehOficio, String numDocumento,
 			String nomeInteressado, String cpfInteressado, String contatoInteressado, int orgaoOrigemId,
 			int tipoDocumentoId, int situacaoId, String observacao) {
-		// TODO Auto-generated method stub
-		
+			
 	}
 	
 	public static String verProcessoSelecionado(int idProcesso) {
@@ -80,18 +87,19 @@ public class FachadaGerenciadorProcesso implements apresentacao.FachadaArmazenam
 	}
 
 	public String[] getListaOrgaos() {
-		// TODO Auto-generated method stub
-		return null;
+		return orgao.todosNomes();
 	}
 
 	public String[] getListaTipoDocumento() {
-		// TODO Auto-generated method stub
-		return null;
+		return assunto.todosNomes();
 	}
 
 	public String[] getListaSituacao() {
-		// TODO Auto-generated method stub
-		return null;
+		return situacao.todosNomes();
 	}
 
+
+
+
+	
 }

@@ -1,10 +1,10 @@
 package apresentacao;
 
-import javafx.collections.ObservableList;
+import java.util.List;
 
 public interface FachadaArmazenamento {
 	
-	public ObservableList<Documento> getListaDocumentos();
+	public List<? extends Documento> getListaDocumentos();
 	
 	public void criarDocumento (boolean ehOficio, String numDocumento, String nomeInteressado,
 			String cpfInteressado, String contatoInteressado, int orgaoOrigemId, int tipoDocumentoId,
