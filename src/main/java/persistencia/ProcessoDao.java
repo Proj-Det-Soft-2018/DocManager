@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import apresentacao.Documento;
 import negocio.GenericoDao;
 import negocio.dominio.Processo;
 
@@ -19,26 +20,24 @@ public class ProcessoDao implements GenericoDao<Processo> {
 	
 	
 	public void salvar(Processo bean) {
-		banco.put(bean.hashCode(), bean);
+		banco.put(bean.getProcessoId(), bean);
 		
 	}
 
 	public void atualizar(Processo bean) {
-		// TODO Auto-generated method stub
-		
+		banco.replace(bean.getProcessoId(), bean);
 	}
 
 	public void deletar(Processo bean) {
-		banco.remove(bean.hashCode());
+		banco.remove(bean.getProcessoId());
 	}
 
 	public Processo getById(int id) {
-		// TODO Auto-generated method stub
 		return banco.get(id);
 	}
 
 	public boolean contem(Processo bean) {
-		return banco.containsKey(bean.hashCode());
+		return banco.containsKey(bean.getProcessoId());
 	}
 
 	public List<Processo> getAll() {
@@ -47,10 +46,21 @@ public class ProcessoDao implements GenericoDao<Processo> {
 		return listaProcessos;
 	}
 	
+	public List<Documento> pegarDocumentos(){
+		List<Documento> lista = new List<Processo>();
+		
+		lista = banco.values();
+		
+		return lista;
+		
+	}
+	
 	public void mostrarProcessos(List<Processo> listaProcessos) {
 		for (Processo processo : listaProcessos) {
 		    System.out.println(processo.getNumero());
 		}
 	}
+	
+	
 
 }

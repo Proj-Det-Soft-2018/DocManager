@@ -21,7 +21,5 @@ public class FabricaDao {
 		return new OrgaoDao();
 	}
 	
-	public static GenericoDao<Situacao> createSitucaoDao() {
-		return new SituacaoDao();
-	}
+	
 }

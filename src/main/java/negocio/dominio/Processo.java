@@ -13,12 +13,12 @@ import negocio.servico.ProcessoServico;
  *
  */
 public class Processo implements Documento{
-	
+	private static int contador = 0;
+	private int processoId;
 	private boolean tipoOficio;
 	private String numero;
 	private Interessado interessado;
-	private String nomeInteressado;
-	private String assunto;
+	private Assunto assunto;
 	private Orgao unidadeOrigem;
 	private LocalDateTime dataEntrada; //Hora registro do processo no banco
 	
@@ -42,11 +42,12 @@ public class Processo implements Documento{
 		boolean tipoOficio,
 		String numero,
 		Interessado interessado,
-		String assunto,
+		Assunto assunto,
 		Orgao unidadeOrigem,
 		Situacao situacaoAtual)
 	{
 		super();
+		this.processoId = this.gerarProcessoId();
 		this.tipoOficio = tipoOficio;
 		this.numero = numero;
 		this.interessado = interessado;
@@ -60,6 +61,17 @@ public class Processo implements Documento{
 		
 	}
 	
+
+	/**
+	 * @return the id
+	 */
+	public int getProcessoId() {
+		return processoId;
+	}
+	
+	private int gerarProcessoId() {
+		return contador++;
+	}
 
 	/**
 	 * @return the tipoOficio
@@ -82,14 +94,6 @@ public class Processo implements Documento{
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
-	
-	public String getNomeInteressado() {
-		return nomeInteressado;
-	}
-
-	public void setNomeInteressado(String nomeInteressado) {
-		this.nomeInteressado = nomeInteressado;
-	}
 
 	public Interessado getInteressado() {
 		return interessado;
@@ -99,11 +103,17 @@ public class Processo implements Documento{
 		this.interessado = interessado;
 	}
 
-	public String getAssunto() {
+	/**
+	 * @return the assunto
+	 */
+	public Assunto getAssunto() {
 		return assunto;
 	}
 
-	public void setAssunto(String assunto) {
+	/**
+	 * @param assunto the assunto to set
+	 */
+	public void setAssunto(Assunto assunto) {
 		this.assunto = assunto;
 	}
 
@@ -202,17 +212,6 @@ public class Processo implements Documento{
 	}
 	
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Processo [numero=" + numero + ", interessado=" + interessado + ", nomeInteressado=" + nomeInteressado
-				+ ", assunto=" + assunto + ", unidadeOrigem=" + unidadeOrigem + ", dataEntrada=" + dataEntrada
-				+ ", situacaoAtual=" + situacaoAtual + ", observacao=" + observacao + ", unidadeDestino="
-				+ unidadeDestino + ", dataSaida=" + dataSaida + "]";
-	}
-
 	public void criar() {
 		this.validar();
 		//inicializar data de entrada
@@ -234,22 +233,23 @@ public class Processo implements Documento{
 	}
 
 	public boolean ehOficio() {
-		// TODO Auto-generated method stub
 		return this.isTipoOficio();
 	}
 
-	public String getNumDocumento() {
-		// TODO Auto-generated method stub
-		return this.getNumDocumento();
+	public String getNomeInteressado() {
+		
+		return this.getInteressado().getNome();
 	}
-
+	
+	public String getNumDocumento() {
+		return this.getNumero();
+	}
+	
 	public String getCpfInteressado() {
-		// TODO Auto-generated method stub
 		return this.getInteressado().getCpf();
 	}
 
 	public String getContatoInteressado() {
-		// TODO Auto-generated method stub
 		return this.getInteressado().getContato1();
 	}
 
@@ -264,13 +264,11 @@ public class Processo implements Documento{
 	}
 
 	public int getSituacaoId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.getSituacaoAtual().getId();
 	}
 	
 	
-	
-	
-	
+
+
 	
 }

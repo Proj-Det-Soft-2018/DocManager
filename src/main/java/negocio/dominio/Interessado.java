@@ -3,10 +3,7 @@
  */
 package negocio.dominio;
 
-import java.time.LocalDateTime;
-
 import negocio.servico.InteressadoServico;
-import negocio.servico.ProcessoServico;
 
 /**
  * Classe representa o interessado do processo, pessoa vinculada ao processo como
@@ -16,6 +13,8 @@ import negocio.servico.ProcessoServico;
  *
  */
 public class Interessado {
+	
+	private int interessadoId;
 	private String nome;
 	private String cpf;
 	private String contato1;

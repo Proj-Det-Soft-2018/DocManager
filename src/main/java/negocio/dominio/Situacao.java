@@ -20,11 +20,11 @@ public class Situacao {
 	
 	private static List<Situacao> db = new ArrayList<Situacao>();
 	static{{
-		db.add( new Situacao(1,"analise","Análise"));
-		db.add(new Situacao (2,"convocarligar","A convocar"));
-		db.add(new Situacao(3,"aguardandodocumento","Aguardando Documento"));
-		db.add(new Situacao(4,"agendado","Agendado"));
-		db.add( new Situacao(5,"concluido","Concluido"));
+		db.add( new Situacao("analise","Análise"));
+		db.add(new Situacao ("convocarligar","A convocar"));
+		db.add(new Situacao("aguardandodocumento","Aguardando Documento"));
+		db.add(new Situacao("agendado","Agendado"));
+		db.add( new Situacao("concluido","Concluido"));
 		
 	}}
 	
@@ -36,13 +36,20 @@ public class Situacao {
 		
 	}
 	
-	public Situacao(int id, String codigo, String descricao) {
-		this.id = id;
+	public Situacao(String codigo, String descricao) {
 		this.codigo = codigo;
 		this.descricao = descricao;		
 	}
 	
-	
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+
+
 	/**
 	 * @return the codigo
 	 */
@@ -64,6 +71,10 @@ public class Situacao {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+	
+	public static Situacao getById(int id) {
+		return db.get(id);
+	}
 
 	/**
 	 * @return the db
@@ -75,7 +86,7 @@ public class Situacao {
 	public String[] todosNomes() {
 		String[] todosNomesSituacao = null;
 		int i = 0;
-		for (Situacao situacao : Situacao.getDb().values()) {
+		for (Situacao situacao : Situacao.getDb()) {
 			todosNomesSituacao[i] = situacao.getDescricao();
 			i++;
 		}
