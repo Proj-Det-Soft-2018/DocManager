@@ -6,7 +6,6 @@ package negocio.facade;
 import java.util.List;
 
 import apresentacao.Documento;
-import apresentacao.FachadaArmazenamento;
 import apresentacao.FachadaCaixasDeEscolha;
 import negocio.dominio.Assunto;
 import negocio.dominio.Interessado;
@@ -18,7 +17,7 @@ import negocio.dominio.Situacao;
  * @author clah
  * 
  */
-public class FachadaGerenciadorProcesso implements FachadaArmazenamento, FachadaCaixasDeEscolha{
+public class FachadaGerenciadorProcesso implements FachadaCaixasDeEscolha{
 	
 	private Processo processo;
 	private Interessado interessado;
