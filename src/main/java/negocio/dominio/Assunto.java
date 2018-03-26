@@ -66,14 +66,7 @@ public class Assunto {
 	}	
 	
 	public String[] todosNomes() {
-		String[] todosNomesAssunto = null;
-		int i = 0;
-		for (Assunto assunto : Assunto.getDb()) {
-			todosNomesAssunto[i] = assunto.getNome();
-			i++;
-		}
-		
-		return todosNomesAssunto;
+		return db.toArray(new String[db.size()]);
 		
 	}
 

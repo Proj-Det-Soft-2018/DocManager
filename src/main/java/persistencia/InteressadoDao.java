@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import negocio.GenericoDao;
-import negocio.IDao;
 import negocio.dominio.Interessado;
 /**
  * 

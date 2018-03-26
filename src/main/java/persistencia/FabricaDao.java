@@ -5,7 +5,6 @@ package persistencia;
 
 import negocio.GenericoDao;
 import negocio.dominio.Orgao;
-import negocio.dominio.Situacao;
 
 /**
  * @author clarissa

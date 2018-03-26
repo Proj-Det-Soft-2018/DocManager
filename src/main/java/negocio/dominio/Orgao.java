@@ -89,14 +89,7 @@ public class Orgao {
 	}	
 	
 	public String[] todosNomes() {
-		String[] todosNomesOrgao = null;
-		int i = 0;
-		for (Orgao situacao : Orgao.getDb()) {
-			todosNomesOrgao[i] = situacao.getNome();
-			i++;
-		}
-		
-		return todosNomesOrgao;
+		return db.toArray(new String[db.size()]);
 		
 	}
 	

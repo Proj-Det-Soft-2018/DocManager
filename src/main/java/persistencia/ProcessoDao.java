@@ -46,12 +46,8 @@ public class ProcessoDao implements GenericoDao<Processo> {
 		return listaProcessos;
 	}
 	
-	public List<Documento> pegarDocumentos(){
-		List<Documento> lista = new List<Processo>();
-		
-		lista = banco.values();
-		
-		return lista;
+	public List<? extends Documento> pegarDocumentos(){
+		return (List<Processo>)(banco.values());
 		
 	}
 	

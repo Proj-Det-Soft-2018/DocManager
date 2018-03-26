@@ -4,12 +4,7 @@
 package negocio.dominio;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import negocio.GenericoDao;
-import persistencia.FabricaDao;
 
 /**
  * @author clah
@@ -84,14 +79,6 @@ public class Situacao {
 	}	
 	
 	public String[] todosNomes() {
-		String[] todosNomesSituacao = null;
-		int i = 0;
-		for (Situacao situacao : Situacao.getDb()) {
-			todosNomesSituacao[i] = situacao.getDescricao();
-			i++;
-		}
-		
-		return todosNomesSituacao;
-		
+		return db.toArray(new String[db.size()]);
 	}
 }
