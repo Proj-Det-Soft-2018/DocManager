@@ -16,14 +16,13 @@ import persistencia.FabricaDao;
 public class Orgao {
 	
 	private static List<Orgao> db = new ArrayList<Orgao>();
-	static{{
+	static{
 		db.add(new Orgao("UFRN"));
 		db.add(new Orgao("DPF"));
 		db.add(new Orgao("MTE"));
 		db.add(new Orgao("DPRF"));
-		db.add(new Orgao("FUNAI"));
-		
-	}}
+		db.add(new Orgao("FUNAI"));	
+	}
 	
 	
 	
@@ -89,8 +88,12 @@ public class Orgao {
 	}	
 	
 	public String[] todosNomes() {
-		return db.toArray(new String[db.size()]);
-		
+		String[] nomes = new String[db.size()];
+		int i = 0;
+		for (Orgao orgao : db) {
+			nomes[i++] = orgao.getNome();
+		}
+		return nomes;
 	}
 	
 	public void remover() {

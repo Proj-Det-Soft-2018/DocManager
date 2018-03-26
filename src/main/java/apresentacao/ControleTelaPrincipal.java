@@ -60,7 +60,6 @@ public class ControleTelaPrincipal implements Initializable {
 		    novoPalco.setScene(new Scene(novoPainel, 720, 540));
 		    
 		    ControleTelaEdicao controllerEdicao = loader.getController();
-			controllerEdicao.setMessage("Novo...");
 			
 			novoPalco.show();
 		} catch (IOException e) {
@@ -82,7 +81,6 @@ public class ControleTelaPrincipal implements Initializable {
 		    novoPalco.setScene(new Scene(novoPainel, 720, 540));
 		    
 		    ControleTelaEdicao controllerEdicao = loader.getController();
-			controllerEdicao.setMessage("Antigo");
 			
 			novoPalco.show();
 		} catch (IOException e) {

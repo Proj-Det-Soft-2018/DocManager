@@ -31,6 +31,7 @@ public class FachadaGerenciadorProcesso implements FachadaArmazenamento, Fachada
 		processo = new Processo();
 		interessado = new Interessado();
 		situacao = new Situacao();
+		assunto = new Assunto();
 		orgao = new Orgao();
 	}	
 
@@ -41,6 +42,7 @@ public class FachadaGerenciadorProcesso implements FachadaArmazenamento, Fachada
 	/**
 	 * Requisição para adicionar novo processo a base de dados
 	 */
+	@Override
 	public void criarDocumento(boolean ehOficio, String numDocumento, String nomeInteressado, String cpfInteressado,
 			String contatoInteressado, int orgaoOrigemId, int assuntoDocumentoId, int situacaoId, String observacao) {
 		
@@ -50,7 +52,6 @@ public class FachadaGerenciadorProcesso implements FachadaArmazenamento, Fachada
 		this.interessado.setContato2(null);
 		
 		this.interessado.criar();
-		
 		
 		this.situacao = Situacao.getDb().get(situacaoId);
 		
@@ -73,6 +74,7 @@ public class FachadaGerenciadorProcesso implements FachadaArmazenamento, Fachada
 	/**
 	 * Requisição para atualizar um processo que já existe
 	 */
+	@Override
 	public void atualizarDocumento(Documento documentoAlvo, boolean ehOficio, String numDocumento,
 			String nomeInteressado, String cpfInteressado, String contatoInteressado, int orgaoOrigemId,
 			int tipoDocumentoId, int situacaoId, String observacao) {
@@ -90,7 +92,7 @@ public class FachadaGerenciadorProcesso implements FachadaArmazenamento, Fachada
 		return orgao.todosNomes();
 	}
 
-	public String[] getListaTipoDocumento() {
+	public String[] getListaAssuntos() {
 		return assunto.todosNomes();
 	}
 

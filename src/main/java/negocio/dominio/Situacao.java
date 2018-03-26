@@ -79,6 +79,11 @@ public class Situacao {
 	}	
 	
 	public String[] todosNomes() {
-		return db.toArray(new String[db.size()]);
+		String[] nomes = new String[db.size()];
+		int i = 0;
+		for (Situacao situacao : db) {
+			nomes[i++] = situacao.getDescricao();
+		}
+		return nomes;
 	}
 }
