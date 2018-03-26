@@ -28,7 +28,7 @@ public class InteressadoDao implements GenericoDao<Interessado> {
 		banco.remove(bean.getCpf());
 	}
 
-	public Interessado getByCpf(String cpf) {
+	public Interessado getById(String cpf) {
 		return banco.get(cpf);
 	}
 
@@ -38,11 +38,6 @@ public class InteressadoDao implements GenericoDao<Interessado> {
 
 	public List<Interessado> getAll() {
 		return new ArrayList<Interessado>(banco.values());
-	}
-
-	public Interessado getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

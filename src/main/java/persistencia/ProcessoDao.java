@@ -16,28 +16,28 @@ import negocio.dominio.Processo;
  *
  */
 public class ProcessoDao implements GenericoDao<Processo> {
-	private static final HashMap<Integer, Processo> banco = new HashMap<Integer, Processo>();
+	private static final HashMap<String, Processo> banco = new HashMap<String, Processo>();
 	
 	
 	public void salvar(Processo bean) {
-		banco.put(bean.getProcessoId(), bean);
+		banco.put(bean.getNumero(), bean);
 		
 	}
 
 	public void atualizar(Processo bean) {
-		banco.replace(bean.getProcessoId(), bean);
+		banco.replace(bean.getNumero(), bean);
 	}
 
 	public void deletar(Processo bean) {
-		banco.remove(bean.getProcessoId());
+		banco.remove(bean.getNumero());
 	}
 
-	public Processo getById(int id) {
+	public Processo getById(String id) {
 		return banco.get(id);
 	}
 
 	public boolean contem(Processo bean) {
-		return banco.containsKey(bean.getProcessoId());
+		return banco.containsKey(bean.getNumero());
 	}
 
 	public List<Processo> getAll() {
@@ -56,7 +56,6 @@ public class ProcessoDao implements GenericoDao<Processo> {
 		    System.out.println(processo.getNumero());
 		}
 	}
-	
 	
 
 }
