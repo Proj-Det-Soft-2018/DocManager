@@ -3,6 +3,11 @@
  */
 package negocio.dominio;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import negocio.GenericoDao;
 import persistencia.FabricaDao;
 
@@ -11,20 +16,45 @@ import persistencia.FabricaDao;
  *
  */
 public class Situacao {
-	private int Id;
+	
+	
+	private static List<Situacao> db = new ArrayList<Situacao>();
+	static{{
+		db.add( new Situacao(1,"analise","Análise"));
+		db.add(new Situacao (2,"convocarligar","A convocar"));
+		db.add(new Situacao(3,"aguardandodocumento","Aguardando Documento"));
+		db.add(new Situacao(4,"agendado","Agendado"));
+		db.add( new Situacao(5,"concluido","Concluido"));
+		
+	}}
+	
+	private int id;
+	private String codigo;	
 	private String descricao;
-	GenericoDao<Situacao> banco;
 	
 	public Situacao() {
-		banco = FabricaDao.createSitucaoDao();
 		
 	}
+	
+	public Situacao(int id, String codigo, String descricao) {
+		this.id = id;
+		this.codigo = codigo;
+		this.descricao = descricao;		
+	}
+	
+	
 	/**
-	 * @param descricao
+	 * @return the codigo
 	 */
-	public Situacao(String descricao) {
-		super();
-		this.descricao = descricao;
+	public String getCodigo() {
+		return codigo;
+	}
+
+	/**
+	 * @param codigo the codigo to set
+	 */
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	public String getDescricao() {
@@ -34,28 +64,23 @@ public class Situacao {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
 	/**
-	 * @return the id
+	 * @return the db
 	 */
-	public int getId() {
-		return Id;
-	}
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		Id = id;
-	}
+	public static List<Situacao> getDb() {
+		return db;
+	}	
 	
-	public void salvar() {
-		banco.salvar(this);
+	public String[] todosNomes() {
+		String[] todosNomesSituacao = null;
+		int i = 0;
+		for (Situacao situacao : Situacao.getDb().values()) {
+			todosNomesSituacao[i] = situacao.getDescricao();
+			i++;
+		}
+		
+		return todosNomesSituacao;
 		
 	}
-	
-	public void remover() {
-		banco.deletar(this);
-	}
-	
-	
-
 }

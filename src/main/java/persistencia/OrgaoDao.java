@@ -14,8 +14,10 @@ import negocio.dominio.Orgao;
  *
  */
 public class OrgaoDao implements GenericoDao<Orgao> {
-	ArrayList<Orgao> bancoOrgao = new ArrayList<Orgao>();
+	private static final ArrayList<Orgao> bancoOrgao = new ArrayList<Orgao>();
+	
 	private String[] todosNomes;
+	
 	
 	public void salvar(Orgao bean) {
 		bancoOrgao.add(bean.getId(),bean);

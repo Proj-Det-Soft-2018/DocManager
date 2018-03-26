@@ -3,6 +3,9 @@
  */
 package negocio.facade;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import apresentacao.Documento;
 import apresentacao.FachadaCaixasDeEscolha;
 import javafx.collections.ObservableList;
@@ -20,16 +23,17 @@ public class FachadaGerenciadorProcesso implements apresentacao.FachadaArmazenam
 	private Interessado interessado;
 	private Situacao situacao;
 	private Orgao orgao;
-	
+	private List<Documento> listaDocumentos;
 	public FachadaGerenciadorProcesso() {
 		processo = new Processo();
 		interessado = new Interessado();
-		situacao = new Situacao(null);
+		situacao = new Situacao();
 		orgao = new Orgao();
 	}	
 
-	public ObservableList<Documento> getListaDocumentos() {
-		return null;
+	public List<Documento> getListaDocumentos() {
+		 listaDocumentos = new ArrayList<Processo>();
+		return processo.getBanco().getAll();
 	}
 	
 	/**
@@ -45,7 +49,8 @@ public class FachadaGerenciadorProcesso implements apresentacao.FachadaArmazenam
 		
 		this.interessado.criar();
 		
-		this.situacao.setDescricao(null);//TODO Estrutura para guardar e metodo set por ID
+		
+		this.situacao = Situacao.getDb().get(situacaoId);
 		
 		this.orgao.setNome(null); //TODO Estrutura para guardar e metodo set por ID
 		
@@ -68,8 +73,7 @@ public class FachadaGerenciadorProcesso implements apresentacao.FachadaArmazenam
 	public void atualizarDocumento(Documento documentoAlvo, boolean ehOficio, String numDocumento,
 			String nomeInteressado, String cpfInteressado, String contatoInteressado, int orgaoOrigemId,
 			int tipoDocumentoId, int situacaoId, String observacao) {
-		// TODO Auto-generated method stub
-		
+			documentoAlvo.
 	}
 	
 	public static String verProcessoSelecionado(int idProcesso) {
@@ -90,8 +94,7 @@ public class FachadaGerenciadorProcesso implements apresentacao.FachadaArmazenam
 	}
 
 	public String[] getListaSituacao() {
-		// TODO Auto-generated method stub
-		return null;
+		return situacao.todosNomes();
 	}
 
 }
