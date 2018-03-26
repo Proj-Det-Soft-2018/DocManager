@@ -13,6 +13,7 @@ import java.util.List;
 public class Assunto {
 	
 	private static List<Assunto> db = new ArrayList<Assunto>();
+	
 	static{{
 		db.add( new Assunto("Isenção de IRPF sobre Aposentadoria"));
 		db.add( new Assunto("Regime Domiciliar"));

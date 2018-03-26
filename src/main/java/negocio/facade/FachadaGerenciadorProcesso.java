@@ -79,11 +79,11 @@ public class FachadaGerenciadorProcesso implements FachadaArmazenamento, Fachada
 			
 	}
 	
-	public static String verProcessoSelecionado(int idProcesso) {
+	public static String verProcessoSelecionado(String numProcesso) {
 		//TODO deve-se implementar como os dados do processo vai ser recebido no parametro
 		//TODO Deve-se ver o retorno após consulta no banco de dados
 		Processo processo = new Processo();
-		return processo.selecionarPorId(idProcesso).toString();
+		return processo.selecionarPorId(numProcesso).toString();
 	}
 
 	public String[] getListaOrgaos() {

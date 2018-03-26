@@ -14,7 +14,6 @@ import negocio.servico.InteressadoServico;
  */
 public class Interessado {
 	
-	private int interessadoId;
 	private String nome;
 	private String cpf;
 	private String contato1;

@@ -31,8 +31,8 @@ public class OrgaoDao implements GenericoDao<Orgao> {
 		bancoOrgao.add(bean);
 	}
 
-	public Orgao getById(int id) {
-		return bancoOrgao.get(id);
+	public Orgao getById(String id) {
+		return null;
 	}
 
 	public boolean contem(Orgao bean) {
