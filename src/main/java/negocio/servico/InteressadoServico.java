@@ -25,8 +25,8 @@ public class InteressadoServico {
 		interessadoDao.deletar(interessado);
 	}
 	
-	public Interessado encontrarPorId(int id) {
-		return interessadoDao.getById(id);
+	public Interessado encontrarPorId(String cpf) {
+		return interessadoDao.getById(cpf);
 	}
 	
 	public boolean contem(Interessado interessado) {

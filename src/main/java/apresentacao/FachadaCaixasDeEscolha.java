@@ -2,9 +2,9 @@ package apresentacao;
 
 public interface FachadaCaixasDeEscolha extends FachadaArmazenamento {
 	
-	public String[] getListaOrgaos();
+	public List<String> getListaOrgaos();
 	
-	public String[] getListaAssuntos();
+	public List<String> getListaTipoDocumento();
 	
-	public String[] getListaSituacao();
+	public List<String> getListaSituacao();
 }
