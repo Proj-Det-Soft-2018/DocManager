@@ -2,6 +2,8 @@ package apresentacao;
 
 import java.util.List;
 
+import negocio.servico.Observador;
+
 /**
  * @author hugotho
  * 
@@ -9,6 +11,8 @@ import java.util.List;
 public interface FachadaArmazenamento {
 	
 	public List<? extends DocumentoVisao> getListaDocumentos();
+	
+	public void cadastrarObservador (Observador observadorDaLista);
 	
 	public void criarDocumento (boolean ehOficio, String numDocumento, String nomeInteressado,
 			String cpfInteressado, String contatoInteressado, int orgaoOrigemId, int tipoDocumentoId,

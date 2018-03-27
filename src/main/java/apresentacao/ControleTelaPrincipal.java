@@ -2,7 +2,6 @@ package apresentacao;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -15,21 +14,24 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import negocio.facade.FachadaGerenciadorDocumento;
+import negocio.servico.Observador;
 
 /**
  * @author hugotho
  * 
  */
-public class ControleTelaPrincipal implements Initializable {
+public class ControleTelaPrincipal implements Initializable, Observador {
 
 	private static final URL ARQUIVO_FXML = ControleTelaPrincipal.class.getResource("/visoes/tela_edicao.fxml");
 	private static final String TITULO_NOVO_DOCUMENTO = "Novo Processo / Ofício";
 	private static final String TITULO_EDITAR_DOCUMENTO = "Ver / Editar";
 
-	private FachadaArmazenamento fachada = new FachadaGerenciadorProcesso(); 
+	private FachadaArmazenamento fachada = new FachadaGerenciadorDocumento(); 
 
 	private Stage novaTelaEdicao;
 	private ControleTelaEdicao controleTelaEdicao;
@@ -70,7 +72,10 @@ public class ControleTelaPrincipal implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
 		this.configurarTabela();
+		this.atualizarTabela(this.fachada.getListaDocumentos());
+		this.fachada.cadastrarObservador(this);
 	}
 
 	@FXML
@@ -83,6 +88,7 @@ public class ControleTelaPrincipal implements Initializable {
 	@FXML
 	private void criarFormularioEdicao() {
 		this.criarTelaEdicao(TITULO_EDITAR_DOCUMENTO);
+		this.controleTelaEdicao.montarFormulario(documentoSelecionado);
 		this.mostrarTelaEdicao();	
 	}
 
@@ -121,32 +127,14 @@ public class ControleTelaPrincipal implements Initializable {
 					this.documentoSelecionado = selecionadoNovo;
 					this.btnVerEditar.setDisable(selecionadoNovo!=null? false : true);
 				});
-
-		// TODO TIRAR MOCK
-		/*************************************************************************************************************/
-		List<DocumentoVisao> listaTeste = new ArrayList<>();
-
-		Processo teste1 = new Processo(true,
-				"0000/0000-Orgão",
-				new Interessado("Hugo Thiago de Holanda Oliveira", "000.000.000-00", "(84) 99999-9999", null),
-				Assunto.values()[17],
-				Orgao.values()[0],
-				Situacao.values()[1]);
-		listaTeste.add(teste1);
-
-		Processo teste2 = new Processo(false,
-				"0000000.00000000/0000-00",
-				new Interessado("João Maria de Valadares", "000.000.000-00", "(84) 99999-9999", null),
-				Assunto.values()[10],
-				Orgao.values()[0],
-				Situacao.values()[0]);
-		listaTeste.add(teste2);
-
-		this.atualizarTabela(listaTeste);
-		/*************************************************************************************************************/
 	}
 
-	private void atualizarTabela(List<DocumentoVisao> lista) {
+	private void atualizarTabela(List<? extends DocumentoVisao> lista) {
 		tabelaProcessosOficios.getItems().setAll(lista);
+	}
+	
+	@Override
+	public void atualizar() {
+		this.atualizarTabela(this.fachada.getListaDocumentos());
 	}
 }

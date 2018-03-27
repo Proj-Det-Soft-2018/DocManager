@@ -13,7 +13,7 @@ import persistencia.ProcessoDao;
  * @author clah
  *@since 24/03/2018
  */
-public class ProcessoServico {
+public class ProcessoServico extends Observavel {
 	GenericoDao<Processo> processoDao = new ProcessoDao();
 	
 	public void criarProcesso(Processo processo) {
@@ -27,9 +27,11 @@ public class ProcessoServico {
 	
 	public void salvarProcesso(Processo processo) {
 		processoDao.salvar(processo);
+		this.notificarTodos();
 	}
 	public void atualizarProcesso(Processo processo) {
 		processoDao.atualizar(processo);
+		this.notificarTodos();
 	}
 	
 	public void deletarProcesso(Processo processo) {
