@@ -179,37 +179,6 @@ public class Processo implements Documento{
 	public void setBanco(ProcessoServico banco) {
 		this.banco = banco;
 	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((numero == null) ? 0 : numero.hashCode());
-		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Processo other = (Processo) obj;
-		if (numero == null) {
-			if (other.numero != null)
-				return false;
-		} else if (!numero.equals(other.numero))
-			return false;
-		return true;
-	}
 	
 
 	public void criar() {
@@ -220,8 +189,8 @@ public class Processo implements Documento{
 			
 	}
 	
-	public Processo selecionarPorId(int hashCode) {
-		return banco.encontrarPorId(hashCode);
+	public Processo selecionarPorId(String numProcesso) {
+		return banco.encontrarPorId(numProcesso);
 			
 	}
 
@@ -264,7 +233,7 @@ public class Processo implements Documento{
 	}
 
 	public int getSituacaoId() {
-		return this.getSituacaoAtual().getId();
+		return this.situacaoAtual.ordinal();
 	}
 	
 	

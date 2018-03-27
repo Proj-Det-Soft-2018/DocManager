@@ -22,16 +22,11 @@ public class FachadaGerenciadorProcesso implements FachadaArmazenamento, Fachada
 	
 	private Processo processo;
 	private Interessado interessado;
-	private Situacao situacao;
-	private Orgao orgao;
-	private Assunto assunto;
 	
 	
 	public FachadaGerenciadorProcesso() {
 		processo = new Processo();
 		interessado = new Interessado();
-		situacao = new Situacao();
-		orgao = new Orgao();
 	}	
 
 	public List<? extends Documento> getListaDocumentos() {
@@ -51,19 +46,11 @@ public class FachadaGerenciadorProcesso implements FachadaArmazenamento, Fachada
 		
 		this.interessado.criar();
 		
-		
-		this.situacao = Situacao.getDb().get(situacaoId);
-		
-		this.orgao = Orgao.getById(orgaoOrigemId);
-		
-		this.assunto = Assunto.getById(assuntoDocumentoId);
-		
-		
 		this.processo.setInteressado(this.interessado);
 		this.processo.setNumero(numDocumento);
-		this.processo.setSituacaoAtual(this.situacao);
-		this.processo.setUnidadeOrigem(this.orgao);
-		this.processo.setAssunto(this.assunto);
+		this.processo.setSituacaoAtual(Situacao.values()[situacaoId-1]);
+		this.processo.setUnidadeOrigem(Orgao.values()[orgaoOrigemId-1]);
+		this.processo.setAssunto(Assunto.values()[assuntoDocumentoId-1]);
 		this.processo.setObservacao(observacao);
 		
 		this.processo.criar();
@@ -79,23 +66,23 @@ public class FachadaGerenciadorProcesso implements FachadaArmazenamento, Fachada
 			
 	}
 	
-	public static String verProcessoSelecionado(int idProcesso) {
+	public static String verProcessoSelecionado(String numProcesso) {
 		//TODO deve-se implementar como os dados do processo vai ser recebido no parametro
 		//TODO Deve-se ver o retorno após consulta no banco de dados
 		Processo processo = new Processo();
-		return processo.selecionarPorId(idProcesso).toString();
+		return processo.selecionarPorId(numProcesso).toString();
 	}
 
-	public String[] getListaOrgaos() {
-		return orgao.todosNomes();
+	public List<String> getListaOrgaos() {
+		return Orgao.getOrgaos();
 	}
 
-	public String[] getListaTipoDocumento() {
-		return assunto.todosNomes();
+	public List<String> getListaTipoDocumento() {
+		return Assunto.getAssuntos();
 	}
 
-	public String[] getListaSituacao() {
-		return situacao.todosNomes();
+	public List<String> getListaSituacao() {
+		return Situacao.getSituacoes();
 	}
 
 

@@ -27,8 +27,8 @@ public class ProcessoServico {
 		processoDao.deletar(processo);
 	}
 	
-	public Processo encontrarPorId(int idProcesso) {
-		return processoDao.getById(idProcesso);
+	public Processo encontrarPorId(String numProcesso) {
+		return processoDao.getById(numProcesso);
 		
 	}
 	
