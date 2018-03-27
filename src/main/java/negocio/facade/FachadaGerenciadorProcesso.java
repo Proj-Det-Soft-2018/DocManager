@@ -26,8 +26,6 @@ public class FachadaGerenciadorProcesso implements FachadaCaixasDeEscolha{
 	public FachadaGerenciadorProcesso() {
 		processo = new Processo();
 		interessado = new Interessado();
-		situacao = new Situacao();
-		orgao = new Orgao();
 	}	
 
 	public List<? extends Documento> getListaDocumentos() {

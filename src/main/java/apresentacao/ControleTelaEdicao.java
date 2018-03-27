@@ -110,7 +110,7 @@ public class ControleTelaEdicao implements Initializable {
 		
 		ObservableList<String> obsListaAssuntos = this.cbAssunto.getItems();
 		obsListaAssuntos.add(CHOICEBOX_TEXTO_PADRAO);
-		obsListaAssuntos.addAll(fachada.getListaAssuntos());
+		obsListaAssuntos.addAll(fachada.getListaTipoDocumento());
 		this.cbAssunto.getSelectionModel().select(0);
 		
 		ObservableList<String> obsListaSituacoes = this.cbSituacao.getItems();
