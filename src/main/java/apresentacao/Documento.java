@@ -14,9 +14,13 @@ public interface Documento {
 	
 	public int getOrgaoOrigemId();
 	
-	public int getTipoDocumentoId();
+	public int getAssuntoId();
 	
 	public int getSituacaoId();
 	
 	public String getObservacao();
+	
+	default String getTipo() {
+		return this.ehOficio()? "Ofício" : "Processo";
+	}
 }
