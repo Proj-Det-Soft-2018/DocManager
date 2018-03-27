@@ -13,11 +13,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import negocio.facade.FachadaGerenciadorProcesso;
 
 public class ControleTelaPrincipal implements Initializable {
 	
@@ -25,7 +23,7 @@ public class ControleTelaPrincipal implements Initializable {
 	private static final String TITULO_NOVO_DOCUMENTO = "Novo Processo / Ofício";
 	private static final String TITULO_EDITAR_DOCUMENTO = "Ver / Editar";
 	
-	private FachadaArmazenamento fachada = new FachadaGerenciadorProcesso(); 
+	//private FachadaArmazenamento fachada = new FachadaGerenciadorProcesso(); 
 	
 	private Stage novaTelaEdicao;
 	private ControleTelaEdicao controleTelaEdicao;
