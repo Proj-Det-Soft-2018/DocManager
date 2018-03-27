@@ -61,7 +61,7 @@ public class Interessado {
 	}
 
 	public void validar() throws RuntimeException {
-		throw new RuntimeException();
+		
 	}
 	
 
