@@ -15,16 +15,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import negocio.dominio.Assunto;
-import negocio.dominio.Interessado;
-import negocio.dominio.Orgao;
-import negocio.dominio.Processo;
-import negocio.dominio.Situacao;
-import negocio.facade.FachadaGerenciadorProcesso;
 
 /**
  * @author hugotho
