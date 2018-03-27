@@ -19,13 +19,13 @@ import negocio.servico.ProcessoServico;
  * @author clah
  * 
  */
-public class FachadaGerenciadorProcesso implements FachadaCaixasDeEscolha{
+public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 	
 	private ProcessoServico processoServico;
 	private InteressadoServico interessadoServico;
 	
 	
-	public FachadaGerenciadorProcesso() {
+	public FachadaGerenciadorDocumento() {
 		processoServico = new ProcessoServico();
 		interessadoServico = new InteressadoServico();
 	}	

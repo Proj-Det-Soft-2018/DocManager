@@ -17,7 +17,7 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import negocio.facade.FachadaGerenciadorProcesso;
+import negocio.facade.FachadaGerenciadorDocumento;
 
 public class ControleTelaEdicao implements Initializable {
 	
@@ -26,7 +26,7 @@ public class ControleTelaEdicao implements Initializable {
 	private static final String CHOICEBOX_TEXTO_PADRAO = "-- SELECIONE --";
 	private static final String LABEL_BTN_ATUALIZAR = "Atualizar"; 
 	
-	private FachadaCaixasDeEscolha fachada = new FachadaGerenciadorProcesso();
+	private FachadaCaixasDeEscolha fachada = new FachadaGerenciadorDocumento();
 	
 	private Documento documento = null;
 	private Boolean estaEditando = false; 
