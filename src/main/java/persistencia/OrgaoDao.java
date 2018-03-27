@@ -16,8 +16,6 @@ import negocio.dominio.Orgao;
 public class OrgaoDao implements GenericoDao<Orgao> {
 	private static final ArrayList<Orgao> bancoOrgao = new ArrayList<Orgao>();
 	
-	private List<String> todosNomes;
-	
 	
 	public void salvar(Orgao bean) {
 		bancoOrgao.add(bean);
