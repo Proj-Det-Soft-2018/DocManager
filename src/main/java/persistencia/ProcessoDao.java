@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import apresentacao.Documento;
+import apresentacao.DocumentoVisao;
 import negocio.GenericoDao;
 import negocio.dominio.Processo;
 
@@ -46,7 +46,7 @@ public class ProcessoDao implements GenericoDao<Processo> {
 		return listaProcessos;
 	}
 	
-	public List<? extends Documento> pegarDocumentos(){
+	public List<? extends DocumentoVisao> pegarDocumentos(){
 		return (List<Processo>)(banco.values());
 		
 	}

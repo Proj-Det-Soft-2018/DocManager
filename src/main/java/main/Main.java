@@ -10,8 +10,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * @author hugotho
+ * 
+ */
 public class Main extends Application {
 	
+	private static final String TITULO_APLICACAO = "DocManager"; 
 	private static final Logger logger = Logger.getLogger(Main.class);
 	
 	public static void main(String[] args) {
@@ -26,7 +31,7 @@ public class Main extends Application {
 		try {
 			fxmlParent = FXMLLoader.load(arquivoFxml);
 			palco.setScene(new Scene(fxmlParent, 940, 570));
-			palco.setTitle("DocManager");		
+			palco.setTitle(TITULO_APLICACAO);		
 			palco.show();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);

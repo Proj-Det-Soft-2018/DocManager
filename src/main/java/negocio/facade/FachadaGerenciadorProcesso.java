@@ -5,7 +5,7 @@ package negocio.facade;
 
 import java.util.List;
 
-import apresentacao.Documento;
+import apresentacao.DocumentoVisao;
 import apresentacao.FachadaCaixasDeEscolha;
 import negocio.dominio.Assunto;
 import negocio.dominio.Interessado;
@@ -28,7 +28,7 @@ public class FachadaGerenciadorProcesso implements FachadaCaixasDeEscolha{
 		interessado = new Interessado();
 	}	
 
-	public List<? extends Documento> getListaDocumentos() {
+	public List<? extends DocumentoVisao> getListaDocumentos() {
 		return processo.getBanco().getAll();
 	}
 	
@@ -54,17 +54,15 @@ public class FachadaGerenciadorProcesso implements FachadaCaixasDeEscolha{
 		this.processo.setObservacao(observacao);
 		
 		this.processo.criar();
-		
 	}
 	
 	/**
 	 * Requisição para atualizar um processo que já existe
 	 */
 	@Override
-	public void atualizarDocumento(Documento documentoAlvo, boolean ehOficio, String numDocumento,
+	public void atualizarDocumento(DocumentoVisao documentoAlvo, boolean ehOficio, String numDocumento,
 			String nomeInteressado, String cpfInteressado, String contatoInteressado, int orgaoOrigemId,
-			int tipoDocumentoId, int situacaoId, String observacao) {
-			
+			int tipoDocumentoId, int situacaoId, String observacao) {	
 	}
 	
 	public static String verProcessoSelecionado(String numProcesso) {
@@ -78,16 +76,11 @@ public class FachadaGerenciadorProcesso implements FachadaCaixasDeEscolha{
 		return Orgao.getOrgaos();
 	}
 
-	public List<String> getListaTipoDocumento() {
+	public List<String> getListaAssuntos() {
 		return Assunto.getAssuntos();
 	}
 
-	public List<String> getListaSituacao() {
+	public List<String> getListaSituacoes() {
 		return Situacao.getSituacoes();
 	}
-
-
-
-
-	
 }

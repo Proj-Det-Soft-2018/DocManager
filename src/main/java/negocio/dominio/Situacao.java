@@ -23,4 +23,8 @@ public enum Situacao {
 		}
 		return listaSituacoes;
 	}
+	
+	public String getStatus() {
+		return this.status;
+	}
 }

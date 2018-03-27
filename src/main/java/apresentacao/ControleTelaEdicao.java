@@ -19,6 +19,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import negocio.facade.FachadaGerenciadorProcesso;
 
+/**
+ * @author hugotho
+ * 
+ */
 public class ControleTelaEdicao implements Initializable {
 	
 	private static final String PROMPT_NUM_PROCESSO = "0000000.00000000/0000-00";
@@ -28,7 +32,7 @@ public class ControleTelaEdicao implements Initializable {
 	
 	private FachadaCaixasDeEscolha fachada = new FachadaGerenciadorProcesso();
 	
-	private Documento documento = null;
+	private DocumentoVisao documento = null;
 	private Boolean estaEditando = false; 
 	
 	@FXML
@@ -76,7 +80,7 @@ public class ControleTelaEdicao implements Initializable {
 	@FXML
 	private Button btnCadastrar;
 	
-	public void montarFormulario(Documento documento) {
+	public void montarFormulario(DocumentoVisao documento) {
 		if (documento != null) {
 			this.documento = documento;
 			this.estaEditando = true;
@@ -115,7 +119,7 @@ public class ControleTelaEdicao implements Initializable {
 		
 		ObservableList<String> obsListaSituacoes = this.cbSituacao.getItems();
 		obsListaSituacoes.add(CHOICEBOX_TEXTO_PADRAO);
-		obsListaSituacoes.addAll(fachada.getListaSituacao());
+		obsListaSituacoes.addAll(fachada.getListaSituacoes());
 		this.cbSituacao.getSelectionModel().select(0);
 	}
 

@@ -5,14 +5,14 @@ package negocio.dominio;
 
 import java.time.LocalDateTime;
 
-import apresentacao.Documento;
+import apresentacao.DocumentoVisao;
 import negocio.servico.ProcessoServico;
 
 /**
  * @author lets
  *
  */
-public class Processo implements Documento{
+public class Processo implements DocumentoVisao{
 	private static int contador = 0;
 	private int processoId;
 	private boolean tipoOficio;
@@ -44,8 +44,7 @@ public class Processo implements Documento{
 		Interessado interessado,
 		Assunto assunto,
 		Orgao unidadeOrigem,
-		Situacao situacaoAtual)
-	{
+		Situacao situacaoAtual) {
 		super();
 		this.processoId = this.gerarProcessoId();
 		this.tipoOficio = tipoOficio;
@@ -222,21 +221,18 @@ public class Processo implements Documento{
 	}
 
 	public int getOrgaoOrigemId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.unidadeOrigem.ordinal()+1;
 	}
 
 	public int getAssuntoId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.assunto.ordinal()+1;
 	}
 
 	public int getSituacaoId() {
-		return this.situacaoAtual.ordinal();
+		return this.situacaoAtual.ordinal()+1;
 	}
 	
-	
-
-
-	
+	public String getSituacao() {
+		return this.situacaoAtual.getStatus();
+	}
 }
