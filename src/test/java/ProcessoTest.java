@@ -56,6 +56,7 @@ public class ProcessoTest {
 		banco.salvar(p);
 		assertEquals(p, banco.getById(p.getNumero()));
 	}
+	
 	/**
 	@Test
 	public void inserirMesmoTest() {
