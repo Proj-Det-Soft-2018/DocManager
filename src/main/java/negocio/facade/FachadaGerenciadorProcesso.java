@@ -12,6 +12,8 @@ import negocio.dominio.Interessado;
 import negocio.dominio.Orgao;
 import negocio.dominio.Processo;
 import negocio.dominio.Situacao;
+import negocio.servico.InteressadoServico;
+import negocio.servico.ProcessoServico;
 
 /**
  * @author clah
@@ -19,50 +21,60 @@ import negocio.dominio.Situacao;
  */
 public class FachadaGerenciadorProcesso implements FachadaCaixasDeEscolha{
 	
-	private Processo processo;
-	private Interessado interessado;
+	private ProcessoServico processoServico;
+	private InteressadoServico interessadoServico;
 	
 	
 	public FachadaGerenciadorProcesso() {
-		processo = new Processo();
-		interessado = new Interessado();
+		processoServico = new ProcessoServico();
+		interessadoServico = new InteressadoServico();
 	}	
 
-	public List<? extends DocumentoVisao> getListaDocumentos() {
-		return processo.getBanco().getAll();
+	public List<? extends Documento> getListaDocumentos() {
+		return this.processoServico.getAll();
 	}
 	
 	/**
 	 * Requisição para adicionar novo processo a base de dados
 	 */
 	@Override
-	public void criarDocumento(boolean ehOficio, String numDocumento, String nomeInteressado, String cpfInteressado,
-			String contatoInteressado, int orgaoOrigemId, int assuntoDocumentoId, int situacaoId, String observacao) {
-		
-		this.interessado.setNome(nomeInteressado);
-		this.interessado.setCpf(cpfInteressado);
-		this.interessado.setContato1(contatoInteressado);
-		this.interessado.setContato2(null);
-		
-		this.interessado.criar();
-		
-		this.processo.setInteressado(this.interessado);
-		this.processo.setNumero(numDocumento);
-		this.processo.setSituacaoAtual(Situacao.values()[situacaoId-1]);
-		this.processo.setUnidadeOrigem(Orgao.values()[orgaoOrigemId-1]);
-		this.processo.setAssunto(Assunto.values()[assuntoDocumentoId-1]);
-		this.processo.setObservacao(observacao);
-		
-		this.processo.criar();
+	public void criarDocumento(
+			boolean ehOficio,
+			String numDocumento,
+			String nomeInteressado,
+			String cpfInteressado,
+			String contatoInteressado,
+			int orgaoOrigemId,
+			int assuntoDocumentoId,
+			int situacaoId,
+			String observacao)
+	{
+		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, contatoInteressado);
+		interessadoServico.criarInteressado(interessado);
+		Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.values()[assuntoDocumentoId-1], Orgao.values()[orgaoOrigemId-1], Situacao.values()[situacaoId-1]);
+		processoServico.criarProcesso(processo);
 	}
 	
 	/**
 	 * Requisição para atualizar um processo que já existe
 	 */
 	@Override
-	public void atualizarDocumento(DocumentoVisao documentoAlvo, boolean ehOficio, String numDocumento,
-			String nomeInteressado, String cpfInteressado, String contatoInteressado, int orgaoOrigemId,
-			int tipoDocumentoId, int situacaoId, String observacao) {	
+	public void atualizarDocumento(
+			Documento documentoAlvo,
+			boolean ehOficio,
+			String numDocumento,
+			String nomeInteressado,
+			String cpfInteressado,
+			String contatoInteressado,
+			int orgaoOrigemId,
+			int tipoDocumentoId,
+			int situacaoId,
+			String observacao)
+	{
+		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, cpfInteressado);
+		interessadoServico.atualizarInteressado(interessado);
+		Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.values()[tipoDocumentoId-1], Orgao.values()[orgaoOrigemId-1], Situacao.values()[situacaoId-1]);
+		processoServico.atualizarProcesso(processo);
 	}
 	
 	public static String verProcessoSelecionado(String numProcesso) {

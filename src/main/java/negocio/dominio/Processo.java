@@ -178,25 +178,15 @@ public class Processo implements DocumentoVisao{
 		this.banco = banco;
 	}
 	
-
-	public void criar() {
-		this.validar();
-		//inicializar data de entrada
-		this.setDataEntrada(LocalDateTime.now());
-		this.banco.salvarProcesso(this);
-			
-	}
-	
 	public Processo selecionarPorId(String numProcesso) {
 		return banco.encontrarPorId(numProcesso);
 			
 	}
 
-	private boolean validar(){
+	public void validar() throws RuntimeException{
 		if(this.numero == null){
-			return false;
+			throw new RuntimeException();
 		}
-		return true;
 	}
 
 	public boolean ehOficio() {

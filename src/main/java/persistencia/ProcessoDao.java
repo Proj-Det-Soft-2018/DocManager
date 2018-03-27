@@ -16,6 +16,7 @@ import negocio.dominio.Processo;
  *
  */
 public class ProcessoDao implements GenericoDao<Processo> {
+	
 	private static final HashMap<String, Processo> banco = new HashMap<String, Processo>();
 	
 	
