@@ -24,12 +24,12 @@ public class ProcessoTest {
 	@Parameters
 	public static Collection <Object[]> data(){
 		return Arrays.asList(new Object[][] {
-			{"1", new Interessado("Allan", "000.000.000-00", "123", "123"), new Assunto("assunto"), new Orgao("IMD"), Situacao.getById(0)},
-			{"2", new Interessado("Clarissa", "000.000.000-01", "1213", "2123"), new Assunto("assunto"), new Orgao("IMD"), Situacao.getById(0)},
-			{"3", new Interessado("Hugo", "000.000.000-02", "1233", "1234"), new Assunto("assunto"), new Orgao("IMD"), Situacao.getById(0)},
-			{"4", new Interessado("Uira", "000.000.000-03", "1236", "1237"), new Assunto("assunto"), new Orgao("IMD"), Situacao.getById(0)},
-			{"5", new Interessado("Miguel", "000.000.000-04", "1238", "123"), new Assunto("assunto"), new Orgao("IMD"), Situacao.getById(0)},
-			{"6", new Interessado("John Doe", "000.000.000-05", "1238", "1233"), new Assunto("assunto"), new Orgao("IMD"), Situacao.getById(0)},
+			{"1", new Interessado("Allan", "000.000.000-00", "123", "123"), Assunto.GENERIC_1, Orgao.UFRN, Situacao.ANALISE},
+			{"2", new Interessado("Clarissa", "000.000.000-01", "1213", "2123"), Assunto.GENERIC_1, Orgao.UFRN, Situacao.ANALISE},
+			{"3", new Interessado("Hugo", "000.000.000-02", "1233", "1234"), Assunto.GENERIC_1, Orgao.UFRN, Situacao.ANALISE},
+			{"4", new Interessado("Uira", "000.000.000-03", "1236", "1237"), Assunto.GENERIC_1, Orgao.UFRN, Situacao.ANALISE},
+			{"5", new Interessado("Miguel", "000.000.000-04", "1238", "123"), Assunto.GENERIC_1, Orgao.UFRN, Situacao.ANALISE},
+			{"6", new Interessado("John Doe", "000.000.000-05", "1238", "1233"), Assunto.GENERIC_1, Orgao.UFRN, Situacao.ANALISE},
 		});
 	}
 	

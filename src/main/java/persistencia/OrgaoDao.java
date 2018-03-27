@@ -16,19 +16,22 @@ import negocio.dominio.Orgao;
 public class OrgaoDao implements GenericoDao<Orgao> {
 	private static final ArrayList<Orgao> bancoOrgao = new ArrayList<Orgao>();
 	
-	private String[] todosNomes;
+	private List<String> todosNomes;
 	
 	
 	public void salvar(Orgao bean) {
-		bancoOrgao.add(bean.getId(),bean);
+		bancoOrgao.add(bean);
 	}
 
 	public void atualizar(Orgao bean) {
-		bancoOrgao.add(bean);
+		int indice = bancoOrgao.indexOf(bean);
+		if(indice != -1) {
+			bancoOrgao.add(indice, bean);
+		}
 	}
 
 	public void deletar(Orgao bean) {
-		bancoOrgao.add(bean);
+		bancoOrgao.remove(bean);
 	}
 
 	public Orgao getById(String id) {
@@ -42,17 +45,6 @@ public class OrgaoDao implements GenericoDao<Orgao> {
 	public List<Orgao> getAll() {
 		
 		return bancoOrgao;
-	}
-	
-	public String[] listarNomes() {
-		todosNomes = null;
-		
-		for (int i=0; i<bancoOrgao.size();i++) {
-			todosNomes[i] = bancoOrgao.get(i).getNome();
-		}
-		
-		return todosNomes;
-		
 	}
 
 }

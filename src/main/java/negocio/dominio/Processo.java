@@ -233,7 +233,7 @@ public class Processo implements Documento{
 	}
 
 	public int getSituacaoId() {
-		return this.getSituacaoAtual().getId();
+		return this.situacaoAtual.ordinal();
 	}
 	
 	

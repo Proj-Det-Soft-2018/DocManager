@@ -3,7 +3,7 @@ package negocio.dominio;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum AssuntoEnum {
+public enum Assunto {
 	
 	GENERIC_1("Aposentadoria por Invalidez"),
 	GENERIC_2("Avaliação para fins de pensão"),
@@ -33,13 +33,13 @@ public enum AssuntoEnum {
 	
 	private String texto;
 	
-	AssuntoEnum(String texto){
+	Assunto(String texto){
 		this.texto = texto;
 	}
 	
 	public static List<String> getAssuntos() {
 		List<String> listaAssuntos = new ArrayList<String>();
-		for(AssuntoEnum assunto : AssuntoEnum.values()) {
+		for(Assunto assunto : Assunto.values()) {
 			listaAssuntos.add(assunto.texto);
 		}
 		return listaAssuntos;

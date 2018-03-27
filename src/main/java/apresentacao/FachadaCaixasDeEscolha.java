@@ -1,10 +1,12 @@
 package apresentacao;
 
+import java.util.List;
+
 public interface FachadaCaixasDeEscolha {
 	
-	public String[] getListaOrgaos();
+	public List<String> getListaOrgaos();
 	
-	public String[] getListaTipoDocumento();
+	public List<String> getListaTipoDocumento();
 	
-	public String[] getListaSituacao();
+	public List<String> getListaSituacao();
 }
