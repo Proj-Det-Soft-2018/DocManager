@@ -11,14 +11,24 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import negocio.facade.FachadaGerenciadorProcesso;
 
 public class ControleTelaPrincipal implements Initializable {
 	
 	private static final URL ARQUIVO_FXML = ControleTelaPrincipal.class.getResource("/visoes/tela_edicao.fxml");
+	private static final String TITULO_NOVO_DOCUMENTO = "Novo Processo / Ofício";
+	private static final String TITULO_EDITAR_DOCUMENTO = "Ver / Editar";
+	
+	private FachadaArmazenamento fachada = new FachadaGerenciadorProcesso(); 
+	
+	private Stage novaTelaEdicao;
+	private ControleTelaEdicao controleTelaEdicao;
 	
 	@FXML
 	private Pane painel;
@@ -37,56 +47,58 @@ public class ControleTelaPrincipal implements Initializable {
 	
 	@FXML
 	private TableView<Documento> tabelaProcessosOficios;
-
+	
+	@FXML
+	private TableColumn<Documento, String> tabColunaTipo;
+	
+	@FXML
+	private TableColumn<Documento, String> tabColunaNumero;
+	
+	@FXML
+	private TableColumn<Documento, String> tabColunaInteressado;
+	
+	@FXML
+	private TableColumn<Documento, String> tabColunaSituacao;
 	
 	private Logger logger = Logger.getLogger(ControleTelaPrincipal.class);
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		//REMOVER WARNING
+		// TODO iniciar colunas
 	}
 	
-	public void novoDocumento() {
+	public void criarDocumento() {
 		
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(ARQUIVO_FXML);
-			Pane novoPainel = loader.load();
-			
-			Stage novoPalco = new Stage();
-			novoPalco.setTitle("Novo Processo / Ofício");
-			novoPalco.initModality(Modality.WINDOW_MODAL);
-		    novoPalco.initOwner(painel.getScene().getWindow());
-		    novoPalco.setScene(new Scene(novoPainel, 720, 540));
-		    
-		    ControleTelaEdicao controllerEdicao = loader.getController();
-			controllerEdicao.setMessage("Novo...");
-			
-			novoPalco.show();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
+		this.criarTelaEdicao(TITULO_NOVO_DOCUMENTO);
+		this.controleTelaEdicao.montarFormulario(null);
+		this.mostrarTelaEdicao();
 	}
 	
 	public void editarDocumento() {
-
+		this.criarTelaEdicao(TITULO_EDITAR_DOCUMENTO);
+		//TODO pegar documento da tabela;
+		this.mostrarTelaEdicao();	
+	}
+	
+	private void criarTelaEdicao(String titulo) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(ARQUIVO_FXML);
 			Pane novoPainel = loader.load();
 			
-			Stage novoPalco = new Stage();
-			novoPalco.setTitle("Novo Processo / Ofício");
-			novoPalco.initModality(Modality.WINDOW_MODAL);
-		    novoPalco.initOwner(painel.getScene().getWindow());
-		    novoPalco.setScene(new Scene(novoPainel, 720, 540));
+			this.novaTelaEdicao = new Stage();
+			this.novaTelaEdicao.setTitle(titulo);
+			this.novaTelaEdicao.initModality(Modality.WINDOW_MODAL);
+			this.novaTelaEdicao.initOwner(painel.getScene().getWindow());
+			this.novaTelaEdicao.setScene(new Scene(novoPainel, 720, 540));
 		    
-		    ControleTelaEdicao controllerEdicao = loader.getController();
-			controllerEdicao.setMessage("Antigo");
-			
-			novoPalco.show();
+		    this.controleTelaEdicao = loader.getController();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
+	}
+	
+	private void mostrarTelaEdicao() {
+		this.novaTelaEdicao.show();
 	}
 }

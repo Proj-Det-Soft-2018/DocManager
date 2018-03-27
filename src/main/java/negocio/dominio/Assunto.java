@@ -66,8 +66,12 @@ public class Assunto {
 	}	
 	
 	public String[] todosNomes() {
-		return db.toArray(new String[db.size()]);
-		
+		String[] nomes = new String[db.size()];
+		int i = 0;
+		for (Assunto assunto : db) {
+			nomes[i++] = assunto.getNome();
+		}
+		return nomes;
 	}
 
 }
