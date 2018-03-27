@@ -1,6 +1,6 @@
 package apresentacao;
 
-public interface FachadaCaixasDeEscolha {
+public interface FachadaCaixasDeEscolha extends FachadaArmazenamento {
 	
 	public String[] getListaOrgaos();
 	

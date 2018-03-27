@@ -12,7 +12,7 @@
 		<Insets bottom="15.0" left="15.0" right="15.0" top="20.0" />
 	</padding>
 	<children>
-		<Button fx:id="btnNovo" layoutX="28.0" layoutY="34.0" mnemonicParsing="false" onAction="#novoDocumento" prefHeight="26.0" prefWidth="140.0" text="Novo..." AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="25.0" />
+		<Button fx:id="btnNovo" layoutX="28.0" layoutY="34.0" mnemonicParsing="false" onAction="#criarDocumento" prefHeight="26.0" prefWidth="140.0" text="Novo..." AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="25.0" />
 		<Button fx:id="btnApagar" disable="true" layoutX="25.0" layoutY="119.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="140.0" text="Apagar" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="97.0" />
 		<Button fx:id="btnVerEditar" disable="true" layoutX="28.0" layoutY="78.0" mnemonicParsing="false" onAction="#editarDocumento" prefHeight="26.0" prefWidth="140.0" text="Ver / Editar" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="61.0" />
 		<Button fx:id="btnBuscar" disable="true" layoutX="25.0" layoutY="359.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="140.0" text="Buscar" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="10.0" />
@@ -21,10 +21,10 @@
             <Label layoutX="25.0" layoutY="27.0" styleClass="painel-titulo" stylesheets="@../css/styles.css" text="Processos / Ofícios" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <TableView fx:id="tabelaProcessosOficios" layoutX="94.0" layoutY="60.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="15.0">
               <columns>
-                <TableColumn editable="false" prefWidth="75.0" sortType="DESCENDING" sortable="false" text="Tipo" />
-                <TableColumn editable="false" prefWidth="174.0" sortType="DESCENDING" sortable="false" text="Número" />
-                  <TableColumn prefWidth="271.0" text="Nome Interessado" />
-                  <TableColumn prefWidth="191.0" text="Situação" />
+                <TableColumn fx:id="tabColunaTipo" prefWidth="75.0" sortType="DESCENDING" sortable="false" text="Tipo" />
+                <TableColumn fx:id="tabColunaNumero" editable="false" prefWidth="174.0" sortType="DESCENDING" sortable="false" text="Número" />
+                  <TableColumn fx:id="tabColunaInteressado" prefWidth="271.0" text="Nome Interessado" />
+                  <TableColumn fx:id="tabColunaSituacao" prefWidth="191.0" text="Situação" />
               </columns>
             </TableView>
          </children>

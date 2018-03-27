@@ -60,7 +60,6 @@ public class Processo implements Documento{
 	public Processo() {
 		
 	}
-	
 
 	/**
 	 * @return the id
@@ -258,7 +257,7 @@ public class Processo implements Documento{
 		return 0;
 	}
 
-	public int getTipoDocumentoId() {
+	public int getAssuntoId() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

@@ -23,10 +23,13 @@ public class ControleTelaEdicao implements Initializable {
 	
 	private static final String PROMPT_NUM_PROCESSO = "0000000.00000000/0000-00";
 	private static final String PROMPT_NUM_OFICIO = "0000/0000-Orgão";
-	private static final String DEFAUT_CHOICE_TEXT = "-- SELECIONE --";
+	private static final String CHOICEBOX_TEXTO_PADRAO = "-- SELECIONE --";
+	private static final String LABEL_BTN_ATUALIZAR = "Atualizar"; 
 	
-	private FachadaArmazenamento fachadaNegocios = new FachadaGerenciadorProcesso();
-	private FachadaCaixasDeEscolha fachadaListas = (FachadaCaixasDeEscolha)fachadaNegocios;
+	private FachadaCaixasDeEscolha fachada = new FachadaGerenciadorProcesso();
+	
+	private Documento documento = null;
+	private Boolean estaEditando = false; 
 	
 	@FXML
 	private VBox raiz;
@@ -72,6 +75,26 @@ public class ControleTelaEdicao implements Initializable {
 
 	@FXML
 	private Button btnCadastrar;
+	
+	public void montarFormulario(Documento documento) {
+		if (documento != null) {
+			this.documento = documento;
+			this.estaEditando = true;
+			this.btnCadastrar.setText(LABEL_BTN_ATUALIZAR);
+			
+			if (documento.ehOficio()) {
+				this.rbOficio.setSelected(true);
+			}
+			this.txtNumProcesso.setText(documento.getNumDocumento());
+			this.txtNomeInteressado.setText(documento.getNomeInteressado());
+			this.txtCpfInteressado.setText(documento.getCpfInteressado());
+			this.txtContatoInteressado.setText(documento.getContatoInteressado());
+			this.cbOrgao.getSelectionModel().select(documento.getOrgaoOrigemId());
+			this.cbAssunto.getSelectionModel().select(documento.getAssuntoId());
+			this.cbSituacao.getSelectionModel().select(documento.getSituacaoId());
+			this.txtObservacao.setText(documento.getObservacao());
+		}
+	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -80,20 +103,20 @@ public class ControleTelaEdicao implements Initializable {
 				(valorObservavel, anterior, novo) -> alterarFormulario(novo));
 		
 		// Preenchimento dos ChoiceBoxes
-		ObservableList<String> obsListaOrgaos = cbOrgao.getItems();
-		obsListaOrgaos.add(DEFAUT_CHOICE_TEXT);
-		obsListaOrgaos.addAll(fachadaListas.getListaOrgaos());
-		cbOrgao.getSelectionModel().select(0);
+		ObservableList<String> obsListaOrgaos = this.cbOrgao.getItems();
+		obsListaOrgaos.add(CHOICEBOX_TEXTO_PADRAO);
+		obsListaOrgaos.addAll(fachada.getListaOrgaos());
+		this.cbOrgao.getSelectionModel().select(0);
 		
-		ObservableList<String> obsListaAssuntos = cbAssunto.getItems();
-		obsListaAssuntos.add(DEFAUT_CHOICE_TEXT);
-		obsListaAssuntos.addAll(fachadaListas.getListaAssuntos());
-		cbAssunto.getSelectionModel().select(0);
+		ObservableList<String> obsListaAssuntos = this.cbAssunto.getItems();
+		obsListaAssuntos.add(CHOICEBOX_TEXTO_PADRAO);
+		obsListaAssuntos.addAll(fachada.getListaAssuntos());
+		this.cbAssunto.getSelectionModel().select(0);
 		
-		ObservableList<String> obsListaSituacoes = cbSituacao.getItems();
-		obsListaSituacoes.add(DEFAUT_CHOICE_TEXT);
-		obsListaSituacoes.addAll(fachadaListas.getListaSituacao());
-		cbSituacao.getSelectionModel().select(0);
+		ObservableList<String> obsListaSituacoes = this.cbSituacao.getItems();
+		obsListaSituacoes.add(CHOICEBOX_TEXTO_PADRAO);
+		obsListaSituacoes.addAll(fachada.getListaSituacao());
+		this.cbSituacao.getSelectionModel().select(0);
 	}
 
 	private void alterarFormulario (Toggle novo) {
@@ -102,9 +125,9 @@ public class ControleTelaEdicao implements Initializable {
 			this.lblDocumento.setText(radio.getText());
 
 			if(Objects.equals(radio.getText(), this.rbProcesso.getText())) {
-				txtNumProcesso.setPromptText(PROMPT_NUM_PROCESSO);
+				this.txtNumProcesso.setPromptText(PROMPT_NUM_PROCESSO);
 			} else {
-				txtNumProcesso.setPromptText(PROMPT_NUM_OFICIO);
+				this.txtNumProcesso.setPromptText(PROMPT_NUM_OFICIO);
 			}
 		}
 	}
@@ -114,5 +137,36 @@ public class ControleTelaEdicao implements Initializable {
 		Stage janela = (Stage) this.raiz.getScene().getWindow();
 		if (janela != null)
 			janela.close();
+	}
+	
+	@FXML
+	private void cadastrar() {
+		if (this.estaEditando) {	// Atulizando documento existente
+			fachada.atualizarDocumento(
+					this.documento,
+					this.rbOficio.isSelected(),
+					this.txtNumProcesso.getText(),
+					this.txtNomeInteressado.getText(),
+					this.txtCpfInteressado.getText(),
+					this.txtContatoInteressado.getText(),
+					this.cbOrgao.getSelectionModel().getSelectedIndex(),
+					this.cbAssunto.getSelectionModel().getSelectedIndex(),
+					this.cbSituacao.getSelectionModel().getSelectedIndex(),
+					this.txtObservacao.getText());
+			
+		} else {					// Criando novo documento
+			fachada.criarDocumento(
+					this.rbOficio.isSelected(),
+					this.txtNumProcesso.getText(),
+					this.txtNomeInteressado.getText(),
+					this.txtCpfInteressado.getText(),
+					this.txtContatoInteressado.getText(),
+					this.cbOrgao.getSelectionModel().getSelectedIndex(),
+					this.cbAssunto.getSelectionModel().getSelectedIndex(),
+					this.cbSituacao.getSelectionModel().getSelectedIndex(),
+					this.txtObservacao.getText());
+		}
+		
+		this.fecharJanela();
 	}
 }
