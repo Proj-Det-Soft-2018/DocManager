@@ -16,6 +16,15 @@ import persistencia.ProcessoDao;
 public class ProcessoServico {
 	GenericoDao<Processo> processoDao = new ProcessoDao();
 	
+	public void criarProcesso(Processo processo) {
+		try{
+			processo.validar();
+		}
+		catch (RuntimeException e) {
+			// TODO: handle exception
+		}
+	}
+	
 	public void salvarProcesso(Processo processo) {
 		processoDao.salvar(processo);
 	}

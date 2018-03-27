@@ -13,6 +13,15 @@ import persistencia.InteressadoDao;
 public class InteressadoServico {
 	GenericoDao<Interessado> interessadoDao = new InteressadoDao();
 	
+	public void criarInteressado(Interessado interessado) {
+		try {
+			interessado.validar();	
+		}
+		catch (RuntimeException e) {
+			// TODO: handle exception
+		}
+	}
+	
 	public void salvarInteressado(Interessado interessado) {
 		interessadoDao.salvar(interessado);
 	}
