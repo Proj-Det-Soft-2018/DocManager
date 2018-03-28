@@ -44,7 +44,8 @@ public class Processo implements DocumentoVisao{
 		Interessado interessado,
 		Assunto assunto,
 		Orgao unidadeOrigem,
-		Situacao situacaoAtual) {
+		Situacao situacaoAtual,
+		String observacao) {
 		super();
 		this.processoId = this.gerarProcessoId();
 		this.tipoOficio = tipoOficio;
@@ -53,6 +54,7 @@ public class Processo implements DocumentoVisao{
 		this.assunto = assunto;
 		this.unidadeOrigem = unidadeOrigem;
 		this.situacaoAtual = situacaoAtual;
+		this.observacao = observacao;
 		this.banco = new ProcessoServico();
 	}
 	

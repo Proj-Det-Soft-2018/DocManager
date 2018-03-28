@@ -52,7 +52,7 @@ public class ProcessoTest {
 	
 	@Test
 	public void inserirTest() {
-		Processo p = new Processo(false, this.numero, this.interessado, this.assunto, this.unidadeOrigem, this.situacaoAtual);
+		Processo p = new Processo(false, this.numero, this.interessado, this.assunto, this.unidadeOrigem, this.situacaoAtual, null);
 		banco.salvar(p);
 		assertEquals(p, banco.getById(p.getNumero()));
 	}

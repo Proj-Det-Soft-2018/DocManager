@@ -21,10 +21,10 @@
             <Label layoutX="25.0" layoutY="27.0" styleClass="painel-titulo" stylesheets="@../css/styles.css" text="Processos / Ofícios" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <TableView fx:id="tabelaProcessosOficios" layoutX="94.0" layoutY="60.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="15.0">
               <columns>
-                <TableColumn fx:id="tabColunaTipo" prefWidth="75.0" sortType="DESCENDING" sortable="false" text="Tipo" />
-                <TableColumn fx:id="tabColunaNumero" editable="false" prefWidth="200.0" sortType="DESCENDING" sortable="false" text="Número" />
-                  <TableColumn fx:id="tabColunaInteressado" prefWidth="309.0" text="Nome Interessado" />
-                  <TableColumn fx:id="tabColunaSituacao" prefWidth="123.0" text="Situação" />
+                <TableColumn fx:id="tabColunaTipo" editable="false" prefWidth="75.0" sortType="DESCENDING" text="Tipo" />
+                <TableColumn fx:id="tabColunaNumero" editable="false" prefWidth="200.0" sortType="DESCENDING" text="Número" />
+                  <TableColumn fx:id="tabColunaInteressado" editable="false" prefWidth="309.0" text="Nome Interessado" />
+                  <TableColumn fx:id="tabColunaSituacao" editable="false" prefWidth="123.0" text="Situação" />
               </columns>
             </TableView>
          </children>

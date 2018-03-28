@@ -11,16 +11,16 @@ public enum Orgao {
 	DPRF("Departamento da Polícia Rodoviária Federal"),
 	FUNAI("Fundação Nacional do Indio");
 	
-	private String nome;
+	private String nomeExt;
 	
 	Orgao(String nome) {
-		this.nome = nome;
+		this.nomeExt = nome;
 	}	
 	
 	public static List<String> getOrgaos() {
 		List<String> listaOrgaos = new ArrayList<String>();
 		for(Orgao orgao : Orgao.values()) {
-			listaOrgaos.add(orgao.nome);
+			listaOrgaos.add(orgao.name() + " - " + orgao.nomeExt);
 		}
 		return listaOrgaos;
 	}

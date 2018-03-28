@@ -53,9 +53,12 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 	@Override
 	public void criarDocumento(	boolean ehOficio, String numDocumento, String nomeInteressado, String cpfInteressado,
 			String contatoInteressado, int orgaoOrigemId, int assuntoDocumentoId, int situacaoId, String observacao) {
+		
 		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, contatoInteressado);
 		interessadoServico.criarInteressado(interessado);
-		Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.values()[assuntoDocumentoId-1], Orgao.values()[orgaoOrigemId-1], Situacao.values()[situacaoId-1]);
+		
+		Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.values()[assuntoDocumentoId-1],
+				Orgao.values()[orgaoOrigemId-1], Situacao.values()[situacaoId-1], observacao);
 		processoServico.criarProcesso(processo);
 	}
 	
@@ -66,9 +69,12 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 	public void atualizarDocumento(DocumentoVisao documentoAlvo, boolean ehOficio, String numDocumento, 
 			String nomeInteressado,	String cpfInteressado, String contatoInteressado, int orgaoOrigemId,
 			int tipoDocumentoId, int situacaoId, String observacao)	{
+		
 		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, cpfInteressado);
 		interessadoServico.atualizarInteressado(interessado);
-		Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.values()[tipoDocumentoId-1], Orgao.values()[orgaoOrigemId-1], Situacao.values()[situacaoId-1]);
+		
+		Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.values()[tipoDocumentoId-1],
+				Orgao.values()[orgaoOrigemId-1], Situacao.values()[situacaoId-1], observacao);
 		processoServico.atualizarProcesso(processo);
 	}
 	

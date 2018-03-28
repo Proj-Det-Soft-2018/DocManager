@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import utils.widget.MaskedTextField?>
 
 <VBox fx:id="raiz" prefHeight="540.0" prefWidth="720.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apresentacao.ControleTelaEdicao">
    <padding>
@@ -41,8 +42,8 @@
             </Label>
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                <children>
-                  <Label fx:id="lblNumProcesso" text="Número:" />
-                  <TextField fx:id="txtNumProcesso" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="240.0" promptText="0000000.00000000/0000-00" />
+                  <Label fx:id="lblNumProcesso" text="Número*:" />
+                  <MaskedTextField mask="#######.########/####-##" fx:id="txtNumProcesso" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="240.0" />
                </children>
             </HBox>
             <GridPane hgap="8.0">
@@ -56,13 +57,13 @@
                 <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label alignment="BOTTOM_LEFT" text="Nome do Interessado" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
+                  <Label alignment="BOTTOM_LEFT" text="Nome do Interessado*" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
                      <GridPane.margin>
                         <Insets bottom="2.0" />
                      </GridPane.margin>
                   </Label>
                   <TextField fx:id="txtNomeInteressado" GridPane.rowIndex="1" />
-                  <Label text="CPF" GridPane.columnIndex="1" GridPane.valignment="BOTTOM">
+                  <Label text="CPF*" GridPane.columnIndex="1" GridPane.valignment="BOTTOM">
                      <GridPane.margin>
                         <Insets bottom="2.0" />
                      </GridPane.margin>
@@ -72,8 +73,8 @@
                         <Insets bottom="2.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField fx:id="txtCpfInteressado" promptText="000.000.000-00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="txtContatoInteressado" promptText="(00) 00000-0000" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <MaskedTextField mask="###.###.###-##" fx:id="txtCpfInteressado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <MaskedTextField mask="(##)*####-####" fx:id="txtContatoInteressado" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                </children>
                <VBox.margin>
                   <Insets />
@@ -89,7 +90,7 @@
                 <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Orgão de origem" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
+                  <Label text="Orgão de origem*" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
                      <padding>
                         <Insets bottom="2.0" />
                      </padding>
@@ -110,13 +111,13 @@
                 <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Assunto" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
+                  <Label text="Assunto*" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
                      <padding>
                         <Insets bottom="2.0" />
                      </padding>
                   </Label>
                   <ChoiceBox fx:id="cbAssunto" maxWidth="1.7976931348623157E308" GridPane.rowIndex="1" />
-                  <Label text="Situação" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
+                  <Label text="Situação*" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
                      <GridPane.margin>
                         <Insets bottom="2.0" />
                      </GridPane.margin>
