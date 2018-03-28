@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import apresentacao.Documento;
+import org.apache.log4j.Logger;
+
+import apresentacao.DocumentoVisao;
 import negocio.GenericoDao;
 import negocio.dominio.Processo;
 
@@ -17,6 +19,7 @@ import negocio.dominio.Processo;
  */
 public class ProcessoDao implements GenericoDao<Processo> {
 	
+	private static Logger logger = Logger.getLogger(ProcessoDao.class);
 	private static final HashMap<String, Processo> banco = new HashMap<String, Processo>();
 	
 	
@@ -47,14 +50,14 @@ public class ProcessoDao implements GenericoDao<Processo> {
 		return listaProcessos;
 	}
 	
-	public List<? extends Documento> pegarDocumentos(){
+	public List<? extends DocumentoVisao> pegarDocumentos(){
 		return (List<Processo>)(banco.values());
 		
 	}
 	
 	public void mostrarProcessos(List<Processo> listaProcessos) {
 		for (Processo processo : listaProcessos) {
-		    System.out.println(processo.getNumero());
+		    logger.info("Núm. processo: " + processo.getNumero());
 		}
 	}
 	

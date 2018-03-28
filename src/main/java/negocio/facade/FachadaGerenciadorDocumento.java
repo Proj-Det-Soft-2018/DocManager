@@ -5,7 +5,7 @@ package negocio.facade;
 
 import java.util.List;
 
-import apresentacao.Documento;
+import apresentacao.DocumentoVisao;
 import apresentacao.FachadaCaixasDeEscolha;
 import negocio.dominio.Assunto;
 import negocio.dominio.Interessado;
@@ -13,6 +13,7 @@ import negocio.dominio.Orgao;
 import negocio.dominio.Processo;
 import negocio.dominio.Situacao;
 import negocio.servico.InteressadoServico;
+import negocio.servico.Observador;
 import negocio.servico.ProcessoServico;
 
 /**
@@ -24,31 +25,34 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 	private ProcessoServico processoServico;
 	private InteressadoServico interessadoServico;
 	
+	// Singleton
+	private static final FachadaGerenciadorDocumento instance = new FachadaGerenciadorDocumento();
 	
-	public FachadaGerenciadorDocumento() {
+	private FachadaGerenciadorDocumento() {
 		processoServico = new ProcessoServico();
 		interessadoServico = new InteressadoServico();
-	}	
+	}
+	
+	public static FachadaGerenciadorDocumento getInstance() {
+		return instance;
+	}
 
-	public List<? extends Documento> getListaDocumentos() {
+	@Override
+	public List<? extends DocumentoVisao> getListaDocumentos() {
 		return this.processoServico.getAll();
 	}
 	
+	@Override
+	public void cadastrarObservador(Observador observadorDaLista) {
+		processoServico.cadastrarObservador(observadorDaLista);
+	}
+
 	/**
 	 * Requisição para adicionar novo processo a base de dados
 	 */
 	@Override
-	public void criarDocumento(
-			boolean ehOficio,
-			String numDocumento,
-			String nomeInteressado,
-			String cpfInteressado,
-			String contatoInteressado,
-			int orgaoOrigemId,
-			int assuntoDocumentoId,
-			int situacaoId,
-			String observacao)
-	{
+	public void criarDocumento(	boolean ehOficio, String numDocumento, String nomeInteressado, String cpfInteressado,
+			String contatoInteressado, int orgaoOrigemId, int assuntoDocumentoId, int situacaoId, String observacao) {
 		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, contatoInteressado);
 		interessadoServico.criarInteressado(interessado);
 		Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.values()[assuntoDocumentoId-1], Orgao.values()[orgaoOrigemId-1], Situacao.values()[situacaoId-1]);
@@ -59,18 +63,9 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 	 * Requisição para atualizar um processo que já existe
 	 */
 	@Override
-	public void atualizarDocumento(
-			Documento documentoAlvo,
-			boolean ehOficio,
-			String numDocumento,
-			String nomeInteressado,
-			String cpfInteressado,
-			String contatoInteressado,
-			int orgaoOrigemId,
-			int tipoDocumentoId,
-			int situacaoId,
-			String observacao)
-	{
+	public void atualizarDocumento(DocumentoVisao documentoAlvo, boolean ehOficio, String numDocumento, 
+			String nomeInteressado,	String cpfInteressado, String contatoInteressado, int orgaoOrigemId,
+			int tipoDocumentoId, int situacaoId, String observacao)	{
 		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, cpfInteressado);
 		interessadoServico.atualizarInteressado(interessado);
 		Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.values()[tipoDocumentoId-1], Orgao.values()[orgaoOrigemId-1], Situacao.values()[situacaoId-1]);
@@ -88,11 +83,12 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 		return Orgao.getOrgaos();
 	}
 
-	public List<String> getListaTipoDocumento() {
+	public List<String> getListaAssuntos() {
 		return Assunto.getAssuntos();
 	}
-
-	public List<String> getListaSituacao() {
+	
+	@Override
+	public List<String> getListaSituacoes() {
 		return Situacao.getSituacoes();
 	}
 }
