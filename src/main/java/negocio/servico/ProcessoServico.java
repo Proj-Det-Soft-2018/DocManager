@@ -5,6 +5,8 @@ package negocio.servico;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import negocio.GenericoDao;
 import negocio.dominio.Processo;
 import persistencia.ProcessoDao;
@@ -14,6 +16,8 @@ import persistencia.ProcessoDao;
  *@since 24/03/2018
  */
 public class ProcessoServico extends Observavel {
+	
+	private static Logger logger = Logger.getLogger(ProcessoServico.class);
 	GenericoDao<Processo> processoDao = new ProcessoDao();
 	
 	public void criarProcesso(Processo processo) {
@@ -21,7 +25,10 @@ public class ProcessoServico extends Observavel {
 			processo.validar();
 		}
 		catch (RuntimeException e) {
-			// TODO: handle exception
+			logger.error(e.getMessage(), e);
+		}
+		finally {
+			this.salvarProcesso(processo);
 		}
 	}
 	

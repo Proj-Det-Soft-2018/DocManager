@@ -31,8 +31,7 @@ public class ControleTelaPrincipal implements Initializable, Observador {
 	private static final String TITULO_NOVO_DOCUMENTO = "Novo Processo / Ofício";
 	private static final String TITULO_EDITAR_DOCUMENTO = "Ver / Editar";
 
-	private FachadaArmazenamento fachada = new FachadaGerenciadorDocumento(); 
-
+	private FachadaArmazenamento fachada;
 	private Stage novaTelaEdicao;
 	private ControleTelaEdicao controleTelaEdicao;
 
@@ -72,7 +71,7 @@ public class ControleTelaPrincipal implements Initializable, Observador {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+		fachada = FachadaGerenciadorDocumento.getInstance();
 		this.configurarTabela();
 		this.atualizarTabela(this.fachada.getListaDocumentos());
 		this.fachada.cadastrarObservador(this);

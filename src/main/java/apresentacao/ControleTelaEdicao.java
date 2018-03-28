@@ -30,9 +30,8 @@ public class ControleTelaEdicao implements Initializable {
 	private static final String CHOICEBOX_TEXTO_PADRAO = "-- SELECIONE --";
 	private static final String LABEL_BTN_ATUALIZAR = "Atualizar"; 
 	
-	private FachadaCaixasDeEscolha fachada = new FachadaGerenciadorDocumento();
-	
-	private DocumentoVisao documento = null;
+	private FachadaCaixasDeEscolha fachada;
+	private DocumentoVisao documento;
 	private Boolean estaEditando = false; 
 	
 	@FXML
@@ -48,7 +47,10 @@ public class ControleTelaEdicao implements Initializable {
 	private ToggleGroup tgProcessoOficio;
 
 	@FXML
-	private Label lblDocumento;
+	private Label lblTipoDocumento;
+	
+	@FXML
+	private Label lblNumProcesso;
 
 	@FXML
 	private TextField txtNumProcesso;
@@ -90,6 +92,8 @@ public class ControleTelaEdicao implements Initializable {
 				this.rbOficio.setSelected(true);
 			}
 			this.txtNumProcesso.setText(documento.getNumDocumento());
+			this.lblNumProcesso.setDisable(true);
+			this.txtNumProcesso.setDisable(true);
 			this.txtNomeInteressado.setText(documento.getNomeInteressado());
 			this.txtCpfInteressado.setText(documento.getCpfInteressado());
 			this.txtContatoInteressado.setText(documento.getContatoInteressado());
@@ -102,6 +106,7 @@ public class ControleTelaEdicao implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		fachada = FachadaGerenciadorDocumento.getInstance();
 		// Comportamento dos radio buttons
 		this.tgProcessoOficio.selectedToggleProperty().addListener(
 				(valorObservavel, anterior, novo) -> alterarFormulario(novo));
@@ -126,7 +131,7 @@ public class ControleTelaEdicao implements Initializable {
 	private void alterarFormulario (Toggle novo) {
 		if (novo != null) {
 			RadioButton radio = (RadioButton)novo;
-			this.lblDocumento.setText(radio.getText());
+			this.lblTipoDocumento.setText(radio.getText());
 
 			if(Objects.equals(radio.getText(), this.rbProcesso.getText())) {
 				this.txtNumProcesso.setPromptText(PROMPT_NUM_PROCESSO);

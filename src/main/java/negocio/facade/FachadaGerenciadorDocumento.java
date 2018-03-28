@@ -25,11 +25,17 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 	private ProcessoServico processoServico;
 	private InteressadoServico interessadoServico;
 	
+	// Singleton
+	private static final FachadaGerenciadorDocumento instance = new FachadaGerenciadorDocumento();
 	
-	public FachadaGerenciadorDocumento() {
+	private FachadaGerenciadorDocumento() {
 		processoServico = new ProcessoServico();
 		interessadoServico = new InteressadoServico();
-	}	
+	}
+	
+	public static FachadaGerenciadorDocumento getInstance() {
+		return instance;
+	}
 
 	@Override
 	public List<? extends DocumentoVisao> getListaDocumentos() {
