@@ -1,97 +1,30 @@
-/**
- * 
- */
 package negocio.dominio;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import negocio.GenericoDao;
-import persistencia.FabricaDao;
-
-/**
- * @author clah
- *
- */
-public class Situacao {
+public enum Situacao {
+	ANALISE("Análise"),
+	CONVOCAR("A convocar"),
+	AGUARDANDODOCUMENTO("Aguardando Documento"),
+	AGENDADO("Agendado"),
+	CONCLUIDO("Concluido");
 	
+	private String status;
 	
-	private static List<Situacao> db = new ArrayList<Situacao>();
-	static{{
-		db.add( new Situacao("analise","Análise"));
-		db.add(new Situacao ("convocarligar","A convocar"));
-		db.add(new Situacao("aguardandodocumento","Aguardando Documento"));
-		db.add(new Situacao("agendado","Agendado"));
-		db.add( new Situacao("concluido","Concluido"));
-		
-	}}
-	
-	private int id;
-	private String codigo;	
-	private String descricao;
-	
-	public Situacao() {
-		
+	Situacao(String status){
+		this.status = status;
 	}
 	
-	public Situacao(String codigo, String descricao) {
-		this.codigo = codigo;
-		this.descricao = descricao;		
-	}
-	
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-
-
-	/**
-	 * @return the codigo
-	 */
-	public String getCodigo() {
-		return codigo;
-	}
-
-	/**
-	 * @param codigo the codigo to set
-	 */
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-	
-	public static Situacao getById(int id) {
-		return db.get(id);
-	}
-
-	/**
-	 * @return the db
-	 */
-	public static List<Situacao> getDb() {
-		return db;
-	}	
-	
-	public String[] todosNomes() {
-		String[] todosNomesSituacao = null;
-		int i = 0;
-		for (Situacao situacao : Situacao.getDb()) {
-			todosNomesSituacao[i] = situacao.getDescricao();
-			i++;
+	public static List<String> getSituacoes() {
+		List<String> listaSituacoes = new ArrayList<String>();
+		for(Situacao situacao : Situacao.values()) {
+			listaSituacoes.add(situacao.status);
 		}
-		
-		return todosNomesSituacao;
-		
+		return listaSituacoes;
+	}
+	
+	public String getStatus() {
+		return this.status;
 	}
 }

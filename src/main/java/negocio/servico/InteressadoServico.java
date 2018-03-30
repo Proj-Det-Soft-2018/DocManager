@@ -13,6 +13,15 @@ import persistencia.InteressadoDao;
 public class InteressadoServico {
 	GenericoDao<Interessado> interessadoDao = new InteressadoDao();
 	
+	public void criarInteressado(Interessado interessado) {
+		try {
+			interessado.validar();	
+		}
+		catch (RuntimeException e) {
+			// TODO: handle exception
+		}
+	}
+	
 	public void salvarInteressado(Interessado interessado) {
 		interessadoDao.salvar(interessado);
 	}
@@ -25,8 +34,8 @@ public class InteressadoServico {
 		interessadoDao.deletar(interessado);
 	}
 	
-	public Interessado encontrarPorId(int id) {
-		return interessadoDao.getById(id);
+	public Interessado encontrarPorId(String cpf) {
+		return interessadoDao.getById(cpf);
 	}
 	
 	public boolean contem(Interessado interessado) {

@@ -5,14 +5,14 @@ package negocio.dominio;
 
 import java.time.LocalDateTime;
 
-import apresentacao.Documento;
+import apresentacao.DocumentoVisao;
 import negocio.servico.ProcessoServico;
 
 /**
  * @author lets
  *
  */
-public class Processo implements Documento{
+public class Processo implements DocumentoVisao{
 	private static int contador = 0;
 	private int processoId;
 	private boolean tipoOficio;
@@ -44,8 +44,7 @@ public class Processo implements Documento{
 		Interessado interessado,
 		Assunto assunto,
 		Orgao unidadeOrigem,
-		Situacao situacaoAtual)
-	{
+		Situacao situacaoAtual) {
 		super();
 		this.processoId = this.gerarProcessoId();
 		this.tipoOficio = tipoOficio;
@@ -60,7 +59,6 @@ public class Processo implements Documento{
 	public Processo() {
 		
 	}
-	
 
 	/**
 	 * @return the id
@@ -179,57 +177,16 @@ public class Processo implements Documento{
 	public void setBanco(ProcessoServico banco) {
 		this.banco = banco;
 	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((numero == null) ? 0 : numero.hashCode());
-		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Processo other = (Processo) obj;
-		if (numero == null) {
-			if (other.numero != null)
-				return false;
-		} else if (!numero.equals(other.numero))
-			return false;
-		return true;
-	}
 	
-
-	public void criar() {
-		this.validar();
-		//inicializar data de entrada
-		this.setDataEntrada(LocalDateTime.now());
-		this.banco.salvarProcesso(this);
-			
-	}
-	
-	public Processo selecionarPorId(int hashCode) {
-		return banco.encontrarPorId(hashCode);
+	public Processo selecionarPorId(String numProcesso) {
+		return banco.encontrarPorId(numProcesso);
 			
 	}
 
-	private boolean validar(){
+	public void validar() throws RuntimeException{
 		if(this.numero == null){
-			return false;
+			throw new RuntimeException();
 		}
-		return true;
 	}
 
 	public boolean ehOficio() {
@@ -254,21 +211,18 @@ public class Processo implements Documento{
 	}
 
 	public int getOrgaoOrigemId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.unidadeOrigem.ordinal()+1;
 	}
 
-	public int getTipoDocumentoId() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getAssuntoId() {
+		return this.assunto.ordinal()+1;
 	}
 
 	public int getSituacaoId() {
-		return this.getSituacaoAtual().getId();
+		return this.situacaoAtual.ordinal()+1;
 	}
 	
-	
-
-
-	
+	public String getSituacao() {
+		return this.situacaoAtual.getStatus();
+	}
 }
