@@ -51,25 +51,56 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 	 * Requisição para adicionar novo processo a base de dados
 	 */
 	@Override
-	public void criarDocumento(	boolean ehOficio, String numDocumento, String nomeInteressado, String cpfInteressado,
-			String contatoInteressado, int orgaoOrigemId, int assuntoDocumentoId, int situacaoId, String observacao) {
+	public void criarDocumento(
+			boolean ehOficio,
+			String numDocumento,
+			String nomeInteressado,
+			String cpfInteressado,
+			String contatoInteressado,
+			int orgaoOrigemId,
+			int assuntoDocumentoId,
+			int situacaoId,
+			String observacao)
+	{
 		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, contatoInteressado);
 		interessadoServico.criarInteressado(interessado);
-		Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.values()[assuntoDocumentoId-1], Orgao.values()[orgaoOrigemId-1], Situacao.values()[situacaoId-1]);
-		processoServico.criarProcesso(processo);
+		try {
+			Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.getAssuntoPorId(assuntoDocumentoId), Orgao.getOrgaoPorId(orgaoOrigemId), Situacao.getSituacaoPorId(situacaoId));
+			processoServico.criarProcesso(processo);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
 	}
 	
 	/**
 	 * Requisição para atualizar um processo que já existe
 	 */
 	@Override
-	public void atualizarDocumento(DocumentoVisao documentoAlvo, boolean ehOficio, String numDocumento, 
-			String nomeInteressado,	String cpfInteressado, String contatoInteressado, int orgaoOrigemId,
-			int tipoDocumentoId, int situacaoId, String observacao)	{
+	public void atualizarDocumento(
+			DocumentoVisao documentoAlvo,
+			boolean ehOficio,
+			String numDocumento, 
+			String nomeInteressado,
+			String cpfInteressado,
+			String contatoInteressado,
+			int orgaoOrigemId,
+			int tipoDocumentoId,
+			int situacaoId,
+			String observacao)
+	{
 		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, cpfInteressado);
 		interessadoServico.atualizarInteressado(interessado);
-		Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.values()[tipoDocumentoId-1], Orgao.values()[orgaoOrigemId-1], Situacao.values()[situacaoId-1]);
-		processoServico.atualizarProcesso(processo);
+		try {
+			Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.getAssuntoPorId(tipoDocumentoId), Orgao.getOrgaoPorId(orgaoOrigemId), Situacao.getSituacaoPorId(situacaoId));
+			processoServico.atualizarProcesso(processo);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 	}
 	
 	public static String verProcessoSelecionado(String numProcesso) {
