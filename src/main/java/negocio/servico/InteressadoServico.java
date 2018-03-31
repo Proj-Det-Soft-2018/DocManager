@@ -2,6 +2,8 @@ package negocio.servico;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import negocio.GenericoDao;
 import negocio.dominio.Interessado;
 import persistencia.InteressadoDaoHash;
@@ -13,12 +15,18 @@ import persistencia.InteressadoDaoHash;
 public class InteressadoServico {
 	GenericoDao<Interessado> interessadoDao = new InteressadoDaoHash();
 	
+	private static Logger logger = Logger.getLogger(InteressadoServico.class);
+	private static GenericoDao<Interessado> interessadoDao = new InteressadoDao();
+	
 	public void criarInteressado(Interessado interessado) {
 		try {
 			interessado.validar();	
 		}
 		catch (RuntimeException e) {
-			// TODO: handle exception
+			logger.error("NAO VALIDOU INTERESSADO");
+		}
+		finally {
+			this.salvarInteressado(interessado);
 		}
 	}
 	
@@ -27,7 +35,16 @@ public class InteressadoServico {
 	}
 	
 	public void atualizarInteressado(Interessado interessado) {
-		interessadoDao.atualizar(interessado);
+		try {
+			interessado.validar();
+		}
+		catch (RuntimeException e) {
+			logger.error("ATUALIZACAO NAO VALIDADA");
+		}
+		finally {
+			interessadoDao.atualizar(interessado);
+		}
+		
 	}
 	
 	public void deletarInteressado(Interessado interessado) {

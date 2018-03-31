@@ -76,19 +76,13 @@ public class Interessado {
 		return contato;
 	}
 
-	/**
-	 * @param contato the contato to set
-	 */
-	public void setContato(String contato) {
-		this.contato = contato;
+	public void validar() throws RuntimeException {
+		if(nome == null || cpf == null){
+			throw new RuntimeException();
+		}else if(cpf.length() != 14) {
+			throw new RuntimeException();
+		}
 	}
-
-	public void validar() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
 	
 
 }
