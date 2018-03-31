@@ -75,6 +75,10 @@ public class Interessado {
 	public String getContato() {
 		return contato;
 	}
+	
+	public void setContato(String contato) {
+		this.contato = contato;
+	}
 
 	public void validar() throws RuntimeException {
 		if(nome == null || cpf == null){

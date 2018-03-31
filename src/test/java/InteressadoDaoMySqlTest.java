@@ -1,3 +1,5 @@
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +17,7 @@ import persistencia.InteressadoDaoMySql;
 public class InteressadoDaoMySqlTest {
 	private Interessado interessado1;
 	private Interessado interessado2;
+	InteressadoDaoMySql dao = new InteressadoDaoMySql();
 	
 	@Before
 	public void setup() {
@@ -23,18 +26,15 @@ public class InteressadoDaoMySqlTest {
 
 	}
 	
-	@Test
-	public void testInserirComSucesso() {
-		InteressadoDaoMySql dao = new InteressadoDaoMySql();
-		System.out.println(interessado1.getCpf());
-		dao.salvar(interessado1);
-	}
+	
 	
 	@Test
-	public void testInserirMesmointeressado() {
-		InteressadoDaoMySql dao = new InteressadoDaoMySql();
-		System.out.println(interessado1.getCpf());
-		dao.salvar(interessado1);
+	public void testGetAll() {
+		
+		for (Interessado interessado : dao.getAll()) {
+			System.out.println(interessado.getNome());
+		}
+		
 	}
 	
 	
