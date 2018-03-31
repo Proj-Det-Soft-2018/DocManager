@@ -22,7 +22,7 @@ public class InteressadoServico {
 			interessado.validar();	
 		}
 		catch (RuntimeException e) {
-			logger.error(e.getMessage(), e);
+			logger.error("NAO VALIDOU INTERESSADO");
 		}
 		finally {
 			this.salvarInteressado(interessado);
@@ -34,7 +34,16 @@ public class InteressadoServico {
 	}
 	
 	public void atualizarInteressado(Interessado interessado) {
-		interessadoDao.atualizar(interessado);
+		try {
+			interessado.validar();
+		}
+		catch (RuntimeException e) {
+			logger.error("ATUALIZACAO NAO VALIDADA");
+		}
+		finally {
+			interessadoDao.atualizar(interessado);
+		}
+		
 	}
 	
 	public void deletarInteressado(Interessado interessado) {

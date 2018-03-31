@@ -97,8 +97,11 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 			Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.getAssuntoPorId(tipoDocumentoId), Orgao.getOrgaoPorId(orgaoOrigemId), Situacao.getSituacaoPorId(situacaoId));
 			processoServico.atualizarProcesso(processo);
 		}
+		catch (RuntimeException e) {
+			// TODO
+		}
 		catch (Exception e) {
-			// TODO: handle exception
+			// TODO
 		}
 		
 	}
