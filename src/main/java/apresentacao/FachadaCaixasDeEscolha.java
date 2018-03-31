@@ -1,10 +1,16 @@
 package apresentacao;
 
-public interface FachadaCaixasDeEscolha {
+import java.util.List;
+
+/**
+ * @author hugotho
+ * 
+ */
+public interface FachadaCaixasDeEscolha extends FachadaArmazenamento {
 	
-	public String[] getListaOrgaos();
+	public List<String> getListaOrgaos();
 	
-	public String[] getListaTipoDocumento();
+	public List<String> getListaAssuntos();
 	
-	public String[] getListaSituacao();
+	public List<String> getListaSituacoes();
 }

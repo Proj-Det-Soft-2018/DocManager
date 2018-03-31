@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="540.0" prefWidth="720.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apresentacao.ControleTelaEdicao">
+<VBox fx:id="raiz" prefHeight="540.0" prefWidth="720.0" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apresentacao.ControleTelaEdicao">
    <padding>
       <Insets bottom="15.0" left="15.0" right="15.0" top="20.0" />
    </padding>
@@ -34,14 +34,14 @@
       </HBox>
       <VBox spacing="10.0" styleClass="painel-borda" stylesheets="@../css/styles.css">
          <children>
-            <Label fx:id="lblDocumento" alignment="TOP_LEFT" styleClass="painel-titulo" stylesheets="@../css/styles.css" text="Processo">
+            <Label fx:id="lblTipoDocumento" alignment="TOP_LEFT" styleClass="painel-titulo" stylesheets="@../css/styles.css" text="Processo">
                <VBox.margin>
                   <Insets left="-10.0" top="9.0" />
                </VBox.margin>
             </Label>
             <HBox alignment="CENTER_LEFT" spacing="10.0">
                <children>
-                  <Label text="Número:" />
+                  <Label fx:id="lblNumProcesso" text="Número:" />
                   <TextField fx:id="txtNumProcesso" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="240.0" promptText="0000000.00000000/0000-00" />
                </children>
             </HBox>
@@ -110,12 +110,12 @@
                 <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Tipo de processo" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
+                  <Label text="Assunto" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
                      <padding>
                         <Insets bottom="2.0" />
                      </padding>
                   </Label>
-                  <ChoiceBox fx:id="cbTipoProcesso" maxWidth="1.7976931348623157E308" GridPane.rowIndex="1" />
+                  <ChoiceBox fx:id="cbAssunto" maxWidth="1.7976931348623157E308" GridPane.rowIndex="1" />
                   <Label text="Situação" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
                      <GridPane.margin>
                         <Insets bottom="2.0" />
@@ -143,8 +143,8 @@
             <Insets top="-15.0" />
          </VBox.margin>
          <children>
-            <Button fx:id="btnCancelar" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="Cancelar" />
-            <Button fx:id="btnCadastrar" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="Cadastrar" />
+            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#fecharJanela" prefHeight="26.0" prefWidth="100.0" text="Cancelar" />
+            <Button fx:id="btnCadastrar" mnemonicParsing="false" onAction="#cadastrar" prefHeight="26.0" prefWidth="100.0" text="Cadastrar" />
          </children>
       </HBox>
    </children>

@@ -3,8 +3,6 @@
  */
 package negocio.dominio;
 
-import negocio.servico.InteressadoServico;
-
 /**
  * Classe representa o interessado do processo, pessoa vinculada ao processo como
  * parte interessada.
@@ -14,14 +12,9 @@ import negocio.servico.InteressadoServico;
  */
 public class Interessado {
 	
-	private int interessadoId;
 	private String nome;
 	private String cpf;
 	private String contato1;
-	private String contato2;
-	
-	private InteressadoServico banco;
-
 	
 	public Interessado() {
 		
@@ -33,12 +26,11 @@ public class Interessado {
 	 * @param contato1
 	 * @param contato2
 	 */
-	public Interessado(String nome, String cpf, String contato1, String contato2) {
+	public Interessado(String nome, String cpf, String contato1) {
 		super();
 		this.nome = nome;
 		this.cpf = cpf;
 		this.contato1 = contato1;
-		this.contato2 = contato2;
 	}
 
 	public String getContato1() {
@@ -47,14 +39,6 @@ public class Interessado {
 
 	public void setContato1(String contato1) {
 		this.contato1 = contato1;
-	}
-
-	public String getContato2() {
-		return contato2;
-	}
-
-	public void setContato2(String contato2) {
-		this.contato2 = contato2;
 	}
 	
 	public String getNome() {
@@ -75,18 +59,12 @@ public class Interessado {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
-	
-	public void criar() {
-		this.validar();
-		
-		this.banco.salvarInteressado(this);
-			
-	}
 
-	private void validar() {
-		// TODO Auto-generated method stub
-		
+	public void validar() throws RuntimeException {
+		if(nome == null || cpf == null){
+			throw new RuntimeException();
+		}else if(cpf.length() != 14) {
+			throw new RuntimeException();
+		}
 	}
-	
-
 }
