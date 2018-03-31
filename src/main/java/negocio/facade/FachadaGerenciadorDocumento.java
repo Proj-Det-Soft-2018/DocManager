@@ -53,7 +53,9 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 	@Override
 	public void criarDocumento(	boolean ehOficio, String numDocumento, String nomeInteressado, String cpfInteressado,
 			String contatoInteressado, int orgaoOrigemId, int assuntoDocumentoId, int situacaoId, String observacao) {
+		//cria objeto interessado
 		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, contatoInteressado);
+		
 		interessadoServico.criarInteressado(interessado);
 		Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.values()[assuntoDocumentoId-1], Orgao.values()[orgaoOrigemId-1], Situacao.values()[situacaoId-1]);
 		processoServico.criarProcesso(processo);
@@ -78,11 +80,13 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 		Processo processo = new Processo();
 		return processo.selecionarPorId(numProcesso).toString();
 	}
-
+	
+	@Override
 	public List<String> getListaOrgaos() {
 		return Orgao.getOrgaos();
 	}
-
+	
+	@Override
 	public List<String> getListaAssuntos() {
 		return Assunto.getAssuntos();
 	}

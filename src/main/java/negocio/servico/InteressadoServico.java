@@ -4,14 +4,14 @@ import java.util.List;
 
 import negocio.GenericoDao;
 import negocio.dominio.Interessado;
-import persistencia.InteressadoDao;
+import persistencia.InteressadoDaoHash;
 /**
  * 
  * @author Allan
  *
  */
 public class InteressadoServico {
-	GenericoDao<Interessado> interessadoDao = new InteressadoDao();
+	GenericoDao<Interessado> interessadoDao = new InteressadoDaoHash();
 	
 	public void criarInteressado(Interessado interessado) {
 		try {

@@ -207,7 +207,7 @@ public class Processo implements DocumentoVisao{
 	}
 
 	public String getContatoInteressado() {
-		return this.getInteressado().getContato1();
+		return this.getInteressado().getContato();
 	}
 
 	public int getOrgaoOrigemId() {
