@@ -2,6 +2,8 @@ package negocio.servico;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import negocio.GenericoDao;
 import negocio.dominio.Interessado;
 import persistencia.InteressadoDao;
@@ -11,14 +13,19 @@ import persistencia.InteressadoDao;
  *
  */
 public class InteressadoServico {
-	GenericoDao<Interessado> interessadoDao = new InteressadoDao();
+	
+	private static Logger logger = Logger.getLogger(InteressadoServico.class);
+	private static GenericoDao<Interessado> interessadoDao = new InteressadoDao();
 	
 	public void criarInteressado(Interessado interessado) {
 		try {
 			interessado.validar();	
 		}
 		catch (RuntimeException e) {
-			// TODO: handle exception
+			logger.error(e.getMessage(), e);
+		}
+		finally {
+			this.salvarInteressado(interessado);
 		}
 	}
 	

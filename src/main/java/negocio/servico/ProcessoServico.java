@@ -18,7 +18,7 @@ import persistencia.ProcessoDao;
 public class ProcessoServico extends Observavel {
 	
 	private static Logger logger = Logger.getLogger(ProcessoServico.class);
-	GenericoDao<Processo> processoDao = new ProcessoDao();
+	private static GenericoDao<Processo> processoDao = new ProcessoDao();
 	
 	public void criarProcesso(Processo processo) {
 		try{
