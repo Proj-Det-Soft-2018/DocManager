@@ -26,16 +26,27 @@ public class InteressadoDaoMySqlTest {
 
 	}
 	
-	
-	
 	@Test
-	public void testGetAll() {
+	public void testExcluirInteressado() {
+		Interessado inter = dao.getById("2");
 		
+		System.out.println("Antes:");
+		for (Interessado interessado : dao.getAll()) {			
+			System.out.println(interessado.getNome());
+		}
+		
+		dao.deletar(inter);
+		
+		System.out.println("Depois:");
 		for (Interessado interessado : dao.getAll()) {
 			System.out.println(interessado.getNome());
 		}
 		
+		
 	}
+	
+	
+	
 	
 	
 

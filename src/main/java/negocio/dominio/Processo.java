@@ -13,7 +13,7 @@ import negocio.servico.ProcessoServico;
  *
  */
 public class Processo implements DocumentoVisao{
-	private Long processoId;
+	private Long id;
 	private boolean tipoOficio;
 	private String numero;
 	private Interessado interessado;
@@ -61,12 +61,12 @@ public class Processo implements DocumentoVisao{
 	/**
 	 * @return the id
 	 */
-	public Long getProcessoId() {
-		return processoId;
+	public Long getId() {
+		return id;
 	}
 	
-	public void setProcessoId(Long processoId) {
-		this.processoId = processoId;
+	public void setId(Long processoId) {
+		this.id = processoId;
 	}
 
 	/**
