@@ -13,8 +13,7 @@ import negocio.servico.ProcessoServico;
  *
  */
 public class Processo implements DocumentoVisao{
-	private static int contador = 0;
-	private int processoId;
+	private Long processoId;
 	private boolean tipoOficio;
 	private String numero;
 	private Interessado interessado;
@@ -46,7 +45,6 @@ public class Processo implements DocumentoVisao{
 		Orgao unidadeOrigem,
 		Situacao situacaoAtual) {
 		super();
-		this.processoId = this.gerarProcessoId();
 		this.tipoOficio = tipoOficio;
 		this.numero = numero;
 		this.interessado = interessado;
@@ -63,12 +61,12 @@ public class Processo implements DocumentoVisao{
 	/**
 	 * @return the id
 	 */
-	public int getProcessoId() {
+	public Long getProcessoId() {
 		return processoId;
 	}
 	
-	private int gerarProcessoId() {
-		return contador++;
+	public void setProcessoId(Long processoId) {
+		this.processoId = processoId;
 	}
 
 	/**
@@ -161,21 +159,6 @@ public class Processo implements DocumentoVisao{
 
 	public void setDataSaida(LocalDateTime dataSaida) {
 		this.dataSaida = dataSaida;
-	}
-	
-	
-	/**
-	 * @return the banco
-	 */
-	public ProcessoServico getBanco() {
-		return banco;
-	}
-
-	/**
-	 * @param banco the banco to set
-	 */
-	public void setBanco(ProcessoServico banco) {
-		this.banco = banco;
 	}
 	
 	public Processo selecionarPorId(String numProcesso) {
