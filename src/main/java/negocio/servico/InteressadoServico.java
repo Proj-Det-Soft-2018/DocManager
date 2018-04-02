@@ -6,16 +6,16 @@ import org.apache.log4j.Logger;
 
 import negocio.GenericoDao;
 import negocio.dominio.Interessado;
-import persistencia.InteressadoDao;
+import persistencia.InteressadoDaoHash;
 /**
  * 
  * @author Allan
  *
  */
 public class InteressadoServico {
+	GenericoDao<Interessado> interessadoDao = new InteressadoDaoHash();
 	
 	private static Logger logger = Logger.getLogger(InteressadoServico.class);
-	private static GenericoDao<Interessado> interessadoDao = new InteressadoDao();
 	
 	public void criarInteressado(Interessado interessado) {
 		try {
@@ -28,8 +28,8 @@ public class InteressadoServico {
 			this.salvarInteressado(interessado);
 		}
 	}
-	
-	public void salvarInteressado(Interessado interessado) {
+	//metodo privado pois só é acesssado depois que o objeto é criado
+	private void salvarInteressado(Interessado interessado) {
 		interessadoDao.salvar(interessado);
 	}
 	

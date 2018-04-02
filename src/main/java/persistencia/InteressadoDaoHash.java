@@ -11,7 +11,7 @@ import negocio.dominio.Interessado;
  * @author Allan
  *
  */
-public class InteressadoDao implements GenericoDao<Interessado> {
+public class InteressadoDaoHash implements GenericoDao<Interessado> {
 	
 	private static final HashMap<String, Interessado> banco = new HashMap<String, Interessado>();
 
