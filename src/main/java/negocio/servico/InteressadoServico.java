@@ -23,9 +23,7 @@ public class InteressadoServico {
 		catch (RuntimeException e) {
 			logger.error("NAO VALIDOU INTERESSADO");
 		}
-		finally {
-			this.salvarInteressado(interessado);
-		}
+		this.salvarInteressado(interessado);
 	}
 	//metodo privado pois só é acesssado depois que o objeto é criado
 	private void salvarInteressado(Interessado interessado) {
@@ -39,10 +37,7 @@ public class InteressadoServico {
 		catch (RuntimeException e) {
 			logger.error("ATUALIZACAO NAO VALIDADA");
 		}
-		finally {
-			interessadoDao.atualizar(interessado);
-		}
-		
+		interessadoDao.atualizar(interessado);
 	}
 	
 	public void deletarInteressado(Interessado interessado) {

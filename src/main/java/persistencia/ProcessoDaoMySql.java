@@ -13,8 +13,6 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.management.RuntimeErrorException;
-
 import negocio.dominio.Assunto;
 import negocio.dominio.Interessado;
 import negocio.dominio.Orgao;
@@ -30,9 +28,12 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 
 	@Override
 	public void salvar(Processo bean) {
-		String sql = "INSERT INTO processos" +
-                	"(eh_oficio,numero,interessado_id,assunto,situacao,orgao_origem,observacao,data_entrada)" +
-                	" values (?,?,?,?,?,?,?,?)";
+		
+		String sql = "INSERT INTO processos"
+					+ "(eh_oficio,numero,interessado_id,"
+                	+ "assunto,situacao,orgao_origem,"
+                	+ "observacao,data_entrada)"
+                	+ " values (?,?,?,?,?,?,?,?)";
 		
 		Connection con = null;
 		PreparedStatement stmt=null;
@@ -68,11 +69,16 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 
 	@Override
 	public void atualizar(Processo bean) {
-		String sql = "UPDATE processos SET "+
-					"numero=?, interessado_id=?, assunto=? , situacao=?, orgao_origem=?,observacao=?,data_saida=?"+
-					" WHERE id=?";
+		
+		String sql = "UPDATE processos SET "
+					+ "numero=?, interessado_id=?, assunto=?,"
+					+ "situacao=?, orgao_origem=?,observacao=?,"
+					+ "data_saida=?"
+					+ " WHERE id=?";
+		
 		Connection con = null;
 		PreparedStatement stmt=null;
+		
 		try {
 			con = ConnectionFactory.getConnection();
 			stmt = con.prepareStatement(sql);
@@ -104,8 +110,10 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 
 	@Override
 	public void deletar(Processo bean) {
+		
 		Connection con = null;
 		PreparedStatement stmt=null;
+		
 		try {
 			con = ConnectionFactory.getConnection();
 			stmt = con.prepareStatement("DELETE FROM processos WHERE id=?");
@@ -124,6 +132,7 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 	//TODO verificar essa exceção generica que os metodos getbyid das classes Orgao, Situacao e Assunto lança
 	@Override
 	public Processo getById(String id) {
+		
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
