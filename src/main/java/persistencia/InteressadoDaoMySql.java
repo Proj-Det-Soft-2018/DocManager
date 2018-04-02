@@ -119,7 +119,41 @@ public class InteressadoDaoMySql implements GenericoDao<Interessado> {
 			return interessado;
 			
 		} catch (SQLException e) {
-			throw new RuntimeException("Erro no getAll Interessado: "+ e);
+			throw new RuntimeException("Erro no getById Interessado: "+ e);
+		}finally {
+			ConnectionFactory.fechaConnection(con, stmt, rs);
+		}
+	}
+	
+	public Interessado getByCpf(String id) {
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = ConnectionFactory.getConnection();
+			
+			stmt = con.prepareStatement("select * from interessados where cpf=?");
+			stmt.setString(1, id);
+			
+			rs = stmt.executeQuery();
+			
+			Interessado interessado = new Interessado();
+			
+			if(rs.next()) {
+				//criando o objeto Interessado
+				
+				interessado.setId(rs.getLong("id"));
+				interessado.setNome(rs.getString("nome"));
+				interessado.setCpf(rs.getString("cpf"));
+				interessado.setContato(rs.getString("contato"));
+				
+			}
+			
+			return interessado;
+			
+		} catch (SQLException e) {
+			throw new RuntimeException("Erro no getByCpf Interessado: "+ e);
 		}finally {
 			ConnectionFactory.fechaConnection(con, stmt, rs);
 		}

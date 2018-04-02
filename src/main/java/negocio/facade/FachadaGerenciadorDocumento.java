@@ -92,6 +92,7 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 			int situacaoId,
 			String observacao)
 	{
+				
 		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, cpfInteressado);
 		interessadoServico.atualizarInteressado(interessado);
 		try {

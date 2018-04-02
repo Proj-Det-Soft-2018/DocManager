@@ -1,3 +1,5 @@
+import static org.junit.Assert.assertEquals;
+
 import java.util.List;
 
 import org.junit.Before;
@@ -27,7 +29,26 @@ public class InteressadoDaoMySqlTest {
 	}
 	
 	@Test
-	public void testExcluirInteressado() {
+	public void testInserirExcluirComSucesso() {
+		dao.salvar(interessado1);
+		System.out.println("Depois inserção:");
+		for (Interessado inter : dao.getAll()) {			
+			System.out.println(inter.getNome());
+		}
+		Interessado interessado = dao.getByCpf("06570555499");
+		assertEquals(interessado1.getCpf(), interessado1.getCpf());
+		dao.deletar(interessado);
+		
+		System.out.println("Depois exclusão:");
+		for (Interessado inter : dao.getAll()) {			
+			System.out.println(inter.getNome());
+		}
+		
+	}
+	
+	
+	@Test
+	public void testAtualizar() {
 		Interessado inter = dao.getById("2");
 		
 		System.out.println("Antes:");

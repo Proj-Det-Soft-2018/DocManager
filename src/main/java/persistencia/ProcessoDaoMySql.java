@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.management.RuntimeErrorException;
@@ -186,14 +187,92 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 
 	@Override
 	public boolean contem(Processo bean) {
-		// TODO Auto-generated method stub
-		return false;
+		String id = bean.getId().toString();
+		Processo processo = this.getById(id);
+		if(processo!=null) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	@Override
 	public List<Processo> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = ConnectionFactory.getConnection();
+			
+			stmt = con.prepareStatement("SELECT * "
+										+"FROM processos p "
+										+ "INNER JOIN interessados i "
+										+ "ON p.interessado_id=i.id");
+					
+			rs = stmt.executeQuery();
+			
+			
+			List<Processo> processos = new ArrayList<Processo>();
+			
+			while(rs.next()) {
+				
+				//criando o objeto Interessado
+				Processo processo = new Processo();
+				processo.setId(rs.getLong("id"));
+				processo.setTipoOficio(rs.getBoolean("eh_oficio"));
+				processo.setNumero(rs.getString("numero"));
+				processo.setObservacao(rs.getString("observacao"));
+				
+				//falta resolver unidade destino /orgao_saida, se vai ter ou não
+				
+				try {
+				processo.setAssunto(Assunto.getAssuntoPorId(rs.getInt("assunto")));
+				processo.setUnidadeOrigem(Orgao.getOrgaoPorId(rs.getInt("orgao_origem")));
+				processo.setSituacaoAtual(Situacao.getSituacaoPorId(rs.getInt("situacao")));
+				}catch(Exception e) {
+					//O que fazer aqui?
+				}
+				
+				//criando objeto interessado
+				Interessado interessado = new Interessado();
+				interessado.setId(rs.getLong("interessado_id"));
+				interessado.setNome(rs.getString("nome"));
+				interessado.setCpf(rs.getString("cpf"));
+				interessado.setContato(rs.getString("contato"));
+				processo.setInteressado(interessado);
+				
+				//Convertendo java.sql.Date to LocalDateTime
+				Date dataE = rs.getDate("data_entrada");
+				if(dataE != null) {
+					Timestamp stampE = new Timestamp(dataE.getTime());
+					LocalDateTime dataEntrada = stampE.toLocalDateTime();
+					processo.setDataEntrada(dataEntrada);
+				}else {
+					processo.setDataEntrada(null);
+				}
+					
+				
+				//Convertendo java.sql.Date to LocalDateTime
+				Date dataS = rs.getDate("data_saida");
+				if(dataS != null) {
+					Timestamp stampS = new Timestamp(rs.getDate("data_saida").getTime());
+					LocalDateTime dataSaida = stampS.toLocalDateTime();
+					processo.setDataSaida(dataSaida);
+				}else {
+					processo.setDataSaida(null);
+				}
+								
+			}
+			
+			return processos;
+			
+
+		} catch (SQLException e) {
+			throw new RuntimeException("Erro no getAll Processo: "+ e);
+		}finally {
+			ConnectionFactory.fechaConnection(con, stmt, rs);
+		}
 	}
 
 }
