@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import negocio.GenericoDao;
 import negocio.dominio.Processo;
 import persistencia.ProcessoDao;
 
