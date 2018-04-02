@@ -1,7 +1,5 @@
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,13 +16,11 @@ import persistencia.InteressadoDaoMySql;
  */
 public class InteressadoDaoMySqlTest {
 	private Interessado interessado1;
-	private Interessado interessado2;
 	InteressadoDaoMySql dao = new InteressadoDaoMySql();
 	
 	@Before
 	public void setup() {
 		interessado1 = new Interessado("Clarissa","06570555499","2020-1515");
-		interessado2 = new Interessado("Hugo", "1234567899", "2020-4558");
 
 	}
 	
