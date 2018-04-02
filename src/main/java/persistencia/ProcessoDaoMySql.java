@@ -15,12 +15,12 @@ import java.util.List;
 
 import javax.management.RuntimeErrorException;
 
-import negocio.GenericoDao;
 import negocio.dominio.Assunto;
 import negocio.dominio.Interessado;
 import negocio.dominio.Orgao;
 import negocio.dominio.Processo;
 import negocio.dominio.Situacao;
+import negocio.servico.GenericoDao;
 
 /**
  * @author clah
@@ -208,8 +208,7 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 			stmt = con.prepareStatement("SELECT * "
 										+"FROM processos p "
 										+ "INNER JOIN interessados i "
-										+ "ON p.interessado_id=i.id");
-					
+										+ "ON p.interessado_id=i.id ");					
 			rs = stmt.executeQuery();
 			
 			
