@@ -62,10 +62,20 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 			int situacaoId,
 			String observacao)
 	{
-		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, contatoInteressado);
+		//Verifica se interessado ja esta no banco atraves do cpf
+		Interessado interessado = interessadoServico.encontrarPorId(cpfInteressado);
 		
-		interessadoServico.criarInteressado(interessado);
+		//se nao está, inicializa valores dos atributos, insere no banco e retorna o objeto com id
+		if(interessado == null) {
+			
+			interessado = new Interessado(nomeInteressado, cpfInteressado, contatoInteressado);
+			interessadoServico.criarInteressado(interessado);
+			//para objeto voltar com id
+			interessado = interessadoServico.encontrarPorId(cpfInteressado);
+		}
+		
 		try {
+			//constroi objeto processo com interessado com id do banco
 			Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.getAssuntoPorId(assuntoDocumentoId), Orgao.getOrgaoPorId(orgaoOrigemId), Situacao.getSituacaoPorId(situacaoId));
 			processoServico.criarProcesso(processo);
 		}
@@ -93,10 +103,28 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 			String observacao)
 	{
 				
-		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, cpfInteressado);
+		//Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, cpfInteressado);
+		
+		//vai buscar o interessado de acordo com o cpf do documento selecionado
+		Interessado interessado = interessadoServico.encontrarPorId(documentoAlvo.getCpfInteressado());
+		
+		interessado.setNome(nomeInteressado);
+		interessado.setCpf(cpfInteressado);
+		interessado.setContato(contatoInteressado);
 		interessadoServico.atualizarInteressado(interessado);
+		
 		try {
-			Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.getAssuntoPorId(tipoDocumentoId), Orgao.getOrgaoPorId(orgaoOrigemId), Situacao.getSituacaoPorId(situacaoId));
+			//tem que ver se o documento visao devolverá informação de id do objeto Processo
+			String idProcesso = ((Interessado)documentoAlvo).getId().toString();
+			Processo processo = processoServico.encontrarPorId(idProcesso);
+			
+			processo.setTipoOficio(ehOficio);
+			processo.setNumero(numDocumento);
+			processo.setSituacaoAtual(Situacao.getSituacaoPorId(situacaoId));
+			processo.setUnidadeOrigem(Orgao.getOrgaoPorId(orgaoOrigemId));
+			processo.setAssunto(Assunto.getAssuntoPorId(tipoDocumentoId));
+			processo.setObservacao(observacao);
+		
 			processoServico.atualizarProcesso(processo);
 		}
 		catch (RuntimeException e) {
@@ -106,14 +134,6 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 			// TODO
 		}
 		
-	}
-	
-	public static String verProcessoSelecionado(String numProcesso) {
-		//TODO deve-se implementar como os dados do processo vai ser recebido no parametro
-		//TODO Deve-se ver o retorno após consulta no banco de dados
-		Processo processo = new Processo();
-		
-		return processo.selecionarPorId(numProcesso).toString();
 	}
 	
 	@Override

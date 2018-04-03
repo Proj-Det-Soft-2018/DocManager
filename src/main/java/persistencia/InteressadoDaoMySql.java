@@ -43,11 +43,13 @@ public class InteressadoDaoMySql implements GenericoDao<Interessado> {
 			ConnectionFactory.fechaConnection(con, stmt);
 		}
 	}
-
+	
+	
 	@Override
 	public void atualizar(Interessado bean) {
-		String sql = "update interessados set nome=?, cpf=?, contato=?," +
-	            "where id=?";
+		String sql = "UPDATE interessados " +
+					 "SET nome=?, cpf=?, contato=?," +
+					 "WHERE id=?";
 		Connection con = null;
 		PreparedStatement stmt = null;
 		
@@ -68,8 +70,8 @@ public class InteressadoDaoMySql implements GenericoDao<Interessado> {
 			ConnectionFactory.fechaConnection(con, stmt);
 		}
 	
-		
 	}
+	
 
 	@Override
 	public void deletar(Interessado bean) {
@@ -89,18 +91,21 @@ public class InteressadoDaoMySql implements GenericoDao<Interessado> {
 		}
 		
 	}
-
+	
+	/**
+	 * Como o id e cpf são unicos, nesse metodo procuramos o processo pelo CPF
+	 */
 	@Override
 	public Interessado getById(String id) {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		
+
 		try {
 			con = ConnectionFactory.getConnection();
 			
-			stmt = con.prepareStatement("select * from interessados where id=?");
-			stmt.setLong(1, Long.parseLong(id));
+			stmt = con.prepareStatement("select * from interessados where cpf=?");
+			stmt.setString(1, id);
 			
 			rs = stmt.executeQuery();
 			
