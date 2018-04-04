@@ -150,7 +150,7 @@ public class ControleTelaEdicao implements Initializable {
 					this.rbOficio.isSelected(),
 					this.txtNumProcesso.getText(),
 					this.txtNomeInteressado.getText(),
-					this.txtCpfInteressado.getText(),
+					this.txtCpfInteressado.plainTextProperty().getValue(),
 					this.txtContatoInteressado.getText(),
 					this.cbOrgao.getSelectionModel().getSelectedIndex(),
 					this.cbAssunto.getSelectionModel().getSelectedIndex(),

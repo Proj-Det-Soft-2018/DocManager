@@ -22,12 +22,10 @@ public class ProcessoServico extends Observavel {
 	public void criarProcesso(Processo processo) {
 		try{
 			processo.validar();
+			this.salvarProcesso(processo);
 		}
 		catch (RuntimeException e) {
 			logger.error("NAO VALIDOU PROCESSO");
-		}
-		finally {
-			this.salvarProcesso(processo);
 		}
 	}
 	
@@ -39,13 +37,11 @@ public class ProcessoServico extends Observavel {
 	public void atualizarProcesso(Processo processo) {
 		try {
 			processo.validar();
+			processoDao.atualizar(processo);
+			this.notificarTodos();	
 		}
 		catch (RuntimeException e) {
 			logger.error("ATUALIZACAO NAO VALIDADA");
-		}
-		finally {
-			processoDao.atualizar(processo);
-			this.notificarTodos();	
 		}
 	}
 	
