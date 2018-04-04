@@ -50,6 +50,7 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 			stmt.setString(7, bean.getObservacao());
 			
 			//Definindo data de entrada no banco de dados
+			
 			bean.setDataEntrada(LocalDateTime.now());
 			Timestamp stamp = Timestamp.valueOf(bean.getDataEntrada());
 			Date dataEntrada = new Date (stamp.getTime());
@@ -90,12 +91,17 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 			stmt.setString(6, bean.getObservacao());
 			
 			//LocalDateTime to java.sql.Date
-			Timestamp stamp = Timestamp.valueOf(bean.getDataSaida());
-			Date dataSaida = new Date (stamp.getTime());
-			stmt.setDate(7,dataSaida);
+			if(bean.getDataSaida()!=null) {
+				Timestamp stamp = Timestamp.valueOf(bean.getDataSaida());
+				Date dataSaida = new Date (stamp.getTime());
+				stmt.setDate(7,dataSaida);
+			}
 			
+			stmt.setDate(7, null);
+				
 			//setando id do processo a ser modificado
 			stmt.setLong(8, bean.getId());
+			
 			
 			stmt.executeUpdate();
 			
@@ -172,14 +178,27 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 				processo.setInteressado(interessado);
 				
 				//Convertendo java.sql.Date to LocalDateTime
-				Timestamp stampE = new Timestamp(rs.getDate("data_entrada").getTime());
-				LocalDateTime dataEntrada = stampE.toLocalDateTime();
-				processo.setDataEntrada(dataEntrada);
+				Date dataE = rs.getDate("data_entrada");
+				if(dataE != null) {
+					Timestamp stampE = new Timestamp(dataE.getTime());
+					LocalDateTime dataEntrada = stampE.toLocalDateTime();
+					processo.setDataEntrada(dataEntrada);
+				}else {
+					processo.setDataEntrada(null);
+				}
+					
 				
 				//Convertendo java.sql.Date to LocalDateTime
-				Timestamp stampS = new Timestamp(rs.getDate("data_saida").getTime());
-				LocalDateTime dataSaida = stampS.toLocalDateTime();
-				processo.setDataSaida(dataSaida);				
+				Date dataS = rs.getDate("data_saida");
+				if(dataS != null) {
+					Timestamp stampS = new Timestamp(rs.getDate("data_saida").getTime());
+					LocalDateTime dataSaida = stampS.toLocalDateTime();
+					processo.setDataSaida(dataSaida);
+				}else {
+					processo.setDataSaida(null);
+				}
+				
+					
 			}else {
 				System.out.println("Nenhum processo encontrado com esse id");
 			}
@@ -273,7 +292,8 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 					processo.setDataSaida(null);
 				}
 				
-				 processos.add(processo);			
+				processos.add(processo);
+			
 			}
 			
 			return processos;
