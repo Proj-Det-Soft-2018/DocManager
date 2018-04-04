@@ -62,17 +62,13 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 			int situacaoId,
 			String observacao)
 	{
-		//Verifica se interessado ja esta no banco atraves do cpf
-		Interessado interessado = interessadoServico.encontrarPorId(cpfInteressado);
 		
-		//se nao está, inicializa valores dos atributos, insere no banco e retorna o objeto com id
-		if(interessado == null) {
-			
-			interessado = new Interessado(nomeInteressado, cpfInteressado, contatoInteressado);
-			interessadoServico.criarInteressado(interessado);
-			//para objeto voltar com id
-			interessado = interessadoServico.encontrarPorId(cpfInteressado);
-		}
+		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, contatoInteressado);
+				
+		interessadoServico.criarInteressado(interessado);
+		
+		//para objeto voltar com id
+		interessado = interessadoServico.encontrarPorId(interessado.getCpf());
 		
 		try {
 			//constroi objeto processo com interessado com id do banco
@@ -82,8 +78,6 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 		catch (Exception e) {
 			// TODO: handle exception
 		}
-		
-		
 	}
 	
 	/**

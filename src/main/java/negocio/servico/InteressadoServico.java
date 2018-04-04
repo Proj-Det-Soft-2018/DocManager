@@ -5,25 +5,35 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import negocio.dominio.Interessado;
-import persistencia.InteressadoDaoHash;
+import persistencia.InteressadoDaoMySql;
 /**
  * 
  * @author Allan
  *
  */
 public class InteressadoServico {
-	GenericoDao<Interessado> interessadoDao = new InteressadoDaoHash();
+	GenericoDao<Interessado> interessadoDao = new InteressadoDaoMySql();
 	
 	private static Logger logger = Logger.getLogger(InteressadoServico.class);
 	
 	public void criarInteressado(Interessado interessado) {
-		try {
-			interessado.validar();	
+		
+		//Verifica se interessado ja esta no banco atraves do cpf
+		Interessado interessado_bd = this.encontrarPorId(interessado.getCpf());
+		
+		if(interessado_bd == null) {
+			try {
+				interessado.validar();
+				this.salvarInteressado(interessado);
+			}
+			catch (RuntimeException e) {
+				//TODO
+			}
+			
 		}
-		catch (RuntimeException e) {
-			logger.error("NAO VALIDOU INTERESSADO");
-		}
-		this.salvarInteressado(interessado);
+		
+		
+		
 	}
 	//metodo privado pois só é acesssado depois que o objeto é criado
 	private void salvarInteressado(Interessado interessado) {

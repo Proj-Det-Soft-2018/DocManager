@@ -167,9 +167,11 @@ public class Processo implements DocumentoVisao{
 	}
 
 	public void validar() throws RuntimeException{
+		/*
 		if(this.numero == null){
 			throw new RuntimeException();
 		}
+		//*/
 	}
 
 	public boolean ehOficio() {

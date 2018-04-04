@@ -48,7 +48,7 @@ public class InteressadoDaoMySql implements GenericoDao<Interessado> {
 	@Override
 	public void atualizar(Interessado bean) {
 		String sql = "UPDATE interessados " +
-					 "SET nome=?, cpf=?, contato=?," +
+					 "SET nome=?, cpf=?, contato=? " +
 					 "WHERE id=?";
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -109,11 +109,11 @@ public class InteressadoDaoMySql implements GenericoDao<Interessado> {
 			
 			rs = stmt.executeQuery();
 			
-			Interessado interessado = new Interessado();
+			Interessado interessado = null;
 			
 			if(rs.next()) {
 				//criando o objeto Interessado
-				
+				interessado = new Interessado();
 				interessado.setId(rs.getLong("id"));
 				interessado.setNome(rs.getString("nome"));
 				interessado.setCpf(rs.getString("cpf"));
@@ -178,6 +178,7 @@ public class InteressadoDaoMySql implements GenericoDao<Interessado> {
 
 	@Override
 	public List<Interessado> getAll() {
+		
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;

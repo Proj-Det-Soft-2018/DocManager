@@ -72,8 +72,8 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 		
 		String sql = "UPDATE processos SET "
 					+ "numero=?, interessado_id=?, assunto=?,"
-					+ "situacao=?, orgao_origem=?,observacao=?,"
-					+ "data_saida=?"
+					+ "situacao=?, orgao_origem=?, observacao=?,"
+					+ " data_saida=?"
 					+ " WHERE id=?";
 		
 		Connection con = null;
@@ -233,14 +233,16 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 				processo.setObservacao(rs.getString("observacao"));
 				
 				//falta resolver unidade destino /orgao_saida, se vai ter ou não
-				
 				try {
-				processo.setAssunto(Assunto.getAssuntoPorId(rs.getInt("assunto")));
-				processo.setUnidadeOrigem(Orgao.getOrgaoPorId(rs.getInt("orgao_origem")));
-				processo.setSituacaoAtual(Situacao.getSituacaoPorId(rs.getInt("situacao")));
-				}catch(Exception e) {
-					//O que fazer aqui?
+					processo.setAssunto(Assunto.getAssuntoPorId(rs.getInt("assunto")));
+					processo.setUnidadeOrigem(Orgao.getOrgaoPorId(rs.getInt("orgao_origem")));
+					processo.setSituacaoAtual(Situacao.getSituacaoPorId(rs.getInt("situacao")));
 				}
+				catch (RuntimeException e) {
+					// TODO: handle exception
+				}
+				
+				
 				
 				//criando objeto interessado
 				Interessado interessado = new Interessado();
@@ -270,7 +272,8 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 				}else {
 					processo.setDataSaida(null);
 				}
-								
+				
+				 processos.add(processo);			
 			}
 			
 			return processos;

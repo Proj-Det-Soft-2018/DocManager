@@ -81,11 +81,13 @@ public class Interessado {
 	}
 
 	public void validar() throws RuntimeException {
+		/*
 		if(nome == null || cpf == null){
 			throw new RuntimeException();
 		}else if(cpf.length() != 14) {
 			throw new RuntimeException();
 		}
+		//*/
 	}
 	
 

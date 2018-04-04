@@ -8,7 +8,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import negocio.dominio.Processo;
-import persistencia.ProcessoDao;
+import persistencia.ProcessoDaoMySql;
 
 /**
  * @author clah
@@ -17,7 +17,7 @@ import persistencia.ProcessoDao;
 public class ProcessoServico extends Observavel {
 	
 	private static Logger logger = Logger.getLogger(ProcessoServico.class);
-	private static GenericoDao<Processo> processoDao = new ProcessoDao();
+	private static GenericoDao<Processo> processoDao = new ProcessoDaoMySql();
 	
 	public void criarProcesso(Processo processo) {
 		try{
