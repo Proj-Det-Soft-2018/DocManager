@@ -7,9 +7,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import negocio.GenericoDao;
 import negocio.dominio.Processo;
-import persistencia.ProcessoDao;
+import persistencia.ProcessoDaoMySql;
 
 /**
  * @author clah
@@ -18,14 +17,14 @@ import persistencia.ProcessoDao;
 public class ProcessoServico extends Observavel {
 	
 	private static Logger logger = Logger.getLogger(ProcessoServico.class);
-	GenericoDao<Processo> processoDao = new ProcessoDao();
+	private static GenericoDao<Processo> processoDao = new ProcessoDaoMySql();
 	
 	public void criarProcesso(Processo processo) {
 		try{
 			processo.validar();
 		}
 		catch (RuntimeException e) {
-			logger.error(e.getMessage(), e);
+			logger.error("NAO VALIDOU PROCESSO");
 		}
 		finally {
 			this.salvarProcesso(processo);
@@ -36,9 +35,18 @@ public class ProcessoServico extends Observavel {
 		processoDao.salvar(processo);
 		this.notificarTodos();
 	}
+	
 	public void atualizarProcesso(Processo processo) {
-		processoDao.atualizar(processo);
-		this.notificarTodos();
+		try {
+			processo.validar();
+		}
+		catch (RuntimeException e) {
+			logger.error("ATUALIZACAO NAO VALIDADA");
+		}
+		finally {
+			processoDao.atualizar(processo);
+			this.notificarTodos();	
+		}
 	}
 	
 	public void deletarProcesso(Processo processo) {

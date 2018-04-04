@@ -2,31 +2,51 @@ package negocio.servico;
 
 import java.util.List;
 
-import negocio.GenericoDao;
+import org.apache.log4j.Logger;
+
 import negocio.dominio.Interessado;
-import persistencia.InteressadoDao;
+import persistencia.InteressadoDaoMySql;
 /**
  * 
  * @author Allan
  *
  */
 public class InteressadoServico {
-	GenericoDao<Interessado> interessadoDao = new InteressadoDao();
+	GenericoDao<Interessado> interessadoDao = new InteressadoDaoMySql();
+	
+	private static Logger logger = Logger.getLogger(InteressadoServico.class);
 	
 	public void criarInteressado(Interessado interessado) {
-		try {
-			interessado.validar();	
+		
+		//Verifica se interessado ja esta no banco atraves do cpf
+		Interessado interessado_bd = this.encontrarPorId(interessado.getCpf());
+		
+		if(interessado_bd == null) {
+			try {
+				interessado.validar();
+				this.salvarInteressado(interessado);
+			}
+			catch (RuntimeException e) {
+				//TODO
+			}
+			
 		}
-		catch (RuntimeException e) {
-			// TODO: handle exception
-		}
+		
+		
+		
 	}
-	
-	public void salvarInteressado(Interessado interessado) {
+	//metodo privado pois só é acesssado depois que o objeto é criado
+	private void salvarInteressado(Interessado interessado) {
 		interessadoDao.salvar(interessado);
 	}
 	
 	public void atualizarInteressado(Interessado interessado) {
+		try {
+			interessado.validar();
+		}
+		catch (RuntimeException e) {
+			logger.error("ATUALIZACAO NAO VALIDADA");
+		}
 		interessadoDao.atualizar(interessado);
 	}
 	

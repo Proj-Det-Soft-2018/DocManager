@@ -13,8 +13,7 @@ import negocio.servico.ProcessoServico;
  *
  */
 public class Processo implements DocumentoVisao{
-	private static int contador = 0;
-	private int processoId;
+	private Long id;
 	private boolean tipoOficio;
 	private String numero;
 	private Interessado interessado;
@@ -47,7 +46,6 @@ public class Processo implements DocumentoVisao{
 		Situacao situacaoAtual,
 		String observacao) {
 		super();
-		this.processoId = this.gerarProcessoId();
 		this.tipoOficio = tipoOficio;
 		this.numero = numero;
 		this.interessado = interessado;
@@ -65,12 +63,12 @@ public class Processo implements DocumentoVisao{
 	/**
 	 * @return the id
 	 */
-	public int getProcessoId() {
-		return processoId;
+	public Long getId() {
+		return id;
 	}
 	
-	private int gerarProcessoId() {
-		return contador++;
+	public void setId(Long processoId) {
+		this.id = processoId;
 	}
 
 	/**
@@ -165,30 +163,17 @@ public class Processo implements DocumentoVisao{
 		this.dataSaida = dataSaida;
 	}
 	
-	
-	/**
-	 * @return the banco
-	 */
-	public ProcessoServico getBanco() {
-		return banco;
-	}
-
-	/**
-	 * @param banco the banco to set
-	 */
-	public void setBanco(ProcessoServico banco) {
-		this.banco = banco;
-	}
-	
 	public Processo selecionarPorId(String numProcesso) {
 		return banco.encontrarPorId(numProcesso);
 			
 	}
 
 	public void validar() throws RuntimeException{
+		/*
 		if(this.numero == null){
 			throw new RuntimeException();
 		}
+		//*/
 	}
 
 	public boolean ehOficio() {
@@ -209,7 +194,7 @@ public class Processo implements DocumentoVisao{
 	}
 
 	public String getContatoInteressado() {
-		return this.getInteressado().getContato1();
+		return this.getInteressado().getContato();
 	}
 
 	public int getOrgaoOrigemId() {

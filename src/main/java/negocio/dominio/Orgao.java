@@ -25,4 +25,13 @@ public enum Orgao {
 		return listaOrgaos;
 	}
 	
+	public static Orgao getOrgaoPorId(int id) throws RuntimeException{
+		if(id == 0) {
+			throw new RuntimeException("USUARIO DEVE ESCOLHER UM ORGAO");
+		}
+		else {
+			return Orgao.values()[id-1];
+		}
+	}
+	
 }

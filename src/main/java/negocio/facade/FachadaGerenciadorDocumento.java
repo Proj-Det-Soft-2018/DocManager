@@ -55,6 +55,7 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 			String contatoInteressado, int orgaoOrigemId, int assuntoDocumentoId, int situacaoId, String observacao) {
 		
 		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, contatoInteressado);
+				
 		interessadoServico.criarInteressado(interessado);
 		
 		Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.values()[assuntoDocumentoId-1],
@@ -78,17 +79,12 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 		processoServico.atualizarProcesso(processo);
 	}
 	
-	public static String verProcessoSelecionado(String numProcesso) {
-		//TODO deve-se implementar como os dados do processo vai ser recebido no parametro
-		//TODO Deve-se ver o retorno após consulta no banco de dados
-		Processo processo = new Processo();
-		return processo.selecionarPorId(numProcesso).toString();
-	}
-
+	@Override
 	public List<String> getListaOrgaos() {
 		return Orgao.getOrgaos();
 	}
-
+	
+	@Override
 	public List<String> getListaAssuntos() {
 		return Assunto.getAssuntos();
 	}

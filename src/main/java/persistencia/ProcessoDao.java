@@ -10,8 +10,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import apresentacao.DocumentoVisao;
-import negocio.GenericoDao;
 import negocio.dominio.Processo;
+import negocio.servico.GenericoDao;
 
 /**
  * @author clah

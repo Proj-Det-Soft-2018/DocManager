@@ -11,14 +11,17 @@ package negocio.dominio;
  *
  */
 public class Interessado {
-	
+	private Long id;
 	private String nome;
 	private String cpf;
-	private String contato1;
+	private String contato;
 	
+	
+	//JavaBeans
 	public Interessado() {
 		
 	}
+
 
 	/**
 	 * @param nome
@@ -26,21 +29,30 @@ public class Interessado {
 	 * @param contato1
 	 * @param contato2
 	 */
-	public Interessado(String nome, String cpf, String contato1) {
+	public Interessado(String nome, String cpf, String contato) {
 		super();
 		this.nome = nome;
 		this.cpf = cpf;
-		this.contato1 = contato1;
-	}
-
-	public String getContato1() {
-		return contato1;
-	}
-
-	public void setContato1(String contato1) {
-		this.contato1 = contato1;
+		this.contato = contato;
 	}
 	
+	
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
 	public String getNome() {
 		return nome;
 	}
@@ -59,9 +71,23 @@ public class Interessado {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
+	
+	public String getContato() {
+		return contato;
+	}
+	
+	public void setContato(String contato) {
+		this.contato = contato;
+	}
 
 	public void validar() throws RuntimeException {
-		
+		/*
+		if(nome == null || cpf == null){
+			throw new RuntimeException();
+		}else if(cpf.length() != 14) {
+			throw new RuntimeException();
+		}
+		//*/
 	}
 	
 

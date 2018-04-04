@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import negocio.GenericoDao;
 import negocio.dominio.Interessado;
+import negocio.servico.GenericoDao;
 /**
  * 
  * @author Allan
  *
  */
-public class InteressadoDao implements GenericoDao<Interessado> {
+public class InteressadoDaoHash implements GenericoDao<Interessado> {
 	
 	private static final HashMap<String, Interessado> banco = new HashMap<String, Interessado>();
 

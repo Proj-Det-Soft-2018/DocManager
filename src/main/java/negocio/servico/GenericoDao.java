@@ -1,7 +1,7 @@
 /**
  * 
  */
-package negocio;
+package negocio.servico;
 
 import java.util.List;
 

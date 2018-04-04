@@ -27,4 +27,13 @@ public enum Situacao {
 	public String getStatus() {
 		return this.status;
 	}
+	
+	public static Situacao getSituacaoPorId(int id) throws RuntimeException{
+		if(id == 0) {
+			throw new RuntimeException("USUARIO DEVE ESCOLHER UMA SITUACAO");
+		}
+		else {
+			return Situacao.values()[id-1];
+		}
+	}
 }
