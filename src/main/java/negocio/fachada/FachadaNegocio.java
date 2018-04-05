@@ -52,6 +52,7 @@ public class FachadaNegocio implements FachadaCaixasDeEscolha{
 	@Override
 	public void salvar (Processo novoProcesso) {
 		//TODO mandar para o serviço de processos
+		processoServico.criarProcesso(novoProcesso);
 	}
 	
 	/**
