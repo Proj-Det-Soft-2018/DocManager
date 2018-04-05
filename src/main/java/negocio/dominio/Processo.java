@@ -5,60 +5,22 @@ package negocio.dominio;
 
 import java.time.LocalDateTime;
 
-import apresentacao.DocumentoVisao;
-import negocio.servico.ProcessoServico;
-
 /**
  * @author lets
  *
  */
-public class Processo implements DocumentoVisao{
+public class Processo {
 	private Long id;
 	private boolean tipoOficio;
 	private String numero;
 	private Interessado interessado;
 	private Assunto assunto;
 	private Orgao unidadeOrigem;
-	private LocalDateTime dataEntrada; //Hora registro do processo no banco
-	
-	private Situacao situacaoAtual;
-	
+	private Situacao situacao;
 	private String observacao;
-	
-	private Orgao unidadeDestino; //para onde o processo é dirigido quando concluido	
+	private Orgao unidadeDestino; //para onde o processo é dirigido quando concluido
+	private LocalDateTime dataEntrada; //Hora registro do processo no banco
 	private LocalDateTime dataSaida; //Hora que altera e grava situação para concluido
-	
-	private ProcessoServico banco;
-	
-	/**
-	 * @param numero
-	 * @param interessado
-	 * @param assunto
-	 * @param unidadeOrigem
-	 * @param situacaoAtual
-	 */
-	public Processo(
-		boolean tipoOficio,
-		String numero,
-		Interessado interessado,
-		Assunto assunto,
-		Orgao unidadeOrigem,
-		Situacao situacaoAtual,
-		String observacao) {
-		super();
-		this.tipoOficio = tipoOficio;
-		this.numero = numero;
-		this.interessado = interessado;
-		this.assunto = assunto;
-		this.unidadeOrigem = unidadeOrigem;
-		this.situacaoAtual = situacaoAtual;
-		this.observacao = observacao;
-		this.banco = new ProcessoServico();
-	}
-	
-	public Processo() {
-		
-	}
 
 	/**
 	 * @return the id
@@ -83,6 +45,10 @@ public class Processo implements DocumentoVisao{
 	 */
 	public void setTipoOficio(boolean tipoOficio) {
 		this.tipoOficio = tipoOficio;
+	}
+	
+	public String getTipo () {
+		return this.tipoOficio? "Ofício" : "Processo";
 	}
 
 	public String getNumero() {
@@ -109,18 +75,48 @@ public class Processo implements DocumentoVisao{
 	}
 
 	/**
-	 * @param assunto the assunto to set
-	 */
 	public void setAssunto(Assunto assunto) {
 		this.assunto = assunto;
+	}
+	*/
+	
+	public void setAssuntoById(int idAssunto) {
+		this.assunto = Assunto.getAssuntoPorId(idAssunto);
 	}
 
 	public Orgao getUnidadeOrigem() {
 		return unidadeOrigem;
 	}
 
+	/**
 	public void setUnidadeOrigem(Orgao unidadeOrigem) {
 		this.unidadeOrigem = unidadeOrigem;
+	}
+	*/
+
+	public void setUnidadeOrigemById(int idUnidadeOrigem) {
+		this.unidadeOrigem = Orgao.getOrgaoPorId(idUnidadeOrigem);
+	}
+
+	public Situacao getSituacao() {
+		return situacao;
+	}
+
+	/**
+	public void setSituacao(Situacao situacao) {
+		this.situacao = situacao;
+	}
+	*/
+	public void setSituacaoById(int idSituacao) {
+		this.situacao = Situacao.getSituacaoPorId(idSituacao);
+	}
+	
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 
 	public LocalDateTime getDataEntrada() {
@@ -129,22 +125,6 @@ public class Processo implements DocumentoVisao{
 
 	public void setDataEntrada(LocalDateTime dataEntrada) {
 		this.dataEntrada = dataEntrada;
-	}
-
-	public Situacao getSituacaoAtual() {
-		return situacaoAtual;
-	}
-
-	public void setSituacaoAtual(Situacao situacaoAtual) {
-		this.situacaoAtual = situacaoAtual;
-	}
-
-	public String getObservacao() {
-		return observacao;
-	}
-
-	public void setObservacao(String observacao) {
-		this.observacao = observacao;
 	}
 
 	public Orgao getUnidadeDestino() {
@@ -162,54 +142,12 @@ public class Processo implements DocumentoVisao{
 	public void setDataSaida(LocalDateTime dataSaida) {
 		this.dataSaida = dataSaida;
 	}
-	
-	public Processo selecionarPorId(String numProcesso) {
-		return banco.encontrarPorId(numProcesso);
-			
-	}
 
 	public void validar() throws RuntimeException{
 		/*
-		if(this.numero == null){
-			throw new RuntimeException();
-		}
-		//*/
-	}
-
-	public boolean ehOficio() {
-		return this.isTipoOficio();
-	}
-
-	public String getNomeInteressado() {
-		
-		return this.getInteressado().getNome();
-	}
-	
-	public String getNumDocumento() {
-		return this.getNumero();
-	}
-	
-	public String getCpfInteressado() {
-		return this.getInteressado().getCpf();
-	}
-
-	public String getContatoInteressado() {
-		return this.getInteressado().getContato();
-	}
-
-	public int getOrgaoOrigemId() {
-		return this.unidadeOrigem.ordinal()+1;
-	}
-
-	public int getAssuntoId() {
-		return this.assunto.ordinal()+1;
-	}
-
-	public int getSituacaoId() {
-		return this.situacaoAtual.ordinal()+1;
-	}
-	
-	public String getSituacao() {
-		return this.situacaoAtual.getStatus();
+			if(this.numero == null){
+				throw new RuntimeException();
+			}
+		*/
 	}
 }

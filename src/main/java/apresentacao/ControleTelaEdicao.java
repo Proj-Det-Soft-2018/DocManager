@@ -17,7 +17,9 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import negocio.facade.FachadaGerenciadorDocumento;
+
+import negocio.dominio.Processo;
+import negocio.fachada.FachadaNegocio;
 import utils.widget.MaskedTextField;
 
 /**
@@ -32,8 +34,7 @@ public class ControleTelaEdicao implements Initializable {
 	private static final String MASCARA_NUM_PROCESSO = "#######.########/####-##";	
 
 	private FachadaCaixasDeEscolha fachada;
-	private DocumentoVisao documento;
-	private Boolean estaEditando = false; 
+	private Processo processoOriginal; 
 
 	@FXML
 	private VBox raiz;
@@ -48,7 +49,7 @@ public class ControleTelaEdicao implements Initializable {
 	private ToggleGroup tgProcessoOficio;
 
 	@FXML
-	private Label lblTipoDocumento;
+	private Label lblTipoProcesso;
 
 	@FXML
 	private Label lblNumProcesso;
@@ -83,35 +84,35 @@ public class ControleTelaEdicao implements Initializable {
 	@FXML
 	private Button btnCadastrar;
 
-	public void montarFormulario(DocumentoVisao documento) {
-		if (documento != null) {
-			this.documento = documento;
-			this.estaEditando = true;
+	public void montarFormulario(Processo processo) {
+		if (processo != null) {
+			this.processoOriginal = processo;
 			this.btnCadastrar.setText(LABEL_BTN_ATUALIZAR);
 
-			if (documento.ehOficio()) {
+			if (processo.isTipoOficio()) {
 				this.rbOficio.setSelected(true);
 				this.rbProcesso.setDisable(true);
 				this.cbOrgao.setDisable(true);
 			} else {
 				this.rbOficio.setDisable(true);
 			}
-			this.cbOrgao.getSelectionModel().select(documento.getOrgaoOrigemId());
-			this.txtNumProcesso.setText(documento.getNumDocumento());
+			this.cbOrgao.getSelectionModel().select(processo.getUnidadeOrigem().ordinal()+1);
+			this.txtNumProcesso.setText(processo.getNumero());
 			this.lblNumProcesso.setDisable(true);
 			this.txtNumProcesso.setDisable(true);
-			this.txtNomeInteressado.setText(documento.getNomeInteressado());
-			this.txtCpfInteressado.setPlainText(documento.getCpfInteressado());
-			this.txtContatoInteressado.setText(documento.getContatoInteressado());
-			this.cbAssunto.getSelectionModel().select(documento.getAssuntoId());
-			this.cbSituacao.getSelectionModel().select(documento.getSituacaoId());
-			this.txtObservacao.setText(documento.getObservacao());
+			this.txtNomeInteressado.setText(processo.getInteressado().getNome());
+			this.txtCpfInteressado.setPlainText(processo.getInteressado().getCpf());
+			this.txtContatoInteressado.setText(processo.getInteressado().getContato());
+			this.cbAssunto.getSelectionModel().select(processo.getAssunto().ordinal()+1);
+			this.cbSituacao.getSelectionModel().select(processo.getSituacao().ordinal()+1);
+			this.txtObservacao.setText(processo.getObservacao());
 		}
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		this.fachada = FachadaGerenciadorDocumento.getInstance();
+		this.processoOriginal = null;
+		this.fachada = FachadaNegocio.getInstance();
 		this.configurarRadioButtons();
 		this.preencherChoiceBoxes();
 		this.configurarChoiceBoxOrgao();
@@ -120,7 +121,7 @@ public class ControleTelaEdicao implements Initializable {
 	private void alterarFormulario (Toggle novoValor) {
 		if (novoValor != null) {
 			RadioButton radio = (RadioButton)novoValor;
-			this.lblTipoDocumento.setText(radio.getText());
+			this.lblTipoProcesso.setText(radio.getText());
 
 			if(Objects.equals(radio.getText(), this.rbProcesso.getText())) {
 				this.txtNumProcesso.setMask(MASCARA_NUM_PROCESSO);
@@ -144,30 +145,38 @@ public class ControleTelaEdicao implements Initializable {
 
 	@FXML
 	private void cadastrar() {
-		if (this.estaEditando) {	// Atulizando documento existente
-			fachada.atualizarDocumento(
-					this.documento,
-					this.rbOficio.isSelected(),
-					this.txtNumProcesso.getText(),
-					this.txtNomeInteressado.getText(),
-					this.txtCpfInteressado.plainTextProperty().getValue(),
-					this.txtContatoInteressado.getText(),
-					this.cbOrgao.getSelectionModel().getSelectedIndex(),
-					this.cbAssunto.getSelectionModel().getSelectedIndex(),
-					this.cbSituacao.getSelectionModel().getSelectedIndex(),
-					this.txtObservacao.getText());
-
-		} else {					// Criando novo documento
-			fachada.criarDocumento(
-					this.rbOficio.isSelected(),
-					this.txtNumProcesso.getText(),
-					this.txtNomeInteressado.getText(),
-					this.txtCpfInteressado.plainTextProperty().getValue(),
-					this.txtContatoInteressado.getText(),
-					this.cbOrgao.getSelectionModel().getSelectedIndex(),
-					this.cbAssunto.getSelectionModel().getSelectedIndex(),
-					this.cbSituacao.getSelectionModel().getSelectedIndex(),
-					this.txtObservacao.getText());
+		if (processoOriginal == null) {	// Criando novo processo
+			Processo novoProcesso = new Processo();
+			/**
+				this.processo,
+				this.rbOficio.isSelected(),
+				this.txtNumProcesso.getText(),
+				this.txtNomeInteressado.getText(),
+				this.txtCpfInteressado.plainTextProperty().getValue(),
+				this.txtContatoInteressado.getText(),
+				this.cbOrgao.getSelectionModel().getSelectedIndex(),
+				this.cbAssunto.getSelectionModel().getSelectedIndex(),
+				this.cbSituacao.getSelectionModel().getSelectedIndex(),
+				this.txtObservacao.getText());
+			 */
+			fachada.salvar(novoProcesso);
+			
+			
+		} else {				// Atualizando existente	
+			Processo processoEditado = new Processo();
+			/**
+				this.processo,
+				this.rbOficio.isSelected(),
+				this.txtNumProcesso.getText(),
+				this.txtNomeInteressado.getText(),
+				this.txtCpfInteressado.plainTextProperty().getValue(),
+				this.txtContatoInteressado.getText(),
+				this.cbOrgao.getSelectionModel().getSelectedIndex(),
+				this.cbAssunto.getSelectionModel().getSelectedIndex(),
+				this.cbSituacao.getSelectionModel().getSelectedIndex(),
+				this.txtObservacao.getText());
+			 */
+			fachada.atualizar(processoEditado);
 		}
 
 		this.fecharJanela();

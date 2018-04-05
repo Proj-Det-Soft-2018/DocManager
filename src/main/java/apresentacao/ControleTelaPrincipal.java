@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,12 +15,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import negocio.facade.FachadaGerenciadorDocumento;
+import negocio.fachada.FachadaNegocio;
 import negocio.servico.Observador;
+import negocio.dominio.Processo;
 
 /**
  * @author hugotho
@@ -28,14 +29,13 @@ import negocio.servico.Observador;
 public class ControleTelaPrincipal implements Initializable, Observador {
 
 	private static final URL ARQUIVO_FXML = ControleTelaPrincipal.class.getResource("/visoes/tela_edicao.fxml");
-	private static final String TITULO_NOVO_DOCUMENTO = "Novo Processo / Ofício";
-	private static final String TITULO_EDITAR_DOCUMENTO = "Ver / Editar";
+	private static final String TITULO_CRIAR = "Novo Processo / Ofício";
+	private static final String TITULO_EDITAR = "Ver / Editar";
 
 	private FachadaArmazenamento fachada;
 	private Stage novaTelaEdicao;
 	private ControleTelaEdicao controleTelaEdicao;
-
-	private DocumentoVisao documentoSelecionado = null;
+	private Processo processoSelecionado;
 
 	@FXML
 	private Pane painel;
@@ -53,41 +53,43 @@ public class ControleTelaPrincipal implements Initializable, Observador {
 	private Button btnBuscar;
 
 	@FXML
-	private TableView<DocumentoVisao> tabelaProcessosOficios;
+	private TableView<Processo> tabelaProcessosOficios;
 
 	@FXML
-	private TableColumn<DocumentoVisao, String> tabColunaTipo;
+	private TableColumn<Processo, String> tabColunaTipo;
 
 	@FXML
-	private TableColumn<DocumentoVisao, String> tabColunaNumero;
+	private TableColumn<Processo, String> tabColunaNumero;
 
 	@FXML
-	private TableColumn<DocumentoVisao, String> tabColunaInteressado;
+	private TableColumn<Processo, String> tabColunaInteressado;
 
 	@FXML
-	private TableColumn<DocumentoVisao, String> tabColunaSituacao;
+	private TableColumn<Processo, String> tabColunaSituacao;
 
 	private Logger logger = Logger.getLogger(ControleTelaPrincipal.class);
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		fachada = FachadaGerenciadorDocumento.getInstance();
-		this.configurarTabela();
-		this.atualizarTabela(this.fachada.getListaDocumentos());
+		this.processoSelecionado = null;
+		this.fachada = FachadaNegocio.getInstance();
 		this.fachada.cadastrarObservador(this);
+		
+		this.configurarTabela();
+		this.atualizarTabela(this.fachada.buscarListaProcessos());
 	}
 
 	@FXML
 	private void criarFormularioNovo() {
-		this.criarTelaEdicao(TITULO_NOVO_DOCUMENTO);
+		this.criarTelaEdicao(TITULO_CRIAR);
 		this.controleTelaEdicao.montarFormulario(null);
 		this.mostrarTelaEdicao();
 	}
 
 	@FXML
 	private void criarFormularioEdicao() {
-		this.criarTelaEdicao(TITULO_EDITAR_DOCUMENTO);
-		this.controleTelaEdicao.montarFormulario(documentoSelecionado);
+		this.criarTelaEdicao(TITULO_EDITAR);
+		this.controleTelaEdicao.montarFormulario(processoSelecionado);
 		this.mostrarTelaEdicao();	
 	}
 
@@ -115,25 +117,29 @@ public class ControleTelaPrincipal implements Initializable, Observador {
 
 	private void configurarTabela() {
 		// inicia as colunas
-		tabColunaTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-		tabColunaNumero.setCellValueFactory(new PropertyValueFactory<>("numDocumento"));
-		tabColunaInteressado.setCellValueFactory(new PropertyValueFactory<>("nomeInteressado"));
-		tabColunaSituacao.setCellValueFactory(new PropertyValueFactory<>("situacao"));
+		tabColunaTipo.setCellValueFactory(
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getTipo()));
+		tabColunaNumero.setCellValueFactory(
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getNumero()));
+		tabColunaInteressado.setCellValueFactory(
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getInteressado().getNome()));
+		tabColunaSituacao.setCellValueFactory(
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituacao().getStatus()));
 
-		// eventHandle para detectar o documento selecionado
+		// eventHandle para detectar o processo selecionado
 		tabelaProcessosOficios.getSelectionModel().selectedItemProperty().addListener(
 				(observavel, selecionandoAnterior, selecionadoNovo) -> {
-					this.documentoSelecionado = selecionadoNovo;
+					this.processoSelecionado = selecionadoNovo;
 					this.btnVerEditar.setDisable(selecionadoNovo!=null? false : true);
 				});
 	}
 
-	private void atualizarTabela(List<? extends DocumentoVisao> lista) {
+	private void atualizarTabela(List<Processo> lista) {
 		tabelaProcessosOficios.getItems().setAll(lista);
 	}
 	
 	@Override
 	public void atualizar() {
-		this.atualizarTabela(this.fachada.getListaDocumentos());
+		this.atualizarTabela(this.fachada.buscarListaProcessos());
 	}
 }

@@ -35,7 +35,7 @@
       </HBox>
       <VBox spacing="10.0" styleClass="painel-borda" stylesheets="@../css/styles.css">
          <children>
-            <Label fx:id="lblTipoDocumento" alignment="TOP_LEFT" styleClass="painel-titulo" stylesheets="@../css/styles.css" text="Processo">
+            <Label fx:id="lblTipoProcesso" alignment="TOP_LEFT" styleClass="painel-titulo" stylesheets="@../css/styles.css" text="Processo">
                <VBox.margin>
                   <Insets left="-10.0" top="9.0" />
                </VBox.margin>

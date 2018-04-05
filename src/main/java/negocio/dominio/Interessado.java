@@ -16,34 +16,12 @@ public class Interessado {
 	private String cpf;
 	private String contato;
 	
-	
-	//JavaBeans
-	public Interessado() {
-		
-	}
-
-
-	/**
-	 * @param nome
-	 * @param cpf
-	 * @param contato1
-	 * @param contato2
-	 */
-	public Interessado(String nome, String cpf, String contato) {
-		super();
-		this.nome = nome;
-		this.cpf = cpf;
-		this.contato = contato;
-	}
-	
-	
 	/**
 	 * @return the id
 	 */
 	public Long getId() {
 		return id;
 	}
-
 
 	/**
 	 * @param id the id to set
@@ -89,6 +67,4 @@ public class Interessado {
 		}
 		//*/
 	}
-	
-
 }

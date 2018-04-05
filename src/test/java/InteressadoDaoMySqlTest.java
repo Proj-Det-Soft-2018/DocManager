@@ -20,7 +20,7 @@ public class InteressadoDaoMySqlTest {
 	
 	@Before
 	public void setup() {
-		interessado1 = new Interessado("Clarissa","06570555499","2020-1515");
+		//interessado1 = new Interessado("Clarissa","06570555499","2020-1515");
 
 	}
 	

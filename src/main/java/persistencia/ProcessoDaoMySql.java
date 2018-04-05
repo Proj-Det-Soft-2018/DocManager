@@ -44,9 +44,9 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 			stmt.setBoolean(1, bean.isTipoOficio());
 			stmt.setString(2, bean.getNumero());
 			stmt.setLong(3, bean.getInteressado().getId());
-			stmt.setInt(4, bean.getAssuntoId());
-			stmt.setInt(5, bean.getSituacaoId());
-			stmt.setInt(6, bean.getOrgaoOrigemId());
+			stmt.setInt(4, bean.getAssunto().ordinal());
+			stmt.setInt(5, bean.getSituacao().ordinal());
+			stmt.setInt(6, bean.getUnidadeOrigem().ordinal());
 			stmt.setString(7, bean.getObservacao());
 			
 			//Definindo data de entrada no banco de dados
@@ -85,9 +85,9 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, bean.getNumero());
 			stmt.setLong(2, bean.getInteressado().getId());
-			stmt.setInt(3, bean.getAssuntoId());
-			stmt.setInt(4, bean.getSituacaoId());
-			stmt.setInt(5, bean.getOrgaoOrigemId());
+			stmt.setInt(3, bean.getAssunto().ordinal());
+			stmt.setInt(4, bean.getSituacao().ordinal());
+			stmt.setInt(5, bean.getUnidadeOrigem().ordinal());
 			stmt.setString(6, bean.getObservacao());
 			
 			//LocalDateTime to java.sql.Date
@@ -165,9 +165,9 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 				//falta resolver unidade destino /orgao_saida, se vai ter ou não
 				
 				try {
-				processo.setAssunto(Assunto.getAssuntoPorId(rs.getInt("assunto")));
-				processo.setUnidadeOrigem(Orgao.getOrgaoPorId(rs.getInt("orgao_origem")));
-				processo.setSituacaoAtual(Situacao.getSituacaoPorId(rs.getInt("situacao")));
+				processo.setAssuntoById(rs.getInt("assunto"));
+				processo.setUnidadeOrigemById(rs.getInt("orgao_origem"));
+				processo.setSituacaoById(rs.getInt("situacao"));
 				}catch(Exception e) {
 					//TODO O que fazer aqui?
 				}
@@ -227,7 +227,6 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 	@Override
 	public List<Processo> getAll() {
 		
-		System.out.println("hey");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -255,9 +254,9 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 				
 				//falta resolver unidade destino /orgao_saida, se vai ter ou não
 				try {
-					processo.setAssunto(Assunto.getAssuntoPorId(rs.getInt("assunto")));
-					processo.setUnidadeOrigem(Orgao.getOrgaoPorId(rs.getInt("orgao_origem")));
-					processo.setSituacaoAtual(Situacao.getSituacaoPorId(rs.getInt("situacao")));
+					processo.setAssuntoById(rs.getInt("assunto"));
+					processo.setUnidadeOrigemById(rs.getInt("orgao_origem"));
+					processo.setSituacaoById(rs.getInt("situacao"));
 				}
 				catch (RuntimeException e) {
 					// TODO: handle exception
@@ -267,7 +266,6 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 				Interessado interessado = new Interessado();
 				
 				interessado.setId(rs.getLong("interessado_id"));
-				System.out.println(interessado.getId());
 				interessado.setNome(rs.getString("nome"));
 				interessado.setCpf(rs.getString("cpf"));
 				interessado.setContato(rs.getString("contato"));

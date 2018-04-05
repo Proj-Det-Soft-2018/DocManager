@@ -2,6 +2,8 @@ package apresentacao;
 
 import java.util.List;
 
+import negocio.dominio.Interessado;
+import negocio.dominio.Processo;
 import negocio.servico.Observador;
 
 /**
@@ -10,15 +12,17 @@ import negocio.servico.Observador;
  */
 public interface FachadaArmazenamento {
 	
-	public List<? extends DocumentoVisao> getListaDocumentos();
+	public List<Processo> buscarListaProcessos();
 	
 	public void cadastrarObservador (Observador observadorDaLista);
 	
-	public void criarDocumento (boolean ehOficio, String numDocumento, String nomeInteressado,
-			String cpfInteressado, String contatoInteressado, int orgaoOrigemId, int tipoDocumentoId,
-			int situacaoId, String observacao);
+	public void salvar (Processo novoProcesso);
 	
-	public void atualizarDocumento (DocumentoVisao documentoAlvo, boolean ehOficio, String numDocumento, String nomeInteressado,
-			String cpfInteressado, String contatoInteressado, int orgaoOrigemId, int tipoDocumentoId,
-			int situacaoId, String observacao);
+	public void atualizar (Processo processoModificado);
+	
+	public Interessado buscarPorCpf (String cpf);
+	
+	public void salvar (Interessado novoInteressado);
+	
+	public void atualizar (Interessado interessadoEditado);
 }

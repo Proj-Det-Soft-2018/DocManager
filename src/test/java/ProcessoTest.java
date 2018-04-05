@@ -17,6 +17,7 @@ import persistencia.ProcessoDaoMySql;
  * @author Allan
  *
  */
+/**
 @RunWith(value = Parameterized.class)
 public class ProcessoTest {
 	@Parameters
@@ -55,12 +56,13 @@ public class ProcessoTest {
 		assert(true);
 	}
 	
-	/**
+	
 	@Test
 	public void inserirMesmoTest() {
 		Processo p = new Processo(false, this.numero, this.interessado, this.assunto, this.unidadeOrigem, this.situacaoAtual);
 		banco.salvar(p);
 		
 	}
-	*/
+	
 }
+*/
