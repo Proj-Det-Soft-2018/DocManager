@@ -226,6 +226,8 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 
 	@Override
 	public List<Processo> getAll() {
+		
+		System.out.println("hey");
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -265,6 +267,7 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 				Interessado interessado = new Interessado();
 				
 				interessado.setId(rs.getLong("interessado_id"));
+				System.out.println(interessado.getId());
 				interessado.setNome(rs.getString("nome"));
 				interessado.setCpf(rs.getString("cpf"));
 				interessado.setContato(rs.getString("contato"));
