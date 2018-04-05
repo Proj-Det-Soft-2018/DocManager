@@ -25,7 +25,8 @@ public class ProcessoServico extends Observavel {
 			this.salvarProcesso(processo);
 		}
 		catch (RuntimeException e) {
-			logger.error("NAO VALIDOU PROCESSO");
+			logger.error(e.getMessage(), e);
+			//TODO elaborar
 		}
 	}
 	
@@ -41,7 +42,8 @@ public class ProcessoServico extends Observavel {
 			this.notificarTodos();	
 		}
 		catch (RuntimeException e) {
-			logger.error("ATUALIZACAO NAO VALIDADA");
+			logger.error(e.getMessage(), e);
+			//TODO elaborar
 		}
 	}
 	

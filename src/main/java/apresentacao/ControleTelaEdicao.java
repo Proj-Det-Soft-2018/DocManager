@@ -101,7 +101,7 @@ public class ControleTelaEdicao implements Initializable {
 			this.lblNumProcesso.setDisable(true);
 			this.txtNumProcesso.setDisable(true);
 			this.txtNomeInteressado.setText(documento.getNomeInteressado());
-			this.txtCpfInteressado.setText(documento.getCpfInteressado());
+			this.txtCpfInteressado.setPlainText(documento.getCpfInteressado());
 			this.txtContatoInteressado.setText(documento.getContatoInteressado());
 			this.cbAssunto.getSelectionModel().select(documento.getAssuntoId());
 			this.cbSituacao.getSelectionModel().select(documento.getSituacaoId());
@@ -162,7 +162,7 @@ public class ControleTelaEdicao implements Initializable {
 					this.rbOficio.isSelected(),
 					this.txtNumProcesso.getText(),
 					this.txtNomeInteressado.getText(),
-					this.txtCpfInteressado.getText(),
+					this.txtCpfInteressado.plainTextProperty().getValue(),
 					this.txtContatoInteressado.getText(),
 					this.cbOrgao.getSelectionModel().getSelectedIndex(),
 					this.cbAssunto.getSelectionModel().getSelectedIndex(),

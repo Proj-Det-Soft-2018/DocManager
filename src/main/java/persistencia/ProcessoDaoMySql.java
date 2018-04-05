@@ -169,7 +169,7 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 				processo.setUnidadeOrigem(Orgao.getOrgaoPorId(rs.getInt("orgao_origem")));
 				processo.setSituacaoAtual(Situacao.getSituacaoPorId(rs.getInt("situacao")));
 				}catch(Exception e) {
-					//O que fazer aqui?
+					//TODO O que fazer aqui?
 				}
 				interessado.setId(rs.getLong("interessado_id"));
 				interessado.setNome(rs.getString("nome"));
@@ -261,10 +261,9 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 					// TODO: handle exception
 				}
 				
-				
-				
 				//criando objeto interessado
 				Interessado interessado = new Interessado();
+				
 				interessado.setId(rs.getLong("interessado_id"));
 				interessado.setNome(rs.getString("nome"));
 				interessado.setCpf(rs.getString("cpf"));

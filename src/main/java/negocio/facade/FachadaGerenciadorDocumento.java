@@ -58,6 +58,8 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 				
 		interessadoServico.criarInteressado(interessado);
 		
+		interessado = interessadoServico.encontrarPorId(cpfInteressado);
+		
 		Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.values()[assuntoDocumentoId-1],
 				Orgao.values()[orgaoOrigemId-1], Situacao.values()[situacaoId-1], observacao);
 		processoServico.criarProcesso(processo);
@@ -71,7 +73,9 @@ public class FachadaGerenciadorDocumento implements FachadaCaixasDeEscolha{
 			String nomeInteressado,	String cpfInteressado, String contatoInteressado, int orgaoOrigemId,
 			int tipoDocumentoId, int situacaoId, String observacao)	{
 		
-		Interessado interessado = new Interessado(nomeInteressado, cpfInteressado, cpfInteressado);
+		Interessado interessado = interessadoServico.encontrarPorId(cpfInteressado);
+		interessado.setNome(nomeInteressado);
+		interessado.setContato(contatoInteressado);
 		interessadoServico.atualizarInteressado(interessado);
 		
 		Processo processo = new Processo(ehOficio, numDocumento, interessado, Assunto.values()[tipoDocumentoId-1],
