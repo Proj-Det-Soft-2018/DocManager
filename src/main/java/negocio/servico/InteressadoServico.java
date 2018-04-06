@@ -80,7 +80,11 @@ public class InteressadoServico {
 		return interessadoDao.contem(interessado);
 	}
 	
-	public List<Interessado> getAll(){
+	public List<Interessado> pegarTodosInteressados(){
 		return interessadoDao.pegarTodos();
 	}
+	
+	public Interessado burcarPeloCpfInteressado(String cpf){
+		return interessadoDao.pegarPeloCpf(cpf);
+	} 
 }

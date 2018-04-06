@@ -9,8 +9,6 @@ import org.apache.log4j.Logger;
 
 import negocio.dominio.Processo;
 import negocio.dominio.Situacao;
-import negocio.excecao.NumeroProcessoVazioException;
-import negocio.fachada.FachadaNegocio;
 import persistencia.ProcessoDaoMySql;
 
 /**

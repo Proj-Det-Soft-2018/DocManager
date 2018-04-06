@@ -211,13 +211,6 @@ public class InteressadoDaoMySql implements InteressadoDao{
 
 
 	@Override
-	public List<Interessado> burcarPeloCpf() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
 	public List<Interessado> burcarPeloNome() {
 		// TODO Auto-generated method stub
 		return null;
