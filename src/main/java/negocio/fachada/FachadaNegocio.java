@@ -5,7 +5,6 @@ package negocio.fachada;
 
 import java.util.List;
 
-import apresentacao.FachadaCaixasDeEscolha;
 import negocio.dominio.Assunto;
 import negocio.dominio.Interessado;
 import negocio.dominio.Orgao;
@@ -42,8 +41,13 @@ public class FachadaNegocio implements FachadaCaixasDeEscolha{
 	}
 	
 	@Override
-	public void cadastrarObservador(Observador observadorDaLista) {
-		processoServico.cadastrarObservador(observadorDaLista);
+	public void cadastrarObservador(Observador observador) {
+		processoServico.cadastrarObservador(observador);
+	}
+	
+	@Override
+	public void descadastrarObservador(Observador observador) {
+		processoServico.descadastrarObservador(observador);
 	}
 
 	/**
@@ -62,15 +66,17 @@ public class FachadaNegocio implements FachadaCaixasDeEscolha{
 		//TODO mandar para o serviço de processos
 	}
 	
+	@Override
 	public Interessado buscarPorCpf (String cpf) {
-		//TODO mandar para o serviço de interessados
-		return null;
+		return interessadoServico.encontrarPorId(cpf);
 	}
 	
+	@Override
 	public void salvar (Interessado novoInteressado) {
 		//TODO mandar para o serviço de interessados
 	}
 	
+	@Override
 	public void atualizar (Interessado interessadoEditado)	{
 		//TODO mandar para o serviço de interessados
 	}

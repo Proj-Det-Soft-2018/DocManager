@@ -18,9 +18,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import negocio.fachada.FachadaArmazenamento;
 import negocio.fachada.FachadaNegocio;
 import negocio.servico.Observador;
 import negocio.dominio.Processo;
+import utils.widget.MaskedTextField;
 
 /**
  * @author hugotho
@@ -28,9 +31,11 @@ import negocio.dominio.Processo;
  */
 public class ControleTelaPrincipal implements Initializable, Observador {
 
-	private static final URL ARQUIVO_FXML = ControleTelaPrincipal.class.getResource("/visoes/tela_edicao.fxml");
+	private static final URL ARQUIVO_FXML = ControleTelaPrincipal.class.getResource("/visoes/tela_editar_processo.fxml");
 	private static final String TITULO_CRIAR = "Novo Processo / Ofício";
 	private static final String TITULO_EDITAR = "Ver / Editar";
+	private static final String MASCARA_NUM_OFICIO = "####/####";
+	private static final String MASCARA_NUM_PROCESSO = "#######.########/####-##";
 
 	private FachadaArmazenamento fachada;
 	private Stage novaTelaEdicao;
@@ -120,7 +125,18 @@ public class ControleTelaPrincipal implements Initializable, Observador {
 		tabColunaTipo.setCellValueFactory(
 				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getTipo()));
 		tabColunaNumero.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getNumero()));
+				conteudo -> {
+					String mascara;
+					if(conteudo.getValue().isTipoOficio()) {
+						mascara = MASCARA_NUM_OFICIO + "-" + conteudo.getValue().getUnidadeOrigem().name();
+					} else {
+						mascara = MASCARA_NUM_PROCESSO;
+					}
+					MaskedTextField numProcessoMascara = new MaskedTextField(mascara);
+					numProcessoMascara.setPlainText(conteudo.getValue().getNumero());
+					
+					return new ReadOnlyStringWrapper(numProcessoMascara.getText());
+				});
 		tabColunaInteressado.setCellValueFactory(
 				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getInteressado().getNome()));
 		tabColunaSituacao.setCellValueFactory(

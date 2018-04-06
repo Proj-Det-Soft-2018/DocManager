@@ -1,4 +1,4 @@
-package apresentacao;
+package negocio.fachada;
 
 import java.util.List;
 

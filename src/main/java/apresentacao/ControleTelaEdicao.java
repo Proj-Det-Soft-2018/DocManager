@@ -12,13 +12,15 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import negocio.dominio.Interessado;
 import negocio.dominio.Processo;
+import negocio.fachada.FachadaCaixasDeEscolha;
 import negocio.fachada.FachadaNegocio;
 import utils.widget.MaskedTextField;
 
@@ -30,11 +32,16 @@ public class ControleTelaEdicao implements Initializable {
 
 	private static final String CHOICEBOX_TEXTO_PADRAO = "-- SELECIONE --";
 	private static final String LABEL_BTN_ATUALIZAR = "Atualizar"; 
-	private static final String MASCARA_INICIAL_OFICIO = "####/####-";
-	private static final String MASCARA_NUM_PROCESSO = "#######.########/####-##";	
+	private static final String LABEL_BTN_EDITAR_INTERESSADO = "Editar"; 
+	private static final String LABEL_BTN_LIMPAR_INTERESSADO = "Limpar"; 
+	private static final String MASCARA_NUM_OFICIO = "####/####";
+	private static final String MASCARA_NUM_PROCESSO = "#######.########/####-##";
+	private static final String MASCARA_CONTATO_8DIGITOS = "(##) ####-####";
+	private static final String MASCARA_CONTATO_9DIGITOS = "(##) #####-####";
 
 	private FachadaCaixasDeEscolha fachada;
-	private Processo processoOriginal; 
+	private Processo processoOriginal;
+	private Interessado interessado;
 
 	@FXML
 	private VBox raiz;
@@ -58,13 +65,22 @@ public class ControleTelaEdicao implements Initializable {
 	private MaskedTextField txtNumProcesso;
 
 	@FXML
-	private TextField txtNomeInteressado;
-
+	private HBox hBoxInteressado;
+	
+	@FXML
+	private Label lblCpfInteressado;
+	
 	@FXML
 	private MaskedTextField txtCpfInteressado;
-
+	
 	@FXML
-	private MaskedTextField txtContatoInteressado;
+	private Button btnBuscarInteressado;
+	
+	@FXML
+	private Label lblTxtNomeInteressado;
+	
+	@FXML
+	private Label lblTxtContatoInteressado; 
 
 	@FXML
 	private ChoiceBox<String> cbOrgao;
@@ -84,6 +100,16 @@ public class ControleTelaEdicao implements Initializable {
 	@FXML
 	private Button btnCadastrar;
 
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		this.processoOriginal = null;
+		this.interessado = null;
+		this.fachada = FachadaNegocio.getInstance();
+		this.configurarRadioButtons();
+		this.preencherChoiceBoxes();
+		this.configurarChoiceBoxOrgao();
+	}
+	
 	public void montarFormulario(Processo processo) {
 		if (processo != null) {
 			this.processoOriginal = processo;
@@ -96,29 +122,20 @@ public class ControleTelaEdicao implements Initializable {
 			} else {
 				this.rbOficio.setDisable(true);
 			}
-			this.cbOrgao.getSelectionModel().select(processo.getUnidadeOrigem().ordinal()+1);
-			this.txtNumProcesso.setText(processo.getNumero());
-			this.lblNumProcesso.setDisable(true);
+			this.cbOrgao.getSelectionModel().select(processo.getUnidadeOrigem().ordinal());
+			this.txtNumProcesso.setPlainText(processo.getNumero());
 			this.txtNumProcesso.setDisable(true);
-			this.txtNomeInteressado.setText(processo.getInteressado().getNome());
-			this.txtCpfInteressado.setPlainText(processo.getInteressado().getCpf());
-			this.txtContatoInteressado.setText(processo.getInteressado().getContato());
-			this.cbAssunto.getSelectionModel().select(processo.getAssunto().ordinal()+1);
-			this.cbSituacao.getSelectionModel().select(processo.getSituacao().ordinal()+1);
+			
+			this.interessado = processo.getInteressado();
+			this.preencherInteressado();
+			
+			this.cbAssunto.getSelectionModel().select(processo.getAssunto().ordinal());
+			this.cbSituacao.getSelectionModel().select(processo.getSituacao().ordinal());
 			this.txtObservacao.setText(processo.getObservacao());
 		}
 	}
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		this.processoOriginal = null;
-		this.fachada = FachadaNegocio.getInstance();
-		this.configurarRadioButtons();
-		this.preencherChoiceBoxes();
-		this.configurarChoiceBoxOrgao();
-	}
-
-	private void alterarFormulario (Toggle novoValor) {
+    private void alterarFormulario (Toggle novoValor) {
 		if (novoValor != null) {
 			RadioButton radio = (RadioButton)novoValor;
 			this.lblTipoProcesso.setText(radio.getText());
@@ -127,12 +144,98 @@ public class ControleTelaEdicao implements Initializable {
 				this.txtNumProcesso.setMask(MASCARA_NUM_PROCESSO);
 			} else {
 				if (cbOrgao.getSelectionModel().getSelectedIndex() != 0) {
-					this.txtNumProcesso.setMask(MASCARA_INICIAL_OFICIO +
+					this.txtNumProcesso.setMask(MASCARA_NUM_OFICIO + "-" +
 							cbOrgao.getSelectionModel().getSelectedItem().split(" - ")[0]);
 				} else {
-					this.txtNumProcesso.setMask(MASCARA_INICIAL_OFICIO);
+					this.txtNumProcesso.setMask(MASCARA_NUM_OFICIO);
 				}
 			}
+		}
+	}
+    
+    private void preencherInteressado() {
+    	
+    	this.txtCpfInteressado.setPlainText(this.interessado.getCpf());
+		this.txtCpfInteressado.setDisable(true);
+		
+		this.hBoxInteressado.getChildren().remove(btnBuscarInteressado);
+		
+		Button btnEditarInteressado = new Button(LABEL_BTN_EDITAR_INTERESSADO);
+		btnEditarInteressado.setOnAction((evento) -> this.editarInteressado());
+		Button btnLimparInteressado = new Button(LABEL_BTN_LIMPAR_INTERESSADO);
+		btnLimparInteressado.setOnAction((evento) -> this.limparInteressado());
+		
+		this.hBoxInteressado.getChildren().addAll(btnEditarInteressado, btnLimparInteressado);
+		
+		this.lblTxtNomeInteressado.setText(this.interessado.getNome());
+		String contato = this.interessado.getContato();
+		MaskedTextField contatoMascara;
+		if(contato.length() == 11) {
+			contatoMascara = new MaskedTextField(MASCARA_CONTATO_9DIGITOS);
+		} else {
+			contatoMascara = new MaskedTextField(MASCARA_CONTATO_8DIGITOS);
+		}
+		contatoMascara.setPlainText(contato);			
+		this.lblTxtContatoInteressado.setText(contatoMascara.getText());
+    }
+    
+    private void editarInteressado() {
+    	
+    }
+    
+    private void limparInteressado() {
+    	this.interessado = null;
+    	
+    	this.hBoxInteressado.getChildren().clear();
+    	this.hBoxInteressado.getChildren().addAll(this.lblCpfInteressado, this.txtCpfInteressado, this.btnBuscarInteressado);
+    	this.txtCpfInteressado.setDisable(false);
+    	this.txtCpfInteressado.clear();
+    	this.lblTxtNomeInteressado.setText("");
+    	this.lblTxtContatoInteressado.setText("");
+    }
+    
+    private void configurarRadioButtons() {
+		this.tgProcessoOficio.selectedToggleProperty().addListener(
+				(valorObservavel, anterior, novo) -> alterarFormulario(novo));
+	}
+
+	private void configurarChoiceBoxOrgao() {
+		cbOrgao.getSelectionModel().selectedItemProperty().addListener(
+				(valorObservado, valorAntigo, valorNovo) -> { 
+					if (rbOficio.isSelected()) {
+						if (valorNovo.equalsIgnoreCase(CHOICEBOX_TEXTO_PADRAO)) {
+							this.txtNumProcesso.setMask(MASCARA_NUM_OFICIO);
+						} else {
+							this.txtNumProcesso.setMask(MASCARA_NUM_OFICIO + "-" + valorNovo.split(" - ")[0]);
+						}
+					}
+				});
+	}
+
+	private void preencherChoiceBoxes() {
+		ObservableList<String> obsListaOrgaos = this.cbOrgao.getItems();
+		obsListaOrgaos.add(CHOICEBOX_TEXTO_PADRAO);
+		obsListaOrgaos.addAll(fachada.getListaOrgaos());
+		this.cbOrgao.getSelectionModel().select(0);
+
+		ObservableList<String> obsListaAssuntos = this.cbAssunto.getItems();
+		obsListaAssuntos.add(CHOICEBOX_TEXTO_PADRAO);
+		obsListaAssuntos.addAll(fachada.getListaAssuntos());
+		this.cbAssunto.getSelectionModel().select(0);
+
+		ObservableList<String> obsListaSituacoes = this.cbSituacao.getItems();
+		obsListaSituacoes.add(CHOICEBOX_TEXTO_PADRAO);
+		obsListaSituacoes.addAll(fachada.getListaSituacoes());
+		this.cbSituacao.getSelectionModel().select(0);
+	}
+	
+	@FXML
+	public void buscarPorCpf() {
+		try {
+			this.interessado = fachada.buscarPorCpf(this.txtCpfInteressado.plainTextProperty().getValue());
+			this.preencherInteressado();
+		} catch(Exception e) {
+			//TODO Tratar Exceções de CPF mau preenchido e de CPF não encontrado
 		}
 	}
 
@@ -180,36 +283,5 @@ public class ControleTelaEdicao implements Initializable {
 		}
 
 		this.fecharJanela();
-	}
-
-	private void configurarRadioButtons() {
-		this.tgProcessoOficio.selectedToggleProperty().addListener(
-				(valorObservavel, anterior, novo) -> alterarFormulario(novo));
-	}
-
-	private void configurarChoiceBoxOrgao() {
-		cbOrgao.getSelectionModel().selectedItemProperty().addListener(
-				(valorObservado, valorAntigo, valorNovo) -> { 
-					if (rbOficio.isSelected()) {
-						this.txtNumProcesso.setMask(MASCARA_INICIAL_OFICIO + valorNovo.split(" - ")[0]);
-					}
-				});
-	}
-
-	private void preencherChoiceBoxes() {
-		ObservableList<String> obsListaOrgaos = this.cbOrgao.getItems();
-		obsListaOrgaos.add(CHOICEBOX_TEXTO_PADRAO);
-		obsListaOrgaos.addAll(fachada.getListaOrgaos());
-		this.cbOrgao.getSelectionModel().select(0);
-
-		ObservableList<String> obsListaAssuntos = this.cbAssunto.getItems();
-		obsListaAssuntos.add(CHOICEBOX_TEXTO_PADRAO);
-		obsListaAssuntos.addAll(fachada.getListaAssuntos());
-		this.cbAssunto.getSelectionModel().select(0);
-
-		ObservableList<String> obsListaSituacoes = this.cbSituacao.getItems();
-		obsListaSituacoes.add(CHOICEBOX_TEXTO_PADRAO);
-		obsListaSituacoes.addAll(fachada.getListaSituacoes());
-		this.cbSituacao.getSelectionModel().select(0);
 	}
 }
