@@ -28,8 +28,8 @@ public class FachadaNegocio implements FachadaCaixasDeEscolha{
 	private static final FachadaNegocio instance = new FachadaNegocio();
 	
 	private FachadaNegocio() {
-		processoServico = new ProcessoServico();
-		interessadoServico = new InteressadoServico();
+		processoServico = ProcessoServico.getInstance();
+		interessadoServico = InteressadoServico.getInstance();
 	}
 	
 	public static FachadaNegocio getInstance() {
@@ -51,7 +51,7 @@ public class FachadaNegocio implements FachadaCaixasDeEscolha{
 	 */
 	@Override
 	public void salvar (Processo novoProcesso) {
-		//TODO mandar para o serviço de processos
+		processoServico.criarProcesso(novoProcesso);
 	}
 	
 	/**
@@ -59,20 +59,20 @@ public class FachadaNegocio implements FachadaCaixasDeEscolha{
 	 */
 	@Override
 	public void atualizar (Processo processoModificado)	{
-		//TODO mandar para o serviço de processos
-	}
+		processoServico.atualizarProcesso(processoModificado);
+ 	}
+	
 	
 	public Interessado buscarPorCpf (String cpf) {
-		//TODO mandar para o serviço de interessados
-		return null;
+		return interessadoServico.burcarPeloCpfInteressado(cpf);
 	}
 	
 	public void salvar (Interessado novoInteressado) {
-		//TODO mandar para o serviço de interessados
+		interessadoServico.criarInteressado(novoInteressado);
 	}
 	
 	public void atualizar (Interessado interessadoEditado)	{
-		//TODO mandar para o serviço de interessados
+		interessadoServico.atualizarInteressado(interessadoEditado);
 	}
 	
 	@Override

@@ -28,15 +28,15 @@ public class InteressadoDaoMySqlTest {
 	public void testInserirExcluirComSucesso() {
 		dao.salvar(interessado1);
 		System.out.println("Depois inserção:");
-		for (Interessado inter : dao.getAll()) {			
+		for (Interessado inter : dao.pegarTodos()) {			
 			System.out.println(inter.getNome());
 		}
-		Interessado interessado = dao.getByCpf("06570555499");
+		Interessado interessado = dao.pegarPeloCpf("06570555499");
 		assertEquals(interessado1.getCpf(), interessado1.getCpf());
 		dao.deletar(interessado);
 		
 		System.out.println("Depois exclusão:");
-		for (Interessado inter : dao.getAll()) {			
+		for (Interessado inter : dao.pegarTodos()) {			
 			System.out.println(inter.getNome());
 		}
 		
@@ -45,17 +45,17 @@ public class InteressadoDaoMySqlTest {
 	
 	@Test
 	public void testAtualizar() {
-		Interessado inter = dao.getById("2");
+		Interessado inter = dao.pegarPeloId(Long.parseLong("2"));
 		
 		System.out.println("Antes:");
-		for (Interessado interessado : dao.getAll()) {			
+		for (Interessado interessado : dao.pegarTodos()) {			
 			System.out.println(interessado.getNome());
 		}
 		
 		dao.deletar(inter);
 		
 		System.out.println("Depois:");
-		for (Interessado interessado : dao.getAll()) {
+		for (Interessado interessado : dao.pegarTodos()) {
 			System.out.println(interessado.getNome());
 		}
 		

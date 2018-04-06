@@ -143,11 +143,19 @@ public class Processo {
 		this.dataSaida = dataSaida;
 	}
 
-	public void validar() throws RuntimeException{
-		/*
-			if(this.numero == null){
-				throw new RuntimeException();
-			}
-		*/
+	public void validarNumeroNulo(){
+		//verifica se o numero está vazio
+		if(this.numero == null || this.numero.isEmpty()){
+			throw new IllegalArgumentException("O campo numero não pode ser vazio.");
+		}
 	}
+	
+	public void validarInteressadoNulo(){
+		//verifica se o interessado está vazio
+		if(this.interessado == null){
+			throw new IllegalArgumentException("O interessado não foi vinculado ao processo.");
+		}
+	}
+	
+	//TODO continuar demais validações dos atributos da classe
 }
