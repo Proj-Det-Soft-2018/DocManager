@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import negocio.dominio.Processo;
+import negocio.dominio.Situacao;
 import persistencia.ProcessoDaoMySql;
 
 /**
@@ -17,11 +18,23 @@ import persistencia.ProcessoDaoMySql;
 public class ProcessoServico extends Observavel {
 	
 	private static Logger logger = Logger.getLogger(ProcessoServico.class);
-	private static GenericoDao<Processo> processoDao = new ProcessoDaoMySql();
+	private ProcessoDao processoDao;
+	
+	// Singleton
+	private static final ProcessoServico instance = new ProcessoServico();
+	
+	private ProcessoServico() {
+		processoDao = new ProcessoDaoMySql();
+	}
+	
+	public static ProcessoServico getInstance() {
+		return instance;
+	}
+	
 	
 	public void criarProcesso(Processo processo) {
 		try{
-			processo.validar();
+			processo.validarNumeroNulo();
 			this.salvarProcesso(processo);
 		}
 		catch (RuntimeException e) {
@@ -31,13 +44,20 @@ public class ProcessoServico extends Observavel {
 	}
 	
 	public void salvarProcesso(Processo processo) {
+		//Antes de salvar verificar os campos que nao podem ser nulos
+		processo.validarNumeroNulo();
+		this.validarNumeroDuplicado(processo.getNumero());
+		
+		
+		
+		
 		processoDao.salvar(processo);
 		this.notificarTodos();
 	}
 	
 	public void atualizarProcesso(Processo processo) {
 		try {
-			processo.validar();
+			//processo.validar();
 			processoDao.atualizar(processo);
 			this.notificarTodos();	
 		}
@@ -51,8 +71,8 @@ public class ProcessoServico extends Observavel {
 		processoDao.deletar(processo);
 	}
 	
-	public Processo encontrarPorId(String numProcesso) {
-		return processoDao.getById(numProcesso);
+	public Processo encontrarPorId(Processo processo) {
+		return processoDao.pegarPeloId(processo.getId());
 		
 	}
 	
@@ -61,7 +81,24 @@ public class ProcessoServico extends Observavel {
 	}
 	
 	public List<Processo> getAll(){
-		return processoDao.getAll();
+		return processoDao.pegarTodos();
+	}
+	
+	/**
+	 * Método procura no banco se tem outro processo com o mesmo número e se a situação 
+	 * está definida como concluída
+	 * @param numero Numero do processo que está sendo inserido.
+	 */
+	public void validarNumeroDuplicado(String numero) {
+		List<Processo> duplicados = processoDao.buscarPorNumero(numero);
+		if(!duplicados.isEmpty()) {
+			//verifica se a situacao dos processos encontrados estao como concluido
+			for (Processo processo : duplicados) {
+				if(!(processo.getSituacao().ordinal()==Situacao.CONCLUIDO.ordinal()) ) {
+					//throw new ProcessoDuplicadoException("Existe outro processo cadastrado com situação não concluída");
+				}				
+			}			
+		}		
 	}
 
 }

@@ -22,6 +22,17 @@ public class Processo {
 	private LocalDateTime dataEntrada; //Hora registro do processo no banco
 	private LocalDateTime dataSaida; //Hora que altera e grava situação para concluido
 
+	public Processo() {
+		
+	}
+	
+	public Processo(Long id, boolean tipoOficio, String numero, String observacao) {
+		this.id = id;
+		this.tipoOficio = tipoOficio;
+		this.numero = numero;
+		this.observacao = observacao;
+	}
+
 	/**
 	 * @return the id
 	 */
@@ -143,11 +154,19 @@ public class Processo {
 		this.dataSaida = dataSaida;
 	}
 
-	public void validar() throws RuntimeException{
-		/*
-			if(this.numero == null){
-				throw new RuntimeException();
-			}
-		*/
+	public void validarNumeroNulo(){
+		//verifica se o numero está vazio
+		if(this.numero == null || this.numero.isEmpty()){
+			throw new IllegalArgumentException("O campo numero não pode ser vazio.");
+		}
 	}
+	
+	public void validarInteressadoNulo(){
+		//verifica se o interessado está vazio
+		if(this.interessado == null){
+			throw new IllegalArgumentException("O interessado não foi vinculado ao processo.");
+		}
+	}
+	
+	//TODO continuar demais validações dos atributos da classe
 }
