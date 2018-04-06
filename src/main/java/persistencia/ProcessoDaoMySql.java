@@ -47,12 +47,13 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			stmt.setString(7, novoProcesso.getObservacao());
 			
 			//Definindo data de entrada no banco de dados
+			LocalDateTime data = LocalDateTime.now();
+			novoProcesso.setDataEntrada(data);
 			
-			novoProcesso.setDataEntrada(LocalDateTime.now());
-			Timestamp stamp = Timestamp.valueOf(novoProcesso.getDataEntrada());
+			Timestamp stamp = Timestamp.valueOf(data);
 			Date dataEntrada = new Date (stamp.getTime());
-			stmt.setDate(8,dataEntrada);
 			
+			stmt.setDate(8,dataEntrada);
 			stmt.executeUpdate();
 			
 			
@@ -158,37 +159,30 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			
 			rs = stmt.executeQuery();
 			
-			Processo processo = new Processo();
-			Interessado interessado = new Interessado();
 			
 			if(rs.next()) {
 				//criando o objeto Interessado
-				
-				processo.setId(rs.getLong("id"));
-				processo.setTipoOficio(rs.getBoolean("eh_oficio"));
-				processo.setNumero(rs.getString("numero"));
-				processo.setObservacao(rs.getString("observacao"));
+				Processo processo = new Processo(rs.getLong("id"), rs.getBoolean("eh_oficio"), rs.getString("numero"), rs.getString("observacao"));
 				
 				//falta resolver unidade destino /orgao_saida, se vai ter ou não
 				
 				try {
-				processo.setAssuntoById(rs.getInt("assunto"));
-				processo.setUnidadeOrigemById(rs.getInt("orgao_origem"));
-				processo.setSituacaoById(rs.getInt("situacao"));
+					processo.setAssuntoById(rs.getInt("assunto"));
+					processo.setUnidadeOrigemById(rs.getInt("orgao_origem"));
+					processo.setSituacaoById(rs.getInt("situacao"));
 				}catch(Exception e) {
 					//TODO O que fazer aqui?
 				}
-				interessado.setId(rs.getLong("interessado_id"));
-				interessado.setNome(rs.getString("nome"));
-				interessado.setCpf(rs.getString("cpf"));
-				interessado.setContato(rs.getString("contato"));
+				
+				Interessado interessado = new Interessado(rs.getLong("interessado_id"), rs.getString("nome"), rs.getString("cpf"), rs.getString("contato"));
 				processo.setInteressado(interessado);
 				
 				//Convertendo java.sql.Date to LocalDateTime
-				Date dataE = rs.getDate("data_entrada");
-				if(dataE != null) {
-					Timestamp stampE = new Timestamp(dataE.getTime());
-					LocalDateTime dataEntrada = stampE.toLocalDateTime();
+				Date dataEntradaSql = rs.getDate("data_entrada");
+				
+				if(dataEntradaSql != null) {
+					Timestamp stampEntrada = new Timestamp(dataEntradaSql.getTime());
+					LocalDateTime dataEntrada = stampEntrada.toLocalDateTime();
 					processo.setDataEntrada(dataEntrada);
 				}else {
 					processo.setDataEntrada(null);
@@ -196,10 +190,10 @@ public class ProcessoDaoMySql implements ProcessoDao{
 					
 				
 				//Convertendo java.sql.Date to LocalDateTime
-				Date dataS = rs.getDate("data_saida");
-				if(dataS != null) {
-					Timestamp stampS = new Timestamp(rs.getDate("data_saida").getTime());
-					LocalDateTime dataSaida = stampS.toLocalDateTime();
+				Date dataSaidaSql = rs.getDate("data_saida");
+				if(dataSaidaSql != null) {
+					Timestamp stampSaida = new Timestamp(rs.getDate("data_saida").getTime());
+					LocalDateTime dataSaida = stampSaida.toLocalDateTime();
 					processo.setDataSaida(dataSaida);
 				}else {
 					processo.setDataSaida(null);
@@ -210,9 +204,6 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			}else {
 				return null;
 			}
-			
-			
-			
 
 		} catch (SQLException e) {
 			///TODO resolver
@@ -252,12 +243,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			while(rs.next()) {
 				
 				//criando o objeto Interessado
-				Processo processo = new Processo();
-				processo.setId(rs.getLong("id"));
-				processo.setTipoOficio(rs.getBoolean("eh_oficio"));
-				processo.setNumero(rs.getString("numero"));
-				processo.setObservacao(rs.getString("observacao"));
-				
+				Processo processo = new Processo(rs.getLong("id"), rs.getBoolean("eh_oficio"), rs.getString("numero"), rs.getString("observacao"));
 				//falta resolver unidade destino /orgao_saida, se vai ter ou não
 				try {
 					processo.setAssuntoById(rs.getInt("assunto"));
@@ -269,19 +255,14 @@ public class ProcessoDaoMySql implements ProcessoDao{
 				}
 				
 				//criando objeto interessado
-				Interessado interessado = new Interessado();
-				
-				interessado.setId(rs.getLong("interessado_id"));
-				interessado.setNome(rs.getString("nome"));
-				interessado.setCpf(rs.getString("cpf"));
-				interessado.setContato(rs.getString("contato"));
+				Interessado interessado = new Interessado(rs.getLong("interessado_id"), rs.getString("nome"), rs.getString("cpf"), rs.getString("contato"));
 				processo.setInteressado(interessado);
 				
 				//Convertendo data entrada de java.sql.Date para LocalDateTime
-				Date dataE = rs.getDate("data_entrada");
-				if(dataE != null) {
-					Timestamp stampE = new Timestamp(dataE.getTime());
-					LocalDateTime dataEntrada = stampE.toLocalDateTime();
+				Date dataEntradaSql = rs.getDate("data_entrada");
+				if(dataEntradaSql != null) {
+					Timestamp stampEntrada = new Timestamp(dataEntradaSql.getTime());
+					LocalDateTime dataEntrada = stampEntrada.toLocalDateTime();
 					processo.setDataEntrada(dataEntrada);
 				}else {
 					processo.setDataEntrada(null);
@@ -289,10 +270,10 @@ public class ProcessoDaoMySql implements ProcessoDao{
 					
 				
 				//Convertendo data Saida de java.sql.Date para LocalDateTime
-				Date dataS = rs.getDate("data_saida");
-				if(dataS != null) {
-					Timestamp stampS = new Timestamp(rs.getDate("data_saida").getTime());
-					LocalDateTime dataSaida = stampS.toLocalDateTime();
+				Date dataSaidaSql = rs.getDate("data_saida");
+				if(dataSaidaSql != null) {
+					Timestamp stampSaida = new Timestamp(rs.getDate("data_saida").getTime());
+					LocalDateTime dataSaida = stampSaida.toLocalDateTime();
 					processo.setDataSaida(dataSaida);
 				}else {
 					processo.setDataSaida(null);
@@ -304,7 +285,6 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			
 			return processos;
 			
-
 		} catch (SQLException e) {
 			//TODO resolver
 			throw new RuntimeException("Erro no pegarTodos Processo: "+ e);

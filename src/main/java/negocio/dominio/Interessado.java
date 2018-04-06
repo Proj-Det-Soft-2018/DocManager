@@ -16,6 +16,15 @@ public class Interessado {
 	private String cpf;
 	private String contato;
 	
+	
+	
+	public Interessado(Long id, String nome, String cpf, String contato) {
+		this.id = id;
+		this.nome = nome;
+		this.cpf = cpf;
+		this.contato = contato;
+	}
+
 	/**
 	 * @return the id
 	 */
