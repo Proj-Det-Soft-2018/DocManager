@@ -12,14 +12,27 @@ import persistencia.InteressadoDaoMySql;
  *
  */
 public class InteressadoServico {
-	GenericoDao<Interessado> interessadoDao = new InteressadoDaoMySql();
+	private InteressadoDao interessadoDao;
 	
 	private static Logger logger = Logger.getLogger(InteressadoServico.class);
+	
+	
+	// Singleton
+	private static final InteressadoServico instance = new InteressadoServico();
+	
+	private InteressadoServico() {
+		interessadoDao = new InteressadoDaoMySql();
+	}
+	
+	public static InteressadoServico getInstance() {
+		return instance;
+	}
+	
 	
 	public void criarInteressado(Interessado interessado) {
 		
 		//Verifica se interessado ja esta no banco atraves do cpf
-		Interessado interessado_bd = this.encontrarPorId(interessado.getCpf());
+		Interessado interessado_bd = this.encontrarPorCpf(interessado.getCpf());
 		
 		if(interessado_bd == null) {
 			try {
@@ -55,8 +68,12 @@ public class InteressadoServico {
 		interessadoDao.deletar(interessado);
 	}
 	
-	public Interessado encontrarPorId(String cpf) {
-		return interessadoDao.getById(cpf);
+	public Interessado encontrarPorId(Long id) {
+		return interessadoDao.pegarPeloId(id);
+	}
+	
+	public Interessado encontrarPorCpf(String cpf) {
+		return interessadoDao.pegarPeloCpf(cpf);
 	}
 	
 	public boolean contem(Interessado interessado) {
@@ -64,6 +81,6 @@ public class InteressadoServico {
 	}
 	
 	public List<Interessado> getAll(){
-		return interessadoDao.getAll();
+		return interessadoDao.pegarTodos();
 	}
 }

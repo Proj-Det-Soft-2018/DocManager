@@ -4,30 +4,27 @@
 package persistencia;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import negocio.dominio.Assunto;
 import negocio.dominio.Interessado;
-import negocio.dominio.Orgao;
 import negocio.dominio.Processo;
-import negocio.dominio.Situacao;
-import negocio.servico.GenericoDao;
+import negocio.servico.ProcessoDao;
 
 /**
  * @author clah
  * @since 01/04/2018
  */
-public class ProcessoDaoMySql implements GenericoDao<Processo>{
-
+public class ProcessoDaoMySql implements ProcessoDao{
+	
 	@Override
-	public void salvar(Processo bean) {
+	public void salvar(Processo novoProcesso) {
 		
 		String sql = "INSERT INTO processos"
 					+ "(eh_oficio,numero,interessado_id,"
@@ -41,18 +38,18 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 			con = ConnectionFactory.getConnection();
 			stmt = con.prepareStatement(sql);
 			
-			stmt.setBoolean(1, bean.isTipoOficio());
-			stmt.setString(2, bean.getNumero());
-			stmt.setLong(3, bean.getInteressado().getId());
-			stmt.setInt(4, bean.getAssunto().ordinal());
-			stmt.setInt(5, bean.getSituacao().ordinal());
-			stmt.setInt(6, bean.getUnidadeOrigem().ordinal());
-			stmt.setString(7, bean.getObservacao());
+			stmt.setBoolean(1, novoProcesso.isTipoOficio());
+			stmt.setString(2, novoProcesso.getNumero());
+			stmt.setLong(3, novoProcesso.getInteressado().getId());
+			stmt.setInt(4, novoProcesso.getAssunto().ordinal());
+			stmt.setInt(5, novoProcesso.getSituacao().ordinal());
+			stmt.setInt(6, novoProcesso.getUnidadeOrigem().ordinal());
+			stmt.setString(7, novoProcesso.getObservacao());
 			
 			//Definindo data de entrada no banco de dados
 			
-			bean.setDataEntrada(LocalDateTime.now());
-			Timestamp stamp = Timestamp.valueOf(bean.getDataEntrada());
+			novoProcesso.setDataEntrada(LocalDateTime.now());
+			Timestamp stamp = Timestamp.valueOf(novoProcesso.getDataEntrada());
 			Date dataEntrada = new Date (stamp.getTime());
 			stmt.setDate(8,dataEntrada);
 			
@@ -67,9 +64,10 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 		
 		
 	}
-
+	
+	
 	@Override
-	public void atualizar(Processo bean) {
+	public void atualizar(Processo processoModificado) {
 		
 		String sql = "UPDATE processos SET "
 					+ "numero=?, interessado_id=?, assunto=?,"
@@ -83,24 +81,25 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 		try {
 			con = ConnectionFactory.getConnection();
 			stmt = con.prepareStatement(sql);
-			stmt.setString(1, bean.getNumero());
-			stmt.setLong(2, bean.getInteressado().getId());
-			stmt.setInt(3, bean.getAssunto().ordinal());
-			stmt.setInt(4, bean.getSituacao().ordinal());
-			stmt.setInt(5, bean.getUnidadeOrigem().ordinal());
-			stmt.setString(6, bean.getObservacao());
+			stmt.setString(1, processoModificado.getNumero());
+			stmt.setLong(2, processoModificado.getInteressado().getId());
+			stmt.setInt(3, processoModificado.getAssunto().ordinal());
+			stmt.setInt(4, processoModificado.getSituacao().ordinal());
+			stmt.setInt(5, processoModificado.getUnidadeOrigem().ordinal());
+			stmt.setString(6, processoModificado.getObservacao());
 			
 			//LocalDateTime to java.sql.Date
-			if(bean.getDataSaida()!=null) {
-				Timestamp stamp = Timestamp.valueOf(bean.getDataSaida());
-				Date dataSaida = new Date (stamp.getTime());
-				stmt.setDate(7,dataSaida);
+			LocalDateTime dataSaida = processoModificado.getDataSaida();
+			if(dataSaida!=null) {
+				Timestamp stamp = Timestamp.valueOf(dataSaida);
+				Date dataSaidaSql = new Date (stamp.getTime());
+				stmt.setDate(7,dataSaidaSql);
 			}
 			
 			stmt.setDate(7, null);
 				
 			//setando id do processo a ser modificado
-			stmt.setLong(8, bean.getId());
+			stmt.setLong(8, processoModificado.getId());
 			
 			
 			stmt.executeUpdate();
@@ -114,8 +113,9 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 		
 	}
 
+		
 	@Override
-	public void deletar(Processo bean) {
+	public void deletar(Processo processo) {
 		
 		Connection con = null;
 		PreparedStatement stmt=null;
@@ -123,7 +123,7 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 		try {
 			con = ConnectionFactory.getConnection();
 			stmt = con.prepareStatement("DELETE FROM processos WHERE id=?");
-	        stmt.setLong(1, bean.getId());
+	        stmt.setLong(1, processo.getId());
 	        stmt.executeUpdate();
 			
 			
@@ -135,9 +135,10 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 		
 	}
 	
+	
 	//TODO verificar essa exceção generica que os metodos getbyid das classes Orgao, Situacao e Assunto lança
 	@Override
-	public Processo getById(String id) {
+	public Processo pegarPeloId(Long id) {
 		
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -147,7 +148,7 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 			con = ConnectionFactory.getConnection();
 			
 			stmt = con.prepareStatement("SELECT * FROM processos p INNER JOIN interessados i ON p.interessado_id=i.id WHERE p.id=?");
-			stmt.setLong(1, Long.parseLong(id));
+			stmt.setLong(1, id);
 			
 			rs = stmt.executeQuery();
 			
@@ -214,18 +215,18 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 	}
 
 	@Override
-	public boolean contem(Processo bean) {
-		String id = bean.getId().toString();
-		Processo processo = this.getById(id);
-		if(processo!=null) {
+	public boolean contem(Processo processo) {
+		Long id = processo.getId();
+		Processo processoBuscado = this.pegarPeloId(id);
+		if(processoBuscado!=null) {
 			return true;
 		}else {
 			return false;
 		}
 	}
-
+	
 	@Override
-	public List<Processo> getAll() {
+	public List<Processo> pegarTodos() {
 		
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -304,6 +305,20 @@ public class ProcessoDaoMySql implements GenericoDao<Processo>{
 		}finally {
 			ConnectionFactory.fechaConnection(con, stmt, rs);
 		}
+	}
+
+
+	@Override
+	public List<Processo> buscarPorNumero(String numero) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Processo> buscarPorSituacao(int situacaoId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -28,8 +28,8 @@ public class FachadaNegocio implements FachadaCaixasDeEscolha{
 	private static final FachadaNegocio instance = new FachadaNegocio();
 	
 	private FachadaNegocio() {
-		processoServico = new ProcessoServico();
-		interessadoServico = new InteressadoServico();
+		processoServico = ProcessoServico.getInstance();
+		interessadoServico = InteressadoServico.getInstance();
 	}
 	
 	public static FachadaNegocio getInstance() {

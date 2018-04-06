@@ -8,6 +8,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import negocio.dominio.Processo;
+import negocio.excecao.NumeroProcessoVazioException;
+import negocio.fachada.FachadaNegocio;
 import persistencia.ProcessoDaoMySql;
 
 /**
@@ -17,7 +19,19 @@ import persistencia.ProcessoDaoMySql;
 public class ProcessoServico extends Observavel {
 	
 	private static Logger logger = Logger.getLogger(ProcessoServico.class);
-	private static GenericoDao<Processo> processoDao = new ProcessoDaoMySql();
+	private ProcessoDao processoDao;
+	
+	// Singleton
+	private static final ProcessoServico instance = new ProcessoServico();
+	
+	private ProcessoServico() {
+		processoDao = new ProcessoDaoMySql();
+	}
+	
+	public static ProcessoServico getInstance() {
+		return instance;
+	}
+	
 	
 	public void criarProcesso(Processo processo) {
 		try{
@@ -51,8 +65,8 @@ public class ProcessoServico extends Observavel {
 		processoDao.deletar(processo);
 	}
 	
-	public Processo encontrarPorId(String numProcesso) {
-		return processoDao.getById(numProcesso);
+	public Processo encontrarPorId(Processo processo) {
+		return processoDao.pegarPeloId(processo.getId());
 		
 	}
 	
@@ -61,7 +75,7 @@ public class ProcessoServico extends Observavel {
 	}
 	
 	public List<Processo> getAll(){
-		return processoDao.getAll();
+		return processoDao.pegarTodos();
 	}
 
 }
