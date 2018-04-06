@@ -17,13 +17,13 @@ import negocio.servico.InteressadoDao;
  * @author clah
  * @since 30/03/2018
  */
-public class InteressadoDaoMySql implements InteressadoDao {
+public class InteressadoDaoMySql implements InteressadoDao{
 
 	@Override
 	public void salvar(Interessado novoInteressado) {
-		String sql = "insert into interessados " +
-                "(nome,cpf,contato)" +
-                " values (?,?,?)";
+		String sql = "INSERT INTO interessados " +
+                		"(nome,cpf,contato)" +
+                		" VALUES (?,?,?)";
 		
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -37,6 +37,7 @@ public class InteressadoDaoMySql implements InteressadoDao {
 			stmt.executeUpdate();
 			
 		} catch (SQLException e) {
+			//TODO resolver
 			throw new RuntimeException(e);
 		}
 		finally {
@@ -65,6 +66,7 @@ public class InteressadoDaoMySql implements InteressadoDao {
 	        stmt.executeUpdate();
 	        
 	    } catch (SQLException e) {
+	    	//TODO resolver
 	        throw new RuntimeException(e);
 	    }finally {
 			ConnectionFactory.fechaConnection(con, stmt);
@@ -79,12 +81,12 @@ public class InteressadoDaoMySql implements InteressadoDao {
 		PreparedStatement stmt = null;
 		try {
 			con = ConnectionFactory.getConnection();
-	        stmt = con.prepareStatement("delete " +
-	                "from interessados where id=?");
+	        stmt = con.prepareStatement("DELETE FROM interessados WHERE id=?");
 	        stmt.setLong(1, processo.getId());
 	        stmt.executeUpdate();
 	        
 	    } catch (SQLException e) {
+	    	//TODO resolver
 	        throw new RuntimeException(e);
 	    }finally {
 	    	ConnectionFactory.fechaConnection(con, stmt);
@@ -92,9 +94,7 @@ public class InteressadoDaoMySql implements InteressadoDao {
 		
 	}
 	
-	/**
-	 * Como o id e cpf são unicos, nesse metodo procuramos o processo pelo CPF
-	 */
+	
 	@Override
 	public Interessado pegarPeloId(Long id) {
 		Connection con = null;
@@ -104,7 +104,7 @@ public class InteressadoDaoMySql implements InteressadoDao {
 		try {
 			con = ConnectionFactory.getConnection();
 			
-			stmt = con.prepareStatement("select * from interessados where id=?");
+			stmt = con.prepareStatement("SELECT * FROM interessados WHERE id=?");
 			stmt.setLong(1, id);
 			
 			rs = stmt.executeQuery();
@@ -124,7 +124,8 @@ public class InteressadoDaoMySql implements InteressadoDao {
 			return interessado;
 			
 		} catch (SQLException e) {
-			throw new RuntimeException("Erro no getById Interessado: "+ e);
+			//TODO resolver
+			throw new RuntimeException("Erro no pegarPeloId Interessado: "+ e);
 		}finally {
 			ConnectionFactory.fechaConnection(con, stmt, rs);
 		}
@@ -139,16 +140,16 @@ public class InteressadoDaoMySql implements InteressadoDao {
 		try {
 			con = ConnectionFactory.getConnection();
 			
-			stmt = con.prepareStatement("select * from interessados where cpf=?");
+			stmt = con.prepareStatement("SELECT * FROM interessados WHERE cpf=?");
 			stmt.setString(1, cpf);
 			
 			rs = stmt.executeQuery();
 			
-			Interessado interessado = new Interessado();
+			Interessado interessado = null;
 			
 			if(rs.next()) {
 				//criando o objeto Interessado
-				
+				interessado = new Interessado();
 				interessado.setId(rs.getLong("id"));
 				interessado.setNome(rs.getString("nome"));
 				interessado.setCpf(rs.getString("cpf"));
@@ -159,7 +160,8 @@ public class InteressadoDaoMySql implements InteressadoDao {
 			return interessado;
 			
 		} catch (SQLException e) {
-			throw new RuntimeException("Erro no getByCpf Interessado: "+ e);
+			//TODO resolver
+			throw new RuntimeException("Erro no pegarPeloCpf Interessado: "+ e);
 		}finally {
 			ConnectionFactory.fechaConnection(con, stmt, rs);
 		}
@@ -168,11 +170,8 @@ public class InteressadoDaoMySql implements InteressadoDao {
 	@Override
 	public boolean contem(Interessado interessado) {
 		Interessado interessadoBuscado = this.pegarPeloId(interessado.getId());
-		if(interessadoBuscado!=null) {
-			return true;
-		}else {
-			return false;
-		}
+		
+		return (interessadoBuscado!=null) ? true: false;
 		
 	}
 
@@ -185,7 +184,7 @@ public class InteressadoDaoMySql implements InteressadoDao {
 		
 		try {
 			con = ConnectionFactory.getConnection();
-			stmt = con.prepareStatement("select * from interessados");
+			stmt = con.prepareStatement("SELECT * FROM interessados");
 			rs = stmt.executeQuery();
 			List<Interessado> interessados = new ArrayList<Interessado>();
 			
@@ -202,6 +201,7 @@ public class InteressadoDaoMySql implements InteressadoDao {
 			
 			return interessados;
 		} catch (SQLException e) {
+			//TODO resolver
 			throw new RuntimeException("Erro no pegarTodos Interessado: "+ e);
 		}finally {
 			ConnectionFactory.fechaConnection(con, stmt, rs);
