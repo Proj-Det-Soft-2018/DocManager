@@ -1,12 +1,17 @@
 package apresentacao;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -15,7 +20,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import negocio.dominio.Interessado;
@@ -29,7 +36,10 @@ import utils.widget.MaskedTextField;
  * 
  */
 public class ControleTelaEdicao implements Initializable {
+	
+	private Logger logger = Logger.getLogger(ControleTelaEdicao.class);
 
+	private static final URL ARQUIVO_FXML_DIALOG_INTERESSADO = ControleTelaPrincipal.class.getResource("/visoes/dialog_editar_interessado.fxml");
 	private static final String CHOICEBOX_TEXTO_PADRAO = "-- SELECIONE --";
 	private static final String LABEL_BTN_ATUALIZAR = "Atualizar"; 
 	private static final String LABEL_BTN_EDITAR_INTERESSADO = "Editar"; 
@@ -180,8 +190,34 @@ public class ControleTelaEdicao implements Initializable {
     }
     
     private void editarInteressado() {
-    	
     }
+    
+    private void criarNovoInteressado() {
+	}
+
+	private void criarDialogEdicao(String titulo) {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(ARQUIVO_FXML_DIALOG_INTERESSADO);
+			Pane novoPainel = loader.load();
+
+			Stage dialogEdicao = new Stage();
+			dialogEdicao.setTitle(titulo);
+			dialogEdicao.initModality(Modality.WINDOW_MODAL);
+			dialogEdicao.initOwner(this.raiz.getScene().getWindow());
+			dialogEdicao.setScene(new Scene(novoPainel, 400, 260));
+
+			ControleDialogInteressado controleDialog = loader.getController();
+			
+			dialogEdicao.show();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
+	private void mostrarTelaEdicao() {
+		
+	}
     
     private void limparInteressado() {
     	this.interessado = null;

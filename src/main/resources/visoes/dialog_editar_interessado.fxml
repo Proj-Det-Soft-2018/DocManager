@@ -42,8 +42,8 @@
       </VBox>
       <HBox alignment="CENTER_RIGHT" spacing="10.0">
          <children>
-            <Button fx:id="btnCancelar" mnemonicParsing="false" text="Cancelar" />
-            <Button fx:id="btnSalvar" mnemonicParsing="false" text="Salvar" />
+            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#fecharJanela" text="Cancelar" />
+            <Button fx:id="btnSalvar" mnemonicParsing="false" onAction="#salvar" text="Salvar" />
          </children>
       </HBox>
    </children>

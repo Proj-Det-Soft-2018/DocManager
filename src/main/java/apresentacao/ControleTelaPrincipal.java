@@ -31,15 +31,13 @@ import utils.widget.MaskedTextField;
  */
 public class ControleTelaPrincipal implements Initializable, Observador {
 
-	private static final URL ARQUIVO_FXML = ControleTelaPrincipal.class.getResource("/visoes/tela_editar_processo.fxml");
-	private static final String TITULO_CRIAR = "Novo Processo / Ofício";
-	private static final String TITULO_EDITAR = "Ver / Editar";
+	private static final URL ARQUIVO_FXML_TELA_EDICAO = ControleTelaPrincipal.class.getResource("/visoes/tela_editar_processo.fxml");
+	private static final String CRIAR_PROCESSO = "Novo Processo / Ofício";
+	private static final String EDITAR_PROCESSO = "Editar Processo";
 	private static final String MASCARA_NUM_OFICIO = "####/####";
 	private static final String MASCARA_NUM_PROCESSO = "#######.########/####-##";
 
 	private FachadaArmazenamento fachada;
-	private Stage novaTelaEdicao;
-	private ControleTelaEdicao controleTelaEdicao;
 	private Processo processoSelecionado;
 
 	@FXML
@@ -83,41 +81,41 @@ public class ControleTelaPrincipal implements Initializable, Observador {
 		this.configurarTabela();
 		this.atualizarTabela(this.fachada.buscarListaProcessos());
 	}
+	
+	@Override
+	public void atualizar() {
+		this.atualizarTabela(this.fachada.buscarListaProcessos());
+	}
 
 	@FXML
 	private void criarFormularioNovo() {
-		this.criarTelaEdicao(TITULO_CRIAR);
-		this.controleTelaEdicao.montarFormulario(null);
-		this.mostrarTelaEdicao();
+		this.criarTelaEdicao(CRIAR_PROCESSO, null);
 	}
 
 	@FXML
 	private void criarFormularioEdicao() {
-		this.criarTelaEdicao(TITULO_EDITAR);
-		this.controleTelaEdicao.montarFormulario(processoSelecionado);
-		this.mostrarTelaEdicao();	
+		this.criarTelaEdicao(EDITAR_PROCESSO, processoSelecionado);
 	}
 
-	private void criarTelaEdicao(String titulo) {
+	private void criarTelaEdicao(String titulo, Processo processo) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(ARQUIVO_FXML);
+			loader.setLocation(ARQUIVO_FXML_TELA_EDICAO);
 			Pane novoPainel = loader.load();
 
-			this.novaTelaEdicao = new Stage();
-			this.novaTelaEdicao.setTitle(titulo);
-			this.novaTelaEdicao.initModality(Modality.WINDOW_MODAL);
-			this.novaTelaEdicao.initOwner(painel.getScene().getWindow());
-			this.novaTelaEdicao.setScene(new Scene(novoPainel, 720, 540));
+			Stage novaTelaEdicao = new Stage();
+			novaTelaEdicao.setTitle(titulo);
+			novaTelaEdicao.initModality(Modality.WINDOW_MODAL);
+			novaTelaEdicao.initOwner(this.painel.getScene().getWindow());
+			novaTelaEdicao.setScene(new Scene(novoPainel, 720, 540));
 
-			this.controleTelaEdicao = loader.getController();
+			ControleTelaEdicao controleTelaEdicao = loader.getController();
+			controleTelaEdicao.montarFormulario(processo);
+			
+			novaTelaEdicao.show();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
-	}
-
-	private void mostrarTelaEdicao() {
-		this.novaTelaEdicao.show();
 	}
 
 	private void configurarTabela() {
@@ -152,10 +150,5 @@ public class ControleTelaPrincipal implements Initializable, Observador {
 
 	private void atualizarTabela(List<Processo> lista) {
 		tabelaProcessosOficios.getItems().setAll(lista);
-	}
-	
-	@Override
-	public void atualizar() {
-		this.atualizarTabela(this.fachada.buscarListaProcessos());
 	}
 }
