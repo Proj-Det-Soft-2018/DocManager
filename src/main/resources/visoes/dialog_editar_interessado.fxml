@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import utils.widget.MaskedContactTextField?>
 
 <VBox fx:id="raiz" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="260.0" prefWidth="400.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="apresentacao.ControleDialogInteressado">
    <children>
@@ -32,7 +33,7 @@
                   <Label text="Contato:" GridPane.rowIndex="2" />
                   <Label fx:id="lblTxtCpf" GridPane.columnIndex="1" />
                   <TextField fx:id="txtNome" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="txtContato" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <MaskedContactTextField fx:id="txtContato" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
                <VBox.margin>
                   <Insets bottom="15.0" left="10.0" right="10.0" top="5.0" />

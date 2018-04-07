@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import negocio.dominio.Processo;
 import negocio.dominio.Situacao;
+import persistencia.ProcessoDao;
 import persistencia.ProcessoDaoMySql;
 
 /**
@@ -48,9 +49,6 @@ public class ProcessoServico extends Observavel {
 		processo.validarNumeroNulo();
 		this.validarNumeroDuplicado(processo.getNumero());
 		
-		
-		
-		
 		processoDao.salvar(processo);
 		this.notificarTodos();
 	}
@@ -69,6 +67,7 @@ public class ProcessoServico extends Observavel {
 	
 	public void deletarProcesso(Processo processo) {
 		processoDao.deletar(processo);
+		this.notificarTodos();
 	}
 	
 	public Processo encontrarPorId(Processo processo) {
@@ -91,7 +90,7 @@ public class ProcessoServico extends Observavel {
 	 */
 	public void validarNumeroDuplicado(String numero) {
 		List<Processo> duplicados = processoDao.buscarPorNumero(numero);
-		if(!duplicados.isEmpty()) {
+		if(duplicados != null && !duplicados.isEmpty()) {
 			//verifica se a situacao dos processos encontrados estao como concluido
 			for (Processo processo : duplicados) {
 				if(!(processo.getSituacao().ordinal()==Situacao.CONCLUIDO.ordinal()) ) {
