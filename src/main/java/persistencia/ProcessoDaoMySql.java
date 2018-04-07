@@ -243,7 +243,9 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			stmt = con.prepareStatement("SELECT * "
 										+"FROM processos p "
 										+ "INNER JOIN interessados i "
-										+ "ON p.interessado_id=i.id ");					
+										+ "ON p.interessado_id=i.id "
+										+ "ORDER BY data_entrada DESC"
+										+ "LIMIT 50");					
 			rs = stmt.executeQuery();
 			
 			
@@ -313,33 +315,111 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		}
 	}
 
+	
+	public List<Processo> burcador(String whereStament) {
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String query = "SELECT * "
+						+ "FROM processos p "
+						+ "INNER JOIN interessados i "
+						+ "ON p.interessado_id=i.id "
+						+ whereStament;
+		
+		try {
+			con = ConnectionFactory.getConnection();
+			
+			stmt = con.prepareStatement(query);
+			
+			rs = stmt.executeQuery();
+			
+			List<Processo> processos = new ArrayList<>();
+			
+			while(rs.next()) {
+				
+				//criando objeto Interessado
+				Interessado interessado = new Interessado();	
+				interessado.setId(rs.getLong("interessado_id"));
+				interessado.setNome(rs.getString("nome"));
+				interessado.setCpf(rs.getString("cpf"));
+				interessado.setContato(rs.getString("contato"));
+				
+				//criando o objeto Processo
+				Processo processo = new Processo();
+				processo.setInteressado(interessado);
+				processo.setId(rs.getLong("id"));
+				processo.setTipoOficio(rs.getBoolean("eh_oficio"));
+				processo.setNumero(rs.getString("numero"));
+				processo.setObservacao(rs.getString("observacao"));
+				
+				//falta resolver unidade destino /orgao_saida, se vai ter ou não
+				processo.setAssuntoById(rs.getInt("assunto"));
+				processo.setUnidadeOrigemById(rs.getInt("orgao_origem"));
+				processo.setSituacaoById(rs.getInt("situacao"));
 
+				
+				//Convertendo data entrada de java.sql.Date para LocalDateTime
+				Date dataE = rs.getDate("data_entrada");
+				if(dataE != null) {
+					Timestamp stampE = new Timestamp(dataE.getTime());
+					LocalDateTime dataEntrada = stampE.toLocalDateTime();
+					processo.setDataEntrada(dataEntrada);
+				}else {
+					processo.setDataEntrada(null);
+				}
+					
+				
+				//Convertendo data Saida de java.sql.Date para LocalDateTime
+				Date dataS = rs.getDate("data_saida");
+				if(dataS != null) {
+					Timestamp stampS = new Timestamp(rs.getDate("data_saida").getTime());
+					LocalDateTime dataSaida = stampS.toLocalDateTime();
+					processo.setDataSaida(dataSaida);
+				}else {
+					processo.setDataSaida(null);
+				}
+				
+				processos.add(processo);
+			
+			}
+			
+			return processos;
+
+		} catch (SQLException e) {
+			///TODO resolver
+			throw new RuntimeException("Erro no pegarPeloId Processo: "+ e);
+		}finally {
+			ConnectionFactory.fechaConnection(con, stmt, rs);
+		}
+	}
+	
+	
 	@Override
 	public List<Processo> buscarPorNumero(String numero) {
-		
-		
-		return null;
+		String sql = "WHERE numero LIKE "+numero;
+		return this.burcador(sql);
 	}
-
-
-	@Override
-	public List<Processo> buscarPorSituacao(int situacaoId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 	@Override
 	public List<Processo> buscarPorNomeInteressado(String nome) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "WHERE nome LIKE '%"+nome+"%'";
+		return this.burcador(sql);
 	}
 
 
 	@Override
 	public List<Processo> buscarPorCpfInteressado(String cpf) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "WHERE cpf="+cpf;
+		return this.burcador(sql);
 	}
+	
+	@Override
+	public List<Processo> buscarPorSituacao(int situacaoId) {
+		String sql = "WHERE situacao="+situacaoId;
+		return this.burcador(sql);
+	}
+
+	
 
 }
