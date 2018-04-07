@@ -63,14 +63,28 @@ public class FachadaNegocio implements FachadaCaixasDeEscolha{
  	}
 	
 	
+	@Override
+	public void excluir (Processo processo) {
+		
+		processoServico.deletarProcesso(processo);
+	}
+	
+	@Override
+	public List<Processo> buscarProcessos(String numero, String nome, String cpf) {
+		return processoServico.burcarProcessos(numero, nome, cpf);
+	}
+	
+	@Override
 	public Interessado buscarPorCpf (String cpf) {
 		return interessadoServico.burcarPeloCpfInteressado(cpf);
 	}
 	
+	@Override
 	public void salvar (Interessado novoInteressado) {
 		interessadoServico.criarInteressado(novoInteressado);
 	}
 	
+	@Override
 	public void atualizar (Interessado interessadoEditado)	{
 		interessadoServico.atualizarInteressado(interessadoEditado);
 	}

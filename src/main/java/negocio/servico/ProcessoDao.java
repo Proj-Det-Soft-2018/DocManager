@@ -21,5 +21,7 @@ public interface ProcessoDao{
 	public List<Processo> pegarTodos();
 	public List<Processo> buscarPorNumero(String numero);
 	public List<Processo> buscarPorSituacao(int situacaoId);
+	public List<Processo> buscarPorNomeInteressado(String nome);
+	public List<Processo> buscarPorCpfInteressado(String cpf);
 	
 }

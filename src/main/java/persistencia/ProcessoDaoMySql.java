@@ -316,13 +316,28 @@ public class ProcessoDaoMySql implements ProcessoDao{
 
 	@Override
 	public List<Processo> buscarPorNumero(String numero) {
-		// TODO Auto-generated method stub
+		
+		
 		return null;
 	}
 
 
 	@Override
 	public List<Processo> buscarPorSituacao(int situacaoId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Processo> buscarPorNomeInteressado(String nome) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Processo> buscarPorCpfInteressado(String cpf) {
 		// TODO Auto-generated method stub
 		return null;
 	}

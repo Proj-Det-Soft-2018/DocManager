@@ -84,9 +84,13 @@ public class ProcessoServico extends Observavel {
 		return processoDao.pegarTodos();
 	}
 	
+	
+	
 	/**
-	 * Método procura no banco se tem outro processo com o mesmo número e se a situação 
-	 * está definida como concluída
+	 * Método procura no banco se tem outro processo com o mesmo número. Se tem, o registro deve
+	 *  estar com a situação definida como concluída. Caso contrário, pede confirmação do 
+	 *  usuário para modificar situacao do registro antigo como concluido.
+	 *  
 	 * @param numero Numero do processo que está sendo inserido.
 	 */
 	public void validarNumeroDuplicado(String numero) {
@@ -100,5 +104,34 @@ public class ProcessoServico extends Observavel {
 			}			
 		}		
 	}
-
+	
+	
+	public List<Processo> burcarProcessos(String numero, String nome, String cpf) {
+		if(numero != null && !numero.isEmpty()) {
+			List<Processo> lista = processoDao.buscarPorNumero(numero);
+			if(lista==null) {
+				//throw new ListaBuscaVazia("Não foi encontrado processos com o número especificado.");
+			}
+			return lista;
+			
+		} else if (nome != null && !nome.isEmpty()) {
+			List<Processo> lista = processoDao.buscarPorNomeInteressado(nome);
+			if(lista==null) {
+				//throw new ListaBuscaVazia("Não foi encontrado processos com o nome especificado.");
+			}
+			return lista;
+			
+		} else if(cpf!=null && !cpf.isEmpty()){
+			List<Processo> lista = processoDao.buscarPorCpfInteressado(cpf);
+			if(lista==null) {
+				//throw new ListaBuscaVazia("Não foi encontrado processos com o cpf especificado.");
+			}
+			return lista;
+			
+		} else {
+			//Se todos os campos estão em branco
+			return null;
+		}
+		
+	}
 }
