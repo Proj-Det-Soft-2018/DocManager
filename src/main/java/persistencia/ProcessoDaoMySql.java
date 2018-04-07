@@ -162,7 +162,11 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			
 			if(rs.next()) {
 				//criando o objeto Interessado
-				Processo processo = new Processo(rs.getLong("id"), rs.getBoolean("eh_oficio"), rs.getString("numero"), rs.getString("observacao"));
+				Processo processo = new Processo(
+						rs.getLong("id"),
+						rs.getBoolean("eh_oficio"),
+						rs.getString("numero"),
+						rs.getString("observacao"));
 				
 				//falta resolver unidade destino /orgao_saida, se vai ter ou não
 				
@@ -174,7 +178,11 @@ public class ProcessoDaoMySql implements ProcessoDao{
 					//TODO O que fazer aqui?
 				}
 				
-				Interessado interessado = new Interessado(rs.getLong("interessado_id"), rs.getString("nome"), rs.getString("cpf"), rs.getString("contato"));
+				Interessado interessado = new Interessado(
+						rs.getLong("interessado_id"),
+						rs.getString("nome"),
+						rs.getString("cpf"),
+						rs.getString("contato"));
 				processo.setInteressado(interessado);
 				
 				//Convertendo java.sql.Date to LocalDateTime
@@ -243,7 +251,11 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			while(rs.next()) {
 				
 				//criando o objeto Interessado
-				Processo processo = new Processo(rs.getLong("id"), rs.getBoolean("eh_oficio"), rs.getString("numero"), rs.getString("observacao"));
+				Processo processo = new Processo(
+						rs.getLong("id"),
+						rs.getBoolean("eh_oficio"),
+						rs.getString("numero"),
+						rs.getString("observacao"));
 				//falta resolver unidade destino /orgao_saida, se vai ter ou não
 				try {
 					processo.setAssuntoById(rs.getInt("assunto"));
@@ -255,7 +267,11 @@ public class ProcessoDaoMySql implements ProcessoDao{
 				}
 				
 				//criando objeto interessado
-				Interessado interessado = new Interessado(rs.getLong("interessado_id"), rs.getString("nome"), rs.getString("cpf"), rs.getString("contato"));
+				Interessado interessado = new Interessado(
+						rs.getLong("interessado_id"),
+						rs.getString("nome"),
+						rs.getString("cpf"),
+						rs.getString("contato"));
 				processo.setInteressado(interessado);
 				
 				//Convertendo data entrada de java.sql.Date para LocalDateTime
@@ -296,15 +312,76 @@ public class ProcessoDaoMySql implements ProcessoDao{
 
 	@Override
 	public List<Processo> buscarPorNumero(String numero) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		List<Processo> listaProcessos = new ArrayList<>();
+		try {
+			con = ConnectionFactory.getConnection();
+			
+			stmt = con.prepareStatement("SELECT * FROM processos WHERE numero=?");
+			stmt.setString(1, numero);
+			
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				Processo processo = new Processo(
+						rs.getLong("id"),
+						rs.getBoolean("eh_oficio"),
+						rs.getString("numero"),
+						rs.getString("observacao"));
+				
+				try {
+					processo.setAssuntoById(rs.getInt("assunto"));
+					processo.setUnidadeOrigemById(rs.getInt("orgao_origem"));
+					processo.setSituacaoById(rs.getInt("situacao"));
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+				listaProcessos.add(processo);
+			}
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		return listaProcessos;
 	}
 
 
 	@Override
 	public List<Processo> buscarPorSituacao(int situacaoId) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		List<Processo> listaProcessos = new ArrayList<>();
+		try {
+			con = ConnectionFactory.getConnection();
+			
+			stmt = con.prepareStatement("SELECT * FROM processos WHERE situacao=?");
+			stmt.setLong(1, situacaoId);
+			
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				Processo processo = new Processo(
+						rs.getLong("id"),
+						rs.getBoolean("eh_oficio"),
+						rs.getString("numero"),
+						rs.getString("observacao"));
+				try {
+					processo.setAssuntoById(rs.getInt("assunto"));
+					processo.setUnidadeOrigemById(rs.getInt("orgao_origem"));
+					processo.setSituacaoById(rs.getInt("situacao"));
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+				listaProcessos.add(processo);
+			}
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		return listaProcessos;
 	}
 
 }

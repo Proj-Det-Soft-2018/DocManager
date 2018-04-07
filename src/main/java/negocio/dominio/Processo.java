@@ -151,21 +151,14 @@ public class Processo {
 	}
 
 	public void setDataSaida(LocalDateTime dataSaida) {
-		this.dataSaida = dataSaida;
-	}
-
-	public void validarNumeroNulo(){
-		//verifica se o numero está vazio
-		if(this.numero == null || this.numero.isEmpty()){
-			throw new IllegalArgumentException("O campo numero não pode ser vazio.");
+		if(dataSaida.isAfter(this.dataEntrada)) {
+			this.dataSaida = dataSaida;
 		}
-	}
-	
-	public void validarInteressadoNulo(){
-		//verifica se o interessado está vazio
-		if(this.interessado == null){
-			throw new IllegalArgumentException("O interessado não foi vinculado ao processo.");
+		else {
+			throw new RuntimeException("Data de saída anterior a data de entrada");
+			//TODO lançar alguma exceção de validacao
 		}
+		
 	}
 	
 	//TODO continuar demais validações dos atributos da classe
