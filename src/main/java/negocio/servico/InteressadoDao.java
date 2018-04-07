@@ -20,7 +20,7 @@ public interface InteressadoDao {
 	public Interessado pegarPeloCpf(String cpf);
 	public boolean contem(Interessado interessado);
 	public List<Interessado> pegarTodos();
-	public List<Interessado> burcarPeloNome();
+	public List<Interessado> burcarPeloNome(String nome);
 	
 
 }
