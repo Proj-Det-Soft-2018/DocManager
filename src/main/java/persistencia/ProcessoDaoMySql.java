@@ -243,32 +243,29 @@ public class ProcessoDaoMySql implements ProcessoDao{
 										+"FROM processos p "
 										+ "INNER JOIN interessados i "
 										+ "ON p.interessado_id=i.id "
-										+ "ORDER BY data_entrada DESC"
+										+ "ORDER BY data_entrada DESC "
 										+ "LIMIT 50");					
 			rs = stmt.executeQuery();
 			
 			
-			List<Processo> processos = new ArrayList<Processo>();
+			List<Processo> processos = new ArrayList<>();
 			
 			while(rs.next()) {
 				
-				//criando o objeto Interessado
+				//criando o objeto Processo
 				Processo processo = new Processo(
 						rs.getLong("id"),
 						rs.getBoolean("eh_oficio"),
 						rs.getString("numero"),
 						rs.getString("observacao"));
 				//falta resolver unidade destino /orgao_saida, se vai ter ou não
-				try {
-					processo.setAssuntoById(rs.getInt("assunto"));
-					processo.setUnidadeOrigemById(rs.getInt("orgao_origem"));
-					processo.setSituacaoById(rs.getInt("situacao"));
-				}
-				catch (RuntimeException e) {
-					// TODO: handle exception
-				}
 				
-				//criando objeto interessado
+				processo.setAssuntoById(rs.getInt("assunto"));
+				processo.setUnidadeOrigemById(rs.getInt("orgao_origem"));
+				processo.setSituacaoById(rs.getInt("situacao"));
+			
+				
+				//creating interessado object
 				Interessado interessado = new Interessado(
 						rs.getLong("interessado_id"),
 						rs.getString("nome"),
@@ -282,8 +279,6 @@ public class ProcessoDaoMySql implements ProcessoDao{
 					Timestamp stampEntrada = new Timestamp(dataEntradaSql.getTime());
 					LocalDateTime dataEntrada = stampEntrada.toLocalDateTime();
 					processo.setDataEntrada(dataEntrada);
-				}else {
-					processo.setDataEntrada(null);
 				}
 					
 				
@@ -293,8 +288,6 @@ public class ProcessoDaoMySql implements ProcessoDao{
 					Timestamp stampSaida = new Timestamp(rs.getDate("data_saida").getTime());
 					LocalDateTime dataSaida = stampSaida.toLocalDateTime();
 					processo.setDataSaida(dataSaida);
-				}else {
-					processo.setDataSaida(null);
 				}
 				
 				processos.add(processo);

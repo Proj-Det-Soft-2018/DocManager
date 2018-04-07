@@ -11,7 +11,7 @@ public enum Situacao {
 	AGUARDANDODOCUMENTO("Aguardando Documento(s)"),
 	AGENDADO("Agendado"),
 	CONCLUIDO("Concluido"),
-	CONVOCADO("COnvocado"),
+	CONVOCADO("Convocado"),
 	SOLICITARDOCUMENTO("Solicitar Documento(s)"),
 	SEMEXITO1("Contato Sem Êxito - 1ª vez"),
 	SEMEXITO2("Contato Sem Êxito - 2ª vez"),
