@@ -35,7 +35,6 @@ public class ProcessoServico extends Observavel {
 	
 	public void criarProcesso(Processo processo) {
 		try{
-			processo.validarNumeroNulo();
 			this.salvarProcesso(processo);
 		}
 		catch (RuntimeException e) {
@@ -46,7 +45,6 @@ public class ProcessoServico extends Observavel {
 	
 	public void salvarProcesso(Processo processo) {
 		//Antes de salvar verificar os campos que nao podem ser nulos
-		processo.validarNumeroNulo();
 		this.validarNumeroDuplicado(processo.getNumero());
 		
 		processoDao.salvar(processo);
