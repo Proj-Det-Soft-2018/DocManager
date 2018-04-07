@@ -6,9 +6,22 @@ import java.util.List;
 public enum Situacao {
 	ANALISE("Análise"),
 	CONVOCAR("A convocar"),
-	AGUARDANDODOCUMENTO("Aguardando Documento"),
+	AGUARDANDODOCUMENTO("Aguardando Documento(s)"),
 	AGENDADO("Agendado"),
-	CONCLUIDO("Concluido");
+	CONCLUIDO("Concluido"),
+	CONVOCADO("COnvocado"),
+	SOLICITARDOCUMENTO("Solicitar Documento(s)"),
+	SEMEXITO1("Contato Sem Êxito - 1ª vez"),
+	SEMEXITO2("Contato Sem Êxito - 2ª vez"),
+	SEMEXITO3("Contato Sem Êxito - 3ª vez"),
+	ENCAMINHADOCOVEPS("Encaminhado a Coordenação COVEPS"),
+	ENCAMINHADOEQUIPEMULTI("Encaminhado p/ Eq. Multiprofissional"),
+	AGUARDANDOPERITO("Aguardando Perito Finalizar"),
+	AGUARDANDOEXTERNA("Aguardando Perícia Externa"),
+	AGENDADAEXTERNA("Agendada Perícia Externa"),
+	PROBLEMASIAPE("Aguardando Resolver Problema SIAPE"),
+	PRONTODESPACHAR("Pronto para Despachar"),
+	INTERESSADOIMPEDIDO("Interessado Impedido de Ser Periciado");
 	
 	private String status;
 	
