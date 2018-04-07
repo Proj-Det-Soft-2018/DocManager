@@ -20,6 +20,7 @@ package utils.widget;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -310,7 +311,7 @@ public class MaskedTextField extends TextField{
      * @param pos Position in mask
      * @return converted position
      */
-    private int maskPositionToPlaintextPosition(int pos){
+    protected int maskPositionToPlaintextPosition(int pos){
         int count = 0;
         
         for (int i = 0; i < semanticMaskLength && i < pos; i++){
@@ -357,12 +358,17 @@ public class MaskedTextField extends TextField{
     public void replaceText(int start, int end, String newText){
         
         int plainStart = maskPositionToPlaintextPosition(start);
+        int plainEnd = maskPositionToPlaintextPosition(end);
         
         String oldPlainText = getPlainText();
-        String newString = oldPlainText.substring(0, plainStart) + newText + oldPlainText.substring(plainStart, oldPlainText.length());
-        setPlainText(newString);
+        StringBuilder newString = new StringBuilder(oldPlainText.substring(0, plainStart));
+        newString.append(newText);
+        if (plainEnd < oldPlainText.length()) {
+        	newString.append(oldPlainText.substring(plainEnd, oldPlainText.length()));
+        }
+        setPlainText(newString.toString());
         
-        int newPos = plaintextPositionToMaskPosition(newString.lastIndexOf(newText) + newText.length());
+        int newPos = plaintextPositionToMaskPosition(plainStart + newText.length());
         selectRange(newPos, newPos);
     }
     

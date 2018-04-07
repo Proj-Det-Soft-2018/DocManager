@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import negocio.dominio.Interessado;
-import negocio.servico.InteressadoDao;
 
 /**
  * @author clah

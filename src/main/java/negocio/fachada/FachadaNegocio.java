@@ -43,11 +43,13 @@ public class FachadaNegocio implements FachadaCaixasDeEscolha{
 	@Override
 	public void cadastrarObservador(Observador observador) {
 		processoServico.cadastrarObservador(observador);
+		interessadoServico.cadastrarObservador(observador);
 	}
 	
 	@Override
 	public void descadastrarObservador(Observador observador) {
 		processoServico.descadastrarObservador(observador);
+		interessadoServico.descadastrarObservador(observador);
 	}
 
 	/**
@@ -68,7 +70,7 @@ public class FachadaNegocio implements FachadaCaixasDeEscolha{
 	
 	@Override
 	public Interessado buscarPorCpf (String cpf) {
-		return interessadoServico.burcarPeloCpfInteressado(cpf);
+		return interessadoServico.burcarPeloCpf(cpf);
 	}
 	
 	@Override

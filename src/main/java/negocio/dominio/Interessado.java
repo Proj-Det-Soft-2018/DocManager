@@ -24,6 +24,10 @@ public class Interessado {
 		this.cpf = cpf;
 		this.contato = contato;
 	}
+	
+	public Interessado() {
+
+	}
 
 	/**
 	 * @return the id

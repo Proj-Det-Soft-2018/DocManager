@@ -15,7 +15,6 @@ import java.util.List;
 
 import negocio.dominio.Interessado;
 import negocio.dominio.Processo;
-import negocio.servico.ProcessoDao;
 
 /**
  * @author clah
@@ -73,7 +72,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		String sql = "UPDATE processos SET "
 					+ "numero=?, interessado_id=?, assunto=?,"
 					+ "situacao=?, orgao_origem=?, observacao=?,"
-					+ " data_saida=?, eh_oficio=?"
+					+ "eh_oficio=?"
 					+ " WHERE id=?";
 		
 		Connection con = null;
@@ -93,7 +92,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			
 			
 			//LocalDateTime to java.sql.Date
-			LocalDateTime dataSaida = processoModificado.getDataSaida();
+			/**LocalDateTime dataSaida = processoModificado.getDataSaida();
 			
 			if(dataSaida!=null) {
 				Timestamp stamp = Timestamp.valueOf(dataSaida);
@@ -101,10 +100,11 @@ public class ProcessoDaoMySql implements ProcessoDao{
 				stmt.setDate(8,dataSaidaSql);
 			}
 			
-			stmt.setDate(8, null);
-				
+			stmt.setDate(8, null); 
+			*/
+			
 			//setando id do processo a ser modificado
-			stmt.setLong(9, processoModificado.getId());
+			stmt.setLong(8, processoModificado.getId());
 			
 			
 			stmt.executeUpdate();

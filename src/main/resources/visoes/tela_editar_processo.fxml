@@ -48,7 +48,7 @@
 				<HBox alignment="CENTER_LEFT" spacing="5.0">
 					<children>
 						<Label fx:id="lblNumProcesso" text="Número*:" />
-						<MaskedTextField mask="#######.########/####-##" fx:id="txtNumProcesso" nodeOrientation="LEFT_TO_RIGHT"
+						<MaskedTextField mask="#####.######/####-##" fx:id="txtNumProcesso" nodeOrientation="LEFT_TO_RIGHT"
 							prefHeight="26.0" prefWidth="240.0" />
 					</children>
 				</HBox>
@@ -178,7 +178,7 @@
 				<Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#fecharJanela"
 					prefHeight="26.0" prefWidth="100.0" text="Cancelar" />
 				<Button fx:id="btnCadastrar" mnemonicParsing="false"
-					onAction="#cadastrar" prefHeight="26.0" prefWidth="100.0" text="Cadastrar" />
+					onAction="#salvar" prefHeight="26.0" prefWidth="100.0" text="Cadastrar" />
 			</children>
 		</HBox>
 	</children>

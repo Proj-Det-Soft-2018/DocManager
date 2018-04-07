@@ -35,7 +35,7 @@ public class ControleTelaPrincipal implements Initializable, Observador {
 	private static final String CRIAR_PROCESSO = "Novo Processo / Ofício";
 	private static final String EDITAR_PROCESSO = "Editar Processo";
 	private static final String MASCARA_NUM_OFICIO = "####/####";
-	private static final String MASCARA_NUM_PROCESSO = "#######.########/####-##";
+	private static final String MASCARA_NUM_PROCESSO = "#####.######/####-##";
 
 	private FachadaArmazenamento fachada;
 	private Processo processoSelecionado;
