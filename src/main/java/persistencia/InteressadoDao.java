@@ -1,7 +1,7 @@
 /**
  * 
  */
-package negocio.servico;
+package persistencia;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface InteressadoDao {
 	public void atualizar(Interessado interessadoModificado);
 	public void deletar(Interessado interessado);
 	public Interessado pegarPeloId(Long id);
-	public Interessado pegarPeloCpf(String cpf);
+	public Interessado pegarPeloCpf(String cpf) throws RuntimeException;
 	public boolean contem(Interessado interessado);
 	public List<Interessado> pegarTodos();
 	public List<Interessado> burcarPeloNome(String nome);

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import negocio.dominio.Interessado;
-import negocio.servico.InteressadoDao;
 
 /**
  * @author clah
@@ -113,12 +112,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 			
 			if(rs.next()) {
 				//criando o objeto Interessado
-				interessado = new Interessado();
-				interessado.setId(rs.getLong("id"));
-				interessado.setNome(rs.getString("nome"));
-				interessado.setCpf(rs.getString("cpf"));
-				interessado.setContato(rs.getString("contato"));
-				
+				interessado = new Interessado(rs.getLong("id"), rs.getString("nome"), rs.getString("cpf"), rs.getString("contato"));
 			}
 			
 			return interessado;
@@ -149,11 +143,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 			
 			if(rs.next()) {
 				//criando o objeto Interessado
-				interessado = new Interessado();
-				interessado.setId(rs.getLong("id"));
-				interessado.setNome(rs.getString("nome"));
-				interessado.setCpf(rs.getString("cpf"));
-				interessado.setContato(rs.getString("contato"));
+				interessado = new Interessado(rs.getLong("id"), rs.getString("nome"), rs.getString("cpf"), rs.getString("contato"));
 				
 			}
 			
@@ -190,15 +180,9 @@ public class InteressadoDaoMySql implements InteressadoDao{
 			
 			while(rs.next()) {
 				//criando o objeto Interessado
-				Interessado interessado = new Interessado();
-				interessado.setId(rs.getLong("id"));
-				interessado.setNome(rs.getString("nome"));
-				interessado.setCpf(rs.getString("cpf"));
-				interessado.setContato(rs.getString("contato"));
-				
+				Interessado interessado = new Interessado(rs.getLong("id"), rs.getString("nome"), rs.getString("cpf"), rs.getString("contato"));
 				interessados.add(interessado);
 			}
-			
 			return interessados;
 		} catch (SQLException e) {
 			//TODO resolver

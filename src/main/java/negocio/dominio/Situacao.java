@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum Situacao {
+	
+	NULL("- Inválido -"),
 	ANALISE("Análise"),
 	CONVOCAR("A convocar"),
 	AGUARDANDODOCUMENTO("Aguardando Documento(s)"),
@@ -34,6 +36,7 @@ public enum Situacao {
 		for(Situacao situacao : Situacao.values()) {
 			listaSituacoes.add(situacao.status);
 		}
+		listaSituacoes.remove(0);
 		return listaSituacoes;
 	}
 	
@@ -46,7 +49,7 @@ public enum Situacao {
 			throw new RuntimeException("USUARIO DEVE ESCOLHER UMA SITUACAO");
 		}
 		else {
-			return Situacao.values()[id-1];
+			return Situacao.values()[id];
 		}
 	}
 }

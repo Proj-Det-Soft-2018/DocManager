@@ -4,37 +4,55 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import negocio.dominio.Interessado;
 import negocio.dominio.Processo;
+import negocio.fachada.FachadaCaixasDeEscolha;
 import negocio.fachada.FachadaNegocio;
+import negocio.servico.Observador;
+import utils.widget.MaskedContactTextField;
 import utils.widget.MaskedTextField;
 
 /**
  * @author hugotho
  * 
  */
-public class ControleTelaEdicao implements Initializable {
+public class ControleTelaEdicao implements Initializable, Observador{
 
+	private Logger logger = Logger.getLogger(ControleTelaEdicao.class);
+
+	private static final URL ARQUIVO_FXML_DIALOG_INTERESSADO = ControleTelaPrincipal.class.getResource("/visoes/dialog_editar_interessado.fxml");
+	private static final String CRIAR_INTERESSADO = "Novo Interessado";
+	private static final String EDITAR_INTERESSADO = "Editar Interessado";
 	private static final String CHOICEBOX_TEXTO_PADRAO = "-- SELECIONE --";
 	private static final String LABEL_BTN_ATUALIZAR = "Atualizar"; 
-	private static final String MASCARA_INICIAL_OFICIO = "####/####-";
-	private static final String MASCARA_NUM_PROCESSO = "#######.########/####-##";	
+	private static final String LABEL_BTN_EDITAR_INTERESSADO = "Editar"; 
+	private static final String LABEL_BTN_LIMPAR_INTERESSADO = "Limpar"; 
+	private static final String MASCARA_NUM_OFICIO = "####/####";
+	private static final String MASCARA_NUM_PROCESSO = "#####.######/####-##";
 
 	private FachadaCaixasDeEscolha fachada;
-	private Processo processoOriginal; 
+	private Processo processoOriginal;
+	private Interessado interessado;
 
 	@FXML
 	private VBox raiz;
@@ -58,13 +76,22 @@ public class ControleTelaEdicao implements Initializable {
 	private MaskedTextField txtNumProcesso;
 
 	@FXML
-	private TextField txtNomeInteressado;
+	private HBox hBoxInteressado;
+
+	@FXML
+	private Label lblCpfInteressado;
 
 	@FXML
 	private MaskedTextField txtCpfInteressado;
 
 	@FXML
-	private MaskedTextField txtContatoInteressado;
+	private Button btnBuscarInteressado;
+
+	@FXML
+	private Label lblTxtNomeInteressado;
+
+	@FXML
+	private Label lblTxtContatoInteressado; 
 
 	@FXML
 	private ChoiceBox<String> cbOrgao;
@@ -84,6 +111,22 @@ public class ControleTelaEdicao implements Initializable {
 	@FXML
 	private Button btnCadastrar;
 
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		this.processoOriginal = null;
+		this.interessado = null;
+		this.fachada = FachadaNegocio.getInstance();
+		this.fachada.cadastrarObservador(this);
+		this.configurarRadioButtons();
+		this.preencherChoiceBoxes();
+		this.configurarChoiceBoxOrgao();
+	}
+
+	@Override
+	public void atualizar() {
+		this.buscarPorCpf();
+	}
+
 	public void montarFormulario(Processo processo) {
 		if (processo != null) {
 			this.processoOriginal = processo;
@@ -96,26 +139,19 @@ public class ControleTelaEdicao implements Initializable {
 			} else {
 				this.rbOficio.setDisable(true);
 			}
-			this.cbOrgao.getSelectionModel().select(processo.getUnidadeOrigem().ordinal()+1);
-			this.txtNumProcesso.setText(processo.getNumero());
-			this.lblNumProcesso.setDisable(true);
+			this.cbOrgao.getSelectionModel().select(processo.getUnidadeOrigem().ordinal());
+			this.txtNumProcesso.setPlainText(processo.getNumero());
 			this.txtNumProcesso.setDisable(true);
-			this.txtNomeInteressado.setText(processo.getInteressado().getNome());
-			this.txtCpfInteressado.setPlainText(processo.getInteressado().getCpf());
-			this.txtContatoInteressado.setText(processo.getInteressado().getContato());
-			this.cbAssunto.getSelectionModel().select(processo.getAssunto().ordinal()+1);
-			this.cbSituacao.getSelectionModel().select(processo.getSituacao().ordinal()+1);
+
+			this.interessado = processo.getInteressado();
+			this.preencherInteressado();
+
+			this.cbAssunto.getSelectionModel().select(processo.getAssunto().ordinal());
+			this.cbSituacao.getSelectionModel().select(processo.getSituacao().ordinal());
 			this.txtObservacao.setText(processo.getObservacao());
 		}
-	}
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		this.processoOriginal = null;
-		this.fachada = FachadaNegocio.getInstance();
-		this.configurarRadioButtons();
-		this.preencherChoiceBoxes();
-		this.configurarChoiceBoxOrgao();
+		this.configurarFechamento();
 	}
 
 	private void alterarFormulario (Toggle novoValor) {
@@ -127,59 +163,89 @@ public class ControleTelaEdicao implements Initializable {
 				this.txtNumProcesso.setMask(MASCARA_NUM_PROCESSO);
 			} else {
 				if (cbOrgao.getSelectionModel().getSelectedIndex() != 0) {
-					this.txtNumProcesso.setMask(MASCARA_INICIAL_OFICIO +
+					this.txtNumProcesso.setMask(MASCARA_NUM_OFICIO + "-" +
 							cbOrgao.getSelectionModel().getSelectedItem().split(" - ")[0]);
 				} else {
-					this.txtNumProcesso.setMask(MASCARA_INICIAL_OFICIO);
+					this.txtNumProcesso.setMask(MASCARA_NUM_OFICIO);
 				}
 			}
 		}
 	}
 
-	@FXML
-	private void fecharJanela() {
-		Stage janela = (Stage) this.raiz.getScene().getWindow();
-		if (janela != null)
-			janela.close();
+	private void preencherInteressado() {
+
+		this.txtCpfInteressado.setPlainText(this.interessado.getCpf());
+		this.txtCpfInteressado.setDisable(true);
+
+		if (hBoxInteressado.getChildren().contains(btnBuscarInteressado)) {
+			this.hBoxInteressado.getChildren().remove(btnBuscarInteressado);
+
+			Button btnEditarInteressado = new Button(LABEL_BTN_EDITAR_INTERESSADO);
+			btnEditarInteressado.setOnAction(evento -> this.editarInteressado());
+			Button btnLimparInteressado = new Button(LABEL_BTN_LIMPAR_INTERESSADO);
+			btnLimparInteressado.setOnAction(evento -> this.limparInteressado());
+
+			this.hBoxInteressado.getChildren().addAll(btnEditarInteressado, btnLimparInteressado);
+		}
+
+		this.lblTxtNomeInteressado.setText(this.interessado.getNome());
+		String contato = this.interessado.getContato();
+		MaskedContactTextField contatoMascara = new MaskedContactTextField();
+		contatoMascara.setContactPlainText(contato);			
+		this.lblTxtContatoInteressado.setText(contatoMascara.getText());
 	}
 
 	@FXML
-	private void cadastrar() {
-		if (processoOriginal == null) {	// Criando novo processo
-			Processo novoProcesso = new Processo();
-			/**
-				this.processo,
-				this.rbOficio.isSelected(),
-				this.txtNumProcesso.getText(),
-				this.txtNomeInteressado.getText(),
-				this.txtCpfInteressado.plainTextProperty().getValue(),
-				this.txtContatoInteressado.getText(),
-				this.cbOrgao.getSelectionModel().getSelectedIndex(),
-				this.cbAssunto.getSelectionModel().getSelectedIndex(),
-				this.cbSituacao.getSelectionModel().getSelectedIndex(),
-				this.txtObservacao.getText());
-			 */
-			fachada.salvar(novoProcesso);
-			
-			
-		} else {				// Atualizando existente	
-			Processo processoEditado = new Processo();
-			/**
-				this.processo,
-				this.rbOficio.isSelected(),
-				this.txtNumProcesso.getText(),
-				this.txtNomeInteressado.getText(),
-				this.txtCpfInteressado.plainTextProperty().getValue(),
-				this.txtContatoInteressado.getText(),
-				this.cbOrgao.getSelectionModel().getSelectedIndex(),
-				this.cbAssunto.getSelectionModel().getSelectedIndex(),
-				this.cbSituacao.getSelectionModel().getSelectedIndex(),
-				this.txtObservacao.getText());
-			 */
-			fachada.atualizar(processoEditado);
+	public void buscarPorCpf() {
+		this.interessado = fachada.buscarPorCpf(this.txtCpfInteressado.plainTextProperty().getValue());
+		if (interessado == null) {
+			this.criarNovoInteressado();
+		} else {
+			this.preencherInteressado();
 		}
+	}
 
-		this.fecharJanela();
+	private void editarInteressado() {
+		criarDialogEdicao(EDITAR_INTERESSADO, interessado);
+	}
+
+	private void criarNovoInteressado() {
+		criarDialogEdicao(CRIAR_INTERESSADO, null);
+	}
+
+	private void criarDialogEdicao(String titulo, Interessado interessado) {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(ARQUIVO_FXML_DIALOG_INTERESSADO);
+			Pane novoPainel = loader.load();
+
+			Stage dialogEdicao = new Stage();
+			dialogEdicao.setTitle(titulo);
+			dialogEdicao.initModality(Modality.WINDOW_MODAL);
+			dialogEdicao.initOwner(this.raiz.getScene().getWindow());
+			ControleDialogInteressado controleDialog = loader.getController();
+			if (interessado == null) {
+				controleDialog.setCpfOnForm(this.txtCpfInteressado.plainTextProperty().getValue());
+				dialogEdicao.setScene(new Scene(novoPainel, 400, 260));
+			} else {
+				controleDialog.populeForm(interessado);
+				dialogEdicao.setScene(new Scene(novoPainel, 400, 230));
+			}
+			dialogEdicao.show();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
+	private void limparInteressado() {
+		this.interessado = null;
+
+		this.hBoxInteressado.getChildren().clear();
+		this.hBoxInteressado.getChildren().addAll(this.lblCpfInteressado, this.txtCpfInteressado, this.btnBuscarInteressado);
+		this.txtCpfInteressado.setDisable(false);
+		this.txtCpfInteressado.clear();
+		this.lblTxtNomeInteressado.setText("");
+		this.lblTxtContatoInteressado.setText("");
 	}
 
 	private void configurarRadioButtons() {
@@ -191,9 +257,19 @@ public class ControleTelaEdicao implements Initializable {
 		cbOrgao.getSelectionModel().selectedItemProperty().addListener(
 				(valorObservado, valorAntigo, valorNovo) -> { 
 					if (rbOficio.isSelected()) {
-						this.txtNumProcesso.setMask(MASCARA_INICIAL_OFICIO + valorNovo.split(" - ")[0]);
+						if (valorNovo.equalsIgnoreCase(CHOICEBOX_TEXTO_PADRAO)) {
+							this.txtNumProcesso.setMask(MASCARA_NUM_OFICIO);
+						} else {
+							this.txtNumProcesso.setMask(MASCARA_NUM_OFICIO + "-" + valorNovo.split(" - ")[0]);
+						}
 					}
 				});
+	}
+
+	private void configurarFechamento() {
+		this.raiz.getScene().getWindow().setOnHidden(
+				event -> this.fachada.descadastrarObservador(this)
+				);
 	}
 
 	private void preencherChoiceBoxes() {
@@ -211,5 +287,38 @@ public class ControleTelaEdicao implements Initializable {
 		obsListaSituacoes.add(CHOICEBOX_TEXTO_PADRAO);
 		obsListaSituacoes.addAll(fachada.getListaSituacoes());
 		this.cbSituacao.getSelectionModel().select(0);
+	}
+
+	@FXML
+	private void fecharJanela() {
+		Stage janela = (Stage) this.raiz.getScene().getWindow();
+		if (janela != null)
+			janela.close();
+	}
+
+	@FXML
+	private void salvar() {
+		Processo processo = new Processo();
+
+		//TODO Exceções
+		processo.setTipoOficio(this.rbOficio.isSelected());
+		processo.setNumero(this.txtNumProcesso.plainTextProperty().getValue());
+		processo.setInteressado(this.interessado);
+		processo.setUnidadeOrigemById(this.cbOrgao.getSelectionModel().getSelectedIndex());
+		processo.setAssuntoById(this.cbAssunto.getSelectionModel().getSelectedIndex());
+		processo.setSituacaoById(this.cbSituacao.getSelectionModel().getSelectedIndex());
+		processo.setObservacao(this.txtObservacao.getText());
+
+		if (processoOriginal == null ) {
+			/* Criar novo Processo */
+			fachada.salvar(processo);
+			
+		} else {
+			/* Alterar Processo Existente */
+			processo.setId(processoOriginal.getId());
+			fachada.atualizar(processo);
+		}
+
+		this.fecharJanela();
 	}
 }

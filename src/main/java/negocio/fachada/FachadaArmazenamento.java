@@ -1,4 +1,4 @@
-package apresentacao;
+package negocio.fachada;
 
 import java.util.List;
 
@@ -14,7 +14,9 @@ public interface FachadaArmazenamento {
 	
 	public List<Processo> buscarListaProcessos();
 	
-	public void cadastrarObservador (Observador observadorDaLista);
+	public void cadastrarObservador (Observador observador);
+	
+	public void descadastrarObservador(Observador observador);
 	
 	public void salvar (Processo novoProcesso);
 	

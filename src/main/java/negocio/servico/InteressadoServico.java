@@ -5,13 +5,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import negocio.dominio.Interessado;
+import persistencia.InteressadoDao;
 import persistencia.InteressadoDaoMySql;
 /**
  * 
  * @author Allan
  *
  */
-public class InteressadoServico {
+public class InteressadoServico extends Observavel {
 	private InteressadoDao interessadoDao;
 	
 	private static Logger logger = Logger.getLogger(InteressadoServico.class);
@@ -32,7 +33,7 @@ public class InteressadoServico {
 	public void criarInteressado(Interessado interessado) {
 		
 		//Verifica se interessado ja esta no banco atraves do cpf
-		Interessado interessado_bd = this.encontrarPorCpf(interessado.getCpf());
+		Interessado interessado_bd = this.burcarPeloCpf(interessado.getCpf());
 		
 		if(interessado_bd == null) {
 			try {
@@ -51,12 +52,14 @@ public class InteressadoServico {
 	//metodo privado pois só é acesssado depois que o objeto é criado
 	private void salvarInteressado(Interessado interessado) {
 		interessadoDao.salvar(interessado);
+		notificarTodos();
 	}
 	
 	public void atualizarInteressado(Interessado interessado) {
 		try {
 			interessado.validar();
 			interessadoDao.atualizar(interessado);
+			notificarTodos();
 		}
 		catch (RuntimeException e) {
 			logger.error(e.getMessage(), e);
@@ -66,14 +69,11 @@ public class InteressadoServico {
 	
 	public void deletarInteressado(Interessado interessado) {
 		interessadoDao.deletar(interessado);
+		notificarTodos();
 	}
 	
 	public Interessado encontrarPorId(Long id) {
 		return interessadoDao.pegarPeloId(id);
-	}
-	
-	public Interessado encontrarPorCpf(String cpf) {
-		return interessadoDao.pegarPeloCpf(cpf);
 	}
 	
 	public boolean contem(Interessado interessado) {
@@ -84,7 +84,7 @@ public class InteressadoServico {
 		return interessadoDao.pegarTodos();
 	}
 	
-	public Interessado burcarPeloCpfInteressado(String cpf){
+	public Interessado burcarPeloCpf(String cpf){
 		return interessadoDao.pegarPeloCpf(cpf);
 	} 
 }

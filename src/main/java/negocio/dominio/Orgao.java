@@ -5,6 +5,7 @@ import java.util.List;
 
 public enum Orgao {
 	
+	NULL("- Inválido -"),
 	UFRN("UNIVERSIDADE FED. DO RIO GRANDE DO NORTE"),
 	DPF("DEPARTAMENTO DE POLICIA FEDERAL"),
 	MTE("MINISTERIO DO TRABALHO E EMPREGO"),
@@ -41,6 +42,7 @@ public enum Orgao {
 		for(Orgao orgao : Orgao.values()) {
 			listaOrgaos.add(orgao.name() + " - " + orgao.nomeExt);
 		}
+		listaOrgaos.remove(0);
 		return listaOrgaos;
 	}
 	
@@ -49,7 +51,7 @@ public enum Orgao {
 			throw new RuntimeException("USUARIO DEVE ESCOLHER UM ORGAO");
 		}
 		else {
-			return Orgao.values()[id-1];
+			return Orgao.values()[id];
 		}
 	}
 	
