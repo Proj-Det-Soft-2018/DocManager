@@ -7,7 +7,11 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	//ProcessoTest.class,
+	ConnectionTest.class,
+	InteressadoDaoMySqlTest.class,
+	ProcessoDaoMySqlTest.class,
+	ProcessoServicoTest.class,
+	ProcessoTest.class,
 })
 public class JunitTestSuite {
 }
