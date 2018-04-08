@@ -69,7 +69,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	@Override
 	public void atualizar(Processo processoModificado) {
 		
-		String sql = "UPDATE processos SET "
+		String query = "UPDATE processos SET "
 					+ "numero=?, interessado_id=?, assunto=?,"
 					+ "situacao=?, orgao_origem=?, observacao=?,"
 					+ "eh_oficio=?"
@@ -81,7 +81,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		try {
 			
 			con = ConnectionFactory.getConnection();
-			stmt = con.prepareStatement(sql);
+			stmt = con.prepareStatement(query);
 			stmt.setString(1, processoModificado.getNumero());
 			stmt.setLong(2, processoModificado.getInteressado().getId());
 			stmt.setInt(3, processoModificado.getAssunto().ordinal());
@@ -89,19 +89,6 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			stmt.setInt(5, processoModificado.getUnidadeOrigem().ordinal());
 			stmt.setString(6, processoModificado.getObservacao());
 			stmt.setBoolean(7, processoModificado.isTipoOficio());
-			
-			
-			//LocalDateTime to java.sql.Date
-			/**LocalDateTime dataSaida = processoModificado.getDataSaida();
-			
-			if(dataSaida!=null) {
-				Timestamp stamp = Timestamp.valueOf(dataSaida);
-				Date dataSaidaSql = new Date (stamp.getTime());
-				stmt.setDate(8,dataSaidaSql);
-			}
-			
-			stmt.setDate(8, null); 
-			*/
 			
 			//setando id do processo a ser modificado
 			stmt.setLong(8, processoModificado.getId());
@@ -143,82 +130,16 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	}
 	
 	
-	//TODO verificar essa exceção generica que os metodos getbyid das classes Orgao, Situacao e Assunto lança
 	@Override
 	public Processo pegarPeloId(Long id) {
+		String sql = "WHERE p.id="+id.toString();
+		List<Processo> lista = this.burcador(sql);
+		if(lista.isEmpty() || lista ==null) {
+			return null;
+		}else {
+			return lista.get(0);
+		} 
 		
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		
-		try {
-			con = ConnectionFactory.getConnection();
-			
-			stmt = con.prepareStatement("SELECT * FROM processos p INNER JOIN interessados i ON p.interessado_id=i.id WHERE p.id=?");
-			stmt.setLong(1, id);
-			
-			rs = stmt.executeQuery();
-			
-			
-			if(rs.next()) {
-				//criando o objeto Interessado
-				Processo processo = new Processo(
-						rs.getLong("id"),
-						rs.getBoolean("eh_oficio"),
-						rs.getString("numero"),
-						rs.getString("observacao"));
-				
-				//falta resolver unidade destino /orgao_saida, se vai ter ou não
-				
-				try {
-					processo.setAssuntoById(rs.getInt("assunto"));
-					processo.setUnidadeOrigemById(rs.getInt("orgao_origem"));
-					processo.setSituacaoById(rs.getInt("situacao"));
-				}catch(Exception e) {
-					//TODO O que fazer aqui?
-				}
-				
-				Interessado interessado = new Interessado(
-						rs.getLong("interessado_id"),
-						rs.getString("nome"),
-						rs.getString("cpf"),
-						rs.getString("contato"));
-				processo.setInteressado(interessado);
-				
-				//Convertendo java.sql.Date to LocalDateTime
-				Date dataEntradaSql = rs.getDate("data_entrada");
-				
-				if(dataEntradaSql != null) {
-					Timestamp stampEntrada = new Timestamp(dataEntradaSql.getTime());
-					LocalDateTime dataEntrada = stampEntrada.toLocalDateTime();
-					processo.setDataEntrada(dataEntrada);
-				}else {
-					processo.setDataEntrada(null);
-				}
-					
-				
-				//Convertendo java.sql.Date to LocalDateTime
-				Date dataSaidaSql = rs.getDate("data_saida");
-				if(dataSaidaSql != null) {
-					Timestamp stampSaida = new Timestamp(rs.getDate("data_saida").getTime());
-					LocalDateTime dataSaida = stampSaida.toLocalDateTime();
-					processo.setDataSaida(dataSaida);
-				}else {
-					processo.setDataSaida(null);
-				}
-				
-				return processo;
-				
-			}else {
-				return null;
-			}
-
-		} catch (SQLException e) {
-			///TODO resolver
-			throw new RuntimeException("Erro no pegarPeloId Processo: "+ e);
-		}finally {
-			ConnectionFactory.fechaConnection(con, stmt, rs);
-		}
 	}
 
 	@Override
@@ -231,81 +152,13 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	
 	@Override
 	public List<Processo> pegarTodos() {
+		String sql = "ORDER BY data_entrada DESC LIMIT 50";
+		return this.burcador(sql);
 		
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		
-		try {
-			con = ConnectionFactory.getConnection();
-			
-			stmt = con.prepareStatement("SELECT * "
-										+"FROM processos p "
-										+ "INNER JOIN interessados i "
-										+ "ON p.interessado_id=i.id "
-										+ "ORDER BY data_entrada DESC "
-										+ "LIMIT 50");					
-			rs = stmt.executeQuery();
-			
-			
-			List<Processo> processos = new ArrayList<>();
-			
-			while(rs.next()) {
-				
-				//criando o objeto Processo
-				Processo processo = new Processo(
-						rs.getLong("id"),
-						rs.getBoolean("eh_oficio"),
-						rs.getString("numero"),
-						rs.getString("observacao"));
-				//falta resolver unidade destino /orgao_saida, se vai ter ou não
-				
-				processo.setAssuntoById(rs.getInt("assunto"));
-				processo.setUnidadeOrigemById(rs.getInt("orgao_origem"));
-				processo.setSituacaoById(rs.getInt("situacao"));
-			
-				
-				//creating interessado object
-				Interessado interessado = new Interessado(
-						rs.getLong("interessado_id"),
-						rs.getString("nome"),
-						rs.getString("cpf"),
-						rs.getString("contato"));
-				processo.setInteressado(interessado);
-				
-				//Convertendo data entrada de java.sql.Date para LocalDateTime
-				Date dataEntradaSql = rs.getDate("data_entrada");
-				if(dataEntradaSql != null) {
-					Timestamp stampEntrada = new Timestamp(dataEntradaSql.getTime());
-					LocalDateTime dataEntrada = stampEntrada.toLocalDateTime();
-					processo.setDataEntrada(dataEntrada);
-				}
-					
-				
-				//Convertendo data Saida de java.sql.Date para LocalDateTime
-				Date dataSaidaSql = rs.getDate("data_saida");
-				if(dataSaidaSql != null) {
-					Timestamp stampSaida = new Timestamp(rs.getDate("data_saida").getTime());
-					LocalDateTime dataSaida = stampSaida.toLocalDateTime();
-					processo.setDataSaida(dataSaida);
-				}
-				
-				processos.add(processo);
-			
-			}
-			
-			return processos;
-			
-		} catch (SQLException e) {
-			//TODO resolver
-			throw new RuntimeException("Erro no pegarTodos Processo: "+ e);
-		}finally {
-			ConnectionFactory.fechaConnection(con, stmt, rs);
-		}
 	}
 
 	
-	public List<Processo> burcador(String whereStament) {
+	private List<Processo> burcador(String whereStament) {
 		
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -354,10 +207,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 					Timestamp stampE = new Timestamp(dataE.getTime());
 					LocalDateTime dataEntrada = stampE.toLocalDateTime();
 					processo.setDataEntrada(dataEntrada);
-				}else {
-					processo.setDataEntrada(null);
 				}
-					
 				
 				//Convertendo data Saida de java.sql.Date para LocalDateTime
 				Date dataS = rs.getDate("data_saida");
@@ -365,8 +215,6 @@ public class ProcessoDaoMySql implements ProcessoDao{
 					Timestamp stampS = new Timestamp(rs.getDate("data_saida").getTime());
 					LocalDateTime dataSaida = stampS.toLocalDateTime();
 					processo.setDataSaida(dataSaida);
-				}else {
-					processo.setDataSaida(null);
 				}
 				
 				processos.add(processo);
