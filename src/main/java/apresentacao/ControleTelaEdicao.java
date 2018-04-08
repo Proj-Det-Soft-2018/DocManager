@@ -190,9 +190,13 @@ public class ControleTelaEdicao implements Initializable, Observador{
 
 		this.lblTxtNomeInteressado.setText(this.interessado.getNome());
 		String contato = this.interessado.getContato();
-		MaskedContactTextField contatoMascara = new MaskedContactTextField();
-		contatoMascara.setContactPlainText(contato);			
-		this.lblTxtContatoInteressado.setText(contatoMascara.getText());
+		if (contato != null && contato.length() != 0) {
+			MaskedContactTextField contatoMascara = new MaskedContactTextField();
+			contatoMascara.setContactPlainText(contato);			
+			this.lblTxtContatoInteressado.setText(contatoMascara.getText());
+		} else {
+			this.lblTxtContatoInteressado.setText("");
+		}
 	}
 
 	@FXML
@@ -315,7 +319,7 @@ public class ControleTelaEdicao implements Initializable, Observador{
 		processo.setAssuntoById(this.cbAssunto.getSelectionModel().getSelectedIndex());
 		processo.setSituacaoById(this.cbSituacao.getSelectionModel().getSelectedIndex());
 		processo.setObservacao(this.txtObservacao.getText());
-		
+
 		this.fachada.descadastrarObservador(this);
 
 		if (processoOriginal == null ) {
