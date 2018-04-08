@@ -234,7 +234,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	
 	@Override
 	public List<Processo> buscarPorNumero(String numero) {
-		String sql = "WHERE numero LIKE '%"+numero+"%'";
+		String sql = "WHERE numero LIKE '"+numero+"'";
 		return this.burcador(sql);
 	}
 
@@ -267,6 +267,30 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		return this.burcador(sql);
 	}
 
-	
+	public List<Processo> buscaComposta(String numero, String nome, String cpf, int orgaoId,
+			int assuntoId, int situacaoId) {
+		StringBuilder sql = new StringBuilder("WHERE ");
+		if (numero != null && !numero.equalsIgnoreCase("")) {
+			sql.append("numero LIKE '"+numero+"' AND ");
+		}
+		if (nome != null && !nome.equalsIgnoreCase("")) {
+			sql.append("nome LIKE '%"+nome+"%' AND ");
+		}
+		if (cpf != null && !cpf.equalsIgnoreCase("")) {
+			sql.append("cpf= '"+cpf+"' AND ");
+		}
+		if (orgaoId != 0) {
+			sql.append("orgao_origem="+orgaoId+" AND ");
+		}
+		if (assuntoId != 0) {
+			sql.append("assunto="+assuntoId+" AND ");
+		}
+		if (situacaoId != 0) {
+			sql.append("situacao="+situacaoId);
+		} else {
+			sql.delete(sql.lastIndexOf(" AND "), sql.length());
+		}
+		return this.burcador(sql.toString());
+	}
 
 }
