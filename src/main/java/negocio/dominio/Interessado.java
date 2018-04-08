@@ -50,10 +50,10 @@ public class Interessado {
 
 
 	public void setNome(String nome) {
-		if(this.nome ==null || this.nome.isEmpty()) {
+		if(nome ==null || nome.isEmpty()) {
 			throw new ValidationException("Você não preencheu o campo Nome!", "Nome", "O campo Nome não pode ser vazio.");
 		}
-		else if(!this.nome.matches("[a-zA-Z\\s]+")) {
+		else if(!nome.matches("[a-zA-Z\\s]+")) {
 			throw new ValidationException("Campo nome contem caracteres inválidos!", "Nome", "O campo Nome deve conter apenas letras.");
 		}
 		this.nome = nome;
@@ -66,10 +66,10 @@ public class Interessado {
 
 
 	public void setCpf(String cpf) {
-		if(this.cpf == null) {
+		if(cpf == null) {
 			throw new ValidationException("Você não preencheu o campo do CPF!", "CPF", "O campo cpf do interessado não pode ser vazio.");
 		}
-		else if(this.cpf.length() != 11) {
+		else if(cpf.length() != 11) {
 			throw new ValidationException("CPF INVÁLIDO!", "CPF", "Você não digitou corretamente o cpf do interessado.");
 		}
 		this.cpf = cpf;
@@ -80,9 +80,8 @@ public class Interessado {
 	}
 	
 	public void setContato(String contato) {
-		if(!this.contato.matches(".((10)|([1-9][1-9]).)\\s9?[6-9][0-9]{3}-[0-9]{4}") ||
-				!this.contato.matches(".((10)|([1-9][1-9]).)\\s[2-5][0-9]{3}-[0-9]{4}") ){
-			throw new ValidationException("O contato não foi digitado corretamente!", "Contato", "O contato deve conter o DDD com 2 dígitos seguido do número.");
+		if(contato.length()>9){
+			throw new ValidationException("O contato não foi digitado corretamente!", "Contato", "O contato deve conter o DDD com 2 dígitos seguido do número." + contato);
 		}
 		
 		this.contato = contato;
