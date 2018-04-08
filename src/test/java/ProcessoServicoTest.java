@@ -1,7 +1,7 @@
 /**
  * 
  */
-package negocio.servico;
+
 
 import static org.junit.Assert.*;
 
@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import negocio.dominio.Processo;
+import negocio.servico.ProcessoServico;
 
 /**
  * @author clah
