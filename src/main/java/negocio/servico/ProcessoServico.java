@@ -103,7 +103,8 @@ public class ProcessoServico extends Observavel {
 	}
 	
 	
-	public List<Processo> burcarProcessos(String numero, String nome, String cpf) {
+	public List<Processo> burcarProcessos(String numero, String nome, String cpf,
+											int situacao, int orgao, int assunto) {
 		if(numero != null && !numero.isEmpty()) {
 			List<Processo> lista = processoDao.buscarPorNumero(numero);
 			if(lista==null) {
@@ -125,7 +126,26 @@ public class ProcessoServico extends Observavel {
 			}
 			return lista;
 			
-		} else {
+		} else if(situacao != 0) {
+			List<Processo> lista = processoDao.buscarPorSituacao(situacao);
+			if(lista==null) {
+				//throw new ListaBuscaVazia("Não foi encontrado processos com a situação especificado.");
+			}
+			return lista;
+		} else if(orgao != 0) {
+			List<Processo> lista = processoDao.buscarPorOrgao(orgao);
+			if(lista==null) {
+				//throw new ListaBuscaVazia("Não foi encontrado processos com o orgao especificado.");
+			}
+			return lista;
+		} else if(assunto != 0) {
+			List<Processo> lista = processoDao.buscarPorAssunto(assunto);
+			if(lista==null) {
+				//throw new ListaBuscaVazia("Não foi encontrado processos com o assunto especificado.");
+			}
+			return lista;
+		}
+			else {
 			//Se todos os campos estão em branco
 			return null;
 		}

@@ -24,7 +24,7 @@ public interface FachadaArmazenamento {
 	
 	public void excluir (Processo processo);
 	
-	public List<Processo> buscarProcessos(String numero, String nome, String cpf);
+	public List<Processo> buscarProcessos(String numero, String nome, String cpf, int situacao, int orgao, int assunto);
 	
 	public Interessado buscarPorCpf (String cpf);
 	

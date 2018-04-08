@@ -23,5 +23,7 @@ public interface ProcessoDao{
 	public List<Processo> buscarPorSituacao(int situacaoId);
 	public List<Processo> buscarPorNomeInteressado(String nome);
 	public List<Processo> buscarPorCpfInteressado(String cpf);
+	public List<Processo> buscarPorOrgao(int orgaoId);
+	public List<Processo> buscarPorAssunto(int assuntoId);
 	
 }

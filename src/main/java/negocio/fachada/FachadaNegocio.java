@@ -76,8 +76,9 @@ public class FachadaNegocio implements FachadaCaixasDeEscolha{
 	}
 	
 	@Override
-	public List<Processo> buscarProcessos(String numero, String nome, String cpf) {
-		return processoServico.burcarProcessos(numero, nome, cpf);
+	public List<Processo> buscarProcessos(String numero, String nome, String cpf,
+										int situacao, int orgao, int assunto) {
+		return processoServico.burcarProcessos(numero, nome, cpf,situacao,orgao,assunto);
 	}
 	
 	@Override

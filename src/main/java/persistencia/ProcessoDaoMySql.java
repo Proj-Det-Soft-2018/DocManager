@@ -408,6 +408,16 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		String sql = "WHERE situacao="+situacaoId;
 		return this.burcador(sql);
 	}
+	
+	public List<Processo> buscarPorOrgao(int orgaoId) {
+		String sql = "WHERE orgao_origem="+orgaoId;
+		return this.burcador(sql);
+	}
+	
+	public List<Processo> buscarPorAssunto(int assuntoId) {
+		String sql = "WHERE assunto="+assuntoId;
+		return this.burcador(sql);
+	}
 
 	
 
