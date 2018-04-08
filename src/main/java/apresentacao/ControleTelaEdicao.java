@@ -300,19 +300,28 @@ public class ControleTelaEdicao implements Initializable, Observador{
 	private void salvar() {
 		Processo processo = new Processo();
 
-		//TODO Exceções
+		//TODO Tratar Exceções
 		processo.setTipoOficio(this.rbOficio.isSelected());
-		processo.setNumero(this.txtNumProcesso.plainTextProperty().getValue());
+		if (this.rbOficio.isSelected()) {
+			String oficioNum = this.txtNumProcesso.plainTextProperty().getValue() +
+					(cbOrgao.getSelectionModel().getSelectedItem().split(" - ")[0]);
+			processo.setNumero(oficioNum);
+		}
+		else {
+			processo.setNumero(this.txtNumProcesso.plainTextProperty().getValue());
+		}
 		processo.setInteressado(this.interessado);
 		processo.setUnidadeOrigemById(this.cbOrgao.getSelectionModel().getSelectedIndex());
 		processo.setAssuntoById(this.cbAssunto.getSelectionModel().getSelectedIndex());
 		processo.setSituacaoById(this.cbSituacao.getSelectionModel().getSelectedIndex());
 		processo.setObservacao(this.txtObservacao.getText());
+		
+		this.fachada.descadastrarObservador(this);
 
 		if (processoOriginal == null ) {
 			/* Criar novo Processo */
 			fachada.salvar(processo);
-			
+
 		} else {
 			/* Alterar Processo Existente */
 			processo.setId(processoOriginal.getId());

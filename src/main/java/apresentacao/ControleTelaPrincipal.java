@@ -32,8 +32,11 @@ import utils.widget.MaskedTextField;
 public class ControleTelaPrincipal implements Initializable, Observador {
 
 	private static final URL ARQUIVO_FXML_TELA_EDICAO = ControleTelaPrincipal.class.getResource("/visoes/tela_editar_processo.fxml");
+	private static final URL ARQUIVO_FXML_DIALOG_PASSWORD = ControleTelaPrincipal.class.getResource("/visoes/dialog_adm_password.fxml");
 	private static final String CRIAR_PROCESSO = "Novo Processo / Ofício";
 	private static final String EDITAR_PROCESSO = "Editar Processo";
+	private static final String DIALOG_ADM_PASS_TITLE = "Autorização";
+	private static final int NUM_OFICIO_OFFSET = 8;
 	private static final String MASCARA_NUM_OFICIO = "####/####";
 	private static final String MASCARA_NUM_PROCESSO = "#####.######/####-##";
 
@@ -117,6 +120,28 @@ public class ControleTelaPrincipal implements Initializable, Observador {
 			logger.error(e.getMessage(), e);
 		}
 	}
+	
+	@FXML
+	private void criarDialogAdmPassword() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(ARQUIVO_FXML_DIALOG_PASSWORD);
+			Pane novoPainel = loader.load();
+
+			Stage novaTelaEdicao = new Stage();
+			novaTelaEdicao.setTitle(DIALOG_ADM_PASS_TITLE);
+			novaTelaEdicao.initModality(Modality.WINDOW_MODAL);
+			novaTelaEdicao.initOwner(this.painel.getScene().getWindow());
+			novaTelaEdicao.setScene(new Scene(novoPainel, 300, 190));
+
+			ControleDialogAdmPassword dialAdmPassController = loader.getController();
+			dialAdmPassController.setProcesso(processoSelecionado);
+			
+			novaTelaEdicao.show();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
 
 	private void configurarTabela() {
 		// inicia as colunas
@@ -124,16 +149,20 @@ public class ControleTelaPrincipal implements Initializable, Observador {
 				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getTipo()));
 		tabColunaNumero.setCellValueFactory(
 				conteudo -> {
-					String mascara;
+					String rawText = conteudo.getValue().getNumero();
+					MaskedTextField numProcessoMascara;
+					StringBuilder finalText;
 					if(conteudo.getValue().isTipoOficio()) {
-						mascara = MASCARA_NUM_OFICIO + "-" + conteudo.getValue().getUnidadeOrigem().name();
+						numProcessoMascara = new MaskedTextField(MASCARA_NUM_OFICIO + "-");
+						numProcessoMascara.setPlainText(rawText);
+						finalText = new StringBuilder(numProcessoMascara.getText());
+						finalText.append(rawText.substring(NUM_OFICIO_OFFSET));
 					} else {
-						mascara = MASCARA_NUM_PROCESSO;
+						numProcessoMascara = new MaskedTextField(MASCARA_NUM_PROCESSO);
+						numProcessoMascara.setPlainText(rawText);
+						finalText = new StringBuilder(numProcessoMascara.getText());
 					}
-					MaskedTextField numProcessoMascara = new MaskedTextField(mascara);
-					numProcessoMascara.setPlainText(conteudo.getValue().getNumero());
-					
-					return new ReadOnlyStringWrapper(numProcessoMascara.getText());
+					return new ReadOnlyStringWrapper(finalText.toString());
 				});
 		tabColunaInteressado.setCellValueFactory(
 				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getInteressado().getNome()));
@@ -145,6 +174,7 @@ public class ControleTelaPrincipal implements Initializable, Observador {
 				(observavel, selecionandoAnterior, selecionadoNovo) -> {
 					this.processoSelecionado = selecionadoNovo;
 					this.btnVerEditar.setDisable(selecionadoNovo!=null? false : true);
+					this.btnApagar.setDisable(selecionadoNovo!=null? false : true);
 				});
 	}
 

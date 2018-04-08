@@ -70,9 +70,9 @@ public class FachadaNegocio implements FachadaCaixasDeEscolha{
 	
 	
 	@Override
-	public void excluir (Processo processo) {
+	public void excluir (Processo processo, String admUser, String password) {
 		
-		processoServico.deletarProcesso(processo);
+		processoServico.deletarProcesso(processo, admUser, password);
 	}
 	
 	@Override

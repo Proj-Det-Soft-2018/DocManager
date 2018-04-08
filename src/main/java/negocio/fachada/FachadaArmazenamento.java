@@ -22,7 +22,7 @@ public interface FachadaArmazenamento {
 	
 	public void atualizar (Processo processoModificado);
 	
-	public void excluir (Processo processo);
+	public void excluir (Processo processo, String admUser, String password);
 	
 	public List<Processo> buscarProcessos(String numero, String nome, String cpf, int situacao, int orgao, int assunto);
 	

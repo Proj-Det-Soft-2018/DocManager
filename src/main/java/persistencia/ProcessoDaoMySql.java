@@ -234,7 +234,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	
 	@Override
 	public List<Processo> buscarPorNumero(String numero) {
-		String sql = "WHERE numero LIKE "+numero;
+		String sql = "WHERE numero LIKE '%"+numero+"%'";
 		return this.burcador(sql);
 	}
 
@@ -247,7 +247,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 
 	@Override
 	public List<Processo> buscarPorCpfInteressado(String cpf) {
-		String sql = "WHERE cpf="+cpf;
+		String sql = "WHERE cpf= '"+cpf+"'";
 		return this.burcador(sql);
 	}
 	
