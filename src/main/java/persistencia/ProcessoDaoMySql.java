@@ -270,6 +270,8 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	public List<Processo> buscaComposta(String numero, String nome, String cpf, int orgaoId,
 			int assuntoId, int situacaoId) {
 		StringBuilder sql = new StringBuilder("WHERE ");
+		final String AND = " AND ";
+		
 		if (numero != null && !numero.equalsIgnoreCase("")) {
 			sql.append("numero LIKE '"+numero+"' AND ");
 		}
@@ -280,15 +282,15 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			sql.append("cpf= '"+cpf+"' AND ");
 		}
 		if (orgaoId != 0) {
-			sql.append("orgao_origem="+orgaoId+" AND ");
+			sql.append("orgao_origem="+orgaoId+AND);
 		}
 		if (assuntoId != 0) {
-			sql.append("assunto="+assuntoId+" AND ");
+			sql.append("assunto="+assuntoId+AND);
 		}
 		if (situacaoId != 0) {
 			sql.append("situacao="+situacaoId);
 		} else {
-			sql.delete(sql.lastIndexOf(" AND "), sql.length());
+			sql.delete(sql.lastIndexOf(AND), sql.length());
 		}
 		return this.burcador(sql.toString());
 	}
