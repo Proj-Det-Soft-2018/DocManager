@@ -159,7 +159,7 @@ public class ControleTelaEdicao implements Initializable, Observador{
 			RadioButton radio = (RadioButton)novoValor;
 			this.lblTipoProcesso.setText(radio.getText());
 
-			if(Objects.equals(radio.getText(), this.rbProcesso.getText())) {
+			if(Objects.equals(radio, this.rbProcesso)) {
 				this.txtNumProcesso.setMask(MASCARA_NUM_PROCESSO);
 			} else {
 				if (cbOrgao.getSelectionModel().getSelectedIndex() != 0) {
