@@ -5,9 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import negocio.dominio.Processo;
-import persistencia.ProcessoDaoMySql;
 /**
  * 
  * @author Allan
@@ -27,12 +24,9 @@ public class ProcessoTest {
 		});
 	}
 	
-	private static ProcessoDaoMySql banco = new ProcessoDaoMySql();
 
 	@Test
 	public void inserirTest() {
-		Processo p = new Processo(null, false, null, null);
-		banco.salvar(p);
 		assert(true);
 	}
 	

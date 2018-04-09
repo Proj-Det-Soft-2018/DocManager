@@ -46,9 +46,9 @@ public enum Orgao {
 		return listaOrgaos;
 	}
 	
-	public static Orgao getOrgaoPorId(int id) throws RuntimeException{
+	public static Orgao getOrgaoPorId(int id) throws ValidationException{
 		if(id == 0) {
-			throw new RuntimeException("USUARIO DEVE ESCOLHER UM ORGAO");
+			throw new ValidationException("Você não selecionou o Orgão!", "Orgao", "O campo Orgão é obrigatório.");
 		}
 		else {
 			return Orgao.values()[id];

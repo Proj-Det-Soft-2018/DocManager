@@ -47,9 +47,9 @@ public enum Assunto {
 		return listaAssuntos;
 	}
 	
-	public static Assunto getAssuntoPorId(int id) throws RuntimeException{
+	public static Assunto getAssuntoPorId(int id) throws ValidationException{
 		if(id == 0) {
-			throw new RuntimeException("USUARIO DEVE ESCOLHER UM ASSUNTO");
+			throw new ValidationException("Você não selecionou um assunto.", "Assunto", "Campo assunto é obrigatório.");
 		}
 		else {
 			return Assunto.values()[id];
