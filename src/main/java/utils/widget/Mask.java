@@ -12,26 +12,26 @@ package utils.widget;
  */
 public class Mask {
     
-    private final char mask;
+    private final char maskChar;
     private final boolean literal;
     private char value;
     private boolean placeholder;
     
-    public Mask (char mask, boolean literal, boolean placeholder) {
-        this.mask = mask;
+    public Mask (char maskChar, boolean literal, boolean placeholder) {
+        this.maskChar = maskChar;
         this.literal = literal;
         this.placeholder = placeholder;
     }
     
-    public Mask (char value, char mask, boolean literal, boolean placeholder) {
+    public Mask (char value, char maskChar, boolean literal, boolean placeholder) {
         this.value = value;
-        this.mask = mask;
+        this.maskChar = maskChar;
         this.literal = literal;
         this.placeholder = placeholder;
     }
     
     public char getMask(){
-        return this.mask;
+        return this.maskChar;
     }
     
     public char getValue(){
