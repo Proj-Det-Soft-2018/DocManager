@@ -43,7 +43,7 @@
 						<TableColumn fx:id="tabColunaTipo" editable="false"
 							prefWidth="75.0" style="-fx-alignment: CENTER" text="Tipo" />
 						<TableColumn fx:id="tabColunaNumero" editable="false"
-							prefWidth="200.0" style="-fx-alignment: CENTER" text="Número" />
+							prefWidth="199.0" style="-fx-alignment: CENTER" text="Número" />
 						<TableColumn fx:id="tabColunaInteressado" editable="false"
 							prefWidth="309.0" style="-fx-alignment: CENTER" text="Nome Interessado" />
 						<TableColumn fx:id="tabColunaSituacao" editable="false"

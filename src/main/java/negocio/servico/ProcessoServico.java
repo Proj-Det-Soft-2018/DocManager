@@ -15,6 +15,7 @@ import org.apache.shiro.subject.Subject;
 
 import negocio.dominio.Processo;
 import negocio.dominio.Situacao;
+import negocio.dominio.ValidationException;
 import persistencia.ProcessoDao;
 import persistencia.ProcessoDaoMySql;
 
@@ -131,7 +132,17 @@ public class ProcessoServico extends Observavel {
 
 
 	public List<Processo> burcarProcessos(String numero, String nome, String cpf, int situacao, int orgao, int assunto) {
-		//TODO validar se todos não são nulos
+		
+		boolean invalidNumber = (numero == null || numero.isEmpty());
+		boolean invalidName = (nome == null || nome.isEmpty());
+		boolean invalidCpf = (cpf == null || cpf.isEmpty());
+		boolean invalidSituation = (situacao == 0);
+		boolean invalidOrganization = (orgao == 0);
+		boolean invalidSubject = (assunto == 0);
+		
+		if(invalidNumber && invalidName && invalidCpf && invalidSituation && invalidOrganization && invalidSubject) {
+			throw new ValidationException("BUSCA INVÁLIDA!", "Busca", "Não foram inseridos valores para busca!");
+		}
 		return processoDao.buscaComposta(numero, nome, cpf, orgao, assunto, situacao);
 	}
 }

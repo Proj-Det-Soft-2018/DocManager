@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
 	ConnectionTest.class,
 	InteressadoDaoMySqlTest.class,
 	ProcessoDaoMySqlTest.class,
-	ProcessoServicoTest.class,
+	//ProcessoServicoTest.class,
 	ProcessoTest.class,
 })
 public class JunitTestSuite {
