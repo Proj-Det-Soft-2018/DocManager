@@ -155,7 +155,8 @@ public class ControleTelaPrincipal implements Initializable, Observador {
 			telaBusca.initOwner(this.painel.getScene().getWindow());
 			telaBusca.setScene(new Scene(novoPainel, 720, 660));
 
-			//ControleTelaBusca controleTelaBusca = loader.getController();
+			ControleTelaBusca controleTelaBusca = loader.getController();
+			controleTelaBusca.configurarFechamento();
 			
 			telaBusca.show();
 		} catch (IOException e) {

@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import utils.widget.MaskedTextField?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
 	minWidth="-Infinity" prefHeight="640.0" prefWidth="720.0"
 	xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="apresentacao.ControleTelaBusca">
@@ -109,8 +109,9 @@
 		</VBox>
 		<HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
 			<children>
-				<Button mnemonicParsing="false" prefWidth="80.0" text="Voltar" />
-				<Button mnemonicParsing="false" prefWidth="80.0" styleClass="button-accent"
+				<Button mnemonicParsing="false" onAction="#fecharJanela" prefWidth="80.0" text="Voltar" />
+				<Button mnemonicParsing="false" onAction="#limpar" prefWidth="80.0" text="Limpar" />
+				<Button mnemonicParsing="false" onAction="#buscar" prefWidth="80.0" styleClass="button-accent"
 					stylesheets="@../css/styles.css" text="Buscar" />
 			</children>
 			<padding>
@@ -140,9 +141,9 @@
 					AnchorPane.rightAnchor="15.0">
 					<children>
 						<Button fx:id="btnVerEditar" disable="true"
-							mnemonicParsing="false" prefWidth="100.0" text="Ver/Editar" />
+							mnemonicParsing="false" onAction="#criarTelaEdicao" prefWidth="100.0" text="Ver/Editar" />
 						<Button fx:id="btnApagar" disable="true" mnemonicParsing="false"
-							prefWidth="80.0" text="Apagar" />
+							onAction="#criarDialogAdmPassword" prefWidth="80.0" text="Apagar" />
 					</children>
 				</HBox>
 			</children>

@@ -1,12 +1,20 @@
 package apresentacao;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -15,25 +23,41 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import negocio.dominio.Processo;
 import negocio.fachada.FachadaCaixasDeEscolha;
 import negocio.fachada.FachadaNegocio;
+import negocio.servico.Observador;
 import utils.widget.DynamicMaskTextField;
 import utils.widget.MaskedTextField;
 
-public class ControleTelaBusca implements Initializable {
+public class ControleTelaBusca implements Initializable, Observador {
+	
+	private static Logger logger = Logger.getLogger(ControleTelaBusca.class);
 
+	private static final URL ARQUIVO_FXML_TELA_EDICAO = ControleTelaPrincipal.class.getResource("/visoes/tela_editar_processo.fxml");
+	private static final URL ARQUIVO_FXML_DIALOG_PASSWORD = ControleTelaPrincipal.class.getResource("/visoes/dialog_adm_password.fxml");
 	private static final String CHOICEBOX_TEXTO_PADRAO = "-- SELECIONE --";
 	private static final String MASCARA_NUM_OFICIO = "####/####-";
-	private static final int OFFSET_MASCARA_OFICIO = 8;
+	private static final String MASCARA_NUM_PROCESSO = "#####.######/####-##";
+	private static final String DIALOG_ADM_PASS_TITLE = "Autorização";
+	private static final String EDITAR_PROCESSO = "Editar Processo";
+	private static final int NUM_OFICIO_OFFSET = 8;
 	private static final String MASCARA_CPF = "###.###.###-##";
 	private static final double TEXTFIELD_MAX_WIDTH = 520.0;
-
+	
 	private FachadaCaixasDeEscolha fachada;
+	private Processo processoSelecionado;
 	private MaskedTextField mTxtCpf;
 	private DynamicMaskTextField dmTxtOficioNum;
-
+	private UltimaBusca ultimaBusca;
+	
+	@FXML
+	private Node root;
+	
 	@FXML
 	private VBox vbNumero;
 
@@ -112,14 +136,96 @@ public class ControleTelaBusca implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.fachada = FachadaNegocio.getInstance();
+		this.fachada.cadastrarObservador(this);
+		this.processoSelecionado = null;
+		this.ultimaBusca = null;
 		this.mTxtCpf = new MaskedTextField(MASCARA_CPF);
 		this.mTxtCpf.setMaxWidth(TEXTFIELD_MAX_WIDTH);
-		this.dmTxtOficioNum = new DynamicMaskTextField(MASCARA_NUM_OFICIO + "*", OFFSET_MASCARA_OFICIO+1);
+		this.dmTxtOficioNum = new DynamicMaskTextField(MASCARA_NUM_OFICIO + "*", NUM_OFICIO_OFFSET+1);
 		this.dmTxtOficioNum.setMaxWidth(TEXTFIELD_MAX_WIDTH);
-		this.preencherChoiceBoxes();
-		this.configurarRadioButtons();
-		this.configurarChoiceBoxOrgao();
-		this.configurarCheckBoxOrgao();
+		preencherChoiceBoxes();
+		configurarRadioButtons();
+		configurarChoiceBoxOrgao();
+		configurarCheckBoxOrgao();
+		configurarTabela();
+	}
+	
+	@Override
+	public void atualizar() {
+		if (this.ultimaBusca != null) {
+			List<Processo> resultado = this.fachada.buscarProcessos(
+					ultimaBusca.numero,
+					ultimaBusca.nomeInteressado,
+					ultimaBusca.cpfInteressado,
+					ultimaBusca.idSituacao,
+					ultimaBusca.idOrgao,
+					ultimaBusca.idAssunto);
+			
+			atualizarTabela(resultado);
+		}
+	}
+	
+	@FXML
+	private void buscar() {
+		String numProcesso = "";
+		if (checkNumero.isSelected()) {
+			if (radioProcesso.isSelected()) {
+				numProcesso = mTxtProcessoNum.plainTextProperty().getValue();
+			}
+			else {
+				numProcesso = dmTxtOficioNum.plainTextProperty().getValue();
+				if (checkOrgao.isSelected() && choiceOrgao.getSelectionModel().getSelectedIndex() != 0) {
+					numProcesso += choiceOrgao.getSelectionModel().getSelectedItem().split("-")[0];
+				}
+			}
+		}
+		
+		String nomeInteressado = "";
+		String cpfInteressado = "";
+		if (checkInteressado.isSelected()) {
+			if (radioNome.isSelected()) {
+				nomeInteressado = txtNome.getText();
+			}
+			else {
+				cpfInteressado = mTxtCpf.plainTextProperty().getValue();
+			}
+		}
+		
+		int idOrgao = checkOrgao.isSelected()? choiceOrgao.getSelectionModel().getSelectedIndex() : 0;
+		int idAssunto = checkAssunto.isSelected()? choiceAssunto.getSelectionModel().getSelectedIndex() : 0;
+		int idSituacao = checkSituacao.isSelected()? choiceSituacao.getSelectionModel().getSelectedIndex() : 0;
+		
+		this.ultimaBusca = new UltimaBusca(numProcesso, nomeInteressado, cpfInteressado, idOrgao, idAssunto, idSituacao);
+		
+		List<Processo> resultado = this.fachada.buscarProcessos(numProcesso, nomeInteressado, cpfInteressado, idSituacao, idOrgao, idAssunto);
+		
+		atualizarTabela(resultado);
+	}
+	
+	@FXML
+	private void limpar() {
+		checkNumero.setSelected(false);
+		checkInteressado.setSelected(false);
+		checkOrgao.setSelected(false);
+		checkAssunto.setSelected(false);
+		checkSituacao.setSelected(false);
+		radioProcesso.setSelected(true);
+		radioNome.setSelected(true);
+		choiceOrgao.getSelectionModel().select(0);
+		choiceAssunto.getSelectionModel().select(0);
+		choiceSituacao.getSelectionModel().select(0);
+		txtNome.clear();
+		mTxtProcessoNum.clear();
+		mTxtCpf.clear();
+		dmTxtOficioNum.clear();
+		dmTxtOficioNum.setDynamic(true);
+	}
+	
+	@FXML
+	private void fecharJanela() {
+		Stage window = (Stage) this.root.getScene().getWindow();
+		if (window != null)
+			window.close();
 	}
 
 	private void preencherChoiceBoxes() {
@@ -172,7 +278,7 @@ public class ControleTelaBusca implements Initializable {
 							if (!valorAntigo.equalsIgnoreCase(CHOICEBOX_TEXTO_PADRAO)) {
 								String oldText = dmTxtOficioNum.plainTextProperty().getValue();
 
-								if (oldText.length() == OFFSET_MASCARA_OFICIO) {
+								if (oldText.length() == NUM_OFICIO_OFFSET) {
 									StringBuilder newText = new StringBuilder(oldText);
 									newText.append(valorAntigo.split(" - ")[0]);
 									dmTxtOficioNum.adjustMask(newText.length());
@@ -200,7 +306,7 @@ public class ControleTelaBusca implements Initializable {
 						this.dmTxtOficioNum.setDynamic(true);
 						if (choiceOrgao.getSelectionModel().getSelectedIndex() != 0) {
 							String oldText = dmTxtOficioNum.plainTextProperty().getValue();
-							if (oldText.length() == OFFSET_MASCARA_OFICIO) {
+							if (oldText.length() == NUM_OFICIO_OFFSET) {
 								StringBuilder newText = new StringBuilder(oldText);
 								String orgao = choiceOrgao.getSelectionModel().getSelectedItem();
 								newText.append(orgao.split(" - ")[0]);
@@ -212,5 +318,112 @@ public class ControleTelaBusca implements Initializable {
 					}
 				});
 	}
+	
+	private void configurarTabela() {
+		// inicia as colunas
+		tabColTipo.setCellValueFactory(
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getTipo()));
+		tabColNumero.setCellValueFactory(
+				conteudo -> {
+					String rawText = conteudo.getValue().getNumero();
+					MaskedTextField numProcessoMascara;
+					StringBuilder finalText;
+					if(conteudo.getValue().isTipoOficio()) {
+						numProcessoMascara = new MaskedTextField(MASCARA_NUM_OFICIO);
+						numProcessoMascara.setPlainText(rawText);
+						finalText = new StringBuilder(numProcessoMascara.getText());
+						finalText.append(rawText.substring(NUM_OFICIO_OFFSET));
+					} else {
+						numProcessoMascara = new MaskedTextField(MASCARA_NUM_PROCESSO);
+						numProcessoMascara.setPlainText(rawText);
+						finalText = new StringBuilder(numProcessoMascara.getText());
+					}
+					return new ReadOnlyStringWrapper(finalText.toString());
+				});
+		tabColInteressado.setCellValueFactory(
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getInteressado().getNome()));
+		tabColSituacao.setCellValueFactory(
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituacao().getStatus()));
 
+		// eventHandle para detectar o processo selecionado
+		tableResultados.getSelectionModel().selectedItemProperty().addListener(
+				(observavel, selecionandoAnterior, selecionadoNovo) -> {
+					this.processoSelecionado = selecionadoNovo;
+					this.btnVerEditar.setDisable(selecionadoNovo!=null? false : true);
+					this.btnApagar.setDisable(selecionadoNovo!=null? false : true);
+				});
+	}
+	
+	public void configurarFechamento() {
+		this.root.getScene().getWindow().setOnHidden(
+				event -> this.fachada.descadastrarObservador(this)
+				);
+	}
+	
+	private void atualizarTabela(List<Processo> lista) {
+		tableResultados.getItems().setAll(lista);
+	}
+	
+	@FXML
+	private void criarDialogAdmPassword() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(ARQUIVO_FXML_DIALOG_PASSWORD);
+			Pane novoPainel = loader.load();
+
+			Stage dialogAdmPassword = new Stage();
+			dialogAdmPassword.setTitle(DIALOG_ADM_PASS_TITLE);
+			dialogAdmPassword.initModality(Modality.WINDOW_MODAL);
+			dialogAdmPassword.initOwner(this.root.getScene().getWindow());
+			dialogAdmPassword.setScene(new Scene(novoPainel, 300, 190));
+
+			ControleDialogAdmPassword dialAdmPassController = loader.getController();
+			dialAdmPassController.setProcesso(this.processoSelecionado);
+			
+			dialogAdmPassword.show();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
+	@FXML
+	private void criarTelaEdicao() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(ARQUIVO_FXML_TELA_EDICAO);
+			Pane novoPainel = loader.load();
+
+			Stage telaEdicao = new Stage();
+			telaEdicao.setTitle(EDITAR_PROCESSO);
+			telaEdicao.initModality(Modality.WINDOW_MODAL);
+			telaEdicao.initOwner(this.root.getScene().getWindow());
+			telaEdicao.setScene(new Scene(novoPainel, 720, 540));
+
+			ControleTelaEdicao controleTelaEdicao = loader.getController();
+			controleTelaEdicao.montarFormulario(this.processoSelecionado);
+			
+			telaEdicao.show();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
+	/* Estrutura de Dados para armazenar a ultima busca */
+	private class UltimaBusca {
+	    private String numero; 
+	    private String nomeInteressado;
+	    private String cpfInteressado;
+	    private int idOrgao;
+	    private int idAssunto;
+	    private int idSituacao; 
+	    
+	    public UltimaBusca(String num, String nomeInter, String cpfInter, int idOrg, int idAss, int idSit) {
+	    	numero = num; 
+	    	nomeInteressado = nomeInter;
+	    	cpfInteressado = cpfInter;
+	    	idOrgao = idOrg;
+	    	idAssunto = idAss;
+	    	idSituacao = idSit;
+	    }
+	 }
 }
