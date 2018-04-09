@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -18,14 +19,18 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import negocio.dominio.Interessado;
 import negocio.dominio.Processo;
+import negocio.dominio.ValidationException;
 import negocio.fachada.FachadaCaixasDeEscolha;
 import negocio.fachada.FachadaNegocio;
 import negocio.servico.Observador;
@@ -201,11 +206,25 @@ public class ControleTelaEdicao implements Initializable, Observador{
 
 	@FXML
 	public void buscarPorCpf() {
-		this.interessado = fachada.buscarPorCpf(this.txtCpfInteressado.plainTextProperty().getValue());
-		if (interessado == null) {
-			this.criarNovoInteressado();
-		} else {
-			this.preencherInteressado();
+		try {
+			this.interessado = fachada.buscarPorCpf(this.txtCpfInteressado.plainTextProperty().getValue());
+			if (interessado == null) {
+				this.criarNovoInteressado();
+			} else {
+				this.preencherInteressado();
+			}
+		} catch (ValidationException ve) {
+			Alert alert = new Alert(AlertType.ERROR, ve.getMessage() + "\n\n");
+			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(
+					node -> {
+						((Label)node).setMinHeight(Region.USE_PREF_SIZE);
+						((Label)node).setTextFill(Color.RED);
+					});
+			alert.setHeaderText(null);
+			alert.setGraphic(null);
+	        alert.initOwner(raiz.getScene().getWindow());
+
+	        alert.showAndWait();
 		}
 	}
 
@@ -303,35 +322,88 @@ public class ControleTelaEdicao implements Initializable, Observador{
 	@FXML
 	private void salvar() {
 		Processo processo = new Processo();
+		boolean failure = false;
+		StringBuilder failureMsg = new StringBuilder();
 
-		//TODO Tratar Exceções
 		processo.setTipoOficio(this.rbOficio.isSelected());
-		if (this.rbOficio.isSelected()) {
-			String oficioNum = this.txtNumProcesso.plainTextProperty().getValue() +
-					(cbOrgao.getSelectionModel().getSelectedItem().split(" - ")[0]);
-			processo.setNumero(oficioNum);
+
+		try {
+			if (this.rbOficio.isSelected()) {
+				String oficioNum = this.txtNumProcesso.plainTextProperty().getValue() +
+						(cbOrgao.getSelectionModel().getSelectedItem().split(" - ")[0]);
+				processo.setNumero(oficioNum);
+			} else {
+				processo.setNumero(this.txtNumProcesso.plainTextProperty().getValue());
+			}
+		} catch (ValidationException ve) {
+			failure = true;
+			failureMsg.append(ve.getMessage());
 		}
-		else {
-			processo.setNumero(this.txtNumProcesso.plainTextProperty().getValue());
+		try {
+			processo.setInteressado(this.interessado);
+		} catch (ValidationException ve) {
+			failure = true;
+			if (failureMsg.length() != 0) {
+				failureMsg.append("\n\n");
+			}
+			failureMsg.append(ve.getMessage());
 		}
-		processo.setInteressado(this.interessado);
-		processo.setUnidadeOrigemById(this.cbOrgao.getSelectionModel().getSelectedIndex());
-		processo.setAssuntoById(this.cbAssunto.getSelectionModel().getSelectedIndex());
-		processo.setSituacaoById(this.cbSituacao.getSelectionModel().getSelectedIndex());
+		try {
+			processo.setUnidadeOrigemById(this.cbOrgao.getSelectionModel().getSelectedIndex());
+		} catch (ValidationException ve) {
+			failure = true;
+			if (failureMsg.length() != 0) {
+				failureMsg.append("\n\n");
+			}
+			failureMsg.append(ve.getMessage());
+		}
+		try {
+			processo.setAssuntoById(this.cbAssunto.getSelectionModel().getSelectedIndex());
+		} catch (ValidationException ve) {
+			failure = true;
+			if (failureMsg.length() != 0) {
+				failureMsg.append("\n\n");
+			}
+			failureMsg.append(ve.getMessage());
+		}
+		try {
+			processo.setSituacaoById(this.cbSituacao.getSelectionModel().getSelectedIndex());
+		} catch (ValidationException ve) {
+			failure = true;
+			if (failureMsg.length() != 0) {
+				failureMsg.append("\n\n");
+			}
+			failureMsg.append(ve.getMessage());
+		}
 		processo.setObservacao(this.txtObservacao.getText());
 
-		this.fachada.descadastrarObservador(this);
+		if (failure) {
+			failureMsg.append("\n\n");
+			Alert alert = new Alert(AlertType.ERROR, failureMsg.toString());
+			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(
+					node -> {
+						((Label)node).setMinHeight(Region.USE_PREF_SIZE);
+						((Label)node).setTextFill(Color.RED);
+					});
+			alert.setHeaderText(null);
+			alert.setGraphic(null);
+	        alert.initOwner(raiz.getScene().getWindow());
 
-		if (processoOriginal == null ) {
-			/* Criar novo Processo */
-			fachada.salvar(processo);
-
-		} else {
-			/* Alterar Processo Existente */
-			processo.setId(processoOriginal.getId());
-			fachada.atualizar(processo);
+	        alert.showAndWait();
+		} else {		
+			this.fachada.descadastrarObservador(this);
+			
+			if (processoOriginal == null ) {
+				/* Criar novo Processo */
+				fachada.salvar(processo);
+		
+			} else {
+				/* Alterar Processo Existente */
+				processo.setId(processoOriginal.getId());
+				fachada.atualizar(processo);
+			}
+		
+			this.fecharJanela();
 		}
-
-		this.fecharJanela();
 	}
 }

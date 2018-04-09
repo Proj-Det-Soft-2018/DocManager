@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import negocio.dominio.Interessado;
+import negocio.dominio.ValidationException;
 import persistencia.InteressadoDao;
 import persistencia.InteressadoDaoMySql;
 /**
@@ -83,6 +84,9 @@ public class InteressadoServico extends Observavel {
 	}
 	
 	public Interessado burcarPeloCpf(String cpf){
+		if(cpf == null || cpf.length() != 11) {
+			throw new ValidationException("CPF INVÁLIDO!", "Busca-CPF", "O CPF buscado está incompleto!");
+		}
 		return interessadoDao.pegarPeloCpf(cpf);
 	} 
 }

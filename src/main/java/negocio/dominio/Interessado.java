@@ -80,8 +80,8 @@ public class Interessado {
 	}
 	
 	public void setContato(String contato) {
-		if(contato.length()>9){
-			throw new ValidationException("O contato não foi digitado corretamente!", "Contato", "O contato deve conter o DDD com 2 dígitos seguido do número." + contato);
+		if(!contato.isEmpty() && contato.length() < 10){
+			throw new ValidationException("O contato não foi digitado corretamente!", "Contato", "O contato inserido está incompleto");
 		}
 		
 		this.contato = contato;

@@ -15,19 +15,25 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import negocio.dominio.Processo;
+import negocio.dominio.ValidationException;
 import negocio.fachada.FachadaCaixasDeEscolha;
 import negocio.fachada.FachadaNegocio;
 import negocio.servico.Observador;
@@ -195,11 +201,23 @@ public class ControleTelaBusca implements Initializable, Observador {
 		int idAssunto = checkAssunto.isSelected()? choiceAssunto.getSelectionModel().getSelectedIndex() : 0;
 		int idSituacao = checkSituacao.isSelected()? choiceSituacao.getSelectionModel().getSelectedIndex() : 0;
 		
-		this.ultimaBusca = new UltimaBusca(numProcesso, nomeInteressado, cpfInteressado, idOrgao, idAssunto, idSituacao);
-		
-		List<Processo> resultado = this.fachada.buscarProcessos(numProcesso, nomeInteressado, cpfInteressado, idSituacao, idOrgao, idAssunto);
-		
-		atualizarTabela(resultado);
+		try {
+			List<Processo> resultado = this.fachada.buscarProcessos(numProcesso, nomeInteressado, cpfInteressado, idSituacao, idOrgao, idAssunto);
+			this.ultimaBusca = new UltimaBusca(numProcesso, nomeInteressado, cpfInteressado, idOrgao, idAssunto, idSituacao);
+			atualizarTabela(resultado);
+		} catch (ValidationException ve) {
+			Alert alert = new Alert(AlertType.ERROR, ve.getMessage() + "\n\n");
+			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(
+					node -> {
+						((Label)node).setMinHeight(Region.USE_PREF_SIZE);
+						((Label)node).setTextFill(Color.RED);
+					});
+			alert.setHeaderText(null);
+			alert.setGraphic(null);
+	        alert.initOwner(root.getScene().getWindow());
+
+	        alert.showAndWait();
+		}
 	}
 	
 	@FXML
