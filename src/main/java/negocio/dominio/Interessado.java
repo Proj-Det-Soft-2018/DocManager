@@ -76,10 +76,12 @@ public class Interessado {
 	}
 	
 	public void setContato(String contato) {
-		if(!contato.isEmpty() && contato.length() < 10){
+		if(contato==null) {
 			throw new ValidationException("O contato não foi digitado corretamente!", "Contato", "O contato inserido está incompleto");
 		}
-		
+		else if(!contato.isEmpty() && contato.length() < 10){
+			throw new ValidationException("O contato não foi digitado corretamente!", "Contato", "O contato inserido está incompleto");
+		}
 		this.contato = contato;
 	}
 

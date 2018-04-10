@@ -181,11 +181,8 @@ public class Processo {
 			this.dataSaida = dataSaida;
 		}
 		else {
-			throw new RuntimeException("Data de saída anterior a data de entrada");
-			//TODO lançar alguma exceção de validacao
+			throw new ValidationException("Data de saída anterior a data de entrada!", "Data", "Verifique a Data e a Hora do seu computador.");
 		}
 		
 	}
-	
-	//TODO continuar demais validações dos atributos da classe
 }
