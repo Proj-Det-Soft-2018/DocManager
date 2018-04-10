@@ -44,12 +44,7 @@ public enum Situacao {
 		return this.status;
 	}
 	
-	public static Situacao getSituacaoPorId(int id) throws ValidationException{
-		if(id == 0) {
-			throw new ValidationException("Você não selecionou a Situação!", "Situacao", "O campo Situação é obrigatório.");
-		}
-		else {
-			return Situacao.values()[id];
-		}
+	public static Situacao getSituacaoPorId(int id){
+		return Situacao.values()[id];
 	}
 }

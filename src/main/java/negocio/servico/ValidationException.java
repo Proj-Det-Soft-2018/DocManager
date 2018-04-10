@@ -1,4 +1,4 @@
-package negocio.dominio;
+package negocio.servico;
 
 @SuppressWarnings("serial")
 public class ValidationException extends RuntimeException{

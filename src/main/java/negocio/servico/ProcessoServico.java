@@ -15,7 +15,6 @@ import org.apache.shiro.subject.Subject;
 
 import negocio.dominio.Processo;
 import negocio.dominio.Situacao;
-import negocio.dominio.ValidationException;
 import persistencia.ProcessoDao;
 import persistencia.ProcessoDaoMySql;
 

@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import negocio.dominio.Interessado;
-import negocio.dominio.ValidationException;
 import persistencia.InteressadoDao;
 import persistencia.InteressadoDaoMySql;
 /**

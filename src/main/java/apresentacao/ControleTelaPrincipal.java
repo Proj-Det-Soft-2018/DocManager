@@ -18,11 +18,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import negocio.dominio.Processo;
 import negocio.fachada.FachadaArmazenamento;
 import negocio.fachada.FachadaNegocio;
 import negocio.servico.Observador;
-import negocio.dominio.Processo;
 import utils.widget.MaskedTextField;
 
 /**

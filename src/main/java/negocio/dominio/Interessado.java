@@ -3,6 +3,8 @@
  */
 package negocio.dominio;
 
+import negocio.servico.ValidationException;
+
 /**
  * Classe representa o interessado do processo, pessoa vinculada ao processo como
  * parte interessada.
@@ -66,12 +68,6 @@ public class Interessado {
 
 
 	public void setCpf(String cpf) {
-		if(cpf == null) {
-			throw new ValidationException("Você não preencheu o campo do CPF!", "CPF", "O campo cpf do interessado não pode ser vazio.");
-		}
-		else if(cpf.length() != 11) {
-			throw new ValidationException("CPF INVÁLIDO!", "CPF", "Você não digitou corretamente o cpf do interessado.");
-		}
 		this.cpf = cpf;
 	}
 	

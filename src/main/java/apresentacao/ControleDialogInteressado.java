@@ -15,9 +15,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import negocio.dominio.Interessado;
-import negocio.dominio.ValidationException;
 import negocio.fachada.FachadaArmazenamento;
 import negocio.fachada.FachadaNegocio;
+import negocio.servico.ValidationException;
 import utils.widget.MaskedContactTextField;
 import utils.widget.MaskedTextField;
 

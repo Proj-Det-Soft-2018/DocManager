@@ -5,6 +5,8 @@ package negocio.dominio;
 
 import java.time.LocalDateTime;
 
+import negocio.servico.ValidationException;
+
 /**
  * @author lets
  *
@@ -67,6 +69,21 @@ public class Processo {
 	}
 
 	public void setNumero(String numero) {
+		if(this.tipoOficio == true) {
+			if(numero.length() < 8) {
+				throw new ValidationException("Número invalido!", "Numero", "O número digitado é inválido.");
+			}
+			else {
+				if(!numero.substring(0, 7).matches("[0-9]+")) {
+					throw new ValidationException("Número invalido!", "Numero", "O número digitado é inválido.");
+				}
+			}
+		}
+		else {
+			if(!(numero.length() == 17) || !(numero.matches("[0-9]+"))) {
+				throw new ValidationException("Número invalido!", "Numero", "O número digitado é inválido.");
+			}
+		}
 		this.numero = numero;
 	}
 
@@ -92,6 +109,9 @@ public class Processo {
 	*/
 	
 	public void setAssuntoById(int idAssunto) {
+		if(idAssunto == 0) {
+			throw new ValidationException("Você não selecionou um assunto.", "Assunto", "Campo assunto é obrigatório.");
+		}
 		this.assunto = Assunto.getAssuntoPorId(idAssunto);
 	}
 
@@ -106,6 +126,9 @@ public class Processo {
 	*/
 
 	public void setUnidadeOrigemById(int idUnidadeOrigem) {
+		if(idUnidadeOrigem == 0) {
+			throw new ValidationException("Você não selecionou o Orgão!", "Orgao", "O campo Orgão é obrigatório.");
+		}
 		this.unidadeOrigem = Orgao.getOrgaoPorId(idUnidadeOrigem);
 	}
 
@@ -119,6 +142,9 @@ public class Processo {
 	}
 	*/
 	public void setSituacaoById(int idSituacao) {
+		if(idSituacao == 0) {
+			throw new ValidationException("Você não selecionou a Situação!", "Situacao", "O campo Situação é obrigatório.");
+		}
 		this.situacao = Situacao.getSituacaoPorId(idSituacao);
 	}
 	
