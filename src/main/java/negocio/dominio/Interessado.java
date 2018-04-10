@@ -3,6 +3,8 @@
  */
 package negocio.dominio;
 
+import negocio.servico.ValidationException;
+
 /**
  * Classe representa o interessado do processo, pessoa vinculada ao processo como
  * parte interessada.
@@ -17,33 +19,24 @@ public class Interessado {
 	private String contato;
 	
 	
-	//JavaBeans
-	public Interessado() {
-		
-	}
-
-
-	/**
-	 * @param nome
-	 * @param cpf
-	 * @param contato1
-	 * @param contato2
-	 */
-	public Interessado(String nome, String cpf, String contato) {
-		super();
+	
+	public Interessado(Long id, String nome, String cpf, String contato) {
+		this.id = id;
 		this.nome = nome;
 		this.cpf = cpf;
 		this.contato = contato;
 	}
 	
-	
+	public Interessado() {
+
+	}
+
 	/**
 	 * @return the id
 	 */
 	public Long getId() {
 		return id;
 	}
-
 
 	/**
 	 * @param id the id to set
@@ -59,6 +52,12 @@ public class Interessado {
 
 
 	public void setNome(String nome) {
+		if(nome ==null || nome.isEmpty()) {
+			throw new ValidationException("Você não preencheu o campo Nome!", "Nome", "O campo Nome não pode ser vazio.");
+		}
+		else if(!nome.matches("[a-zA-Z\\s]+")) {
+			throw new ValidationException("Campo nome contem caracteres inválidos!", "Nome", "O campo Nome deve conter apenas letras.");
+		}
 		this.nome = nome;
 	}
 
@@ -77,18 +76,13 @@ public class Interessado {
 	}
 	
 	public void setContato(String contato) {
+		if(contato==null) {
+			throw new ValidationException("O contato não foi digitado corretamente!", "Contato", "O contato inserido está incompleto");
+		}
+		else if(!contato.isEmpty() && contato.length() < 10){
+			throw new ValidationException("O contato não foi digitado corretamente!", "Contato", "O contato inserido está incompleto");
+		}
 		this.contato = contato;
 	}
-
-	public void validar() throws RuntimeException {
-		/*
-		if(nome == null || cpf == null){
-			throw new RuntimeException();
-		}else if(cpf.length() != 14) {
-			throw new RuntimeException();
-		}
-		//*/
-	}
-	
 
 }

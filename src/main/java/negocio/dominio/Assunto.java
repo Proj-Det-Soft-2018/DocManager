@@ -5,6 +5,7 @@ import java.util.List;
 
 public enum Assunto {
 	
+	NULL("- Inválido -"),
 	GENERIC_1("Aposentadoria por Invalidez"),
 	GENERIC_2("Avaliação para fins de pensão"),
 	GENERIC_3("Remoção por motivo de saúde do servidor ou de pessoa de sua família e " + 
@@ -42,16 +43,12 @@ public enum Assunto {
 		for(Assunto assunto : Assunto.values()) {
 			listaAssuntos.add(assunto.texto);
 		}
+		listaAssuntos.remove(0);
 		return listaAssuntos;
 	}
 	
-	public static Assunto getAssuntoPorId(int id) throws RuntimeException{
-		if(id == 0) {
-			throw new RuntimeException("USUARIO DEVE ESCOLHER UM ASSUNTO");
-		}
-		else {
-			return Assunto.values()[id-1];
-		}
+	public static Assunto getAssuntoPorId(int id){
+		return Assunto.values()[id];
 	}
 	
 
