@@ -111,7 +111,7 @@
 			<children>
 				<Button mnemonicParsing="false" onAction="#fecharJanela"
 					prefWidth="80.0" text="Voltar" />
-				<Button mnemonicParsing="false" onAction="#limpar" prefWidth="80.0"
+				<Button mnemonicParsing="false" onAction="#limparFormulario" prefWidth="80.0"
 					text="Limpar" />
 				<Button mnemonicParsing="false" onAction="#buscar" prefWidth="80.0"
 					styleClass="button-accent" stylesheets="@../css/styles.css" text="Buscar" />
