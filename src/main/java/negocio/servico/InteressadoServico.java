@@ -37,7 +37,6 @@ public class InteressadoServico extends Observavel {
 		
 		if(interessado_bd == null) {
 			try {
-				interessado.validar();
 				this.salvarInteressado(interessado);
 			}
 			catch (RuntimeException e) {
@@ -57,7 +56,6 @@ public class InteressadoServico extends Observavel {
 	
 	public void atualizarInteressado(Interessado interessado) {
 		try {
-			interessado.validar();
 			interessadoDao.atualizar(interessado);
 			notificarTodos();
 		}
@@ -85,6 +83,9 @@ public class InteressadoServico extends Observavel {
 	}
 	
 	public Interessado burcarPeloCpf(String cpf){
+		if(cpf == null || cpf.length() != 11) {
+			throw new ValidationException("CPF INVÁLIDO!", "Busca-CPF", "O CPF buscado está incompleto!");
+		}
 		return interessadoDao.pegarPeloCpf(cpf);
 	} 
 }

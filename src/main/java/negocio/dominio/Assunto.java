@@ -47,13 +47,8 @@ public enum Assunto {
 		return listaAssuntos;
 	}
 	
-	public static Assunto getAssuntoPorId(int id) throws RuntimeException{
-		if(id == 0) {
-			throw new RuntimeException("USUARIO DEVE ESCOLHER UM ASSUNTO");
-		}
-		else {
-			return Assunto.values()[id];
-		}
+	public static Assunto getAssuntoPorId(int id){
+		return Assunto.values()[id];
 	}
 	
 

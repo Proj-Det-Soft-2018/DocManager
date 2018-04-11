@@ -288,8 +288,8 @@ public class MaskedTextField extends TextField{
             case MASK_HEXADECIMAL: return Pattern.matches("[0-9a-fA-F]", String.valueOf(value));
             case MASK_LOWER_CHARACTER: return Character.isLetter(value);
             case MASK_UPPER_CHARACTER: return Character.isLetter(value);
+            default: return false;
         }
-        return false;
     }
     
     /**
@@ -329,7 +329,8 @@ public class MaskedTextField extends TextField{
      * @param pos 
      */
     private int plaintextPositionToMaskPosition(int pos){
-        int countLiterals = 0, countNonLiterals = 0;
+        int countLiterals = 0;
+        int countNonLiterals = 0;
         
         for (int i = 0; i < semanticMaskLength && countNonLiterals < pos; i++){
             Mask m = semanticMask.get(i);

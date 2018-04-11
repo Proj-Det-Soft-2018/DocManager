@@ -181,19 +181,19 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			while(rs.next()) {
 				
 				//criando objeto Interessado
-				Interessado interessado = new Interessado();	
-				interessado.setId(rs.getLong("interessado_id"));
-				interessado.setNome(rs.getString("nome"));
-				interessado.setCpf(rs.getString("cpf"));
-				interessado.setContato(rs.getString("contato"));
+				Interessado interessado = new Interessado(
+						rs.getLong("interessado_id"),
+						rs.getString("nome"),
+						rs.getString("cpf"),
+						rs.getString("contato"));
 				
 				//criando o objeto Processo
-				Processo processo = new Processo();
+				Processo processo = new Processo(
+						rs.getLong("id"),
+						rs.getBoolean("eh_oficio"),
+						rs.getString("numero"),
+						rs.getString("observacao"));
 				processo.setInteressado(interessado);
-				processo.setId(rs.getLong("id"));
-				processo.setTipoOficio(rs.getBoolean("eh_oficio"));
-				processo.setNumero(rs.getString("numero"));
-				processo.setObservacao(rs.getString("observacao"));
 				
 				//falta resolver unidade destino /orgao_saida, se vai ter ou não
 				processo.setAssuntoById(rs.getInt("assunto"));
@@ -202,18 +202,18 @@ public class ProcessoDaoMySql implements ProcessoDao{
 
 				
 				//Convertendo data entrada de java.sql.Date para LocalDateTime
-				Date dataE = rs.getDate("data_entrada");
-				if(dataE != null) {
-					Timestamp stampE = new Timestamp(dataE.getTime());
-					LocalDateTime dataEntrada = stampE.toLocalDateTime();
+				Date dataEntradaSql = rs.getDate("data_entrada");
+				if(dataEntradaSql != null) {
+					Timestamp stampEntradaSql = new Timestamp(dataEntradaSql.getTime());
+					LocalDateTime dataEntrada = stampEntradaSql.toLocalDateTime();
 					processo.setDataEntrada(dataEntrada);
 				}
 				
 				//Convertendo data Saida de java.sql.Date para LocalDateTime
-				Date dataS = rs.getDate("data_saida");
-				if(dataS != null) {
-					Timestamp stampS = new Timestamp(rs.getDate("data_saida").getTime());
-					LocalDateTime dataSaida = stampS.toLocalDateTime();
+				Date dataSaidaSql = rs.getDate("data_saida");
+				if(dataSaidaSql != null) {
+					Timestamp stampSaidaSql = new Timestamp(rs.getDate("data_saida").getTime());
+					LocalDateTime dataSaida = stampSaidaSql.toLocalDateTime();
 					processo.setDataSaida(dataSaida);
 				}
 				
@@ -234,7 +234,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	
 	@Override
 	public List<Processo> buscarPorNumero(String numero) {
-		String sql = "WHERE numero LIKE "+numero;
+		String sql = "WHERE numero LIKE '"+numero+"'";
 		return this.burcador(sql);
 	}
 
@@ -247,7 +247,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 
 	@Override
 	public List<Processo> buscarPorCpfInteressado(String cpf) {
-		String sql = "WHERE cpf="+cpf;
+		String sql = "WHERE cpf= '"+cpf+"'";
 		return this.burcador(sql);
 	}
 	
@@ -267,6 +267,32 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		return this.burcador(sql);
 	}
 
-	
+	public List<Processo> buscaComposta(String numero, String nome, String cpf, int orgaoId,
+			int assuntoId, int situacaoId) {
+		StringBuilder sql = new StringBuilder("WHERE ");
+		final String AND = " AND ";
+		
+		if (numero != null && !numero.equalsIgnoreCase("")) {
+			sql.append("numero LIKE '"+numero+"' AND ");
+		}
+		if (nome != null && !nome.equalsIgnoreCase("")) {
+			sql.append("nome LIKE '%"+nome+"%' AND ");
+		}
+		if (cpf != null && !cpf.equalsIgnoreCase("")) {
+			sql.append("cpf= '"+cpf+"' AND ");
+		}
+		if (orgaoId != 0) {
+			sql.append("orgao_origem="+orgaoId+AND);
+		}
+		if (assuntoId != 0) {
+			sql.append("assunto="+assuntoId+AND);
+		}
+		if (situacaoId != 0) {
+			sql.append("situacao="+situacaoId);
+		} else {
+			sql.delete(sql.lastIndexOf(AND), sql.length());
+		}
+		return this.burcador(sql.toString());
+	}
 
 }

@@ -7,7 +7,8 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	//ProcessoTest.class,
+	InteressadoTest.class,
+	ProcessoTest.class,
 })
 public class JunitTestSuite {
 }

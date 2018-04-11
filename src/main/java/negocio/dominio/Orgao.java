@@ -6,30 +6,30 @@ import java.util.List;
 public enum Orgao {
 	
 	NULL("- Inválido -"),
-	UFRN("UNIVERSIDADE FED. DO RIO GRANDE DO NORTE"),
-	DPF("DEPARTAMENTO DE POLICIA FEDERAL"),
-	MTE("MINISTERIO DO TRABALHO E EMPREGO"),
-	DPRF("DEPTO. DE POLICIA RODOVIARIA FEDERAL"),
-	FUNAI("FUNDACAO NACIONAL DO INDIO"),
-	MAPA("MINIST.DA AGRICULTURA,PECUARIA E ABAST."),
-	MF("MINISTERIO DA FAZENDA"),
-	MJ("MINISTERIO DA FAZENDA"),
-	MPOG("MINISTERIO DO PLANEJ. DESENV. E GESTAO"),
-	IPHAN("INSTITUTO DO PATR.HIST.E ART. NACIONAL"),
-	UFERSA("UNIVERSIDADE FED. RURAL DO SEMI-ARIDO"),
-	FUNASA("FUNDACAO NACIONAL DE SAUDE"),
-	DNPM("DEPARTAMENTO NAC. DE PRODUCAO MINERAL"),
-	ANVISA("AGENCIA NACIONAL DE VIGILANCIA SANITARIA"),
-	DPU("DEFENSORIA PUBLICA DA UNIAO"),
-	DNIT("DEPARTAMENTO NAC.DE INFRAEST. DE TRANSP."),
-	AGU("ADVOCACIA-GERAL DA UNIAO"),
-	MCTI("MINIST.DA CIENCIA, TECNOLOGIA E INOVACAO"),
-	IBAMA("INST. BR. MEIO AMB. REC. NAT. RENOVAVEIS"),
-	INCRA("INSTITUTO NAC. DE COLONIZ E REF AGRARIA"),
-	DNOCS("DEPTO. NACIONAL DE OBRAS CONTRA AS SECAS"),
-	ICMBIO("INSTITUTO CHICO MENDES CONSERV.BIODIVER."),
-	IBGE("FUND. INST. BRASIL. GEOG. E ESTATISTICA"),
-	CGU("MINISTERIO DA TRANSP. FISCAL. E CGU");
+	UFRN("Universidade Federal do Rio Grande do Norte"),
+	DPF("Departamento de Polícia Federal"),
+	MTE("Ministério Do Trabalho e Emprego"),
+	DPRF("Departamento de Policia Rodoviaria Federal"),
+	FUNAI("Fundação Nacional do Índio"),
+	MAPA("Ministério da Agricultura, Pecuaria e Abastecimento"),
+	MF("Ministério da Fazenda"),
+	MJ("Ministério da Justiça"),
+	MPOG("Ministério do Planejamento Desenvolvimento e Gestão"),
+	IPHAN("Instituto do Patrimônio Histórico e Artístico Nacional"),
+	UFERSA("Universidade Federal Uural do Semi-Árido"),
+	FUNASA("Fundação Nacional de Saúde"),
+	DNPM("Departamento Nacional de Produção Mineral"),
+	ANVISA("Agência Nacional de Vigilância Sanitária"),
+	DPU("Defensoria Pública da União"),
+	DNIT("Departamento Nacional de Infraestrutura de Transportes"),
+	AGU("Advocacia-Geral da União"),
+	MCTI("Ministério da Ciência, Tecnologia, Inovações e Comunicações"),
+	IBAMA("Instituto Brasileiro do Meio Ambiente e dos Recursos Naturais Renováveis"),
+	INCRA("Instituto Nacional de Colonização e Reforma Agrária"),
+	DNOCS("Departamento Nacional de Obras Contra as Secas"),
+	ICMBIO("Instituto Chico Mendes de Conservação da Biodiversidade"),
+	IBGE("Instituto Brasileiro de Geografia e Estatística"),
+	CGU("Ministério da Transparência e Controladoria-Geral da União");
 	
 	private String nomeExt;
 	
@@ -46,13 +46,8 @@ public enum Orgao {
 		return listaOrgaos;
 	}
 	
-	public static Orgao getOrgaoPorId(int id) throws RuntimeException{
-		if(id == 0) {
-			throw new RuntimeException("USUARIO DEVE ESCOLHER UM ORGAO");
-		}
-		else {
-			return Orgao.values()[id];
-		}
+	public static Orgao getOrgaoPorId(int id){
+		return Orgao.values()[id];
 	}
 	
 }
