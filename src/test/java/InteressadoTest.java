@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import negocio.dominio.Interessado;
-import negocio.servico.ValidationException;
+import business.model.Interested;
+import business.service.ValidationException;
 
 @RunWith(value = Parameterized.class)
 public class InteressadoTest {
@@ -35,7 +35,7 @@ public class InteressadoTest {
 
 	@Test(expected = ValidationException.class)
 	public void creationTest() {
-		Interessado i = new Interessado();
+		Interested i = new Interested();
 		i.setNome(this.nome);
 		i.setContato(this.contato);
 	}

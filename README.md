@@ -35,11 +35,11 @@ No Linux Ubuntu sua instalação pode ser obtida pelos repositórios oficiais, u
 ### Ferramentas Indicadas
 * **e(fx)clipse:** pluggin do eclipse com ferramentas para desenvolvimento com JavaFX.
 	Para sua instalação, na ferramenta Eclipse: 
-	1. Na aba **Help** clique em **Install New Software...**
-	2. No campo **Work with** selecione ***--All Available Sites --***
-	3. Na lista que será mostrada, dentro de ***General Purpose Tools*** escolha **e(fx)clipse-IDE** e clique em **Next>**
-	4. Clique em **Nest>** para confirmar a escolha
-	5. Aceite o termo de licença e clique em **Finish**.
+1. Na aba **Help** clique em **Install New Software...**
+2. No campo **Work with** selecione ***--All Available Sites --***
+3. Na lista que será mostrada, dentro de ***General Purpose Tools*** escolha **e(fx)clipse-IDE** e clique em **Next>**
+4. Clique em **Nest>** para confirmar a escolha
+5. Aceite o termo de licença e clique em **Finish**.
 	
 * **SceneBuilder 2.0:** ferramenta para edição de arquivos .fxml utilizados pelo JavaFX.
 	Pode ser adquirido na página oficinal de [download](www.oracle.com/technetwork/java/javafxscenebuilder-1x-archive-2199384.html) da Oracle.
@@ -77,8 +77,8 @@ Agora na ferramenta Eclipse:
 Para executar o programa no Eclipse é necessário configurar a variável de ambiente também para o **Java Aplication**, para tanto, também nas **Run Configurations...**
 
 12.  Crie uma nova **Java Aplication**
-13. Na aba **Main**, selecione o *Workspace* do *DocManager* como *Base Directory* e em *Main Class:* **main.Main**
-14. Na aba **Environment** e crie a variável *PASSWORD_DATABASE* com sua senha de ***root*** do banco como *Value*.
+13. Na aba **Main**, selecione o *Workspace* do *DocManager* como *Base Directory* e em *Main Class:* **Main**
+14. Na aba **Environment** e crie a variável *DATABASE_PASSWORD* com sua senha de ***root*** do banco como *Value*.
 15. Clique em **Run** e veja a aplicação rodar :)
 
 ## Este projeto utiliza

@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import negocio.dominio.Processo;
-import negocio.servico.ValidationException;
+import business.model.Process;
+import business.service.ValidationException;
 /**
  * 
  * @author Allan
@@ -43,7 +43,7 @@ public class ProcessoTest {
 	
 	@Test(expected = ValidationException.class)
 	public void creationTest() {
-		Processo p = new Processo();
+		Process p = new Process();
 		p.setTipoOficio(this.oficio);
 		p.setNumero(this.numero);
 		p.setAssuntoById(this.assunto);
