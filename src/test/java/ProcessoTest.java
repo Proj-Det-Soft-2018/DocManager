@@ -42,7 +42,7 @@ public class ProcessoTest {
 	}
 	
 	@Test(expected = ValidationException.class)
-	public void creationTest() {
+	public void creationTest() throws ValidationException {
 		Process p = new Process();
 		p.setTipoOficio(this.oficio);
 		p.setNumero(this.numero);

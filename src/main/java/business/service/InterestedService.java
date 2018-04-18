@@ -1,16 +1,17 @@
 package business.service;
 
 import business.model.Interested;
+import persistence.DatabaseException;
 
 public interface InterestedService {
 	
-	public Interested searchByCpf(String cpf);
+	public Interested searchByCpf(String cpf) throws ValidationException, DatabaseException;
 		
-	public void save(Interested interested);
+	public void save(Interested interested) throws DatabaseException;
 	
-	public void update(Interested interested);
+	public void update(Interested interested) throws DatabaseException;
 	
-	public void delete(Interested interested);
+	public void delete(Interested interested) throws DatabaseException;
 	
 	public void attach(Observer observer);
 	

@@ -11,6 +11,7 @@ import business.model.Process;
 import business.service.ConcreteProcessService;
 import business.service.Observer;
 import business.service.ProcessService;
+import business.service.ValidationException;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import persistence.DatabaseException;
 import presentation.utils.widget.MaskedTextField;
 
 /**
@@ -80,11 +82,19 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 		processService.attach(this);
 		
 		this.configurarTabela();
-		this.atualizarTabela(this.processService.getList());
+		try {
+			this.atualizarTabela(this.processService.getList());
+		} catch (ValidationException e) {
+			// TODO ANALISAR NOVO TRY-CATCH
+			e.printStackTrace();
+		} catch (DatabaseException e) {
+			// TODO ANALISAR NOVO TRY-CATCH
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
-	public void update() {
+	public void update() throws ValidationException, DatabaseException {
 		this.atualizarTabela(this.processService.getList());
 	}
 

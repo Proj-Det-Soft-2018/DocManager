@@ -68,7 +68,7 @@ public class Process {
 		return numero;
 	}
 
-	public void setNumero(String numero) {
+	public void setNumero(String numero) throws ValidationException {
 		if(this.tipoOficio == true) {
 			if(numero.length() < 8) {
 				throw new ValidationException("Número invalido!", "Numero", "O número digitado é inválido.");
@@ -106,9 +106,10 @@ public class Process {
 	public void setAssunto(Assunto assunto) {
 		this.assunto = assunto;
 	}
+	 * @throws ValidationException 
 	*/
 	
-	public void setAssuntoById(int idAssunto) {
+	public void setAssuntoById(int idAssunto) throws ValidationException {
 		if(idAssunto == 0) {
 			throw new ValidationException("Você não selecionou um assunto.", "Assunto", "Campo assunto é obrigatório.");
 		}
@@ -123,9 +124,10 @@ public class Process {
 	public void setUnidadeOrigem(Orgao unidadeOrigem) {
 		this.unidadeOrigem = unidadeOrigem;
 	}
+	 * @throws ValidationException 
 	*/
 
-	public void setUnidadeOrigemById(int idUnidadeOrigem) {
+	public void setUnidadeOrigemById(int idUnidadeOrigem) throws ValidationException {
 		if(idUnidadeOrigem == 0) {
 			throw new ValidationException("Você não selecionou o Orgão!", "Orgao", "O campo Orgão é obrigatório.");
 		}
@@ -140,8 +142,9 @@ public class Process {
 	public void setSituacao(Situacao situacao) {
 		this.situacao = situacao;
 	}
+	 * @throws ValidationException 
 	*/
-	public void setSituacaoById(int idSituacao) {
+	public void setSituacaoById(int idSituacao) throws ValidationException {
 		if(idSituacao == 0) {
 			throw new ValidationException("Você não selecionou a Situação!", "Situacao", "O campo Situação é obrigatório.");
 		}
@@ -176,7 +179,7 @@ public class Process {
 		return dataSaida;
 	}
 
-	public void setDataSaida(LocalDateTime dataSaida) {
+	public void setDataSaida(LocalDateTime dataSaida) throws ValidationException {
 		if(dataSaida.isAfter(this.dataEntrada)) {
 			this.dataSaida = dataSaida;
 		}

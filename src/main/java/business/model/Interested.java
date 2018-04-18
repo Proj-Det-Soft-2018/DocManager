@@ -51,7 +51,7 @@ public class Interested {
 	}
 
 
-	public void setNome(String nome) {
+	public void setNome(String nome) throws ValidationException {
 		if(nome ==null || nome.isEmpty()) {
 			throw new ValidationException("Você não preencheu o campo Nome!", "Nome", "O campo Nome não pode ser vazio.");
 		}
@@ -63,7 +63,7 @@ public class Interested {
 
 
 	public String getCpf() {
-		return cpf;
+		return this.cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
 	}
 
 
@@ -75,7 +75,7 @@ public class Interested {
 		return contato;
 	}
 	
-	public void setContato(String contato) {
+	public void setContato(String contato) throws ValidationException {
 		if(contato==null) {
 			throw new ValidationException("O contato não foi digitado corretamente!", "Contato", "O contato inserido está incompleto");
 		}

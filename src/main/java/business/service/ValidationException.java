@@ -1,7 +1,7 @@
 package business.service;
 
 @SuppressWarnings("serial")
-public class ValidationException extends RuntimeException{
+public class ValidationException extends Exception{
 	
 	/**
 	 * 

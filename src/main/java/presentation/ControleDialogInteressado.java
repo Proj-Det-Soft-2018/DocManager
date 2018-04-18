@@ -18,6 +18,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import persistence.DatabaseException;
 import presentation.utils.widget.MaskedContactTextField;
 import presentation.utils.widget.MaskedTextField;
 
@@ -89,17 +90,12 @@ public class ControleDialogInteressado implements Initializable {
 	}
 
 	@FXML
-	private void salvar() {
+	private void salvar() throws DatabaseException {
 		Interested interessado = new Interested();
 		boolean failure = false;
 		StringBuilder failureMsg = new StringBuilder();
 		
-		try {
-			interessado.setCpf(cpf);
-		} catch (ValidationException ve) {
-			failure = true;
-			failureMsg.append(ve.getMessage());
-		}
+		interessado.setCpf(cpf);
 		
 		try {
 			interessado.setNome(this.txtNome.getText());

@@ -34,7 +34,7 @@ public class InteressadoTest {
 
 
 	@Test(expected = ValidationException.class)
-	public void creationTest() {
+	public void creationTest() throws ValidationException {
 		Interested i = new Interested();
 		i.setNome(this.nome);
 		i.setContato(this.contato);
