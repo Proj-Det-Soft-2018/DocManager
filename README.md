@@ -77,8 +77,8 @@ Agora na ferramenta Eclipse:
 Para executar o programa no Eclipse é necessário configurar a variável de ambiente também para o **Java Aplication**, para tanto, também nas **Run Configurations...**
 
 12.  Crie uma nova **Java Aplication**
-13. Na aba **Main**, selecione o *Workspace* do *DocManager* como *Base Directory* e em *Main Class:* **main.Main**
-14. Na aba **Environment** e crie a variável *PASSWORD_DATABASE* com sua senha de ***root*** do banco como *Value*.
+13. Na aba **Main**, selecione o *Workspace* do *DocManager* como *Base Directory* e em *Main Class:* **Main**
+14. Na aba **Environment** e crie a variável *DATABASE_PASSWORD* com sua senha de ***root*** do banco como *Value*.
 15. Clique em **Run** e veja a aplicação rodar :)
 
 ## Este projeto utiliza
