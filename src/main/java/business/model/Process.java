@@ -65,7 +65,12 @@ public class Process {
 	}
 
 	public String getNumero() {
-		return numero;
+		if(this.isTipoOficio()) {
+			return this.numero.replaceAll("(\\d{4})(\\d{4})(\\w)", "$1/$2-$3");
+		}
+		else {
+			return this.numero.replaceAll("(\\d{5})(\\d{6})(\\d{4})(\\d{2})", "$1.$2/$3.$4");
+		}
 	}
 
 	public void setNumero(String numero) throws ValidationException {

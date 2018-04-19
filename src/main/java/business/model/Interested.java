@@ -72,7 +72,7 @@ public class Interested {
 	}
 	
 	public String getContato() {
-		return contato;
+		return this.contato.replaceAll("(\\d{2})(\\d{5}|\\d{4})(\\d{4})", "($1)$2-$3");
 	}
 	
 	public void setContato(String contato) throws ValidationException {
