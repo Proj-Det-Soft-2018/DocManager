@@ -27,9 +27,9 @@
 	</padding>
 	<children>
 		<VBox minHeight="-Infinity" prefHeight="275.0" spacing="8.0"
-			styleClass="painel-borda" stylesheets="@../css/styles.css">
+			styleClass="painel-borda" stylesheets="@../fx_css/styles.css">
 			<children>
-				<Label styleClass="painel-titulo" stylesheets="@../css/styles.css"
+				<Label styleClass="painel-titulo" stylesheets="@../fx_css/styles.css"
 					text="Campos para a Busca" />
 				<GridPane hgap="15.0" vgap="10.0">
 					<columnConstraints>
@@ -114,15 +114,15 @@
 				<Button mnemonicParsing="false" onAction="#limparFormulario" prefWidth="80.0"
 					text="Limpar" />
 				<Button mnemonicParsing="false" onAction="#buscar" prefWidth="80.0"
-					styleClass="button-accent" stylesheets="@../css/styles.css" text="Buscar" />
+					styleClass="button-accent" stylesheets="@../fx_css/styles.css" text="Buscar" />
 			</children>
 			<padding>
 				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 			</padding>
 		</HBox>
-		<AnchorPane styleClass="painel-borda" stylesheets="@../css/styles.css">
+		<AnchorPane styleClass="painel-borda" stylesheets="@../fx_css/styles.css">
 			<children>
-				<Label styleClass="painel-titulo" stylesheets="@../css/styles.css"
+				<Label styleClass="painel-titulo" stylesheets="@../fx_css/styles.css"
 					text="Resultados" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
 				<TableView fx:id="tableResultados" layoutX="63.0"
 					AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0"

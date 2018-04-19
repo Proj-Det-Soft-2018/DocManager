@@ -3,6 +3,7 @@
  */
 package business.service;
 
+import java.io.InputStream;
 import java.util.List;
 
 import org.apache.shiro.SecurityUtils;
@@ -82,29 +83,6 @@ public class ConcreteProcessService extends Observable implements ProcessService
 		return processoDao.pegarTodos();
 	}
 
-
-
-	/**
-	 * Método procura no banco se tem outro processo com o mesmo número. Se tem, o registro deve
-	 *  estar com a situação definida como concluída. Caso contrário, pede confirmação do 
-	 *  usuário para modificar situacao do registro antigo como concluido.
-	 *  
-	 * @param numero Numero do processo que está sendo inserido.
-	 */
-	public void validarNumeroDuplicado(String numero) {
-		List<Process> duplicados = processoDao.buscarPorNumero(numero);
-		if(duplicados != null && !duplicados.isEmpty()) {
-			//verifica se a situacao dos processos encontrados estao como concluido
-			for (Process processo : duplicados) {
-				if(!(processo.getSituacao().ordinal()==Situation.CONCLUIDO.ordinal()) ) {
-					//TODO tratar e criar Exception
-					//throw new ProcessoDuplicadoException("Existe outro processo cadastrado com situação não concluída");
-				}				
-			}			
-		}		
-	}
-
-
 	public List<Process> search(String number, String name, String cpf, int situation, int organization, int subject) {
 		
 		boolean invalidNumber = (number == null || number.isEmpty());
@@ -118,5 +96,29 @@ public class ConcreteProcessService extends Observable implements ProcessService
 			throw new ValidationException("BUSCA INVÁLIDA!", "Busca", "Não foram inseridos valores para busca!");
 		}
 		return processoDao.buscaComposta(number, name, cpf, organization, subject, situation);
+	}
+	
+	public InputStream getPdf(Process process) {
+		return null;
+	}
+	
+	/**
+	 *  Método procura no banco se tem outro processo com o mesmo número. Se tem, o registro deve
+	 *  estar com a situação definida como concluída. Caso contrário, pede confirmação do 
+	 *  usuário para modificar situacao do registro antigo como concluido.
+	 *  
+	 * @param numero Numero do processo que está sendo inserido.
+	 */
+	private void validarNumeroDuplicado(String numero) {
+		List<Process> duplicados = processoDao.buscarPorNumero(numero);
+		if(duplicados != null && !duplicados.isEmpty()) {
+			//verifica se a situacao dos processos encontrados estao como concluido
+			for (Process processo : duplicados) {
+				if(!(processo.getSituacao().ordinal()==Situation.CONCLUIDO.ordinal()) ) {
+					//TODO tratar e criar Exception
+					//throw new ProcessoDuplicadoException("Existe outro processo cadastrado com situação não concluída");
+				}				
+			}			
+		}		
 	}
 }
