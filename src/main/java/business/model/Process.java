@@ -3,7 +3,15 @@
  */
 package business.model;
 
+import java.io.File;
 import java.time.LocalDateTime;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 import business.service.ValidationException;
 
@@ -11,6 +19,8 @@ import business.service.ValidationException;
  * @author lets
  *
  */
+@XmlRootElement
+@XmlSeeAlso(Interested.class)
 public class Process {
 	private Long id;
 	private boolean tipoOficio;
@@ -59,11 +69,12 @@ public class Process {
 	public void setTipoOficio(boolean tipoOficio) {
 		this.tipoOficio = tipoOficio;
 	}
-	
+	@XmlElement(name="type")
 	public String getTipo () {
 		return this.tipoOficio? "Ofício" : "Processo";
 	}
-
+	
+	@XmlElement(name="number")
 	public String getNumero() {
 		if(this.isTipoOficio()) {
 			return this.numero.replaceAll("(\\d{4})(\\d{4})(\\w)", "$1/$2-$3");
@@ -91,7 +102,7 @@ public class Process {
 		}
 		this.numero = numero;
 	}
-
+	@XmlElement
 	public Interested getInteressado() {
 		return interessado;
 	}
@@ -103,6 +114,7 @@ public class Process {
 	/**
 	 * @return the assunto
 	 */
+	@XmlElement(name="subject")
 	public Subject getAssunto() {
 		return assunto;
 	}
@@ -120,7 +132,7 @@ public class Process {
 		}
 		this.assunto = Subject.getAssuntoPorId(idAssunto);
 	}
-
+	@XmlElement(name="organization")
 	public Organization getUnidadeOrigem() {
 		return unidadeOrigem;
 	}
@@ -138,7 +150,7 @@ public class Process {
 		}
 		this.unidadeOrigem = Organization.getOrgaoPorId(idUnidadeOrigem);
 	}
-
+	@XmlElement(name="situation")
 	public Situation getSituacao() {
 		return situacao;
 	}
@@ -155,7 +167,7 @@ public class Process {
 		}
 		this.situacao = Situation.getSituacaoPorId(idSituacao);
 	}
-	
+	@XmlElement(name="observation")
 	public String getObservacao() {
 		return observacao;
 	}
@@ -163,7 +175,7 @@ public class Process {
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
-
+	@XmlElement(name="in")
 	public LocalDateTime getDataEntrada() {
 		return dataEntrada;
 	}
@@ -171,7 +183,6 @@ public class Process {
 	public void setDataEntrada(LocalDateTime dataEntrada) {
 		this.dataEntrada = dataEntrada;
 	}
-
 	public Organization getUnidadeDestino() {
 		return unidadeDestino;
 	}
@@ -179,7 +190,7 @@ public class Process {
 	public void setUnidadeDestino(Organization unidadeDestino) {
 		this.unidadeDestino = unidadeDestino;
 	}
-
+	@XmlElement(name="out")
 	public LocalDateTime getDataSaida() {
 		return dataSaida;
 	}
@@ -192,5 +203,16 @@ public class Process {
 			throw new ValidationException("Data de saída anterior a data de entrada!", "Data", "Verifique a Data e a Hora do seu computador.");
 		}
 		
+	}
+	public void toXml() throws JAXBException {
+		File file = new File("C:\\file.xml");
+		JAXBContext jaxbContext = JAXBContext.newInstance(this.getClass());
+		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+		jaxbMarshaller.marshal(this, file);
+		jaxbMarshaller.marshal(this, System.out);
+
 	}
 }

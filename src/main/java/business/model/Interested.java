@@ -3,6 +3,9 @@
  */
 package business.model;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import business.service.ValidationException;
 
 /**
@@ -12,6 +15,7 @@ import business.service.ValidationException;
  * @author clah
  *
  */
+@XmlRootElement(name="interested")
 public class Interested {
 	private Long id;
 	private String nome;
@@ -45,7 +49,7 @@ public class Interested {
 		this.id = id;
 	}
 
-
+	@XmlElement(name="name")
 	public String getNome() {
 		return nome;
 	}
@@ -60,8 +64,7 @@ public class Interested {
 		}
 		this.nome = nome;
 	}
-
-
+	@XmlElement(name="cpf")
 	public String getCpf() {
 		return this.cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
 	}
@@ -84,5 +87,4 @@ public class Interested {
 		}
 		this.contato = contato;
 	}
-
 }
