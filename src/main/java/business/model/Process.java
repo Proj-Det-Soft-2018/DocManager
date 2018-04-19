@@ -3,7 +3,9 @@
  */
 package business.model;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 
 import javax.xml.bind.JAXBContext;
@@ -13,7 +15,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
-import business.service.ValidationException;
+import org.apache.log4j.Logger;
+
+import business.exception.ValidationException;
 
 /**
  * @author lets
@@ -22,6 +26,9 @@ import business.service.ValidationException;
 @XmlRootElement
 @XmlSeeAlso(Interested.class)
 public class Process {
+	
+	private static final Logger logger = Logger.getLogger(Process.class);
+	
 	private Long id;
 	private boolean tipoOficio;
 	private String numero;
@@ -35,9 +42,9 @@ public class Process {
 	private LocalDateTime dataSaida; //Hora que altera e grava situação para concluido
 
 	public Process() {
-		
+
 	}
-	
+
 	public Process(Long id, boolean tipoOficio, String numero, String observacao) {
 		this.id = id;
 		this.tipoOficio = tipoOficio;
@@ -51,7 +58,7 @@ public class Process {
 	public Long getId() {
 		return id;
 	}
-	
+
 	public void setId(Long processoId) {
 		this.id = processoId;
 	}
@@ -69,39 +76,45 @@ public class Process {
 	public void setTipoOficio(boolean tipoOficio) {
 		this.tipoOficio = tipoOficio;
 	}
+	
 	@XmlElement(name="type")
 	public String getTipo () {
 		return this.tipoOficio? "Ofício" : "Processo";
 	}
-	
+
 	@XmlElement(name="number")
-	public String getNumero() {
+	public String getFormatedNumero() {
 		if(this.isTipoOficio()) {
 			return this.numero.replaceAll("(\\d{4})(\\d{4})(\\w)", "$1/$2-$3");
 		}
 		else {
-			return this.numero.replaceAll("(\\d{5})(\\d{6})(\\d{4})(\\d{2})", "$1.$2/$3.$4");
+			return this.numero.replaceAll("(\\d{5})(\\d{6})(\\d{4})(\\d{2})", "$1.$2/$3-$4");
 		}
+	}
+	
+	public String getNumero() {
+		return numero;
 	}
 
 	public void setNumero(String numero) throws ValidationException {
 		if(this.tipoOficio == true) {
 			if(numero.length() < 8) {
-				throw new ValidationException("Número invalido!", "Numero", "O número digitado é inválido.");
+				throw new ValidationException("O número digitado é inválido.");
 			}
 			else {
 				if(!numero.substring(0, 7).matches("[0-9]+")) {
-					throw new ValidationException("Número invalido!", "Numero", "O número digitado é inválido.");
+					throw new ValidationException("O número digitado é inválido.");
 				}
 			}
 		}
 		else {
 			if(!(numero.length() == 17) || !(numero.matches("[0-9]+"))) {
-				throw new ValidationException("Número invalido!", "Numero", "O número digitado é inválido.");
+				throw new ValidationException("O número digitado é inválido.");
 			}
 		}
 		this.numero = numero;
 	}
+	
 	@XmlElement
 	public Interested getInteressado() {
 		return interessado;
@@ -111,62 +124,67 @@ public class Process {
 		this.interessado = interessado;
 	}
 
-	/**
-	 * @return the assunto
-	 */
+	
 	@XmlElement(name="subject")
-	public Subject getAssunto() {
+	public String getSubjectString() {
+		return assunto.getText();
+	}
+	
+	/**
+	 * @return assunto
+	 */
+	public Subject getSubject() {
 		return assunto;
 	}
 
 	/**
-	public void setAssunto(Assunto assunto) {
-		this.assunto = assunto;
-	}
 	 * @throws ValidationException 
-	*/
-	
+	 */
 	public void setAssuntoById(int idAssunto) throws ValidationException {
 		if(idAssunto == 0) {
-			throw new ValidationException("Você não selecionou um assunto.", "Assunto", "Campo assunto é obrigatório.");
+			throw new ValidationException("Campo assunto é obrigatório.");
 		}
 		this.assunto = Subject.getAssuntoPorId(idAssunto);
 	}
+	
 	@XmlElement(name="organization")
+	public String getOriginEntityString(){
+		return unidadeOrigem.getNomeExt();
+	}
+	
 	public Organization getUnidadeOrigem() {
 		return unidadeOrigem;
 	}
-
+	
 	/**
-	public void setUnidadeOrigem(Orgao unidadeOrigem) {
-		this.unidadeOrigem = unidadeOrigem;
-	}
 	 * @throws ValidationException 
-	*/
-
+	 */
 	public void setUnidadeOrigemById(int idUnidadeOrigem) throws ValidationException {
 		if(idUnidadeOrigem == 0) {
-			throw new ValidationException("Você não selecionou o Orgão!", "Orgao", "O campo Orgão é obrigatório.");
+			throw new ValidationException("O campo Orgão é obrigatório.");
 		}
 		this.unidadeOrigem = Organization.getOrgaoPorId(idUnidadeOrigem);
 	}
+	
 	@XmlElement(name="situation")
+	public String getSituationString() {
+		return situacao.getStatus();
+	}
+	
 	public Situation getSituacao() {
 		return situacao;
 	}
 
 	/**
-	public void setSituacao(Situacao situacao) {
-		this.situacao = situacao;
-	}
 	 * @throws ValidationException 
-	*/
+	 */
 	public void setSituacaoById(int idSituacao) throws ValidationException {
 		if(idSituacao == 0) {
-			throw new ValidationException("Você não selecionou a Situação!", "Situacao", "O campo Situação é obrigatório.");
+			throw new ValidationException("O campo Situação é obrigatório.");
 		}
 		this.situacao = Situation.getSituacaoPorId(idSituacao);
 	}
+	
 	@XmlElement(name="observation")
 	public String getObservacao() {
 		return observacao;
@@ -175,7 +193,8 @@ public class Process {
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
-	@XmlElement(name="in")
+	
+	@XmlElement(name="entry-date")
 	public LocalDateTime getDataEntrada() {
 		return dataEntrada;
 	}
@@ -183,6 +202,7 @@ public class Process {
 	public void setDataEntrada(LocalDateTime dataEntrada) {
 		this.dataEntrada = dataEntrada;
 	}
+	
 	public Organization getUnidadeDestino() {
 		return unidadeDestino;
 	}
@@ -190,6 +210,7 @@ public class Process {
 	public void setUnidadeDestino(Organization unidadeDestino) {
 		this.unidadeDestino = unidadeDestino;
 	}
+	
 	@XmlElement(name="out")
 	public LocalDateTime getDataSaida() {
 		return dataSaida;
@@ -200,19 +221,30 @@ public class Process {
 			this.dataSaida = dataSaida;
 		}
 		else {
-			throw new ValidationException("Data de saída anterior a data de entrada!", "Data", "Verifique a Data e a Hora do seu computador.");
+			throw new ValidationException("Verifique a Data e a Hora do seu computador.");
+		}
+	}
+	
+	public InputStream toXml() {
+		try {
+			// ByteArray para receber o XML 
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			
+			// Conversão do Objeto para um XML
+			JAXBContext jaxbContext = JAXBContext.newInstance(this.getClass());
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			jaxbMarshaller.marshal(this, out);
+			
+			// Transformação em InputStream
+			InputStream inputStream = new ByteArrayInputStream(out.toByteArray());
+			
+			return inputStream;
+		} catch (JAXBException e) {
+			// TODO Gerar e enviar nova exception
+			logger.error(e.getMessage(), e);
 		}
 		
-	}
-	public void toXml() throws JAXBException {
-		File file = new File("C:\\file.xml");
-		JAXBContext jaxbContext = JAXBContext.newInstance(this.getClass());
-		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-
-		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-		jaxbMarshaller.marshal(this, file);
-		jaxbMarshaller.marshal(this, System.out);
-
+		return null;
 	}
 }

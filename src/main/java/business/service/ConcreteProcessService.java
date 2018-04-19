@@ -13,11 +13,12 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.text.IniRealm;
 import org.apache.shiro.subject.Subject;
 
+import business.exception.ValidationException;
 import business.model.Process;
 import business.model.Situation;
-import persistence.DatabaseException;
 import persistence.ProcessoDao;
 import persistence.ProcessoDaoMySql;
+import persistence.exception.DatabaseException;
 
 /**
  * @author clah
@@ -84,7 +85,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 		return processoDao.pegarTodos();
 	}
 
-	public List<Process> search(String number, String name, String cpf, int situation, int organization, int subject) {
+	public List<Process> search(String number, String name, String cpf, int situation, int organization, int subject) throws ValidationException, DatabaseException {
 		
 		boolean invalidNumber = (number == null || number.isEmpty());
 		boolean invalidName = (name == null || name.isEmpty());
@@ -94,7 +95,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 		boolean invalidSubject = (subject == 0);
 		
 		if(invalidNumber && invalidName && invalidCpf && invalidSituation && invalidOrganization && invalidSubject) {
-			throw new ValidationException("BUSCA INVÁLIDA!", "Busca", "Não foram inseridos valores para busca!");
+			throw new ValidationException("Não foram inseridos valores para busca!");
 		}
 		return processoDao.buscaComposta(number, name, cpf, organization, subject, situation);
 	}
@@ -112,32 +113,16 @@ public class ConcreteProcessService extends Observable implements ProcessService
 	 * @throws ValidationException 
 	 * @throws DatabaseException 
 	 */
-	public void validarNumeroDuplicado(String numero) throws ValidationException, DatabaseException {
+	private void validarNumeroDuplicado(String numero) throws ValidationException, DatabaseException {
 		List<Process> duplicados = processoDao.buscarPorNumero(numero);
 		if(duplicados != null && !duplicados.isEmpty()) {
 			//verifica se a situacao dos processos encontrados estao como concluido
 			for (Process processo : duplicados) {
 				if(!(processo.getSituacao().ordinal()==Situation.CONCLUIDO.ordinal()) ) {
 					//TODO tratar e criar Exception
-					throw new ValidationException("Processo Duplicado!", "NumProcesso", "Existe outro processo cadastrado com situação não concluída");
+					throw new ValidationException("Existe outro processo cadastrado com situação não concluída");
 				}				
 			}			
 		}		
-	}
-
-
-	public List<Process> search(String number, String name, String cpf, int situation, int organization, int subject) throws ValidationException, DatabaseException {
-		
-		boolean invalidNumber = (number == null || number.isEmpty());
-		boolean invalidName = (name == null || name.isEmpty());
-		boolean invalidCpf = (cpf == null || cpf.isEmpty());
-		boolean invalidSituation = (situation == 0);
-		boolean invalidOrganization = (organization == 0);
-		boolean invalidSubject = (subject == 0);
-		
-		if(invalidNumber && invalidName && invalidCpf && invalidSituation && invalidOrganization && invalidSubject) {
-			throw new ValidationException("BUSCA INVÁLIDA!", "Busca", "Não foram inseridos valores para busca!");
-		}
-		return processoDao.buscaComposta(number, name, cpf, organization, subject, situation);
 	}
 }

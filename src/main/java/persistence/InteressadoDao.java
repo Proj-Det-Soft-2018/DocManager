@@ -6,6 +6,7 @@ package persistence;
 import java.util.List;
 
 import business.model.Interested;
+import persistence.exception.DatabaseException;
 
 /**
  * @author clah

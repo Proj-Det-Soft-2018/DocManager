@@ -5,8 +5,9 @@ package persistence;
 
 import java.util.List;
 
+import business.exception.ValidationException;
 import business.model.Process;
-import business.service.ValidationException;
+import persistence.exception.DatabaseException;
 
 /**
  * @author clah

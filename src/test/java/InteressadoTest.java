@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import business.exception.ValidationException;
 import business.model.Interested;
-import business.service.ValidationException;
 
 @RunWith(value = Parameterized.class)
 public class InteressadoTest {

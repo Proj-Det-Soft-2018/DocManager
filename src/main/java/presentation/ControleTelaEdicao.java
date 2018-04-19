@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
+import business.exception.ValidationException;
 import business.model.Interested;
 import business.model.Process;
 import business.service.ConcreteInterestedService;
@@ -15,7 +16,6 @@ import business.service.InterestedService;
 import business.service.Observer;
 import business.service.ProcessService;
 import business.service.ListService;
-import business.service.ValidationException;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,8 +37,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import persistence.DatabaseException;
-import presentation.utils.widget.MaskedContactTextField;
+import persistence.exception.DatabaseException;
 import presentation.utils.widget.MaskedTextField;
 
 /**
@@ -160,7 +159,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 			this.interessado = processo.getInteressado();
 			this.preencherInteressado();
 
-			this.cbAssunto.getSelectionModel().select(processo.getAssunto().ordinal());
+			this.cbAssunto.getSelectionModel().select(processo.getSubject().ordinal());
 			this.cbSituacao.getSelectionModel().select(processo.getSituacao().ordinal());
 			this.txtObservacao.setText(processo.getObservacao());
 		}
@@ -203,11 +202,9 @@ public class ControleTelaEdicao implements Initializable, Observer{
 		}
 
 		this.lblTxtNomeInteressado.setText(this.interessado.getNome());
-		String contato = this.interessado.getContato();
-		if (contato != null && contato.length() != 0) {
-			MaskedContactTextField contatoMascara = new MaskedContactTextField();
-			contatoMascara.setContactPlainText(contato);			
-			this.lblTxtContatoInteressado.setText(contatoMascara.getText());
+		String contato = this.interessado.getFormatedContato();
+		if (contato != null && contato.length() != 0) {	
+			this.lblTxtContatoInteressado.setText(contato);
 		} else {
 			this.lblTxtContatoInteressado.setText("");
 		}
@@ -328,6 +325,8 @@ public class ControleTelaEdicao implements Initializable, Observer{
 
 	@FXML
 	private void salvar() throws ValidationException, DatabaseException {
+		//TODO refatorar
+		
 		Process processo = new Process();
 		boolean failure = false;
 		StringBuilder failureMsg = new StringBuilder();
@@ -348,18 +347,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 		}
 		
 		processo.setInteressado(this.interessado);
-		//TODO setInteressado não precisa try-catch, mas analisem anyway
-		/*
-		try {
-			
-		} catch (ValidationException ve) {
-			failure = true;
-			if (failureMsg.length() != 0) {
-				failureMsg.append("\n\n");
-			}
-			failureMsg.append(ve.getMessage());
-		}
-		//*/
+		
 		try {
 			processo.setUnidadeOrigemById(this.cbOrgao.getSelectionModel().getSelectedIndex());
 		} catch (ValidationException ve) {

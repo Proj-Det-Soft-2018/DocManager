@@ -3,8 +3,9 @@ package business.service;
 import java.io.InputStream;
 import java.util.List;
 
+import business.exception.ValidationException;
 import business.model.Process;
-import persistence.DatabaseException;
+import persistence.exception.DatabaseException;
 
 public interface ProcessService {
 

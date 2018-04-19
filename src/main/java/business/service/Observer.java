@@ -1,6 +1,7 @@
 package business.service;
 
-import persistence.DatabaseException;
+import business.exception.ValidationException;
+import persistence.exception.DatabaseException;
 
 public interface Observer {
 

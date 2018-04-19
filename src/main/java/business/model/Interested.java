@@ -6,7 +6,7 @@ package business.model;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import business.service.ValidationException;
+import business.exception.ValidationException;
 
 /**
  * Classe representa o interessado do processo, pessoa vinculada ao processo como
@@ -31,9 +31,7 @@ public class Interested {
 		this.contato = contato;
 	}
 	
-	public Interested() {
-
-	}
+	public Interested() {}
 
 	/**
 	 * @return the id
@@ -56,17 +54,22 @@ public class Interested {
 
 
 	public void setNome(String nome) throws ValidationException {
-		if(nome ==null || nome.isEmpty()) {
-			throw new ValidationException("Você não preencheu o campo Nome!", "Nome", "O campo Nome não pode ser vazio.");
+		if(nome == null || nome.isEmpty()) {
+			throw new ValidationException("O campo Nome não pode ser vazio.");
 		}
 		else if(!nome.matches("[a-zA-Z\\s]+")) {
-			throw new ValidationException("Campo nome contem caracteres inválidos!", "Nome", "O campo Nome deve conter apenas letras.");
+			throw new ValidationException("O campo Nome deve conter apenas letras.");
 		}
 		this.nome = nome;
 	}
+	
 	@XmlElement(name="cpf")
+	public String getFormatedCpf() {
+		return cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+	}
+	
 	public String getCpf() {
-		return this.cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+		return cpf;
 	}
 
 
@@ -74,16 +77,18 @@ public class Interested {
 		this.cpf = cpf;
 	}
 	
+	@XmlElement(name="contact")
+	public String getFormatedContato() {
+		return contato.replaceAll("(\\d{2})(\\d{5}|\\d{4})(\\d{4})", "($1) $2-$3");
+	}
+	
 	public String getContato() {
-		return this.contato.replaceAll("(\\d{2})(\\d{5}|\\d{4})(\\d{4})", "($1)$2-$3");
+		return contato;
 	}
 	
 	public void setContato(String contato) throws ValidationException {
-		if(contato==null) {
-			throw new ValidationException("O contato não foi digitado corretamente!", "Contato", "O contato inserido está incompleto");
-		}
-		else if(!contato.isEmpty() && contato.length() < 10){
-			throw new ValidationException("O contato não foi digitado corretamente!", "Contato", "O contato inserido está incompleto");
+		if(contato == null || contato.isEmpty() || contato.length() < 10){
+			throw new ValidationException("O contato inserido está incompleto");
 		}
 		this.contato = contato;
 	}

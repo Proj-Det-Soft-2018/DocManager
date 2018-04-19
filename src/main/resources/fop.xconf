@@ -16,6 +16,5 @@
   <source-resolution>150</source-resolution>
   <!-- Target resolution in dpi (dots/pixels per inch) for specifying the target resolution for generated bitmaps, default: 72dpi -->
   <target-resolution>150</target-resolution>
-
-  <!-- etc. etc..... -->
+  
 </fop>
