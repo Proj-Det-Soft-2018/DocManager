@@ -23,10 +23,14 @@
 			layoutY="78.0" mnemonicParsing="false" onAction="#criarFormularioEdicao"
 			prefHeight="26.0" prefWidth="140.0" text="Ver / Editar"
 			AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="61.0" />
+		<Button fx:id="btnCertidaoPdf" disable="true" layoutX="25.0"
+			layoutY="119.0" mnemonicParsing="false" onAction="#criarTelaPdf"
+			prefHeight="26.0" prefWidth="140.0" text="Certidão PDF"
+			AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="97.0" />
 		<Button fx:id="btnApagar" disable="true" layoutX="25.0"
 			layoutY="119.0" mnemonicParsing="false" onAction="#criarDialogAdmPassword"
 			prefHeight="26.0" prefWidth="140.0" text="Apagar"
-			AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="97.0" />
+			AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="133.0" />
 		<AnchorPane layoutX="186.0" layoutY="19.0" prefHeight="355.0"
 			prefWidth="397.0" styleClass="painel-borda" stylesheets="@../fx_css/styles.css"
 			AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="170.0"

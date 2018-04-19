@@ -68,7 +68,7 @@ public class ControleDialogInteressado implements Initializable {
 		this.interessadoOriginal = interessadoOriginal;
 		this.lblTxtCpf.setText(interessadoOriginal.getFormatedCpf());
 		
-		this.txtNome.setText(interessadoOriginal.getNome());
+		this.txtNome.setText(interessadoOriginal.getName());
 		this.txtContato.setContactPlainText(interessadoOriginal.getContato());
 	}
 	

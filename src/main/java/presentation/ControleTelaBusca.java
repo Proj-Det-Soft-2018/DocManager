@@ -384,7 +384,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 		tabColNumero.setCellValueFactory(
 				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getFormatedNumero()));
 		tabColInteressado.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getInteressado().getNome()));
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getInteressado().getName()));
 		tabColSituacao.setCellValueFactory(
 				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituacao().getStatus()));
 

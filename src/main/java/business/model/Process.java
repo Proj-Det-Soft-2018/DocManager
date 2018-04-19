@@ -1,6 +1,3 @@
-/**
- * 
- */
 package business.model;
 
 import java.io.ByteArrayInputStream;
@@ -14,6 +11,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.log4j.Logger;
 
@@ -55,6 +53,7 @@ public class Process {
 	/**
 	 * @return the id
 	 */
+	@XmlTransient
 	public Long getId() {
 		return id;
 	}
@@ -66,6 +65,7 @@ public class Process {
 	/**
 	 * @return the tipoOficio
 	 */
+	@XmlTransient
 	public boolean isTipoOficio() {
 		return tipoOficio;
 	}
@@ -92,6 +92,7 @@ public class Process {
 		}
 	}
 	
+	@XmlTransient
 	public String getNumero() {
 		return numero;
 	}
@@ -115,7 +116,7 @@ public class Process {
 		this.numero = numero;
 	}
 	
-	@XmlElement
+	@XmlElement(name="interested")
 	public Interested getInteressado() {
 		return interessado;
 	}
@@ -147,7 +148,7 @@ public class Process {
 		this.assunto = Subject.getAssuntoPorId(idAssunto);
 	}
 	
-	@XmlElement(name="organization")
+	@XmlElement(name="origin-entity")
 	public String getOriginEntityString(){
 		return unidadeOrigem.getNomeExt();
 	}
@@ -233,7 +234,7 @@ public class Process {
 			// Conversão do Objeto para um XML
 			JAXBContext jaxbContext = JAXBContext.newInstance(this.getClass());
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
 			jaxbMarshaller.marshal(this, out);
 			
 			// Transformação em InputStream

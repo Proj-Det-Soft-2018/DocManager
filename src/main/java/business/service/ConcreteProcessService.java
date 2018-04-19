@@ -101,6 +101,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 	}
 	
 	public InputStream getPdf(Process process) {
+		process.toXml();
 		return null;
 	}
 	

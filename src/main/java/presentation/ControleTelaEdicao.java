@@ -201,7 +201,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 			this.hBoxInteressado.getChildren().addAll(btnEditarInteressado, btnLimparInteressado);
 		}
 
-		this.lblTxtNomeInteressado.setText(this.interessado.getNome());
+		this.lblTxtNomeInteressado.setText(this.interessado.getName());
 		String contato = this.interessado.getFormatedContato();
 		if (contato != null && contato.length() != 0) {	
 			this.lblTxtContatoInteressado.setText(contato);
