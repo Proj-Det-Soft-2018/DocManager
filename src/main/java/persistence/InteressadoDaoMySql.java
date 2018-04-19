@@ -19,7 +19,7 @@ import business.model.Interested;
 public class InteressadoDaoMySql implements InteressadoDao{
 
 	@Override
-	public void salvar(Interested novoInteressado) {
+	public void salvar(Interested novoInteressado) throws DatabaseException {
 		String sql = "INSERT INTO interessados " +
                 		"(nome,cpf,contato)" +
                 		" VALUES (?,?,?)";
@@ -36,8 +36,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 			stmt.executeUpdate();
 			
 		} catch (SQLException e) {
-			//TODO resolver
-			throw new RuntimeException(e);
+			throw new DatabaseException("Não foi possível salvar o interessado no Banco de Dados.");
 		}
 		finally {
 			ConnectionFactory.fechaConnection(con, stmt);
@@ -46,13 +45,12 @@ public class InteressadoDaoMySql implements InteressadoDao{
 	
 	
 	@Override
-	public void atualizar(Interested interessadoModificado) {
+	public void atualizar(Interested interessadoModificado) throws DatabaseException {
 		String sql = "UPDATE interessados " +
 					 "SET nome=?, cpf=?, contato=? " +
 					 "WHERE id=?";
 		Connection con = null;
 		PreparedStatement stmt = null;
-		
 	    try {
 	    	con = ConnectionFactory.getConnection();
 			stmt = con.prepareStatement(sql);
@@ -65,8 +63,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 	        stmt.executeUpdate();
 	        
 	    } catch (SQLException e) {
-	    	//TODO resolver
-	        throw new RuntimeException(e);
+	        throw new DatabaseException("Não foi possível atualizar o interessado no Banco de Dados.");
 	    }finally {
 			ConnectionFactory.fechaConnection(con, stmt);
 		}
@@ -75,7 +72,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 	
 
 	@Override
-	public void deletar(Interested processo) {
+	public void deletar(Interested processo) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		try {
@@ -85,8 +82,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 	        stmt.executeUpdate();
 	        
 	    } catch (SQLException e) {
-	    	//TODO resolver
-	        throw new RuntimeException(e);
+	        throw new DatabaseException("Não foi possível deletar o processo do Banco de Dados.");
 	    }finally {
 	    	ConnectionFactory.fechaConnection(con, stmt);
 		}
@@ -95,7 +91,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 	
 	
 	@Override
-	public Interested pegarPeloId(Long id) {
+	public Interested pegarPeloId(Long id) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -122,15 +118,14 @@ public class InteressadoDaoMySql implements InteressadoDao{
 			return interessado;
 			
 		} catch (SQLException e) {
-			//TODO resolver
-			throw new RuntimeException("Erro no pegarPeloId Interessado: "+ e);
+			throw new DatabaseException("Não foi possível recuperar o interessado por ID");
 		}finally {
 			ConnectionFactory.fechaConnection(con, stmt, rs);
 		}
 	}
 	
 	@Override
-	public Interested pegarPeloCpf(String cpf) {
+	public Interested pegarPeloCpf(String cpf) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -158,15 +153,14 @@ public class InteressadoDaoMySql implements InteressadoDao{
 			return interessado;
 			
 		} catch (SQLException e) {
-			//TODO resolver
-			throw new RuntimeException("Erro no pegarPeloCpf Interessado: "+ e);
+			throw new DatabaseException("Não foi possível recuperar o interessado pelo CPF");
 		}finally {
 			ConnectionFactory.fechaConnection(con, stmt, rs);
 		}
 	}
 
 	@Override
-	public boolean contem(Interested interessado) {
+	public boolean contem(Interested interessado) throws DatabaseException {
 		Interested interessadoBuscado = this.pegarPeloId(interessado.getId());
 		
 		return (interessadoBuscado!=null) ? true: false;
@@ -174,7 +168,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 	}
 
 	@Override
-	public List<Interested> pegarTodos() {
+	public List<Interested> pegarTodos() throws DatabaseException {
 		
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -197,8 +191,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 			}
 			return interessados;
 		} catch (SQLException e) {
-			//TODO resolver
-			throw new RuntimeException("Erro no pegarTodos Interessado: "+ e);
+			throw new DatabaseException("Não foi possível recuperar todos os interessados.");
 		}finally {
 			ConnectionFactory.fechaConnection(con, stmt, rs);
 		}

@@ -15,7 +15,7 @@ import java.sql.SQLException;
  */
 public class ConnectionFactory {
 	
-	public static Connection getConnection() {
+	public static Connection getConnection() throws DatabaseException {
 		String driver = "jdbc:mysql://localhost/docmanager";
 		String user = "root";
 		String pass = System.getenv("DATABASE_PASSWORD");
@@ -23,12 +23,12 @@ public class ConnectionFactory {
 		try {
 			return DriverManager.getConnection(driver,user,pass);
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			throw new DatabaseException("Não foi possível estabelecer conexão com o Banco de Dados.");
 		}		
 		
 	}
 	
-	public static void fechaConnection(Connection con) {
+	public static void fechaConnection(Connection con) throws DatabaseException {
 		
 		try {
 			if(con!=null) {
@@ -36,11 +36,11 @@ public class ConnectionFactory {
 			}
 			
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			throw new DatabaseException("Não foi possível encerrar conexão com o Banco de Dados.");
 		}
 	}
 	
-	public static void fechaConnection(Connection con, PreparedStatement stmt) {
+	public static void fechaConnection(Connection con, PreparedStatement stmt) throws DatabaseException {
 		fechaConnection(con);
 		
 		try {
@@ -49,12 +49,12 @@ public class ConnectionFactory {
 			}
 			
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			throw new DatabaseException("Não foi possível destruir o statement construído.");
 
 		}
 	}
 	
-	public static void fechaConnection(Connection con, PreparedStatement stmt, ResultSet rs) {
+	public static void fechaConnection(Connection con, PreparedStatement stmt, ResultSet rs) throws DatabaseException {
 		fechaConnection(con, stmt);
 		
 		try {
@@ -63,7 +63,7 @@ public class ConnectionFactory {
 			}
 			
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			throw new DatabaseException("Não foi possível destruir o Result Set.");
 
 		}
 	}

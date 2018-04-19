@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import persistence.DatabaseException;
 
 public class ControleDialogAdmPassword implements Initializable {
 
@@ -42,7 +43,7 @@ public class ControleDialogAdmPassword implements Initializable {
 	}
 
 	@FXML
-	private void deleteProcess() {
+	private void deleteProcess() throws DatabaseException {
 		String user = txtUser.getText();
 		String password = txtPassword.getText();
 

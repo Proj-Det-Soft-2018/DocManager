@@ -39,6 +39,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import persistence.DatabaseException;
 import presentation.utils.widget.DynamicMaskTextField;
 import presentation.utils.widget.MaskedTextField;
 
@@ -155,7 +156,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 	}
 
 	@Override
-	public void update() {
+	public void update() throws ValidationException, DatabaseException {
 		if (this.ultimaBusca != null) {
 			List<Process> resultado = this.processService.search(
 					ultimaBusca.numero,
@@ -170,7 +171,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 	}
 
 	@FXML
-	private void buscar() {
+	private void buscar() throws DatabaseException {
 		String numProcesso = (checkNumero.isSelected())? getProcessNumberEntry() : "";
 		String nomeInteressado = (checkInteressado.isSelected() && radioProcesso.isSelected())? txtNome.getText() : "";
 		String cpfInteressado = (checkInteressado.isSelected() && radioCpf.isSelected())? mTxtCpf.getPlainText() : "";

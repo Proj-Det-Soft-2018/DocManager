@@ -37,6 +37,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import persistence.DatabaseException;
 import presentation.utils.widget.MaskedContactTextField;
 import presentation.utils.widget.MaskedTextField;
 
@@ -136,7 +137,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	}
 
 	@Override
-	public void update() {
+	public void update() throws DatabaseException {
 		buscarPorCpf();
 	}
 
@@ -213,7 +214,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	}
 
 	@FXML
-	public void buscarPorCpf() {
+	public void buscarPorCpf() throws DatabaseException {
 		try {
 			this.interessado = interestedService.searchByCpf(this.txtCpfInteressado.plainTextProperty().getValue());
 			if (interessado == null) {
@@ -326,7 +327,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	}
 
 	@FXML
-	private void salvar() {
+	private void salvar() throws ValidationException, DatabaseException {
 		Process processo = new Process();
 		boolean failure = false;
 		StringBuilder failureMsg = new StringBuilder();
@@ -345,8 +346,12 @@ public class ControleTelaEdicao implements Initializable, Observer{
 			failure = true;
 			failureMsg.append(ve.getMessage());
 		}
+		
+		processo.setInteressado(this.interessado);
+		//TODO setInteressado não precisa try-catch, mas analisem anyway
+		/*
 		try {
-			processo.setInteressado(this.interessado);
+			
 		} catch (ValidationException ve) {
 			failure = true;
 			if (failureMsg.length() != 0) {
@@ -354,6 +359,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 			}
 			failureMsg.append(ve.getMessage());
 		}
+		//*/
 		try {
 			processo.setUnidadeOrigemById(this.cbOrgao.getSelectionModel().getSelectedIndex());
 		} catch (ValidationException ve) {

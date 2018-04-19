@@ -3,6 +3,8 @@ package business.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import persistence.DatabaseException;
+
 public abstract class Observable {
 
 	List<Observer> observers = new ArrayList<>();
@@ -16,6 +18,16 @@ public abstract class Observable {
 	}
 	
 	public void notifyObservers () {
-		this.observers.forEach(Observer::update);
+		this.observers.forEach(t -> {
+			try {
+				t.update();
+			} catch (ValidationException e) {
+				// TODO ANALISAR ESSE TRY-CATCH
+				e.printStackTrace();
+			} catch (DatabaseException e) {
+				// TODO ANALISAR NOVO CATCH
+				e.printStackTrace();
+			}
+		});
 	}
 }
