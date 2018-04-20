@@ -49,10 +49,12 @@ public class ControleTelaBusca implements Initializable, Observer {
 
 	private static final URL ARQUIVO_FXML_TELA_EDICAO = ControleTelaPrincipal.class.getResource("/visions/tela_editar_processo.fxml");
 	private static final URL ARQUIVO_FXML_DIALOG_PASSWORD = ControleTelaPrincipal.class.getResource("/visions/dialog_adm_password.fxml");
+	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_PDF = ControleTelaPrincipal.class.getResource("/visions/tela_visualizar_pdf.fxml");
 	private static final String MASCARA_NUM_OFICIO = "####/####";
 	private static final String MASCARA_CPF = "###.###.###-##";
 	private static final String DIALOG_ADM_PASS_TITLE = "Autorização";
 	private static final String EDITAR_PROCESSO_TITLE = "Editar Processo";
+	private static final String VISUALIZAR_PDF = "Certidão";
 
 	private ListService listService;
 	private ProcessService processService;
@@ -135,6 +137,9 @@ public class ControleTelaBusca implements Initializable, Observer {
 
 	@FXML
 	private Button btnVerEditar;
+	
+	@FXML
+	private Button btnCertidaoPdf;
 
 	@FXML
 	private Button btnApagar;
@@ -393,6 +398,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 				(observavel, selecionandoAnterior, selecionadoNovo) -> {
 					this.processoSelecionado = selecionadoNovo;
 					this.btnVerEditar.setDisable(selecionadoNovo!=null? false : true);
+					this.btnCertidaoPdf.setDisable(selecionadoNovo!=null? false : true);
 					this.btnApagar.setDisable(selecionadoNovo!=null? false : true);
 				});
 	}
@@ -454,6 +460,29 @@ public class ControleTelaBusca implements Initializable, Observer {
 			controleTelaEdicao.montarFormulario(this.processoSelecionado);
 
 			telaEdicao.show();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
+	@FXML
+	private void criarTelaPdf() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(ARQUIVO_FXML_TELA_VISUALIZAR_PDF);
+			Pane novoPainel = loader.load();
+
+			Stage pdfViewerScreen = new Stage();
+			pdfViewerScreen.setTitle(VISUALIZAR_PDF);
+			pdfViewerScreen.initModality(Modality.WINDOW_MODAL);
+			pdfViewerScreen.initOwner(this.root.getScene().getWindow());
+			pdfViewerScreen.setScene(new Scene(novoPainel, 820, 660));
+
+			PdfViewerController pdfViewerController = loader.getController();
+			pdfViewerController.engineConfigurations();
+			pdfViewerController.setVisualizedProcess(processoSelecionado);
+			
+			pdfViewerScreen.show();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
