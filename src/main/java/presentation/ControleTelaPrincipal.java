@@ -164,6 +164,7 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 
 			PdfViewerController pdfViewerController = loader.getController();
 			pdfViewerController.engineConfigurations();
+			pdfViewerController.setVisualizedProcess(processoSelecionado);
 			
 			pdfViewerScreen.show();
 		} catch (IOException e) {

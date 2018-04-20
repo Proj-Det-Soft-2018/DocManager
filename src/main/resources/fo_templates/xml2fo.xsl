@@ -36,7 +36,7 @@
 									<fo:table-cell>
 										<fo:block>
 											<fo:block>
-												<fo:external-graphic src="templates/img/ufrn.png"
+												<fo:external-graphic src="fo_templates/img/ufrn.png"
 													content-width="90pt" />
 											</fo:block>
 										</fo:block>
@@ -54,7 +54,7 @@
 									<fo:table-cell>
 										<fo:block>
 											<fo:block>
-												<fo:external-graphic src="templates/img/siass.png"
+												<fo:external-graphic src="fo_templates/img/siass.png"
 													content-width="90pt" />
 											</fo:block>
 										</fo:block>
@@ -135,7 +135,7 @@
 									</fo:block>
 								</fo:table-cell>
 								<fo:table-cell>
-									<fo:block><xsl:value-of select="name"/></fo:block>
+									<fo:block><xsl:value-of select="interested/name"/></fo:block>
 								</fo:table-cell>
 							</fo:table-row>
 							<fo:table-row>
@@ -145,7 +145,7 @@
 									</fo:block>
 								</fo:table-cell>
 								<fo:table-cell>
-									<fo:block><xsl:value-of select="cpf"/>
+									<fo:block><xsl:value-of select="interested/cpf"/>
 									</fo:block>
 								</fo:table-cell>
 							</fo:table-row>
@@ -162,7 +162,7 @@
 			                </fo:block>
 			              </fo:table-cell>
 			              <fo:table-cell>
-			                <fo:block><xsl:value-of select="organization"/></fo:block>
+			                <fo:block><xsl:value-of select="origin-entity"/></fo:block>
 			              </fo:table-cell>
 			            </fo:table-row>
 			            <fo:table-row>
@@ -192,7 +192,7 @@
 			                </fo:block>
 			              </fo:table-cell>
 			              <fo:table-cell text-align="justify">
-			                <fo:block><xsl:value-of select="observations"/></fo:block>
+			                <fo:block><xsl:value-of select="observation"/></fo:block>
 			              </fo:table-cell>
 			            </fo:table-row>
 			          </fo:table-body>

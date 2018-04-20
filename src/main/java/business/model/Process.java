@@ -1,8 +1,7 @@
 package business.model;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
 
 import javax.xml.bind.JAXBContext;
@@ -226,26 +225,32 @@ public class Process {
 		}
 	}
 	
-	public InputStream toXml() {
+	public String toXml() {
+		
+		StringWriter stringWriter = new StringWriter();
+		String xml = null;
+		
 		try {
-			// ByteArray para receber o XML 
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			
 			// Conversão do Objeto para um XML
 			JAXBContext jaxbContext = JAXBContext.newInstance(this.getClass());
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
-			jaxbMarshaller.marshal(this, out);
+			jaxbMarshaller.marshal(this, stringWriter);
 			
-			// Transformação em InputStream
-			InputStream inputStream = new ByteArrayInputStream(out.toByteArray());
-			
-			return inputStream;
+			xml = stringWriter.toString();
 		} catch (JAXBException e) {
-			// TODO Gerar e enviar nova exception
+			// TODO Nova Exceção?
 			logger.error(e.getMessage(), e);
+		} finally {
+			// Fecha o reader e o writer
+			try {
+				stringWriter.close();
+			} catch (IOException e) {
+				// Não conseguiu fechar o writer
+				logger.fatal(e.getMessage(), e);
+			}
 		}
 		
-		return null;
+		return xml;
 	}
 }

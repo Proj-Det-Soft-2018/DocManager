@@ -513,11 +513,8 @@ html[dir='rtl'] #viewerContainer {
   cursor: default;
 }
 
-#toolbarViewerRight {
-    display:none;
-}
-
 #toolbarContainer {
+  display:none;
   width: 100%;
 }
 

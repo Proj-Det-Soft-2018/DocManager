@@ -1,6 +1,5 @@
 package business.service;
 
-import java.io.InputStream;
 import java.util.List;
 
 import business.exception.ValidationException;
@@ -19,7 +18,7 @@ public interface ProcessService {
 	
 	public List<Process> search(String number, String name, String cpf, int situation, int organization, int subject) throws ValidationException, DatabaseException;
 	
-	public InputStream getPdf(Process process);
+	public byte[] getPdf(Process process);
 	
 	public void attach(Observer observer);
 	
