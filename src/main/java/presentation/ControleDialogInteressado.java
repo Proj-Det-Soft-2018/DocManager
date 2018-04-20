@@ -60,14 +60,16 @@ public class ControleDialogInteressado implements Initializable {
 	}
 	
 	public void setCpfOnForm(String cpf) {
+		this.cpf = cpf;
 		lblTxtCpf.setText(cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4"));
 	}
 	
 	public void populeForm(Interested interessadoOriginal) {
 		raiz.getChildren().remove(this.lblAlerta);
 		this.interessadoOriginal = interessadoOriginal;
-		this.lblTxtCpf.setText(interessadoOriginal.getFormatedCpf());
 		
+		cpf = interessadoOriginal.getCpf();
+		this.lblTxtCpf.setText(interessadoOriginal.getFormatedCpf());
 		this.txtNome.setText(interessadoOriginal.getName());
 		this.txtContato.setContactPlainText(interessadoOriginal.getContato());
 	}
@@ -81,6 +83,7 @@ public class ControleDialogInteressado implements Initializable {
 
 	@FXML
 	private void salvar() throws DatabaseException {
+		
 		Interested interessado = new Interested();
 		boolean failure = false;
 		StringBuilder failureMsg = new StringBuilder();
