@@ -3,7 +3,8 @@ package business.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import persistence.DatabaseException;
+import business.exception.ValidationException;
+import persistence.exception.DatabaseException;
 
 public abstract class Observable {
 

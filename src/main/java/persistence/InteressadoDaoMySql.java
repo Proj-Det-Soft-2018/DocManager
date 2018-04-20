@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import business.model.Interested;
+import persistence.exception.DatabaseException;
 
 /**
  * @author clah
@@ -29,7 +30,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 		try {
 			con = ConnectionFactory.getConnection();
 			stmt = con.prepareStatement(sql);
-			stmt.setString(1,novoInteressado.getNome());
+			stmt.setString(1,novoInteressado.getName());
 	        stmt.setString(2,novoInteressado.getCpf());
 	        stmt.setString(3,novoInteressado.getContato());
 	        
@@ -55,7 +56,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 	    	con = ConnectionFactory.getConnection();
 			stmt = con.prepareStatement(sql);
 			
-			stmt.setString(1, interessadoModificado.getNome());
+			stmt.setString(1, interessadoModificado.getName());
 	        stmt.setString(2, interessadoModificado.getCpf());
 	        stmt.setString(3, interessadoModificado.getContato());
 	        stmt.setLong(4, interessadoModificado.getId());

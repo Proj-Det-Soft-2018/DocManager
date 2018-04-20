@@ -32,16 +32,22 @@ public enum Subject {
 	GENERIC_17("Avaliação da capacidade laborativa por recomendação superior"),
 	GENERIC_18("Comunicação de doença de notificação compulsória");
 	
-	private String texto;
+	private String text;
 	
-	Subject(String texto){
-		this.texto = texto;
+	Subject(String text){
+		this.text = text;
 	}
 	
+	public String getText() {
+		return text;
+	}
+
+
+
 	public static List<String> getAssuntos() {
-		List<String> listaAssuntos = new ArrayList<String>();
+		List<String> listaAssuntos = new ArrayList<>();
 		for(Subject assunto : Subject.values()) {
-			listaAssuntos.add(assunto.texto);
+			listaAssuntos.add(assunto.text);
 		}
 		listaAssuntos.remove(0);
 		return listaAssuntos;

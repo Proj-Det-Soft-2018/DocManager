@@ -5,8 +5,9 @@ package business.model;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-import business.service.ValidationException;
+import business.exception.ValidationException;
 
 /**
  * Classe representa o interessado do processo, pessoa vinculada ao processo como
@@ -18,26 +19,25 @@ import business.service.ValidationException;
 @XmlRootElement(name="interested")
 public class Interested {
 	private Long id;
-	private String nome;
+	private String name;
 	private String cpf;
-	private String contato;
+	private String contact;
 	
 	
 	
 	public Interested(Long id, String nome, String cpf, String contato) {
 		this.id = id;
-		this.nome = nome;
+		this.name = nome;
 		this.cpf = cpf;
-		this.contato = contato;
+		this.contact = contato;
 	}
 	
-	public Interested() {
-
-	}
+	public Interested() {}
 
 	/**
 	 * @return the id
 	 */
+	@XmlTransient
 	public Long getId() {
 		return id;
 	}
@@ -49,24 +49,30 @@ public class Interested {
 		this.id = id;
 	}
 
-	@XmlElement(name="name")
-	public String getNome() {
-		return nome;
+	@XmlElement
+	public String getName() {
+		return name;
 	}
 
 
 	public void setNome(String nome) throws ValidationException {
-		if(nome ==null || nome.isEmpty()) {
-			throw new ValidationException("Você não preencheu o campo Nome!", "Nome", "O campo Nome não pode ser vazio.");
+		if(nome == null || nome.isEmpty()) {
+			throw new ValidationException("O campo Nome não pode ser vazio.");
 		}
 		else if(!nome.matches("[a-zA-Z\\s]+")) {
-			throw new ValidationException("Campo nome contem caracteres inválidos!", "Nome", "O campo Nome deve conter apenas letras.");
+			throw new ValidationException("O campo Nome deve conter apenas letras.");
 		}
-		this.nome = nome;
+		this.name = nome;
 	}
+	
 	@XmlElement(name="cpf")
+	public String getFormatedCpf() {
+		return cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+	}
+	
+	@XmlTransient
 	public String getCpf() {
-		return this.cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+		return cpf;
 	}
 
 
@@ -74,17 +80,20 @@ public class Interested {
 		this.cpf = cpf;
 	}
 	
+	@XmlElement(name="contact")
+	public String getFormatedContato() {
+		return contact.replaceAll("(\\d{2})(\\d{5}|\\d{4})(\\d{4})", "($1) $2-$3");
+	}
+	
+	@XmlTransient
 	public String getContato() {
-		return this.contato.replaceAll("(\\d{2})(\\d{5}|\\d{4})(\\d{4})", "($1)$2-$3");
+		return contact;
 	}
 	
 	public void setContato(String contato) throws ValidationException {
-		if(contato==null) {
-			throw new ValidationException("O contato não foi digitado corretamente!", "Contato", "O contato inserido está incompleto");
+		if(contato == null || contato.isEmpty() || contato.length() < 10){
+			throw new ValidationException("O contato inserido está incompleto");
 		}
-		else if(!contato.isEmpty() && contato.length() < 10){
-			throw new ValidationException("O contato não foi digitado corretamente!", "Contato", "O contato inserido está incompleto");
-		}
-		this.contato = contato;
+		this.contact = contato;
 	}
 }

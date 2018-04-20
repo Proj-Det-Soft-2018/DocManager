@@ -3,10 +3,10 @@ package presentation;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import business.exception.ValidationException;
 import business.model.Interested;
 import business.service.ConcreteInterestedService;
 import business.service.InterestedService;
-import business.service.ValidationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -18,17 +18,14 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import persistence.DatabaseException;
+import persistence.exception.DatabaseException;
 import presentation.utils.widget.MaskedContactTextField;
-import presentation.utils.widget.MaskedTextField;
 
 /**
  * @author hugotho
  * 
  */
 public class ControleDialogInteressado implements Initializable {
-	
-	private static final String MASK_CPF = "###.###.###-##";
 	
 	private InterestedService interestedService;
 	private Interested interessadoOriginal;
@@ -63,22 +60,15 @@ public class ControleDialogInteressado implements Initializable {
 	}
 	
 	public void setCpfOnForm(String cpf) {
-		this.cpf = cpf;
-		MaskedTextField maskedCpf = new MaskedTextField(MASK_CPF);
-		maskedCpf.setPlainText(cpf);
-		lblTxtCpf.setText(maskedCpf.getText());
+		lblTxtCpf.setText(cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4"));
 	}
 	
 	public void populeForm(Interested interessadoOriginal) {
 		raiz.getChildren().remove(this.lblAlerta);
 		this.interessadoOriginal = interessadoOriginal;
-		cpf = interessadoOriginal.getCpf();
+		this.lblTxtCpf.setText(interessadoOriginal.getFormatedCpf());
 		
-		MaskedTextField maskedCpf = new MaskedTextField(MASK_CPF);
-		maskedCpf.setPlainText(cpf);
-		this.lblTxtCpf.setText(maskedCpf.getText());
-		
-		this.txtNome.setText(interessadoOriginal.getNome());
+		this.txtNome.setText(interessadoOriginal.getName());
 		this.txtContato.setContactPlainText(interessadoOriginal.getContato());
 	}
 	

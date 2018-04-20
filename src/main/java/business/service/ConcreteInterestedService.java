@@ -1,9 +1,10 @@
 package business.service;
 
+import business.exception.ValidationException;
 import business.model.Interested;
 import persistence.DaoFactory;
-import persistence.DatabaseException;
 import persistence.InteressadoDao;
+import persistence.exception.DatabaseException;
 /**
  * 
  * @author Allan
@@ -45,7 +46,7 @@ public class ConcreteInterestedService extends Observable implements InterestedS
 	@Override
 	public Interested searchByCpf(String cpf) throws ValidationException, DatabaseException{
 		if(cpf == null || cpf.length() != 11) {
-			throw new ValidationException("CPF INVÁLIDO!", "Busca-CPF", "O CPF buscado está incompleto!");
+			throw new ValidationException("O CPF buscado está incompleto!");
 		}
 		return interessadoDao.pegarPeloCpf(cpf);
 	} 
