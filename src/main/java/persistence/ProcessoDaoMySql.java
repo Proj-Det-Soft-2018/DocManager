@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import business.exception.ValidationException;
 import business.model.Interested;
@@ -237,35 +238,6 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		return this.burcador(sql);
 	}
 
-	@Override
-	public List<Process> buscarPorNomeInteressado(String nome) throws ValidationException, DatabaseException {
-		String sql = "WHERE nome LIKE '%"+nome+"%'";
-		return this.burcador(sql);
-	}
-
-
-	@Override
-	public List<Process> buscarPorCpfInteressado(String cpf) throws ValidationException, DatabaseException {
-		String sql = "WHERE cpf= '"+cpf+"'";
-		return this.burcador(sql);
-	}
-	
-	@Override
-	public List<Process> buscarPorSituacao(int situacaoId) throws ValidationException, DatabaseException {
-		String sql = "WHERE situacao="+situacaoId;
-		return this.burcador(sql);
-	}
-	
-	public List<Process> buscarPorOrgao(int orgaoId) throws ValidationException, DatabaseException {
-		String sql = "WHERE orgao_origem="+orgaoId;
-		return this.burcador(sql);
-	}
-	
-	public List<Process> buscarPorAssunto(int assuntoId) throws ValidationException, DatabaseException {
-		String sql = "WHERE assunto="+assuntoId;
-		return this.burcador(sql);
-	}
-
 	public List<Process> buscaComposta(String numero, String nome, String cpf, int orgaoId,
 			int assuntoId, int situacaoId) throws ValidationException, DatabaseException {
 		StringBuilder sql = new StringBuilder("WHERE ");
@@ -292,6 +264,14 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			sql.delete(sql.lastIndexOf(AND), sql.length());
 		}
 		return this.burcador(sql.toString());
+	}
+	
+	//Methods to resolve statistic solutions
+
+	@Override
+	public Map<Integer, ArrayList<Integer>> getQuantityProcessPerMonthYearList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
