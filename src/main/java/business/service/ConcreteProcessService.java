@@ -14,9 +14,9 @@ import org.apache.shiro.subject.Subject;
 
 import business.model.Process;
 import business.model.Situation;
+import persistence.DaoFactory;
 import persistence.DatabaseException;
 import persistence.ProcessoDao;
-import persistence.ProcessoDaoMySql;
 
 /**
  * @author clah
@@ -31,7 +31,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 	private static final ConcreteProcessService instance = new ConcreteProcessService();
 
 	private ConcreteProcessService() {
-		processoDao = new ProcessoDaoMySql();
+		processoDao = DaoFactory.getProcessDao();
 
 		// Inicilização do Apache Shiro -- utiliza o resources/shiro.ini
 		IniRealm iniRealm = new IniRealm("classpath:shiro.ini");
