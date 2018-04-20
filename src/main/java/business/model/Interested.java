@@ -91,7 +91,7 @@ public class Interested {
 	}
 	
 	public void setContato(String contato) throws ValidationException {
-		if(contato == null || contato.isEmpty() || contato.length() < 10){
+		if(contato == null || (!contato.isEmpty() && contato.length() < 10)){
 			throw new ValidationException("O contato inserido está incompleto");
 		}
 		this.contact = contato;

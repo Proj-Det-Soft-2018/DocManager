@@ -160,7 +160,7 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 			pdfViewerScreen.setTitle(VISUALIZAR_PDF);
 			pdfViewerScreen.initModality(Modality.WINDOW_MODAL);
 			pdfViewerScreen.initOwner(this.painel.getScene().getWindow());
-			pdfViewerScreen.setScene(new Scene(novoPainel, 820, 570));
+			pdfViewerScreen.setScene(new Scene(novoPainel, 820, 660));
 
 			PdfViewerController pdfViewerController = loader.getController();
 			pdfViewerController.engineConfigurations();

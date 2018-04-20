@@ -47,7 +47,7 @@
 											Subsistema Integrado de Atenção à Saúde do Servidor -
 											SIASS&#8232;
 											&#8232;
-											<fo:inline role="span"> Emitido em 13/04/2018 09:52
+											<fo:inline role="span"> Emitido em <xsl:value-of select="current-time"/>
 											</fo:inline>
 										</fo:block>
 									</fo:table-cell>
