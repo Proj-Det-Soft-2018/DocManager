@@ -32,7 +32,7 @@ public enum Situation {
 	}
 	
 	public static List<String> getSituacoes() {
-		List<String> listaSituacoes = new ArrayList<String>();
+		List<String> listaSituacoes = new ArrayList<>();
 		for(Situation situacao : Situation.values()) {
 			listaSituacoes.add(situacao.status);
 		}

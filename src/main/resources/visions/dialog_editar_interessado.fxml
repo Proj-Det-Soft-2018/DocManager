@@ -19,9 +19,9 @@
 		<Label fx:id="lblAlerta"
 			text="CPF não encontrado.&#10;Por favor, cadastre um novo Interessado. "
 			textFill="RED" />
-		<VBox styleClass="painel-borda" stylesheets="@../css/styles.css">
+		<VBox styleClass="painel-borda" stylesheets="@../fx_css/styles.css">
 			<children>
-				<Label styleClass="painel-titulo" stylesheets="@../css/styles.css"
+				<Label styleClass="painel-titulo" stylesheets="@../fx_css/styles.css"
 					text="Interessado" />
 				<GridPane hgap="5.0" vgap="5.0">
 					<columnConstraints>

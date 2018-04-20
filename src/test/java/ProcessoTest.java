@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import business.exception.ValidationException;
 import business.model.Process;
-import business.service.ValidationException;
 /**
  * 
  * @author Allan

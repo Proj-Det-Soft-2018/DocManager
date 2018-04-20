@@ -1,4 +1,4 @@
-package persistence;
+package persistence.exception;
 
 @SuppressWarnings("serial")
 public class DatabaseException extends Exception {

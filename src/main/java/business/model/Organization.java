@@ -35,10 +35,15 @@ public enum Organization {
 	
 	Organization(String nome) {
 		this.nomeExt = nome;
-	}	
+	}
 	
+	public String getNomeExt() {
+		return nomeExt;
+	}
+
+
 	public static List<String> getOrgaos() {
-		List<String> listaOrgaos = new ArrayList<String>();
+		List<String> listaOrgaos = new ArrayList<>();
 		for(Organization orgao : Organization.values()) {
 			listaOrgaos.add(orgao.name() + " - " + orgao.nomeExt);
 		}

@@ -1,7 +1,8 @@
 package business.service;
 
+import business.exception.ValidationException;
 import business.model.Interested;
-import persistence.DatabaseException;
+import persistence.exception.DatabaseException;
 
 public interface InterestedService {
 	

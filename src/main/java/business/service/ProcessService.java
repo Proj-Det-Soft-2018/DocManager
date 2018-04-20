@@ -2,8 +2,9 @@ package business.service;
 
 import java.util.List;
 
+import business.exception.ValidationException;
 import business.model.Process;
-import persistence.DatabaseException;
+import persistence.exception.DatabaseException;
 
 public interface ProcessService {
 
@@ -16,6 +17,8 @@ public interface ProcessService {
 	public void delete(Process process, String admUser, String password) throws DatabaseException;
 	
 	public List<Process> search(String number, String name, String cpf, int situation, int organization, int subject) throws ValidationException, DatabaseException;
+	
+	public byte[] getPdf(Process process);
 	
 	public void attach(Observer observer);
 	

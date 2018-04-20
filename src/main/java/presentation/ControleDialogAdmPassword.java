@@ -16,7 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import persistence.DatabaseException;
+import persistence.exception.DatabaseException;
 
 public class ControleDialogAdmPassword implements Initializable {
 

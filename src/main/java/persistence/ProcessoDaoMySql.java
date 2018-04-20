@@ -13,9 +13,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import business.exception.ValidationException;
 import business.model.Interested;
 import business.model.Process;
-import business.service.ValidationException;
+import persistence.exception.DatabaseException;
 
 /**
  * @author clah
@@ -41,7 +42,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			stmt.setBoolean(1, novoProcesso.isTipoOficio());
 			stmt.setString(2, novoProcesso.getNumero());
 			stmt.setLong(3, novoProcesso.getInteressado().getId());
-			stmt.setInt(4, novoProcesso.getAssunto().ordinal());
+			stmt.setInt(4, novoProcesso.getSubject().ordinal());
 			stmt.setInt(5, novoProcesso.getSituacao().ordinal());
 			stmt.setInt(6, novoProcesso.getUnidadeOrigem().ordinal());
 			stmt.setString(7, novoProcesso.getObservacao());
@@ -85,7 +86,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			stmt = con.prepareStatement(query);
 			stmt.setString(1, processoModificado.getNumero());
 			stmt.setLong(2, processoModificado.getInteressado().getId());
-			stmt.setInt(3, processoModificado.getAssunto().ordinal());
+			stmt.setInt(3, processoModificado.getSubject().ordinal());
 			stmt.setInt(4, processoModificado.getSituacao().ordinal());
 			stmt.setInt(5, processoModificado.getUnidadeOrigem().ordinal());
 			stmt.setString(6, processoModificado.getObservacao());
