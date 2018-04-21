@@ -271,13 +271,27 @@ public class ProcessoDaoMySql implements ProcessoDao{
 
 	@Override
 	public Map<Integer, ArrayList<Integer>> getQuantityProcessPerMonthYearList() throws DatabaseException {
+		String query = "SELECT COUNT(id), EXTRACT(year from data_entrada) as ano, EXTRACT(month from data_entrada) AS mes "
+						+ "FROM processos "
+						+ "GROUP BY ano, mes ORDER BY ano, mes";
 		
+		return this.builderMapIntArrayInt(query);
+	}
+	
+	@Override
+	public Map<Integer, ArrayList<Integer>> getQuantityProcessPerMonthFromLastYearList() throws DatabaseException {
+		String query = "SELECT COUNT(id), EXTRACT(year from data_entrada) as ano, EXTRACT(month from data_entrada) AS mes "
+						+ "FROM (SELECT * FROM processos WHERE data_entrada BETWEEN CURDATE() - INTERVAL 1 YEAR AND CURDATE() ) AS processosUltimoAno "
+						+ "GROUP BY ano, mes ORDER BY ano, mes";
+		return this.builderMapIntArrayInt(query);
+	}
+
+
+	private Map<Integer, ArrayList<Integer>> builderMapIntArrayInt(String query) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
-		String query = "SELECT COUNT(id), EXTRACT(year from data_entrada) as ano, EXTRACT(month from data_entrada) AS mes "
-				+ "FROM processos GROUP BY ano, mes ORDER BY ano, mes";
 		Map<Integer, ArrayList<Integer>> list = new HashMap<Integer, ArrayList<Integer>>();
 		
 		con = ConnectionFactory.getConnection();
@@ -306,8 +320,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			throw new DatabaseException("Problema no SQL:"+e.getMessage());
 		}
 	}
-
-
+	
 	@Override
 	public Map<Integer, Integer> getQuantityProcessPerSituation() throws DatabaseException {
 		Connection con = null;
@@ -338,6 +351,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			throw new DatabaseException("Problema no SQL:"+e.getMessage());
 		}
 	}
+
 	
 
 

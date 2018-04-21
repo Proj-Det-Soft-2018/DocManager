@@ -29,5 +29,6 @@ public interface ProcessoDao{
 	//Statistics lists
 	public Map<Integer, ArrayList<Integer>> getQuantityProcessPerMonthYearList() throws DatabaseException;
 	public Map<Integer, Integer> getQuantityProcessPerSituation() throws DatabaseException;
+	public Map<Integer, ArrayList<Integer>> getQuantityProcessPerMonthFromLastYearList() throws DatabaseException;
 	
 }
