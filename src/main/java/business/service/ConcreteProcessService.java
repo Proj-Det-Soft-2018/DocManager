@@ -98,13 +98,13 @@ public class ConcreteProcessService extends Observable implements ProcessService
 		//Antes de salvar verificar os campos que nao podem ser nulos
 		this.validarNumeroDuplicado(process.getNumber());
 
-		processoDao.salvar(process);
+		processoDao.save(process);
 		this.notifyObservers();
 	}
 
 	@Override
 	public void update(Process process) throws DatabaseException {
-		processoDao.atualizar(process);
+		processoDao.update(process);
 		this.notifyObservers();			
 	}
 
@@ -119,7 +119,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 		}
 
 		if (currentUser.hasRole("admin")) {
-			processoDao.deletar(process);
+			processoDao.delete(process);
 			this.notifyObservers();
 		}
 
@@ -127,7 +127,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 	}
 
 	public List<Process> getList() throws ValidationException, DatabaseException{
-		return processoDao.pegarTodos();
+		return processoDao.getAll();
 	}
 
 	public List<Process> search(String number, String name, String cpf, int situation, int organization, int subject) throws ValidationException, DatabaseException {
@@ -142,7 +142,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 		if(invalidNumber && invalidName && invalidCpf && invalidSituation && invalidOrganization && invalidSubject) {
 			throw new ValidationException("Não foram inseridos valores para busca!");
 		}
-		return processoDao.buscaComposta(number, name, cpf, organization, subject, situation);
+		return processoDao.multipleSearch(number, name, cpf, organization, subject, situation);
 	}
 
 	public byte[] getPdf(Process process) {
@@ -163,7 +163,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 	 * @throws DatabaseException 
 	 */
 	private void validarNumeroDuplicado(String numero) throws ValidationException, DatabaseException {
-		List<Process> duplicados = processoDao.buscarPorNumero(numero);
+		List<Process> duplicados = processoDao.searchByNumber(numero);
 		if(duplicados != null && !duplicados.isEmpty()) {
 			//verifica se a situacao dos processos encontrados estao como concluido
 			for (Process processo : duplicados) {

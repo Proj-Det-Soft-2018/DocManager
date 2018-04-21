@@ -17,15 +17,15 @@ import persistence.exception.DatabaseException;
  */
 public interface ProcessoDao{
 	
-	public void salvar(Process novoProcesso) throws DatabaseException;
-	public void atualizar(Process processoModificado) throws DatabaseException;
-	public void deletar(Process processo) throws DatabaseException;
-	public Process pegarPeloId(Long id) throws ValidationException, DatabaseException;
-	public boolean contem(Process processo) throws ValidationException, DatabaseException;
-	public List<Process> pegarTodos() throws ValidationException, DatabaseException;
-	public List<Process> buscarPorNumero(String numero) throws ValidationException, DatabaseException;
-	public List<Process> buscaComposta(String numero, String nomeInteressado, String cpfInteressado, int orgaoId,
-			int assuntoId, int situacaoId) throws ValidationException, DatabaseException;
+	public void save(Process newProcess) throws DatabaseException;
+	public void update(Process modifiedProcess) throws DatabaseException;
+	public void delete(Process process) throws DatabaseException;
+	public Process getById(Long id) throws ValidationException, DatabaseException;
+	public boolean contains(Process process) throws ValidationException, DatabaseException;
+	public List<Process> getAll() throws ValidationException, DatabaseException;
+	public List<Process> searchByNumber(String number) throws ValidationException, DatabaseException;
+	public List<Process> multipleSearch(String number, String interestedName, String interestedCpf, int organizationId,
+			int subjectId, int situationId) throws ValidationException, DatabaseException;
 	//Statistics lists
 	public Map<Integer, ArrayList<Integer>> getQuantityProcessPerMonthYearList() throws DatabaseException;
 	public Map<Integer, Integer> getQuantityProcessPerSituation() throws DatabaseException;
