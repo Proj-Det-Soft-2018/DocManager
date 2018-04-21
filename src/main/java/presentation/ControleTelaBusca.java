@@ -173,11 +173,9 @@ public class ControleTelaBusca implements Initializable, Observer {
 						ultimaBusca.idOrgao,
 						ultimaBusca.idAssunto);
 			} catch (ValidationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage(), e);
 			} catch (DatabaseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage(), e);
 			}
 
 			atualizarTabela(resultado);
@@ -210,8 +208,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 
 			alert.showAndWait();
 		} catch (DatabaseException e) {
-			// TODO VERIFICAR CATCH NO CONTROLADOR
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 

@@ -11,6 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.log4j.Logger;
+
 import java.util.ResourceBundle;
 import java.util.Stack;
 
@@ -67,6 +70,7 @@ public class StatisticsGraphsScreenController implements Initializable {
     final ToggleGroup tgCategoryGroup = new ToggleGroup();
 	
     private static final String NULL_POINT_PROCESSOS = "Não existe processos cadastrados";
+    private Logger logger = Logger.getLogger(StatisticsGraphsScreenController.class);
     private ObservableList<String> observableMonthsList = FXCollections.observableArrayList();
     private ObservableList<String> observableMonthsList2 = FXCollections.observableArrayList();
 	private StatisticService statisticService;
@@ -81,7 +85,7 @@ public class StatisticsGraphsScreenController implements Initializable {
 			try {
 				this.createPieChartSubject();
 			} catch (DatabaseException e) {
-				//TODO tem que ver para onde vai a mensagem, sugiro log.
+				logger.error(e.getMessage(), e);
 			}
 			
 		
@@ -114,10 +118,11 @@ public class StatisticsGraphsScreenController implements Initializable {
 		try {
 			dados = statisticService.quantityProcessPerMonthYear();
 		} catch (DatabaseException e) {
-			//TODO tem que ver para onde vai a mensagem, sugiro log.
+			logger.error(e.getMessage(), e);
 		}
 		
         if(dados == null || dados.isEmpty()) {
+        	//TODO analisar dps
 			throw new NullPointerException(NULL_POINT_PROCESSOS);
 		}		
 		
@@ -146,10 +151,11 @@ public class StatisticsGraphsScreenController implements Initializable {
 		try {
 			dados = statisticService.quantityProcessFromLastYear();
 		} catch (DatabaseException e) {
-			//TODO tem que ver para onde vai a mensagem, sugiro log.
+			logger.error(e.getMessage(), e);
 		}
 		
         if(dados == null || dados.isEmpty()) {
+        	//TODO analisar dps
 			throw new NullPointerException(NULL_POINT_PROCESSOS);
 		}
 		

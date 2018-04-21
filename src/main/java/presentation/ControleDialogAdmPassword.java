@@ -3,6 +3,7 @@ package presentation;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
 import org.apache.shiro.authc.AuthenticationException;
 
 import business.model.Process;
@@ -31,6 +32,8 @@ public class ControleDialogAdmPassword implements Initializable {
 
 	@FXML
 	private PasswordField txtPassword;
+	
+	private Logger logger = Logger.getLogger(ControleDialogAdmPassword.class);
 
 	public void setProcesso(Process process) {
 		this.process = process;
@@ -57,8 +60,7 @@ public class ControleDialogAdmPassword implements Initializable {
 			alertLabel.setTextFill(Color.RED);
 			this.root.getChildren().add(0, alertLabel);
 		} catch (DatabaseException e) {
-			// TODO VERIFICAR CATCH CONTROLADOR
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 

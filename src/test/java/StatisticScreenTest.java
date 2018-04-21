@@ -9,8 +9,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.fop.fo.properties.NumberProperty.PositiveIntegerMaker;
-
 import business.model.Situation;
 import business.service.ConcreteStatisticService;
 import business.service.StatisticService;
@@ -134,7 +132,7 @@ public class StatisticScreenTest extends Application {
 		return graficoLinha;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ })
 	private Node createBarChartQuantityProcessPerMonthYear() {
 		// Obtém an array com nomes dos meses em Inglês.
         String[] arrayMeses = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
