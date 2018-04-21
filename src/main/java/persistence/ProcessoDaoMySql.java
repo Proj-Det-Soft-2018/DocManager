@@ -136,7 +136,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	public Process pegarPeloId(Long id) throws ValidationException, DatabaseException {
 		String sql = "WHERE p.id="+id.toString();
 		List<Process> lista = this.burcador(sql);
-		if(lista.isEmpty() || lista ==null) {
+		if(lista.isEmpty()) {
 			return null;
 		}else {
 			return lista.get(0);
@@ -292,7 +292,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
-		Map<Integer, ArrayList<Integer>> list = new HashMap<Integer, ArrayList<Integer>>();
+		Map<Integer, ArrayList<Integer>> list = new HashMap<>();
 		
 		con = ConnectionFactory.getConnection();
 		
@@ -319,12 +319,14 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		} catch (SQLException e) {
 			throw new DatabaseException("Problema no SQL:"+e.getMessage());
 		}
+		finally {
+			ConnectionFactory.fechaConnection(con, stmt, rs);
+		}
 	}
 	
 	@Override
 	public Map<Integer, Integer> getQuantityProcessPerSituationList() throws DatabaseException {
 		String category = "situacao";
-		
 		return this.builderMapIntInt(category);
 		
 	}
@@ -332,6 +334,12 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	@Override
 	public Map<Integer, Integer> getQuantityProcessPerOrganizationList() throws DatabaseException {
 		String category = "orgao_origem";
+		return this.builderMapIntInt(category);
+	}
+	
+	@Override
+	public Map<Integer, Integer> getQuantityProcessPerSubjectList() throws DatabaseException {
+		String category = "assunto";
 		return this.builderMapIntInt(category);
 	}
 	
@@ -352,7 +360,8 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {
-				Integer situation, quantity;
+				Integer situation;
+				Integer quantity;
 				situation = rs.getInt(categoryColumn);
 				quantity = rs.getInt("qtde");
 				
@@ -363,9 +372,12 @@ public class ProcessoDaoMySql implements ProcessoDao{
 
 		} catch (SQLException e) {
 			throw new DatabaseException("Problema no SQL:"+e.getMessage());
+		}finally {
+			ConnectionFactory.fechaConnection(con, stmt, rs);
 		}
 
 	}
+
 
 
 	

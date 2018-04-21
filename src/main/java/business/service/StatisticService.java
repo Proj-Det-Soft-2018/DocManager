@@ -22,4 +22,6 @@ public interface StatisticService {
 
 	public Map<Integer, Integer> quantityProcessPerOrganization() throws DatabaseException;
 
+	public Map<Integer, Integer> quantityProcessPerSubject() throws DatabaseException;
+
 }

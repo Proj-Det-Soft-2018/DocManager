@@ -240,16 +240,23 @@ public class StatisticsGraphsScreenController implements Initializable {
 	
 	@FXML
 	private void createPieChartSituation() throws DatabaseException{
+		pieChart.getData().clear(); //Clean data chart
 		Map<Integer, Integer> dados = statisticService.quantityProcessPerSituation();
-		pieChart.getData().clear();
 		this.createPieChart("Situação",dados);
 	}
 	
 	@FXML
 	private void createPieChartOrganization() throws DatabaseException{
-		Map<Integer, Integer> dados = statisticService.quantityProcessPerOrganization();
 		pieChart.getData().clear(); //Clean data chart
+		Map<Integer, Integer> dados = statisticService.quantityProcessPerOrganization();
 		this.createPieChart("Órgão",dados);
+	}
+	
+	@FXML
+	private void createPieChartSubject() throws DatabaseException{
+		pieChart.getData().clear(); //Clean data chart
+		Map<Integer, Integer> dados = statisticService.quantityProcessPerSubject();
+		this.createPieChart("Assunto",dados);
 	}
 	
 	
@@ -281,7 +288,7 @@ public class StatisticsGraphsScreenController implements Initializable {
 		}else if(category.compareTo("Órgão")==0){
 			return Organization.getOrgaoPorId(categoryId).name();
 		}else if(category.compareTo("Assunto")==0) {
-			return Subject.getAssuntoPorId(categoryId).getText();
+			return Subject.getAssuntoPorId(categoryId).getShortText();
 		}else {
 			return null;
 		}
