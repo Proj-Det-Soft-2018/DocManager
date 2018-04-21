@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import negocio.dominio.Processo;
-import negocio.servico.ValidationException;
+import business.exception.ValidationException;
+import business.model.Process;
 /**
  * 
  * @author Allan
@@ -23,7 +23,7 @@ public class ProcessoTest {
 			{false, "00000010110143", 13, 2, 0},
 			{false, "000000101101430", 11, 3, 1},
 			{true, "a1234567", 14, 4, 2},
-			{true, "111234567", 8, 5, 2},
+			{true, "1112", 8, 5, 2},
 		});
 	}
 	
@@ -42,12 +42,12 @@ public class ProcessoTest {
 	}
 	
 	@Test(expected = ValidationException.class)
-	public void creationTest() {
-		Processo p = new Processo();
+	public void creationTest() throws ValidationException {
+		Process p = new Process();
 		p.setTipoOficio(this.oficio);
-		p.setNumero(this.numero);
-		p.setAssuntoById(this.assunto);
-		p.setUnidadeOrigemById(this.orgao);
-		p.setSituacaoById(this.situacao);
+		p.setNumber(this.numero);
+		p.setSubjectById(this.assunto);
+		p.setOriginEntityById(this.orgao);
+		p.setSituationById(this.situacao);
 	}
 }
