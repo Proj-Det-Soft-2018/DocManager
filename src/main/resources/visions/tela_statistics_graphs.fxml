@@ -15,23 +15,54 @@
           <content>
             <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
               <children>
-                <BarChart fx:id="barChart" layoutX="51.0" layoutY="35.0" prefHeight="464.0" prefWidth="838.0" title="Quantidade de Processos Por Mês e Ano">
+                <BarChart fx:id="barChartMonthYear" layoutX="51.0" layoutY="35.0" prefHeight="464.0" prefWidth="838.0" title="Quantidade de Processos Por Mês e Ano">
                   <xAxis>
-                    <CategoryAxis fx:id="categoryAxis" side="BOTTOM" />
+                    <CategoryAxis fx:id="categoryAxisMonthYear" side="BOTTOM" />
                   </xAxis>
                   <yAxis>
-                    <NumberAxis fx:id="numberAxis" side="LEFT" />
+                    <NumberAxis fx:id="numberAxisMonthYear" side="LEFT" />
                   </yAxis>
                 </BarChart>
               </children>
             </AnchorPane>
           </content>
         </Tab>
-        <Tab text="QuantidadePorSituaçao">
+        <Tab text="QuantidadeUltimos12Meses">
           <content>
             <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
               <children>
-                <PieChart id="PieChart" fx:id="pieChart" layoutX="51.0" layoutY="35.0" prefHeight="464.0" prefWidth="838.0" title="Quantidade de Processo Por Situação" />
+                <BarChart fx:id="barChartLastYear" layoutX="51.0" layoutY="35.0" prefHeight="464.0" prefWidth="838.0" title="Quantidade de Processos Nos Últimos 12 Meses">
+                  <xAxis>
+                    <CategoryAxis fx:id="categoryAxisLastYear" side="BOTTOM" />
+                  </xAxis>
+                  <yAxis>
+                    <NumberAxis fx:id="numberAxisLastYear" side="LEFT" />
+                  </yAxis>
+                </BarChart>
+              </children>
+            </AnchorPane>
+          </content>
+        </Tab>
+        <Tab text="QuantidadePorCategoria">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <children>
+                <SplitPane dividerPositions="0.15604395604395604" focusTraversable="true" layoutX="14.0" layoutY="13.0" prefHeight="506.0" prefWidth="912.0">
+                  <items>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="430.0" prefWidth="940.0">
+                      <children>
+                        <RadioButton id="radioBtn1" fx:id="radioBtnSubject" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#createPieChartSubject" text="Assunto" />
+                        <RadioButton id="radioBtn2" fx:id="radioBtnOrganization" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" onAction="#createPieChartOrganization" text="Orgao" />
+                        <RadioButton id="radioBtnSituacao" fx:id="radioBtnSituation" layoutX="14.0" layoutY="80.0" mnemonicParsing="false" onAction="#createPieChartSituation" selected="false" text="Situaçao" />
+                      </children>
+                    </AnchorPane>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="506.0" prefWidth="725.0">
+                      <children>
+                        <PieChart id="PieChart" fx:id="pieChart" layoutX="33.0" layoutY="37.0" legendSide="RIGHT" prefHeight="430.0" prefWidth="700.0" title="" />
+                      </children>
+                    </AnchorPane>
+                  </items>
+                </SplitPane>
               </children>
             </AnchorPane>
           </content>
