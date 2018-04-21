@@ -273,11 +273,11 @@ public class StatisticsGraphsScreenController implements Initializable {
 
 	private String getCategoryNameById(int categoryId, String category) {
 		if(category.compareTo("Situação")==0){
-			return Situation.getSituacaoPorId(categoryId).getStatus();
+			return Situation.getSituationById(categoryId).getStatus();
 		}else if(category.compareTo("Órgão")==0){
-			return Organization.getOrgaoPorId(categoryId).name();
+			return Organization.getOrganizationById(categoryId).name();
 		}else if(category.compareTo("Assunto")==0) {
-			return Subject.getAssuntoPorId(categoryId).getShortText();
+			return Subject.getSubjectById(categoryId).getShortText();
 		}else {
 			return null;
 		}
