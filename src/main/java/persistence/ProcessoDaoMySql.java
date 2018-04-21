@@ -11,7 +11,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import business.exception.ValidationException;
 import business.model.Interested;
@@ -237,35 +239,6 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		return this.burcador(sql);
 	}
 
-	@Override
-	public List<Process> buscarPorNomeInteressado(String nome) throws ValidationException, DatabaseException {
-		String sql = "WHERE nome LIKE '%"+nome+"%'";
-		return this.burcador(sql);
-	}
-
-
-	@Override
-	public List<Process> buscarPorCpfInteressado(String cpf) throws ValidationException, DatabaseException {
-		String sql = "WHERE cpf= '"+cpf+"'";
-		return this.burcador(sql);
-	}
-	
-	@Override
-	public List<Process> buscarPorSituacao(int situacaoId) throws ValidationException, DatabaseException {
-		String sql = "WHERE situacao="+situacaoId;
-		return this.burcador(sql);
-	}
-	
-	public List<Process> buscarPorOrgao(int orgaoId) throws ValidationException, DatabaseException {
-		String sql = "WHERE orgao_origem="+orgaoId;
-		return this.burcador(sql);
-	}
-	
-	public List<Process> buscarPorAssunto(int assuntoId) throws ValidationException, DatabaseException {
-		String sql = "WHERE assunto="+assuntoId;
-		return this.burcador(sql);
-	}
-
 	public List<Process> buscaComposta(String numero, String nome, String cpf, int orgaoId,
 			int assuntoId, int situacaoId) throws ValidationException, DatabaseException {
 		StringBuilder sql = new StringBuilder("WHERE ");
@@ -293,5 +266,79 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		}
 		return this.burcador(sql.toString());
 	}
+	
+	//Methods to resolve statistic solutions
+
+	@Override
+	public Map<Integer, ArrayList<Integer>> getQuantityProcessPerMonthYearList() throws DatabaseException {
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		String query = "SELECT COUNT(id), EXTRACT(year from data_entrada) as ano, EXTRACT(month from data_entrada) AS mes "
+				+ "FROM processos GROUP BY ano, mes ORDER BY ano, mes";
+		Map<Integer, ArrayList<Integer>> list = new HashMap<Integer, ArrayList<Integer>>();
+		
+		con = ConnectionFactory.getConnection();
+		
+		try {
+			stmt = con.prepareStatement(query);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				ArrayList<Integer> line = new ArrayList<>();
+                if (!list.containsKey(rs.getInt("ano")))
+                {
+                    line.add(rs.getInt("mes"));
+                    line.add(rs.getInt("count(id)"));
+                    list.put(rs.getInt("ano"), line);
+                }else{
+                    ArrayList<Integer> newLine = list.get(rs.getInt("ano"));
+                    newLine.add(rs.getInt("mes"));
+                    newLine.add(rs.getInt("count(id)"));
+                }
+			}
+			
+			return list;
+
+		} catch (SQLException e) {
+			throw new DatabaseException("Problema no SQL:"+e.getMessage());
+		}
+	}
+
+
+	@Override
+	public Map<Integer, Integer> getQuantityProcessPerSituation() throws DatabaseException {
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		String query = "SELECT COUNT(id) AS qtde, situacao FROM processos GROUP BY situacao ORDER BY situacao";
+		
+		Map<Integer, Integer> list = new HashMap<>();
+		
+		con = ConnectionFactory.getConnection();
+		
+		try {
+			stmt = con.prepareStatement(query);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				Integer situation, quantity;
+				situation = rs.getInt("situacao");
+				quantity = rs.getInt("qtde");
+				
+				list.put(situation, quantity);
+			}
+			
+			return list;
+
+		} catch (SQLException e) {
+			throw new DatabaseException("Problema no SQL:"+e.getMessage());
+		}
+	}
+	
+
 
 }

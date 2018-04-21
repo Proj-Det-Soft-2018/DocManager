@@ -2,8 +2,8 @@ package business.service;
 
 import business.exception.ValidationException;
 import business.model.Interested;
+import persistence.DaoFactory;
 import persistence.InteressadoDao;
-import persistence.InteressadoDaoMySql;
 import persistence.exception.DatabaseException;
 /**
  * 
@@ -18,7 +18,7 @@ public class ConcreteInterestedService extends Observable implements InterestedS
 	private static final ConcreteInterestedService instance = new ConcreteInterestedService();
 
 	private ConcreteInterestedService() {
-		interessadoDao = new InteressadoDaoMySql();
+		interessadoDao = DaoFactory.getInterestedDao();
 	}
 
 	public static ConcreteInterestedService getInstance() {

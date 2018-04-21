@@ -57,6 +57,10 @@
 			</children>
 		</AnchorPane>
 		<Button layoutX="25.0" layoutY="359.0" mnemonicParsing="false"
+			onAction="#createStatisticScreen" prefHeight="26.0" prefWidth="140.0"
+			text="Gráficos" AnchorPane.bottomAnchor="56.0"
+			AnchorPane.leftAnchor="10.0" />
+		<Button layoutX="25.0" layoutY="359.0" mnemonicParsing="false"
 			onAction="#criarTelaBusca" prefHeight="26.0" prefWidth="140.0"
 			text="Buscar" AnchorPane.bottomAnchor="20.0"
 			AnchorPane.leftAnchor="10.0" />
