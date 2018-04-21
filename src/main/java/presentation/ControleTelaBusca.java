@@ -160,22 +160,32 @@ public class ControleTelaBusca implements Initializable, Observer {
 	}
 
 	@Override
-	public void update() throws ValidationException, DatabaseException {
+	public void update() {
 		if (this.ultimaBusca != null) {
-			List<Process> resultado = this.processService.search(
-					ultimaBusca.numero,
-					ultimaBusca.nomeInteressado,
-					ultimaBusca.cpfInteressado,
-					ultimaBusca.idSituacao,
-					ultimaBusca.idOrgao,
-					ultimaBusca.idAssunto);
+			//TODO verificar resultado = null
+			List<Process> resultado = null;
+			try {
+				resultado = this.processService.search(
+						ultimaBusca.numero,
+						ultimaBusca.nomeInteressado,
+						ultimaBusca.cpfInteressado,
+						ultimaBusca.idSituacao,
+						ultimaBusca.idOrgao,
+						ultimaBusca.idAssunto);
+			} catch (ValidationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DatabaseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			atualizarTabela(resultado);
 		}
 	}
 
 	@FXML
-	private void buscar() throws DatabaseException {
+	private void buscar() {
 		String numProcesso = (checkNumero.isSelected())? getProcessNumberEntry() : "";
 		String nomeInteressado = (checkInteressado.isSelected() && radioProcesso.isSelected())? txtNome.getText() : "";
 		String cpfInteressado = (checkInteressado.isSelected() && radioCpf.isSelected())? mTxtCpf.getPlainText() : "";
@@ -199,6 +209,9 @@ public class ControleTelaBusca implements Initializable, Observer {
 			alert.initOwner(root.getScene().getWindow());
 
 			alert.showAndWait();
+		} catch (DatabaseException e) {
+			// TODO VERIFICAR CATCH NO CONTROLADOR
+			e.printStackTrace();
 		}
 	}
 

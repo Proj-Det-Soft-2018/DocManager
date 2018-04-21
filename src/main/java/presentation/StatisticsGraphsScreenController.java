@@ -48,25 +48,26 @@ public class StatisticsGraphsScreenController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		statisticService = ConcreteStatisticService.getInstance();
+		this.createBarChartQuantityProcessPerMonthYear();
+		this.createQuantityProcessPerSituationPieChart();
+	}
+	
+	@FXML
+	private void createBarChartQuantityProcessPerMonthYear() {
+		// Obtém an array com nomes dos meses em Inglês.
+		String[] arrayMeses = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
+        // Converte o array em uma lista e adiciona em nossa ObservableList de meses.
+        observableListMeses.addAll(Arrays.asList(arrayMeses));
+        // Associa os nomes de mês como categorias para o eixo horizontal.        
+        categoryAxis.setCategories(observableListMeses);
+        //TODO VERIFICAR MAP NULL
+        Map<Integer, ArrayList<Integer>> dados = null;
 		try {
-			this.createBarChartQuantityProcessPerMonthYear();
-			this.createQuantityProcessPerSituationPieChart();
+			dados = statisticService.quantityProcessPerMonthYear();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	@FXML
-	private void createBarChartQuantityProcessPerMonthYear() throws DatabaseException {
-		// Obtém an array com nomes dos meses em Inglês.
-        String[] arrayMeses = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
-        // Converte o array em uma lista e adiciona em nossa ObservableList de meses.
-        observableListMeses.addAll(Arrays.asList(arrayMeses));
-     // Associa os nomes de mês como categorias para o eixo horizontal.        
-        categoryAxis.setCategories(observableListMeses);
-       
-        Map<Integer, ArrayList<Integer>> dados = statisticService.quantityProcessPerMonthYear();
 		
 		if(dados == null || dados.isEmpty()) {
 			System.out.println("ta dando ruim!");
@@ -118,10 +119,16 @@ public class StatisticsGraphsScreenController implements Initializable {
         }
     }
 	
-	private void createQuantityProcessPerSituationPieChart() throws DatabaseException {
+	private void createQuantityProcessPerSituationPieChart() {
 	//	PieChart pieChart = new PieChart();
-		
-		 Map<Integer, Integer> dados = statisticService.quantityProcessPerSituation();
+		//TODO verificar map com valor null
+		Map<Integer, Integer> dados = null;
+		try {
+			dados = statisticService.quantityProcessPerSituation();
+		} catch (DatabaseException e) {
+			// TODO VERIFICAR CATCH CONTROLADOR
+			e.printStackTrace();
+		}
 			
 			
 			if(dados == null || dados.isEmpty()) {
