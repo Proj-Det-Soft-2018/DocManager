@@ -37,7 +37,7 @@ public class ConcreteStatisticService implements StatisticService {
 	@Override
 	public Map<Integer, Integer> quantityProcessPerSituation() throws DatabaseException {
 		// TODO Auto-generated method stub
-		return null;
+		return processoDao.getQuantityProcessPerSituation();
 	}
 
 }

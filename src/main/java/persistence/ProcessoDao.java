@@ -27,6 +27,7 @@ public interface ProcessoDao{
 	public List<Process> buscaComposta(String numero, String nomeInteressado, String cpfInteressado, int orgaoId,
 			int assuntoId, int situacaoId) throws ValidationException, DatabaseException;
 	//Statistics lists
-	public Map<Integer, ArrayList<Integer>> getQuantityProcessPerMonthYearList();
+	public Map<Integer, ArrayList<Integer>> getQuantityProcessPerMonthYearList() throws DatabaseException;
+	public Map<Integer, Integer> getQuantityProcessPerSituation() throws DatabaseException;
 	
 }
