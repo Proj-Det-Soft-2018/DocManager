@@ -136,7 +136,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	}
 
 	@Override
-	public void update() throws DatabaseException {
+	public void update() {
 		buscarPorCpf();
 	}
 
@@ -211,7 +211,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	}
 
 	@FXML
-	public void buscarPorCpf() throws DatabaseException {
+	public void buscarPorCpf() {
 		try {
 			this.interessado = interestedService.searchByCpf(this.txtCpfInteressado.plainTextProperty().getValue());
 			if (interessado == null) {
@@ -231,6 +231,9 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	        alert.initOwner(raiz.getScene().getWindow());
 
 	        alert.showAndWait();
+		} catch (DatabaseException e) {
+			// TODO VERIFICAR CATCH CONTROLADOR
+			e.printStackTrace();
 		}
 	}
 
@@ -324,7 +327,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	}
 
 	@FXML
-	private void save() throws ValidationException, DatabaseException {
+	private void save() {
 		//TODO refatorar
 		
 		Process processo = new Process();
@@ -395,12 +398,25 @@ public class ControleTelaEdicao implements Initializable, Observer{
 			
 			if (processoOriginal == null ) {
 				/* Criar novo Processo */
-				processService.save(processo);
+				try {
+					processService.save(processo);
+				} catch (ValidationException e) {
+					// TODO VERIFICAR CATCH CONTROLADOR
+					e.printStackTrace();
+				} catch (DatabaseException e) {
+					// TODO VERIFICAR CATCH CONTROLADOR
+					e.printStackTrace();
+				}
 		
 			} else {
 				/* Alterar Processo Existente */
 				processo.setId(processoOriginal.getId());
-				processService.update(processo);
+				try {
+					processService.update(processo);
+				} catch (DatabaseException e) {
+					// TODO VERIFICAR CATCH CONTROLADOR
+					e.printStackTrace();
+				}
 			}
 		
 			this.closeWindow();

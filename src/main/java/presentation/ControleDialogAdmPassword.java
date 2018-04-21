@@ -43,7 +43,7 @@ public class ControleDialogAdmPassword implements Initializable {
 	}
 
 	@FXML
-	private void deleteProcess() throws DatabaseException {
+	private void deleteProcess() {
 		String user = txtUser.getText();
 		String password = txtPassword.getText();
 
@@ -56,6 +56,9 @@ public class ControleDialogAdmPassword implements Initializable {
 			Label alertLabel = new Label("Usuário ou Senha Incorretos!");
 			alertLabel.setTextFill(Color.RED);
 			this.root.getChildren().add(0, alertLabel);
+		} catch (DatabaseException e) {
+			// TODO VERIFICAR CATCH CONTROLADOR
+			e.printStackTrace();
 		}
 	}
 

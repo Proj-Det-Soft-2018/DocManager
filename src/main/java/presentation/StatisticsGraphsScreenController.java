@@ -104,7 +104,7 @@ public class StatisticsGraphsScreenController implements Initializable {
 
 	private void createBarChartQuantityProcessPerMonthYear(){
 		// Obtém an array com nomes dos meses em Inglês.
-        String[] arrayMeses = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
+		String[] arrayMeses = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
         // Converte o array em uma lista e adiciona em nossa ObservableList de meses.
         observableMonthsList.addAll(Arrays.asList(arrayMeses));
         // Associa os nomes de mês como categorias para o eixo horizontal.        

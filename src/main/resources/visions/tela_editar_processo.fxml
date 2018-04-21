@@ -175,10 +175,10 @@
 				<Insets top="-15.0" />
 			</VBox.margin>
 			<children>
-				<Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#fecharJanela"
+				<Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#closeWindow"
 					prefHeight="26.0" prefWidth="100.0" text="Cancelar" />
 				<Button fx:id="btnCadastrar" mnemonicParsing="false"
-					onAction="#salvar" prefHeight="26.0" prefWidth="100.0" text="Cadastrar" />
+					onAction="#save" prefHeight="26.0" prefWidth="100.0" text="Cadastrar" />
 			</children>
 		</HBox>
 	</children>

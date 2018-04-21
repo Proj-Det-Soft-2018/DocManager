@@ -95,8 +95,16 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 	}
 	
 	@Override
-	public void update() throws ValidationException, DatabaseException {
-		this.atualizarTabela(this.processService.getList());
+	public void update() {
+		try {
+			this.atualizarTabela(this.processService.getList());
+		} catch (ValidationException e) {
+			// TODO VERIFICAR CATCH CONTROLADOR
+			e.printStackTrace();
+		} catch (DatabaseException e) {
+			// TODO VERIFICAR CATCH CONTROLADOR
+			e.printStackTrace();
+		}
 	}
 
 	@FXML

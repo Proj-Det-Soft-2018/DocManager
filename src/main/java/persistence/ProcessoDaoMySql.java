@@ -27,7 +27,7 @@ import persistence.exception.DatabaseException;
 public class ProcessoDaoMySql implements ProcessoDao{
 	
 	@Override
-	public void salvar(Process novoProcesso) throws DatabaseException {
+	public void save(Process process) throws DatabaseException {
 		
 		String sql = "INSERT INTO processos"
 					+ "(eh_oficio,numero,interessado_id,"
@@ -35,35 +35,35 @@ public class ProcessoDaoMySql implements ProcessoDao{
                 	+ "observacao,data_entrada)"
                 	+ " values (?,?,?,?,?,?,?,?)";
 		
-		Connection con = null;
-		PreparedStatement stmt=null;
+		Connection connection = null;
+		PreparedStatement statement=null;
 		try {
-			con = ConnectionFactory.getConnection();
-			stmt = con.prepareStatement(sql);
+			connection = ConnectionFactory.getConnection();
+			statement = connection.prepareStatement(sql);
 			
-			stmt.setBoolean(1, novoProcesso.isOficio());
-			stmt.setString(2, novoProcesso.getNumber());
-			stmt.setLong(3, novoProcesso.getIntersted().getId());
-			stmt.setInt(4, novoProcesso.getSubject().ordinal());
-			stmt.setInt(5, novoProcesso.getSituation().ordinal());
-			stmt.setInt(6, novoProcesso.getOriginEntity().ordinal());
-			stmt.setString(7, novoProcesso.getObservation());
+			statement.setBoolean(1, process.isOficio());
+			statement.setString(2, process.getNumber());
+			statement.setLong(3, process.getIntersted().getId());
+			statement.setInt(4, process.getSubject().ordinal());
+			statement.setInt(5, process.getSituation().ordinal());
+			statement.setInt(6, process.getOriginEntity().ordinal());
+			statement.setString(7, process.getObservation());
 			
 			//Definindo data de entrada no banco de dados
-			LocalDateTime data = LocalDateTime.now();
-			novoProcesso.setRegistrationDate(data);
+			LocalDateTime date = LocalDateTime.now();
+			process.setRegistrationDate(date);
 			
-			Timestamp stamp = Timestamp.valueOf(data);
-			Date dataEntrada = new Date (stamp.getTime());
+			Timestamp stamp = Timestamp.valueOf(date);
+			Date registrationDate = new Date (stamp.getTime());
 			
-			stmt.setDate(8,dataEntrada);
-			stmt.executeUpdate();
+			statement.setDate(8,registrationDate);
+			statement.executeUpdate();
 			
 			
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível salvar o processo no Banco de Dados.");
 		}finally {
-			ConnectionFactory.fechaConnection(con, stmt);
+			ConnectionFactory.closeConnection(connection, statement);
 		}
 		
 		
@@ -71,7 +71,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	
 	
 	@Override
-	public void atualizar(Process processoModificado) throws DatabaseException {
+	public void update(Process process) throws DatabaseException {
 		
 		String query = "UPDATE processos SET "
 					+ "numero=?, interessado_id=?, assunto=?,"
@@ -79,92 +79,93 @@ public class ProcessoDaoMySql implements ProcessoDao{
 					+ "eh_oficio=?"
 					+ " WHERE id=?";
 		
-		Connection con = null;
-		PreparedStatement stmt=null;
+		Connection connection = null;
+		PreparedStatement statement=null;
 		
 		try {
 			
-			con = ConnectionFactory.getConnection();
-			stmt = con.prepareStatement(query);
-			stmt.setString(1, processoModificado.getNumber());
-			stmt.setLong(2, processoModificado.getIntersted().getId());
-			stmt.setInt(3, processoModificado.getSubject().ordinal());
-			stmt.setInt(4, processoModificado.getSituation().ordinal());
-			stmt.setInt(5, processoModificado.getOriginEntity().ordinal());
-			stmt.setString(6, processoModificado.getObservation());
-			stmt.setBoolean(7, processoModificado.isOficio());
+			connection = ConnectionFactory.getConnection();
+			statement = connection.prepareStatement(query);
+			statement.setString(1, process.getNumber());
+			statement.setLong(2, process.getIntersted().getId());
+			statement.setInt(3, process.getSubject().ordinal());
+			statement.setInt(4, process.getSituation().ordinal());
+			statement.setInt(5, process.getOriginEntity().ordinal());
+			statement.setString(6, process.getObservation());
+			statement.setBoolean(7, process.isOficio());
 			
 			//setando id do processo a ser modificado
-			stmt.setLong(8, processoModificado.getId());
+			statement.setLong(8, process.getId());
 			
 			
-			stmt.executeUpdate();
+			statement.executeUpdate();
 			
 			
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível atualizar o processo no Banco de Dados.");
 		}finally {
-			ConnectionFactory.fechaConnection(con, stmt);
+			ConnectionFactory.closeConnection(connection, statement);
 		}
 		
 	}
 
 		
 	@Override
-	public void deletar(Process processo) throws DatabaseException {
+	public void delete(Process process) throws DatabaseException {
 		
-		Connection con = null;
-		PreparedStatement stmt=null;
+		Connection connection = null;
+		PreparedStatement statement=null;
 		
 		try {
-			con = ConnectionFactory.getConnection();
-			stmt = con.prepareStatement("DELETE FROM processos WHERE id=?");
-	        stmt.setLong(1, processo.getId());
-	        stmt.executeUpdate();
+			connection = ConnectionFactory.getConnection();
+			statement = connection.prepareStatement("DELETE FROM processos WHERE id=?");
+	        statement.setLong(1, process.getId());
+	        statement.executeUpdate();
 			
 			
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível deletar o processo do Banco de Dados.");
 		}finally {
-			ConnectionFactory.fechaConnection(con, stmt);
+			ConnectionFactory.closeConnection(connection, statement);
 		}
 		
 	}
 	
 	
 	@Override
-	public Process pegarPeloId(Long id) throws ValidationException, DatabaseException {
+	public Process getById(Long id) throws ValidationException, DatabaseException {
 		String sql = "WHERE p.id="+id.toString();
-		List<Process> lista = this.burcador(sql);
-		if(lista.isEmpty()) {
+		List<Process> processList = this.searcher(sql);
+		if(processList.isEmpty() || processList ==null) {
 			return null;
 		}else {
-			return lista.get(0);
+			//TODO verificar o getById
+			return processList.get(0);
 		} 
 		
 	}
 
 	@Override
-	public boolean contem(Process processo) throws ValidationException, DatabaseException {		
-		Process processoBuscado = this.pegarPeloId(processo.getId());
+	public boolean contains(Process process) throws ValidationException, DatabaseException {		
+		Process foundProcess = this.getById(process.getId());
 		
-		return (processoBuscado!=null) ? true : false;
+		return (foundProcess!=null) ? true : false;
 		
 	}
 	
 	@Override
-	public List<Process> pegarTodos() throws ValidationException, DatabaseException {
+	public List<Process> getAll() throws ValidationException, DatabaseException {
 		String sql = "ORDER BY data_entrada DESC LIMIT 50";
-		return this.burcador(sql);
+		return this.searcher(sql);
 		
 	}
 
 	
-	private List<Process> burcador(String whereStament) throws ValidationException, DatabaseException {
+	private List<Process> searcher(String whereStament) throws ValidationException, DatabaseException {
 		
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
 		String query = "SELECT * "
 						+ "FROM processos p "
 						+ "INNER JOIN interessados i "
@@ -172,99 +173,99 @@ public class ProcessoDaoMySql implements ProcessoDao{
 						+ whereStament;
 		
 		try {
-			con = ConnectionFactory.getConnection();
+			connection = ConnectionFactory.getConnection();
 			
-			stmt = con.prepareStatement(query);
+			statement = connection.prepareStatement(query);
 			
-			rs = stmt.executeQuery();
+			resultSet = statement.executeQuery();
 			
-			List<Process> processos = new ArrayList<>();
+			List<Process> processList = new ArrayList<>();
 			
-			while(rs.next()) {
+			while(resultSet.next()) {
 				
 				//criando objeto Interessado
-				Interested interessado = new Interested(
-						rs.getLong("interessado_id"),
-						rs.getString("nome"),
-						rs.getString("cpf"),
-						rs.getString("contato"));
+				Interested interested = new Interested(
+						resultSet.getLong("interessado_id"),
+						resultSet.getString("nome"),
+						resultSet.getString("cpf"),
+						resultSet.getString("contato"));
 				
 				//criando o objeto Processo
-				Process processo = new Process(
-						rs.getLong("id"),
-						rs.getBoolean("eh_oficio"),
-						rs.getString("numero"),
-						rs.getString("observacao"));
-				processo.setInterested(interessado);
+				Process process = new Process(
+						resultSet.getLong("id"),
+						resultSet.getBoolean("eh_oficio"),
+						resultSet.getString("numero"),
+						resultSet.getString("observacao"));
+				process.setInterested(interested);
 				
 				//falta resolver unidade destino /orgao_saida, se vai ter ou não
-				processo.setSubjectById(rs.getInt("assunto"));
-				processo.setOriginEntityById(rs.getInt("orgao_origem"));
-				processo.setSituationById(rs.getInt("situacao"));
+				process.setSubjectById(resultSet.getInt("assunto"));
+				process.setOriginEntityById(resultSet.getInt("orgao_origem"));
+				process.setSituationById(resultSet.getInt("situacao"));
 
 				
 				//Convertendo data entrada de java.sql.Date para LocalDateTime
-				Date dataEntradaSql = rs.getDate("data_entrada");
-				if(dataEntradaSql != null) {
-					Timestamp stampEntradaSql = new Timestamp(dataEntradaSql.getTime());
-					LocalDateTime dataEntrada = stampEntradaSql.toLocalDateTime();
-					processo.setRegistrationDate(dataEntrada);
+				Date jdbcRegistrationDate = resultSet.getDate("data_entrada");
+				if(jdbcRegistrationDate != null) {
+					Timestamp jdbcRegistrationStamp = new Timestamp(jdbcRegistrationDate.getTime());
+					LocalDateTime registrationDate = jdbcRegistrationStamp.toLocalDateTime();
+					process.setRegistrationDate(registrationDate);
 				}
 				
 				//Convertendo data Saida de java.sql.Date para LocalDateTime
-				Date dataSaidaSql = rs.getDate("data_saida");
-				if(dataSaidaSql != null) {
-					Timestamp stampSaidaSql = new Timestamp(rs.getDate("data_saida").getTime());
-					LocalDateTime dataSaida = stampSaidaSql.toLocalDateTime();
-					processo.setDispatchDate(dataSaida);
+				Date jdbcDispatchDate = resultSet.getDate("data_saida");
+				if(jdbcDispatchDate != null) {
+					Timestamp jdbcDispatchStamp = new Timestamp(resultSet.getDate("data_saida").getTime());
+					LocalDateTime dispatchDate = jdbcDispatchStamp.toLocalDateTime();
+					process.setDispatchDate(dispatchDate);
 				}
 				
-				processos.add(processo);
+				processList.add(process);
 			
 			}
 			
-			return processos;
+			return processList;
 
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível buscar o processo no Banco.");
 		}finally {
-			ConnectionFactory.fechaConnection(con, stmt, rs);
+			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
 	}
 	
 	
 	@Override
-	public List<Process> buscarPorNumero(String numero) throws ValidationException, DatabaseException {
-		String sql = "WHERE numero LIKE '"+numero+"'";
-		return this.burcador(sql);
+	public List<Process> searchByNumber(String number) throws ValidationException, DatabaseException {
+		String sql = "WHERE numero LIKE '"+number+"'";
+		return this.searcher(sql);
 	}
 
-	public List<Process> buscaComposta(String numero, String nome, String cpf, int orgaoId,
-			int assuntoId, int situacaoId) throws ValidationException, DatabaseException {
+	public List<Process> multipleSearch(String number, String name, String cpf, int organizationId,
+			int subjectId, int situationId) throws ValidationException, DatabaseException {
 		StringBuilder sql = new StringBuilder("WHERE ");
 		final String AND = " AND ";
 		
-		if (numero != null && !numero.equalsIgnoreCase("")) {
-			sql.append("numero LIKE '"+numero+"' AND ");
+		if (number != null && !number.equalsIgnoreCase("")) {
+			sql.append("numero LIKE '"+number+"' AND ");
 		}
-		if (nome != null && !nome.equalsIgnoreCase("")) {
-			sql.append("nome LIKE '%"+nome+"%' AND ");
+		if (name != null && !name.equalsIgnoreCase("")) {
+			sql.append("nome LIKE '%"+name+"%' AND ");
 		}
 		if (cpf != null && !cpf.equalsIgnoreCase("")) {
 			sql.append("cpf= '"+cpf+"' AND ");
 		}
-		if (orgaoId != 0) {
-			sql.append("orgao_origem="+orgaoId+AND);
+		if (organizationId != 0) {
+			sql.append("orgao_origem="+organizationId+AND);
 		}
-		if (assuntoId != 0) {
-			sql.append("assunto="+assuntoId+AND);
+		if (subjectId != 0) {
+			sql.append("assunto="+subjectId+AND);
 		}
-		if (situacaoId != 0) {
-			sql.append("situacao="+situacaoId);
+		if (situationId != 0) {
+			sql.append("situacao="+situationId);
 		} else {
 			sql.delete(sql.lastIndexOf(AND), sql.length());
 		}
-		return this.burcador(sql.toString());
+		return this.searcher(sql.toString());
 	}
 	
 	//Methods to resolve statistic solutions
@@ -294,23 +295,23 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		
 		Map<Integer, ArrayList<Integer>> list = new HashMap<>();
 		
-		con = ConnectionFactory.getConnection();
+		connection = ConnectionFactory.getConnection();
 		
 		try {
-			stmt = con.prepareStatement(query);
-			rs = stmt.executeQuery();
+			statement = connection.prepareStatement(query);
+			resultSet = statement.executeQuery();
 			
-			while(rs.next()) {
-				ArrayList<Integer> line = new ArrayList<>();
-                if (!list.containsKey(rs.getInt("ano")))
+			while(resultSet.next()) {
+				ArrayList<Integer> row = new ArrayList<>();
+                if (!list.containsKey(resultSet.getInt("ano")))
                 {
-                    line.add(rs.getInt("mes"));
-                    line.add(rs.getInt("count(id)"));
-                    list.put(rs.getInt("ano"), line);
+                    row.add(resultSet.getInt("mes"));
+                    row.add(resultSet.getInt("count(id)"));
+                    list.put(resultSet.getInt("ano"), row);
                 }else{
-                    ArrayList<Integer> newLine = list.get(rs.getInt("ano"));
-                    newLine.add(rs.getInt("mes"));
-                    newLine.add(rs.getInt("count(id)"));
+                    ArrayList<Integer> newRow = list.get(resultSet.getInt("ano"));
+                    newRow.add(resultSet.getInt("mes"));
+                    newRow.add(resultSet.getInt("count(id)"));
                 }
 			}
 			
@@ -353,11 +354,11 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		
 		Map<Integer, Integer> list = new HashMap<>();
 		
-		con = ConnectionFactory.getConnection();
+		connection = ConnectionFactory.getConnection();
 		
 		try {
-			stmt = con.prepareStatement(query);
-			rs = stmt.executeQuery();
+			statement = connection.prepareStatement(query);
+			resultSet = statement.executeQuery();
 			
 			while(rs.next()) {
 				Integer situation;
