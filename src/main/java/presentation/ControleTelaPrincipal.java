@@ -35,10 +35,13 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 	private static final URL ARQUIVO_FXML_DIALOG_PASSWORD = ControleTelaPrincipal.class.getResource("/visions/dialog_adm_password.fxml");
 	private static final URL ARQUIVO_FXML_TELA_BUSCA = ControleTelaPrincipal.class.getResource("/visions/tela_buscar_processos.fxml");
 	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_PDF = ControleTelaPrincipal.class.getResource("/visions/tela_visualizar_pdf.fxml");
+	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_GRAFICOS = ControleTelaPrincipal.class.getResource("/visions/tela_statistics_graphs.fxml");
+	
 	private static final String CRIAR_PROCESSO = "Novo Processo / Ofício";
 	private static final String EDITAR_PROCESSO = "Editar Processo";
 	private static final String BUSCAR_PROCESSO = "Buscar Processos / Ofícios";
 	private static final String VISUALIZAR_PDF = "Certidão";
+	private static final String VISUALIZAR_GRAFICOS = "Gráficos Administrativos";
 	private static final String DIALOG_ADM_PASS_TITLE = "Autorização";
 
 	private ProcessService processService;
@@ -167,6 +170,28 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 			pdfViewerController.setVisualizedProcess(processoSelecionado);
 			
 			pdfViewerScreen.show();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
+	@FXML
+	private void createStatisticScreen() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(ARQUIVO_FXML_TELA_VISUALIZAR_GRAFICOS);
+			Pane novoPainel = loader.load();
+
+			Stage statisticsGraphsScreen = new Stage();
+			statisticsGraphsScreen.setTitle(VISUALIZAR_GRAFICOS);
+			statisticsGraphsScreen.initModality(Modality.WINDOW_MODAL);
+			statisticsGraphsScreen.initOwner(this.painel.getScene().getWindow());
+			statisticsGraphsScreen.setScene(new Scene(novoPainel, 820, 660));
+
+		//	StatisticsGraphsScreenController statisticsGraphsController = loader.getController();
+			
+			
+			statisticsGraphsScreen.show();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
