@@ -289,9 +289,9 @@ public class ProcessoDaoMySql implements ProcessoDao{
 
 
 	private Map<Integer, ArrayList<Integer>> builderMapIntArrayInt(String query) throws DatabaseException {
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
 		
 		Map<Integer, ArrayList<Integer>> list = new HashMap<>();
 		
@@ -321,7 +321,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			throw new DatabaseException("Problema no SQL:"+e.getMessage());
 		}
 		finally {
-			ConnectionFactory.fechaConnection(con, stmt, rs);
+			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
 	}
 	
@@ -345,9 +345,9 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	}
 	
 	private Map<Integer, Integer> builderMapIntInt(String categoryColumn) throws DatabaseException{
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
 		
 		String query = "SELECT COUNT(id) AS qtde, " + categoryColumn +" FROM processos "
 				+ "GROUP BY "+ categoryColumn +" ORDER BY "+ categoryColumn;
@@ -360,11 +360,11 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			statement = connection.prepareStatement(query);
 			resultSet = statement.executeQuery();
 			
-			while(rs.next()) {
+			while(resultSet.next()) {
 				Integer situation;
 				Integer quantity;
-				situation = rs.getInt(categoryColumn);
-				quantity = rs.getInt("qtde");
+				situation = resultSet.getInt(categoryColumn);
+				quantity = resultSet.getInt("qtde");
 				
 				list.put(situation, quantity);
 			}
@@ -374,7 +374,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		} catch (SQLException e) {
 			throw new DatabaseException("Problema no SQL:"+e.getMessage());
 		}finally {
-			ConnectionFactory.fechaConnection(con, stmt, rs);
+			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
 
 	}
