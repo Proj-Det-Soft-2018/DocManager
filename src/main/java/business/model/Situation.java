@@ -31,20 +31,20 @@ public enum Situation {
 		this.status = status;
 	}
 	
-	public static List<String> getSituacoes() {
-		List<String> listaSituacoes = new ArrayList<>();
-		for(Situation situacao : Situation.values()) {
-			listaSituacoes.add(situacao.status);
+	public static List<String> getSituations() {
+		List<String> situationList = new ArrayList<>();
+		for(Situation situation : Situation.values()) {
+			situationList.add(situation.status);
 		}
-		listaSituacoes.remove(0);
-		return listaSituacoes;
+		situationList.remove(0);
+		return situationList;
 	}
 	
 	public String getStatus() {
 		return this.status;
 	}
 	
-	public static Situation getSituacaoPorId(int id){
+	public static Situation getSituationById(int id){
 		return Situation.values()[id];
 	}
 }

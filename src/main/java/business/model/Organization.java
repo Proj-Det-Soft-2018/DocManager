@@ -31,27 +31,27 @@ public enum Organization {
 	IBGE("Instituto Brasileiro de Geografia e Estatística"),
 	CGU("Ministério da Transparência e Controladoria-Geral da União");
 	
-	private String nomeExt;
+	private String fullName;
 	
-	Organization(String nome) {
-		this.nomeExt = nome;
+	Organization(String name) {
+		this.fullName = name;
 	}
 	
-	public String getNomeExt() {
-		return nomeExt;
+	public String getFullName() {
+		return fullName;
 	}
 
 
-	public static List<String> getOrgaos() {
-		List<String> listaOrgaos = new ArrayList<>();
-		for(Organization orgao : Organization.values()) {
-			listaOrgaos.add(orgao.name() + " - " + orgao.nomeExt);
+	public static List<String> getOrganization() {
+		List<String> organizationList = new ArrayList<>();
+		for(Organization organization : Organization.values()) {
+			organizationList.add(organization.name() + " - " + organization.fullName);
 		}
-		listaOrgaos.remove(0);
-		return listaOrgaos;
+		organizationList.remove(0);
+		return organizationList;
 	}
 	
-	public static Organization getOrgaoPorId(int id){
+	public static Organization getOrganizationById(int id){
 		return Organization.values()[id];
 	}
 	

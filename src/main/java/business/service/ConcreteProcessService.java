@@ -96,7 +96,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 	@Override
 	public void save(Process process) throws ValidationException, DatabaseException {
 		//Antes de salvar verificar os campos que nao podem ser nulos
-		this.validarNumeroDuplicado(process.getNumero());
+		this.validarNumeroDuplicado(process.getNumber());
 
 		processoDao.salvar(process);
 		this.notifyObservers();
@@ -167,7 +167,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 		if(duplicados != null && !duplicados.isEmpty()) {
 			//verifica se a situacao dos processos encontrados estao como concluido
 			for (Process processo : duplicados) {
-				if(!(processo.getSituacao().ordinal()==Situation.CONCLUIDO.ordinal()) ) {
+				if(!(processo.getSituation().ordinal()==Situation.CONCLUIDO.ordinal()) ) {
 					//TODO tratar e criar Exception
 					throw new ValidationException("Existe outro processo cadastrado com situação não concluída");
 				}				

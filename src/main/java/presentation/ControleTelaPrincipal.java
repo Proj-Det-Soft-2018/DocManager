@@ -222,13 +222,13 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 	private void configurarTabela() {
 		// inicia as colunas
 		tabColunaTipo.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getTipo()));
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getType()));
 		tabColunaNumero.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getFormatedNumero()));
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getFormattedNumber()));
 		tabColunaInteressado.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getInteressado().getName()));
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getIntersted().getName()));
 		tabColunaSituacao.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituacao().getStatus()));
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituation().getStatus()));
 
 		// eventHandle para detectar o processo selecionado
 		tabelaProcessosOficios.getSelectionModel().selectedItemProperty().addListener(

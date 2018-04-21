@@ -71,7 +71,7 @@ public class ControleDialogInteressado implements Initializable {
 		cpf = interessadoOriginal.getCpf();
 		this.lblTxtCpf.setText(interessadoOriginal.getFormatedCpf());
 		this.txtNome.setText(interessadoOriginal.getName());
-		this.txtContato.setContactPlainText(interessadoOriginal.getContato());
+		this.txtContato.setContactPlainText(interessadoOriginal.getContact());
 	}
 	
 	@FXML
@@ -91,7 +91,7 @@ public class ControleDialogInteressado implements Initializable {
 		interessado.setCpf(cpf);
 		
 		try {
-			interessado.setNome(this.txtNome.getText());
+			interessado.setName(this.txtNome.getText());
 		} catch (ValidationException ve) {
 			failure = true;
 			if (failureMsg.length() != 0) {
@@ -101,7 +101,7 @@ public class ControleDialogInteressado implements Initializable {
 		}
 		
 		try {
-			interessado.setContato(this.txtContato.plainTextProperty().getValue());
+			interessado.setContact(this.txtContato.plainTextProperty().getValue());
 		} catch (ValidationException ve) {
 			failure = true;
 			if (failureMsg.length() != 0) {

@@ -131,7 +131,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 		interestedService = ConcreteInterestedService.getInstance();
 		interestedService.attach(this);
 		configurarRadioButtons();
-		preencherChoiceBoxes();
+		fillChoiceBoxes();
 		configurarChoiceBoxOrgao();
 	}
 
@@ -145,23 +145,23 @@ public class ControleTelaEdicao implements Initializable, Observer{
 			this.processoOriginal = processo;
 			this.btnCadastrar.setText(LABEL_BTN_ATUALIZAR);
 
-			if (processo.isTipoOficio()) {
+			if (processo.isOficio()) {
 				this.rbOficio.setSelected(true);
 				this.rbProcesso.setDisable(true);
 				this.cbOrgao.setDisable(true);
 			} else {
 				this.rbOficio.setDisable(true);
 			}
-			this.cbOrgao.getSelectionModel().select(processo.getUnidadeOrigem().ordinal());
-			this.txtNumProcesso.setPlainText(processo.getNumero());
+			this.cbOrgao.getSelectionModel().select(processo.getOriginEntity().ordinal());
+			this.txtNumProcesso.setPlainText(processo.getNumber());
 			this.txtNumProcesso.setDisable(true);
 
-			this.interessado = processo.getInteressado();
+			this.interessado = processo.getIntersted();
 			this.preencherInteressado();
 
 			this.cbAssunto.getSelectionModel().select(processo.getSubject().ordinal());
-			this.cbSituacao.getSelectionModel().select(processo.getSituacao().ordinal());
-			this.txtObservacao.setText(processo.getObservacao());
+			this.cbSituacao.getSelectionModel().select(processo.getSituation().ordinal());
+			this.txtObservacao.setText(processo.getObservation());
 		}
 
 		this.configurarFechamento();
@@ -202,7 +202,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 		}
 
 		this.lblTxtNomeInteressado.setText(this.interessado.getName());
-		String contato = this.interessado.getFormatedContato();
+		String contato = this.interessado.getFormatedContact();
 		if (contato != null && contato.length() != 0) {	
 			this.lblTxtContatoInteressado.setText(contato);
 		} else {
@@ -302,7 +302,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 				);
 	}
 
-	private void preencherChoiceBoxes() {
+	private void fillChoiceBoxes() {
 		ObservableList<String> obsListaOrgaos = this.cbOrgao.getItems();
 		obsListaOrgaos.addAll(listService.getOrganizationsList());
 		this.cbOrgao.getSelectionModel().select(0);
@@ -317,14 +317,14 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	}
 
 	@FXML
-	private void fecharJanela() {
+	private void closeWindow() {
 		Stage janela = (Stage) this.raiz.getScene().getWindow();
 		if (janela != null)
 			janela.close();
 	}
 
 	@FXML
-	private void salvar() throws ValidationException, DatabaseException {
+	private void save() throws ValidationException, DatabaseException {
 		//TODO refatorar
 		
 		Process processo = new Process();
@@ -337,19 +337,19 @@ public class ControleTelaEdicao implements Initializable, Observer{
 			if (this.rbOficio.isSelected()) {
 				String oficioNum = this.txtNumProcesso.plainTextProperty().getValue() +
 						(cbOrgao.getSelectionModel().getSelectedItem().split(" - ")[0]);
-				processo.setNumero(oficioNum);
+				processo.setNumber(oficioNum);
 			} else {
-				processo.setNumero(this.txtNumProcesso.plainTextProperty().getValue());
+				processo.setNumber(this.txtNumProcesso.plainTextProperty().getValue());
 			}
 		} catch (ValidationException ve) {
 			failure = true;
 			failureMsg.append(ve.getMessage());
 		}
 		
-		processo.setInteressado(this.interessado);
+		processo.setInterested(this.interessado);
 		
 		try {
-			processo.setUnidadeOrigemById(this.cbOrgao.getSelectionModel().getSelectedIndex());
+			processo.setOriginEntityById(this.cbOrgao.getSelectionModel().getSelectedIndex());
 		} catch (ValidationException ve) {
 			failure = true;
 			if (failureMsg.length() != 0) {
@@ -358,7 +358,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 			failureMsg.append(ve.getMessage());
 		}
 		try {
-			processo.setAssuntoById(this.cbAssunto.getSelectionModel().getSelectedIndex());
+			processo.setSubjectById(this.cbAssunto.getSelectionModel().getSelectedIndex());
 		} catch (ValidationException ve) {
 			failure = true;
 			if (failureMsg.length() != 0) {
@@ -367,7 +367,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 			failureMsg.append(ve.getMessage());
 		}
 		try {
-			processo.setSituacaoById(this.cbSituacao.getSelectionModel().getSelectedIndex());
+			processo.setSituationById(this.cbSituacao.getSelectionModel().getSelectedIndex());
 		} catch (ValidationException ve) {
 			failure = true;
 			if (failureMsg.length() != 0) {
@@ -375,7 +375,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 			}
 			failureMsg.append(ve.getMessage());
 		}
-		processo.setObservacao(this.txtObservacao.getText());
+		processo.setObservation(this.txtObservacao.getText());
 
 		if (failure) {
 			failureMsg.append("\n\n");
@@ -403,7 +403,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 				processService.update(processo);
 			}
 		
-			this.fecharJanela();
+			this.closeWindow();
 		}
 	}
 }

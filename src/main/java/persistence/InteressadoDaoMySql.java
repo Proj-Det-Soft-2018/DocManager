@@ -32,7 +32,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1,novoInteressado.getName());
 	        stmt.setString(2,novoInteressado.getCpf());
-	        stmt.setString(3,novoInteressado.getContato());
+	        stmt.setString(3,novoInteressado.getContact());
 	        
 			stmt.executeUpdate();
 			
@@ -58,7 +58,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 			
 			stmt.setString(1, interessadoModificado.getName());
 	        stmt.setString(2, interessadoModificado.getCpf());
-	        stmt.setString(3, interessadoModificado.getContato());
+	        stmt.setString(3, interessadoModificado.getContact());
 	        stmt.setLong(4, interessadoModificado.getId());
 	        
 	        stmt.executeUpdate();

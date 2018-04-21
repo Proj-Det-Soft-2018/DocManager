@@ -18,7 +18,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -134,7 +133,7 @@ public class StatisticsGraphsScreenController implements Initializable {
 				Map.Entry<Integer, Integer> pair = (Map.Entry<Integer, Integer>)it.next();
 				
 				int situacaoId = Integer.parseInt( pair.getKey().toString() );
-				String situationName = Situation.getSituacaoPorId(situacaoId).getStatus();
+				String situationName = Situation.getSituationById(situacaoId).getStatus();
 				double quantity = Double.parseDouble(pair.getValue().toString());
 				
 				Data slice = new PieChart.Data(situationName,quantity);

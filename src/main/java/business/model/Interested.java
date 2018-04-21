@@ -55,14 +55,14 @@ public class Interested {
 	}
 
 
-	public void setNome(String nome) throws ValidationException {
-		if(nome == null || nome.isEmpty()) {
+	public void setName(String name) throws ValidationException {
+		if(name == null || name.isEmpty()) {
 			throw new ValidationException("O campo Nome não pode ser vazio.");
 		}
-		else if(!nome.matches("[a-zA-Z\\s]+")) {
+		else if(!name.matches("[a-zA-Z\\s]+")) {
 			throw new ValidationException("O campo Nome deve conter apenas letras.");
 		}
-		this.name = nome;
+		this.name = name;
 	}
 	
 	@XmlElement(name="cpf")
@@ -81,19 +81,19 @@ public class Interested {
 	}
 	
 	@XmlElement(name="contact")
-	public String getFormatedContato() {
+	public String getFormatedContact() {
 		return contact.replaceAll("(\\d{2})(\\d{5}|\\d{4})(\\d{4})", "($1) $2-$3");
 	}
 	
 	@XmlTransient
-	public String getContato() {
+	public String getContact() {
 		return contact;
 	}
 	
-	public void setContato(String contato) throws ValidationException {
-		if(contato == null || (!contato.isEmpty() && contato.length() < 10)){
+	public void setContact(String contact) throws ValidationException {
+		if(contact == null || (!contact.isEmpty() && contact.length() < 10)){
 			throw new ValidationException("O contato inserido está incompleto");
 		}
-		this.contact = contato;
+		this.contact = contact;
 	}
 }

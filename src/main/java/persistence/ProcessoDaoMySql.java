@@ -41,17 +41,17 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			con = ConnectionFactory.getConnection();
 			stmt = con.prepareStatement(sql);
 			
-			stmt.setBoolean(1, novoProcesso.isTipoOficio());
-			stmt.setString(2, novoProcesso.getNumero());
-			stmt.setLong(3, novoProcesso.getInteressado().getId());
+			stmt.setBoolean(1, novoProcesso.isOficio());
+			stmt.setString(2, novoProcesso.getNumber());
+			stmt.setLong(3, novoProcesso.getIntersted().getId());
 			stmt.setInt(4, novoProcesso.getSubject().ordinal());
-			stmt.setInt(5, novoProcesso.getSituacao().ordinal());
-			stmt.setInt(6, novoProcesso.getUnidadeOrigem().ordinal());
-			stmt.setString(7, novoProcesso.getObservacao());
+			stmt.setInt(5, novoProcesso.getSituation().ordinal());
+			stmt.setInt(6, novoProcesso.getOriginEntity().ordinal());
+			stmt.setString(7, novoProcesso.getObservation());
 			
 			//Definindo data de entrada no banco de dados
 			LocalDateTime data = LocalDateTime.now();
-			novoProcesso.setDataEntrada(data);
+			novoProcesso.setRegistrationDate(data);
 			
 			Timestamp stamp = Timestamp.valueOf(data);
 			Date dataEntrada = new Date (stamp.getTime());
@@ -86,13 +86,13 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			
 			con = ConnectionFactory.getConnection();
 			stmt = con.prepareStatement(query);
-			stmt.setString(1, processoModificado.getNumero());
-			stmt.setLong(2, processoModificado.getInteressado().getId());
+			stmt.setString(1, processoModificado.getNumber());
+			stmt.setLong(2, processoModificado.getIntersted().getId());
 			stmt.setInt(3, processoModificado.getSubject().ordinal());
-			stmt.setInt(4, processoModificado.getSituacao().ordinal());
-			stmt.setInt(5, processoModificado.getUnidadeOrigem().ordinal());
-			stmt.setString(6, processoModificado.getObservacao());
-			stmt.setBoolean(7, processoModificado.isTipoOficio());
+			stmt.setInt(4, processoModificado.getSituation().ordinal());
+			stmt.setInt(5, processoModificado.getOriginEntity().ordinal());
+			stmt.setString(6, processoModificado.getObservation());
+			stmt.setBoolean(7, processoModificado.isOficio());
 			
 			//setando id do processo a ser modificado
 			stmt.setLong(8, processoModificado.getId());
@@ -195,12 +195,12 @@ public class ProcessoDaoMySql implements ProcessoDao{
 						rs.getBoolean("eh_oficio"),
 						rs.getString("numero"),
 						rs.getString("observacao"));
-				processo.setInteressado(interessado);
+				processo.setInterested(interessado);
 				
 				//falta resolver unidade destino /orgao_saida, se vai ter ou não
-				processo.setAssuntoById(rs.getInt("assunto"));
-				processo.setUnidadeOrigemById(rs.getInt("orgao_origem"));
-				processo.setSituacaoById(rs.getInt("situacao"));
+				processo.setSubjectById(rs.getInt("assunto"));
+				processo.setOriginEntityById(rs.getInt("orgao_origem"));
+				processo.setSituationById(rs.getInt("situacao"));
 
 				
 				//Convertendo data entrada de java.sql.Date para LocalDateTime
@@ -208,7 +208,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 				if(dataEntradaSql != null) {
 					Timestamp stampEntradaSql = new Timestamp(dataEntradaSql.getTime());
 					LocalDateTime dataEntrada = stampEntradaSql.toLocalDateTime();
-					processo.setDataEntrada(dataEntrada);
+					processo.setRegistrationDate(dataEntrada);
 				}
 				
 				//Convertendo data Saida de java.sql.Date para LocalDateTime
@@ -216,7 +216,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 				if(dataSaidaSql != null) {
 					Timestamp stampSaidaSql = new Timestamp(rs.getDate("data_saida").getTime());
 					LocalDateTime dataSaida = stampSaidaSql.toLocalDateTime();
-					processo.setDataSaida(dataSaida);
+					processo.setDispatchDate(dataSaida);
 				}
 				
 				processos.add(processo);

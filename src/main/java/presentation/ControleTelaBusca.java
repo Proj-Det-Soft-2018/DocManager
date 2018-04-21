@@ -385,13 +385,13 @@ public class ControleTelaBusca implements Initializable, Observer {
 	private void configurarTabela() {
 		// inicia as colunas
 		tabColTipo.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getTipo()));
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getType()));
 		tabColNumero.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getFormatedNumero()));
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getFormattedNumber()));
 		tabColInteressado.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getInteressado().getName()));
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getIntersted().getName()));
 		tabColSituacao.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituacao().getStatus()));
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituation().getStatus()));
 
 		// eventHandle para detectar o processo selecionado
 		tableResultados.getSelectionModel().selectedItemProperty().addListener(
