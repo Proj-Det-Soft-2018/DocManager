@@ -19,8 +19,6 @@ import business.model.Situation;
 import business.model.Subject;
 import business.service.ConcreteStatisticService;
 import business.service.StatisticService;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -32,8 +30,8 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.PieChart.Data;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import persistence.exception.DatabaseException;
 
 /**
@@ -65,7 +63,9 @@ public class StatisticsGraphsScreenController implements Initializable {
     
     @FXML
     private PieChart pieChart;
-        
+	
+    final ToggleGroup tgCategoryGroup = new ToggleGroup();
+	
     private static final String NULL_POINT_PROCESSOS = "Não existe processos cadastrados";
     private ObservableList<String> observableMonthsList = FXCollections.observableArrayList();
     private ObservableList<String> observableMonthsList2 = FXCollections.observableArrayList();
@@ -75,58 +75,34 @@ public class StatisticsGraphsScreenController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		statisticService = ConcreteStatisticService.getInstance();
 		this.radioBtnsConfigure();
-		try {
+		
 			this.createBarChartQuantityProcessPerMonthYear();
 			this.createBarChartQuantityProcessFromLastYear();
+			try {
+				this.createPieChartSubject();
+			} catch (DatabaseException e) {
+				//TODO tem que ver para onde vai a mensagem, sugiro log.
+			}
 			
-		} catch (DatabaseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 	
 	private void radioBtnsConfigure() {
-		final ToggleGroup tgGroup = new ToggleGroup();
+	
+		radioBtnSubject.setToggleGroup(tgCategoryGroup);
+		radioBtnSubject.setUserData("sub");
+		radioBtnSubject.setSelected(true);
 		
-		radioBtnOrganization.setToggleGroup(tgGroup);
+		radioBtnOrganization.setToggleGroup(tgCategoryGroup);
 		radioBtnOrganization.setUserData("org");
 		
-		radioBtnSubject.setToggleGroup(tgGroup);
-		radioBtnSubject.setUserData("sub");
-		
-		radioBtnSituation.setToggleGroup(tgGroup);
-		radioBtnSituation.setSelected(true);
+		radioBtnSituation.setToggleGroup(tgCategoryGroup);
 		radioBtnSituation.setUserData("sit");
 		
 		
-		
-		tgGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
-		    public void changed(ObservableValue<? extends Toggle> ov,
-		        Toggle old_toggle, Toggle new_toggle) {
-		            if (tgGroup.getSelectedToggle() != null) {
-		            	this.radioBtnAction(tgGroup.getSelectedToggle().getUserData().toString());
-		            	
-		               
-		            }                
-		        }
-
-			private void radioBtnAction(String btnName) {
-				if(btnName.compareTo("sit")==0) {
-					System.out.println("situação!");
-				}else if (btnName.compareTo("org")==0) {
-					System.out.println("orgaaao");
-				} else if(btnName.compareTo("sub")==0){
-					System.out.println("subjeeect");
-				}else {
-					System.out.println("deu ruim");
-				}
-				
-			}
-		});
-		
 	}
 
-	private void createBarChartQuantityProcessPerMonthYear() throws DatabaseException {
+	private void createBarChartQuantityProcessPerMonthYear(){
 		// Obtém an array com nomes dos meses em Inglês.
         String[] arrayMeses = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
         // Converte o array em uma lista e adiciona em nossa ObservableList de meses.
@@ -134,7 +110,12 @@ public class StatisticsGraphsScreenController implements Initializable {
         // Associa os nomes de mês como categorias para o eixo horizontal.        
         categoryAxisMonthYear.setCategories(observableMonthsList);
        
-        Map<Integer, ArrayList<Integer>> dados = statisticService.quantityProcessPerMonthYear();
+        Map<Integer, ArrayList<Integer>> dados = null;
+		try {
+			dados = statisticService.quantityProcessPerMonthYear();
+		} catch (DatabaseException e) {
+			//TODO tem que ver para onde vai a mensagem, sugiro log.
+		}
 		
         if(dados == null || dados.isEmpty()) {
 			throw new NullPointerException(NULL_POINT_PROCESSOS);
@@ -154,14 +135,19 @@ public class StatisticsGraphsScreenController implements Initializable {
         }
    	}
 	
-	private void createBarChartQuantityProcessFromLastYear() throws DatabaseException {
+	private void createBarChartQuantityProcessFromLastYear() {
 		
         // Converte o array em uma lista e adiciona em nossa ObservableList de meses.
         observableMonthsList2.addAll(this.getMonthList(Calendar.getInstance()));
         // Associa os nomes de mês como categorias para o eixo horizontal.        
         categoryAxisLastYear.setCategories(observableMonthsList2);
        
-        Map<Integer, ArrayList<Integer>> dados = statisticService.quantityProcessFromLastYear();
+        Map<Integer, ArrayList<Integer>> dados = null;
+		try {
+			dados = statisticService.quantityProcessFromLastYear();
+		} catch (DatabaseException e) {
+			//TODO tem que ver para onde vai a mensagem, sugiro log.
+		}
 		
         if(dados == null || dados.isEmpty()) {
 			throw new NullPointerException(NULL_POINT_PROCESSOS);
@@ -264,7 +250,7 @@ public class StatisticsGraphsScreenController implements Initializable {
 		if(dataMap == null || dataMap.isEmpty()) {
 			throw new NullPointerException(NULL_POINT_PROCESSOS);
 		}
-		
+		pieChart.setLabelsVisible(false);
 		pieChart.setTitle("Quantidade de Processos por "+category);
 		
 		Iterator<Entry<Integer, Integer>> it = dataMap.entrySet().iterator();
@@ -277,8 +263,11 @@ public class StatisticsGraphsScreenController implements Initializable {
 			
 			Data slice = new PieChart.Data(categoryName,quantity);
 			pieChart.getData().add(slice);
+			
 			it.remove(); // avoids a ConcurrentModificationException
 		 }
+		
+			pieChart.getData().forEach(this::installTooltip);
 		
 	}
 
@@ -294,28 +283,17 @@ public class StatisticsGraphsScreenController implements Initializable {
 		}
 	}
 
-	private void createQuantityProcessPerSituationPieChart() throws DatabaseException {
-		
-		 Map<Integer, Integer> dados = statisticService.quantityProcessPerSituation();
-			
-			
-			if(dados == null || dados.isEmpty()) {
-				throw new NullPointerException(NULL_POINT_PROCESSOS);
-			}
-			
-			Iterator<Entry<Integer, Integer>> it = dados.entrySet().iterator();
-			while (it.hasNext()) {
-				Map.Entry<Integer, Integer> pair = it.next();
-				
-				int situacaoId = Integer.parseInt( pair.getKey().toString() );
-				String situationName = Situation.getSituacaoPorId(situacaoId).getStatus();
-				double quantity = Double.parseDouble(pair.getValue().toString());
-				
-				Data slice = new PieChart.Data(situationName,quantity);
-				pieChart.getData().add(slice);
-				it.remove(); // avoids a ConcurrentModificationException
-			 }
-					
+
+	//http://acodigo.blogspot.com.br/2017/08/piechart-javafx.html
+	public void installTooltip(PieChart.Data d) {
+
+	    String msg = String.format("%s : %s", d.getName(), (int)d.getPieValue());
+	
+	    Tooltip tt = new Tooltip(msg);
+	    tt.setStyle("-fx-background-color: gray; -fx-text-fill: whitesmoke;");
+	    
+	    Tooltip.install(d.getNode(), tt);
 	}
+
 
 }
