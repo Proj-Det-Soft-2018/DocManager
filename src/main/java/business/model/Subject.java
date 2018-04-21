@@ -5,43 +5,44 @@ import java.util.List;
 
 public enum Subject {
 	
-	NULL("- Inválido -"),
-	GENERIC_1("Aposentadoria por Invalidez"),
-	GENERIC_2("Avaliação para fins de pensão"),
-	GENERIC_3("Remoção por motivo de saúde do servidor ou de pessoa de sua família e " + 
-			"Movimentação do Prontuário de Saúde de Servidor Removido"),
-	GENERIC_4("Horário especial para servidor com deficiência e para o servidor com familiar com " + 
-			"deficiência"),
-	GENERIC_5("Constatação de deficiência dos candidatos aprovados em concurso público em " + 
-			"vaga de pessoa com deficiência"),
-	GENERIC_6("Avaliação de sanidade mental do servidor para fins de Processo Administrativo " + 
-			"Disciplinar"),
-	GENERIC_7("Recomendação para tratamento de acidentados em serviço em instituição " + 
+	NULL("INV","- Inválido -"),
+	APO("Aposentadoria","Aposentadoria por Invalidez"),
+	PENSAO("Pensão","Avaliação para fins de pensão"),
+	REMOCAOFAMILIA("Rem. Família","Remoção por motivo de saúde de pessoa de sua família"),
+	REMOCAOPROPRIOSERVIDOR("Rem. Servidor","Remoção por motivo de saúde do servidor"),
+	HORARIO_ESPECIAL_FAMILIA("Horário Esp. Família","Horário especial para servidor com familiar com deficiência"),
+	HORARIO_ESPECIAL_SERVIDOR("Horário Esp. Servidor","Horário especial para servidor com deficiência"),
+	CONSTATACAO_DEFICIENCIA("Constatação Deficiência","Constatação de deficiência dos candidatos aprovados em vaga de pessoa com deficiência"),
+	ACIDENTE_SERVICO("Acidente em Serviço","Recomendação para tratamento de acidentados em serviço em instituição " + 
 			"privada à conta de recursos públicos"),
-	GENERIC_8("Readaptação funcional de servidor por redução de capacidade laboral"),
-	GENERIC_9("Avaliação de servidor aposentado por invalidez para fins de reversão"),
-	GENERIC_10("Avaliação de servidor aposentado para constatação de invalidez por doença " + 
-			"especificada no §1o do art. 186, para fins de integralização de proventos"),
-	GENERIC_11("Avaliação da capacidade laborativa de servidor em disponibilidade"),
-	GENERIC_12("Exame para investidura em cargo público"),
-	GENERIC_13("Pedido de reconsideração e recurso"),
-	GENERIC_14("Avaliação para isenção de imposto de renda"),
-	GENERIC_15("Avaliação de idade mental de dependente para concessão de auxílio pré-escolar"),
-	GENERIC_16("Avaliação de servidor portador de deficiência para comprovação da necessidade " + 
-			"de acompanhamento de viagem a serviço"),
-	GENERIC_17("Avaliação da capacidade laborativa por recomendação superior"),
-	GENERIC_18("Comunicação de doença de notificação compulsória");
+	REVERSAO("Reversão Aposentadoria","Avaliação de servidor aposentado por invalidez para fins de reversão"),
+	INTEGRALIZACAO("Integralização de Proventos","Avaliação de servidor aposentado para fins de integralização de proventos"),
+	DISPONIBILIDADE("Av. Disponibilidade","Avaliação da capacidade laborativa de servidor em disponibilidade"),
+	IRPF_APOSENTADORIA("IRPF Aposentadoria","Avaliação para isenção de imposto de renda sobre Aposentadoria"),
+	IRPF_PENSAO("IRPF Pensao","Avaliação para isenção de imposto de renda sobre Pensão"),
+	AUXILIO_PRE_ESCOLAR("Auxílio Pré Escolar","Avaliação de idade mental de dependente para concessão de auxílio pré-escolar"),
+	REGIME_DOMICILIAR("Regime Domiciliar","Avaliação de Regime Domiciliar para Aluno Doente"),
+	AV_DEPENDENTE("Av. Dependente","Avaliação de Dependente"),
+	AV_SANIDADE_MENTAL("Av. Sanidade Mental PAD",
+						"Avaliação de sanidade mental do servidor para fins de Processo Administrativo Disciplinar"),
+	AV_REC_SUPERIOR("Av. por Rec. Superior","Avaliação da capacidade laborativa por recomendação superior"),
+	AV_READAPTACAO("Av. Readaptação","Avaliação da capacidade laborativa para Fins de Readaptação");
 	
 	private String text;
+	private String shortText;
 	
-	Subject(String text){
+	Subject(String shortText, String text){
+		this.shortText = shortText;
 		this.text = text;
 	}
 	
 	public String getText() {
 		return text;
 	}
-
+	
+	public String getShortText() {
+		return shortText;
+	}
 
 
 	public static List<String> getSubjects() {
