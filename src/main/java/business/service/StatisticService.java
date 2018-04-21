@@ -20,4 +20,6 @@ public interface StatisticService {
 	
 	public Map<Integer,ArrayList<Integer>> quantityProcessFromLastYear() throws DatabaseException;
 
+	public Map<Integer, Integer> quantityProcessPerOrganization() throws DatabaseException;
+
 }

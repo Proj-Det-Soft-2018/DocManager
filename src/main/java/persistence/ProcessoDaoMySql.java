@@ -322,12 +322,26 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	}
 	
 	@Override
-	public Map<Integer, Integer> getQuantityProcessPerSituation() throws DatabaseException {
+	public Map<Integer, Integer> getQuantityProcessPerSituationList() throws DatabaseException {
+		String category = "situacao";
+		
+		return this.builderMapIntInt(category);
+		
+	}
+	
+	@Override
+	public Map<Integer, Integer> getQuantityProcessPerOrganizationList() throws DatabaseException {
+		String category = "orgao_origem";
+		return this.builderMapIntInt(category);
+	}
+	
+	private Map<Integer, Integer> builderMapIntInt(String categoryColumn) throws DatabaseException{
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
-		String query = "SELECT COUNT(id) AS qtde, situacao FROM processos GROUP BY situacao ORDER BY situacao";
+		String query = "SELECT COUNT(id) AS qtde, " + categoryColumn +" FROM processos "
+				+ "GROUP BY "+ categoryColumn +" ORDER BY "+ categoryColumn;
 		
 		Map<Integer, Integer> list = new HashMap<>();
 		
@@ -339,7 +353,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			
 			while(rs.next()) {
 				Integer situation, quantity;
-				situation = rs.getInt("situacao");
+				situation = rs.getInt(categoryColumn);
 				quantity = rs.getInt("qtde");
 				
 				list.put(situation, quantity);
@@ -350,7 +364,11 @@ public class ProcessoDaoMySql implements ProcessoDao{
 		} catch (SQLException e) {
 			throw new DatabaseException("Problema no SQL:"+e.getMessage());
 		}
+
 	}
+
+
+	
 
 	
 

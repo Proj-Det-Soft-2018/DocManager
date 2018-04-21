@@ -28,7 +28,8 @@ public interface ProcessoDao{
 			int assuntoId, int situacaoId) throws ValidationException, DatabaseException;
 	//Statistics lists
 	public Map<Integer, ArrayList<Integer>> getQuantityProcessPerMonthYearList() throws DatabaseException;
-	public Map<Integer, Integer> getQuantityProcessPerSituation() throws DatabaseException;
+	public Map<Integer, Integer> getQuantityProcessPerSituationList() throws DatabaseException;
 	public Map<Integer, ArrayList<Integer>> getQuantityProcessPerMonthFromLastYearList() throws DatabaseException;
+	public Map<Integer, Integer> getQuantityProcessPerOrganizationList() throws DatabaseException;
 	
 }

@@ -36,12 +36,17 @@ public class ConcreteStatisticService implements StatisticService {
 
 	@Override
 	public Map<Integer, Integer> quantityProcessPerSituation() throws DatabaseException {
-		return processoDao.getQuantityProcessPerSituation();
+		return processoDao.getQuantityProcessPerSituationList();
 	}
 
 	@Override
 	public Map<Integer, ArrayList<Integer>> quantityProcessFromLastYear() throws DatabaseException {
 		return processoDao.getQuantityProcessPerMonthFromLastYearList();
+	}
+
+	@Override
+	public Map<Integer, Integer> quantityProcessPerOrganization() throws DatabaseException {
+		return processoDao.getQuantityProcessPerOrganizationList();
 	}
 
 }
