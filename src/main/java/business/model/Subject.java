@@ -45,16 +45,16 @@ public enum Subject {
 	}
 
 
-	public static List<String> getAssuntos() {
-		List<String> listaAssuntos = new ArrayList<>();
-		for(Subject assunto : Subject.values()) {
-			listaAssuntos.add(assunto.text);
+	public static List<String> getSubjects() {
+		List<String> subjectList = new ArrayList<>();
+		for(Subject subject : Subject.values()) {
+			subjectList.add(subject.text);
 		}
-		listaAssuntos.remove(0);
-		return listaAssuntos;
+		subjectList.remove(0);
+		return subjectList;
 	}
 	
-	public static Subject getAssuntoPorId(int id){
+	public static Subject getSubjectById(int id){
 		return Subject.values()[id];
 	}
 	

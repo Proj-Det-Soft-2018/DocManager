@@ -20,100 +20,100 @@ import persistence.exception.DatabaseException;
 public class InteressadoDaoMySql implements InteressadoDao{
 
 	@Override
-	public void salvar(Interested novoInteressado) throws DatabaseException {
+	public void save(Interested novoInteressado) throws DatabaseException {
 		String sql = "INSERT INTO interessados " +
                 		"(nome,cpf,contato)" +
                 		" VALUES (?,?,?)";
 		
-		Connection con = null;
-		PreparedStatement stmt = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
 		try {
-			con = ConnectionFactory.getConnection();
-			stmt = con.prepareStatement(sql);
-			stmt.setString(1,novoInteressado.getName());
-	        stmt.setString(2,novoInteressado.getCpf());
-	        stmt.setString(3,novoInteressado.getContato());
+			connection = ConnectionFactory.getConnection();
+			statement = connection.prepareStatement(sql);
+			statement.setString(1,novoInteressado.getName());
+	        statement.setString(2,novoInteressado.getCpf());
+	        statement.setString(3,novoInteressado.getContact());
 	        
-			stmt.executeUpdate();
+			statement.executeUpdate();
 			
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível salvar o interessado no Banco de Dados.");
 		}
 		finally {
-			ConnectionFactory.fechaConnection(con, stmt);
+			ConnectionFactory.closeConnection(connection, statement);
 		}
 	}
 	
 	
 	@Override
-	public void atualizar(Interested interessadoModificado) throws DatabaseException {
+	public void update(Interested modifiedInterested) throws DatabaseException {
 		String sql = "UPDATE interessados " +
 					 "SET nome=?, cpf=?, contato=? " +
 					 "WHERE id=?";
-		Connection con = null;
-		PreparedStatement stmt = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
 	    try {
-	    	con = ConnectionFactory.getConnection();
-			stmt = con.prepareStatement(sql);
+	    	connection = ConnectionFactory.getConnection();
+			statement = connection.prepareStatement(sql);
 			
-			stmt.setString(1, interessadoModificado.getName());
-	        stmt.setString(2, interessadoModificado.getCpf());
-	        stmt.setString(3, interessadoModificado.getContato());
-	        stmt.setLong(4, interessadoModificado.getId());
+			statement.setString(1, modifiedInterested.getName());
+	        statement.setString(2, modifiedInterested.getCpf());
+	        statement.setString(3, modifiedInterested.getContact());
+	        statement.setLong(4, modifiedInterested.getId());
 	        
-	        stmt.executeUpdate();
+	        statement.executeUpdate();
 	        
 	    } catch (SQLException e) {
 	        throw new DatabaseException("Não foi possível atualizar o interessado no Banco de Dados.");
 	    }finally {
-			ConnectionFactory.fechaConnection(con, stmt);
+			ConnectionFactory.closeConnection(connection, statement);
 		}
 	
 	}
 	
 
 	@Override
-	public void deletar(Interested processo) throws DatabaseException {
-		Connection con = null;
-		PreparedStatement stmt = null;
+	public void delete(Interested interested) throws DatabaseException {
+		Connection connection = null;
+		PreparedStatement statement = null;
 		try {
-			con = ConnectionFactory.getConnection();
-	        stmt = con.prepareStatement("DELETE FROM interessados WHERE id=?");
-	        stmt.setLong(1, processo.getId());
-	        stmt.executeUpdate();
+			connection = ConnectionFactory.getConnection();
+	        statement = connection.prepareStatement("DELETE FROM interessados WHERE id=?");
+	        statement.setLong(1, interested.getId());
+	        statement.executeUpdate();
 	        
 	    } catch (SQLException e) {
 	        throw new DatabaseException("Não foi possível deletar o processo do Banco de Dados.");
 	    }finally {
-	    	ConnectionFactory.fechaConnection(con, stmt);
+	    	ConnectionFactory.closeConnection(connection, statement);
 		}
 		
 	}
 	
 	
 	@Override
-	public Interested pegarPeloId(Long id) throws DatabaseException {
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+	public Interested getById(Long id) throws DatabaseException {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
 
 		try {
-			con = ConnectionFactory.getConnection();
+			connection = ConnectionFactory.getConnection();
 			
-			stmt = con.prepareStatement("SELECT * FROM interessados WHERE id=?");
-			stmt.setLong(1, id);
+			statement = connection.prepareStatement("SELECT * FROM interessados WHERE id=?");
+			statement.setLong(1, id);
 			
-			rs = stmt.executeQuery();
+			resultSet = statement.executeQuery();
 			
 			Interested interessado = null;
 			
-			if(rs.next()) {
+			if(resultSet.next()) {
 				//criando o objeto Interessado
 				interessado = new Interested(
-						rs.getLong("id"),
-						rs.getString("nome"),
-						rs.getString("cpf"),
-						rs.getString("contato"));
+						resultSet.getLong("id"),
+						resultSet.getString("nome"),
+						resultSet.getString("cpf"),
+						resultSet.getString("contato"));
 			}
 			
 			return interessado;
@@ -121,89 +121,82 @@ public class InteressadoDaoMySql implements InteressadoDao{
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível recuperar o interessado por ID");
 		}finally {
-			ConnectionFactory.fechaConnection(con, stmt, rs);
+			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
 	}
 	
 	@Override
-	public Interested pegarPeloCpf(String cpf) throws DatabaseException {
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+	public Interested getByCpf(String cpf) throws DatabaseException {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
 		
 		try {
-			con = ConnectionFactory.getConnection();
+			connection = ConnectionFactory.getConnection();
 			
-			stmt = con.prepareStatement("SELECT * FROM interessados WHERE cpf=?");
-			stmt.setString(1, cpf);
+			statement = connection.prepareStatement("SELECT * FROM interessados WHERE cpf=?");
+			statement.setString(1, cpf);
 			
-			rs = stmt.executeQuery();
+			resultSet = statement.executeQuery();
 			
-			Interested interessado = null;
+			Interested interested = null;
 			
-			if(rs.next()) {
+			if(resultSet.next()) {
 				//criando o objeto Interessado
-				interessado = new Interested(
-						rs.getLong("id"),
-						rs.getString("nome"),
-						rs.getString("cpf"),
-						rs.getString("contato"));
+				interested = new Interested(
+						resultSet.getLong("id"),
+						resultSet.getString("nome"),
+						resultSet.getString("cpf"),
+						resultSet.getString("contato"));
 				
 			}
 			
-			return interessado;
+			return interested;
 			
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível recuperar o interessado pelo CPF");
 		}finally {
-			ConnectionFactory.fechaConnection(con, stmt, rs);
+			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
 	}
 
 	@Override
-	public boolean contem(Interested interessado) throws DatabaseException {
-		Interested interessadoBuscado = this.pegarPeloId(interessado.getId());
+	public boolean contains(Interested interested) throws DatabaseException {
+		Interested foundInterested = this.getById(interested.getId());
 		
-		return (interessadoBuscado!=null) ? true: false;
+		return (foundInterested!=null) ? true: false;
 		
 	}
 
 	@Override
-	public List<Interested> pegarTodos() throws DatabaseException {
+	public List<Interested> getAll() throws DatabaseException {
 		
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
 		
 		try {
-			con = ConnectionFactory.getConnection();
-			stmt = con.prepareStatement("SELECT * FROM interessados");
-			rs = stmt.executeQuery();
-			List<Interested> interessados = new ArrayList<Interested>();
+			connection = ConnectionFactory.getConnection();
+			statement = connection.prepareStatement("SELECT * FROM interessados");
+			resultSet = statement.executeQuery();
+			List<Interested> interestedList = new ArrayList<Interested>();
 			
-			while(rs.next()) {
+			while(resultSet.next()) {
 				//criando o objeto Interessado
-				Interested interessado = new Interested(
-						rs.getLong("id"),
-						rs.getString("nome"),
-						rs.getString("cpf"),
-						rs.getString("contato"));
-				interessados.add(interessado);
+				Interested interested = new Interested(
+						resultSet.getLong("id"),
+						resultSet.getString("nome"),
+						resultSet.getString("cpf"),
+						resultSet.getString("contato"));
+				interestedList.add(interested);
 			}
-			return interessados;
+			return interestedList;
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível recuperar todos os interessados.");
 		}finally {
-			ConnectionFactory.fechaConnection(con, stmt, rs);
+			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
 	
-	}
-
-
-	@Override
-	public List<Interested> burcarPeloNome(String nome) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

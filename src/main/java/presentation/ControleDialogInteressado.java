@@ -71,7 +71,7 @@ public class ControleDialogInteressado implements Initializable {
 		cpf = interessadoOriginal.getCpf();
 		this.lblTxtCpf.setText(interessadoOriginal.getFormatedCpf());
 		this.txtNome.setText(interessadoOriginal.getName());
-		this.txtContato.setContactPlainText(interessadoOriginal.getContato());
+		this.txtContato.setContactPlainText(interessadoOriginal.getContact());
 	}
 	
 	@FXML
@@ -82,7 +82,7 @@ public class ControleDialogInteressado implements Initializable {
 	}
 
 	@FXML
-	private void salvar() throws DatabaseException {
+	private void salvar() {
 		
 		Interested interessado = new Interested();
 		boolean failure = false;
@@ -91,7 +91,7 @@ public class ControleDialogInteressado implements Initializable {
 		interessado.setCpf(cpf);
 		
 		try {
-			interessado.setNome(this.txtNome.getText());
+			interessado.setName(this.txtNome.getText());
 		} catch (ValidationException ve) {
 			failure = true;
 			if (failureMsg.length() != 0) {
@@ -101,7 +101,7 @@ public class ControleDialogInteressado implements Initializable {
 		}
 		
 		try {
-			interessado.setContato(this.txtContato.plainTextProperty().getValue());
+			interessado.setContact(this.txtContato.plainTextProperty().getValue());
 		} catch (ValidationException ve) {
 			failure = true;
 			if (failureMsg.length() != 0) {
@@ -127,10 +127,20 @@ public class ControleDialogInteressado implements Initializable {
 		
 		else {
 			if(interessadoOriginal == null) {
-				interestedService.save(interessado);
+				try {
+					interestedService.save(interessado);
+				} catch (DatabaseException e) {
+					// TODO VERIFICAR CATCH CONTROLADOR
+					e.printStackTrace();
+				}
 			} else {
 				interessado.setId(interessadoOriginal.getId());
-				interestedService.update(interessado);
+				try {
+					interestedService.update(interessado);
+				} catch (DatabaseException e) {
+					// TODO VERIFICAR CATCH CONTROLADOR
+					e.printStackTrace();
+				}
 			}
 			this.fecharJanela();
 		}

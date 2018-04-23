@@ -30,11 +30,11 @@ public class ConnectionFactory {
 		
 	}
 	
-	public static void fechaConnection(Connection con) throws DatabaseException {
+	public static void closeConnection(Connection connection) throws DatabaseException {
 		
 		try {
-			if(con!=null) {
-				con.close();
+			if(connection!=null) {
+				connection.close();
 			}
 			
 		} catch (SQLException e) {
@@ -42,12 +42,12 @@ public class ConnectionFactory {
 		}
 	}
 	
-	public static void fechaConnection(Connection con, PreparedStatement stmt) throws DatabaseException {
-		fechaConnection(con);
+	public static void closeConnection(Connection connection, PreparedStatement statement) throws DatabaseException {
+		closeConnection(connection);
 		
 		try {
-			if(stmt != null) {
-				stmt.close();
+			if(statement != null) {
+				statement.close();
 			}
 			
 		} catch (SQLException e) {
@@ -56,12 +56,12 @@ public class ConnectionFactory {
 		}
 	}
 	
-	public static void fechaConnection(Connection con, PreparedStatement stmt, ResultSet rs) throws DatabaseException {
-		fechaConnection(con, stmt);
+	public static void closeConnection(Connection connection, PreparedStatement statement, ResultSet resultSet) throws DatabaseException {
+		closeConnection(connection, statement);
 		
 		try {
-			if(rs!=null) {
-				rs.close();
+			if(resultSet!=null) {
+				resultSet.close();
 			}
 			
 		} catch (SQLException e) {

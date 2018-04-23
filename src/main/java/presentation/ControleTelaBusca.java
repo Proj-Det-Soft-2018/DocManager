@@ -49,10 +49,12 @@ public class ControleTelaBusca implements Initializable, Observer {
 
 	private static final URL ARQUIVO_FXML_TELA_EDICAO = ControleTelaPrincipal.class.getResource("/visions/tela_editar_processo.fxml");
 	private static final URL ARQUIVO_FXML_DIALOG_PASSWORD = ControleTelaPrincipal.class.getResource("/visions/dialog_adm_password.fxml");
+	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_PDF = ControleTelaPrincipal.class.getResource("/visions/tela_visualizar_pdf.fxml");
 	private static final String MASCARA_NUM_OFICIO = "####/####";
 	private static final String MASCARA_CPF = "###.###.###-##";
 	private static final String DIALOG_ADM_PASS_TITLE = "Autorização";
 	private static final String EDITAR_PROCESSO_TITLE = "Editar Processo";
+	private static final String VISUALIZAR_PDF = "Certidão";
 
 	private ListService listService;
 	private ProcessService processService;
@@ -135,6 +137,9 @@ public class ControleTelaBusca implements Initializable, Observer {
 
 	@FXML
 	private Button btnVerEditar;
+	
+	@FXML
+	private Button btnCertidaoPdf;
 
 	@FXML
 	private Button btnApagar;
@@ -155,22 +160,32 @@ public class ControleTelaBusca implements Initializable, Observer {
 	}
 
 	@Override
-	public void update() throws ValidationException, DatabaseException {
+	public void update() {
 		if (this.ultimaBusca != null) {
-			List<Process> resultado = this.processService.search(
-					ultimaBusca.numero,
-					ultimaBusca.nomeInteressado,
-					ultimaBusca.cpfInteressado,
-					ultimaBusca.idSituacao,
-					ultimaBusca.idOrgao,
-					ultimaBusca.idAssunto);
+			//TODO verificar resultado = null
+			List<Process> resultado = null;
+			try {
+				resultado = this.processService.search(
+						ultimaBusca.numero,
+						ultimaBusca.nomeInteressado,
+						ultimaBusca.cpfInteressado,
+						ultimaBusca.idSituacao,
+						ultimaBusca.idOrgao,
+						ultimaBusca.idAssunto);
+			} catch (ValidationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DatabaseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			atualizarTabela(resultado);
 		}
 	}
 
 	@FXML
-	private void buscar() throws DatabaseException {
+	private void buscar() {
 		String numProcesso = (checkNumero.isSelected())? getProcessNumberEntry() : "";
 		String nomeInteressado = (checkInteressado.isSelected() && radioProcesso.isSelected())? txtNome.getText() : "";
 		String cpfInteressado = (checkInteressado.isSelected() && radioCpf.isSelected())? mTxtCpf.getPlainText() : "";
@@ -194,6 +209,9 @@ public class ControleTelaBusca implements Initializable, Observer {
 			alert.initOwner(root.getScene().getWindow());
 
 			alert.showAndWait();
+		} catch (DatabaseException e) {
+			// TODO VERIFICAR CATCH NO CONTROLADOR
+			e.printStackTrace();
 		}
 	}
 
@@ -380,19 +398,20 @@ public class ControleTelaBusca implements Initializable, Observer {
 	private void configurarTabela() {
 		// inicia as colunas
 		tabColTipo.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getTipo()));
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getType()));
 		tabColNumero.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getFormatedNumero()));
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getFormattedNumber()));
 		tabColInteressado.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getInteressado().getName()));
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getIntersted().getName()));
 		tabColSituacao.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituacao().getStatus()));
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituation().getStatus()));
 
 		// eventHandle para detectar o processo selecionado
 		tableResultados.getSelectionModel().selectedItemProperty().addListener(
 				(observavel, selecionandoAnterior, selecionadoNovo) -> {
 					this.processoSelecionado = selecionadoNovo;
 					this.btnVerEditar.setDisable(selecionadoNovo!=null? false : true);
+					this.btnCertidaoPdf.setDisable(selecionadoNovo!=null? false : true);
 					this.btnApagar.setDisable(selecionadoNovo!=null? false : true);
 				});
 	}
@@ -454,6 +473,29 @@ public class ControleTelaBusca implements Initializable, Observer {
 			controleTelaEdicao.montarFormulario(this.processoSelecionado);
 
 			telaEdicao.show();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+	
+	@FXML
+	private void criarTelaPdf() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(ARQUIVO_FXML_TELA_VISUALIZAR_PDF);
+			Pane novoPainel = loader.load();
+
+			Stage pdfViewerScreen = new Stage();
+			pdfViewerScreen.setTitle(VISUALIZAR_PDF);
+			pdfViewerScreen.initModality(Modality.WINDOW_MODAL);
+			pdfViewerScreen.initOwner(this.root.getScene().getWindow());
+			pdfViewerScreen.setScene(new Scene(novoPainel, 820, 660));
+
+			PdfViewerController pdfViewerController = loader.getController();
+			pdfViewerController.engineConfigurations();
+			pdfViewerController.setVisualizedProcess(processoSelecionado);
+			
+			pdfViewerScreen.show();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}

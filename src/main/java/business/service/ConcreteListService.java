@@ -17,13 +17,13 @@ public class ConcreteListService implements ListService {
 	private List<String> situationsList;
 	
 	private ConcreteListService() {
-		organizationsList = Organization.getOrgaos();
+		organizationsList = Organization.getOrganization();
 		organizationsList.add(0, DEFAULT_CHOICEBOX_START);
 		
-		subjectsList = Subject.getAssuntos();
+		subjectsList = Subject.getSubjects();
 		subjectsList.add(0, DEFAULT_CHOICEBOX_START);
 		
-		situationsList = Situation.getSituacoes();
+		situationsList = Situation.getSituations();
 		situationsList.add(0, DEFAULT_CHOICEBOX_START);
 	}
 	

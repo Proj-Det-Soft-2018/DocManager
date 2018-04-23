@@ -104,7 +104,7 @@ public class StatisticsGraphsScreenController implements Initializable {
 
 	private void createBarChartQuantityProcessPerMonthYear(){
 		// Obtém an array com nomes dos meses em Inglês.
-        String[] arrayMeses = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
+		String[] arrayMeses = {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
         // Converte o array em uma lista e adiciona em nossa ObservableList de meses.
         observableMonthsList.addAll(Arrays.asList(arrayMeses));
         // Associa os nomes de mês como categorias para o eixo horizontal.        
@@ -273,11 +273,11 @@ public class StatisticsGraphsScreenController implements Initializable {
 
 	private String getCategoryNameById(int categoryId, String category) {
 		if(category.compareTo("Situação")==0){
-			return Situation.getSituacaoPorId(categoryId).getStatus();
+			return Situation.getSituationById(categoryId).getStatus();
 		}else if(category.compareTo("Órgão")==0){
-			return Organization.getOrgaoPorId(categoryId).name();
+			return Organization.getOrganizationById(categoryId).name();
 		}else if(category.compareTo("Assunto")==0) {
-			return Subject.getAssuntoPorId(categoryId).getShortText();
+			return Subject.getSubjectById(categoryId).getShortText();
 		}else {
 			return null;
 		}

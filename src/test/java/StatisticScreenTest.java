@@ -80,7 +80,7 @@ public class StatisticScreenTest extends Application {
 				Map.Entry<Integer, Integer> pair = (Map.Entry<Integer, Integer>)it.next();
 				
 				int situacaoId = Integer.parseInt( pair.getKey().toString() );
-				String situationName = Situation.getSituacaoPorId(situacaoId).getStatus();
+				String situationName = Situation.getSituationById(situacaoId).getStatus();
 				double quantity = Double.parseDouble(pair.getValue().toString());
 				
 				Data slice = new PieChart.Data(situationName,quantity);

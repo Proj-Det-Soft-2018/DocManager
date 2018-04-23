@@ -45,9 +45,9 @@ public class ProcessoTest {
 	public void creationTest() throws ValidationException {
 		Process p = new Process();
 		p.setTipoOficio(this.oficio);
-		p.setNumero(this.numero);
-		p.setAssuntoById(this.assunto);
-		p.setUnidadeOrigemById(this.orgao);
-		p.setSituacaoById(this.situacao);
+		p.setNumber(this.numero);
+		p.setSubjectById(this.assunto);
+		p.setOriginEntityById(this.orgao);
+		p.setSituationById(this.situacao);
 	}
 }

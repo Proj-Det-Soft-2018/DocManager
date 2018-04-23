@@ -27,19 +27,19 @@ public class ConcreteInterestedService extends Observable implements InterestedS
 
 	@Override
 	public void save(Interested interessado) throws DatabaseException {
-		interessadoDao.salvar(interessado);
+		interessadoDao.save(interessado);
 		notifyObservers();
 	}
 
 	@Override
 	public void update(Interested interessado) throws DatabaseException {
-		interessadoDao.atualizar(interessado);
+		interessadoDao.update(interessado);
 		notifyObservers();
 	}
 
 	@Override
 	public void delete(Interested interessado) throws DatabaseException {
-		interessadoDao.deletar(interessado);
+		interessadoDao.delete(interessado);
 		notifyObservers();
 	}
 
@@ -48,6 +48,6 @@ public class ConcreteInterestedService extends Observable implements InterestedS
 		if(cpf == null || cpf.length() != 11) {
 			throw new ValidationException("O CPF buscado está incompleto!");
 		}
-		return interessadoDao.pegarPeloCpf(cpf);
+		return interessadoDao.getByCpf(cpf);
 	} 
 }

@@ -111,10 +111,11 @@
 			<children>
 				<Button mnemonicParsing="false" onAction="#fecharJanela"
 					prefWidth="80.0" text="Voltar" />
-				<Button mnemonicParsing="false" onAction="#limparFormulario" prefWidth="80.0"
-					text="Limpar" />
+				<Button mnemonicParsing="false" onAction="#limparFormulario"
+					prefWidth="80.0" text="Limpar" />
 				<Button mnemonicParsing="false" onAction="#buscar" prefWidth="80.0"
-					styleClass="button-accent" stylesheets="@../fx_css/styles.css" text="Buscar" />
+					styleClass="button-accent" stylesheets="@../fx_css/styles.css"
+					text="Buscar" />
 			</children>
 			<padding>
 				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -145,6 +146,9 @@
 						<Button fx:id="btnVerEditar" disable="true"
 							mnemonicParsing="false" onAction="#criarTelaEdicao" prefWidth="100.0"
 							text="Ver/Editar" />
+						<Button fx:id="btnCertidaoPdf" disable="true"
+							mnemonicParsing="false" onAction="#criarTelaPdf"
+							prefWidth="130.0" text="Certidão PDF" />
 						<Button fx:id="btnApagar" disable="true" mnemonicParsing="false"
 							onAction="#criarDialogAdmPassword" prefWidth="80.0" text="Apagar" />
 					</children>

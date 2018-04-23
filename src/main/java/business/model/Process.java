@@ -27,26 +27,26 @@ public class Process {
 	private static final Logger logger = Logger.getLogger(Process.class);
 	
 	private Long id;
-	private boolean tipoOficio;
-	private String numero;
-	private Interested interessado;
-	private Subject assunto;
-	private Organization unidadeOrigem;
-	private Situation situacao;
-	private String observacao;
-	private Organization unidadeDestino; //para onde o processo é dirigido quando concluido
-	private LocalDateTime dataEntrada; //Hora registro do processo no banco
-	private LocalDateTime dataSaida; //Hora que altera e grava situação para concluido
+	private boolean oficio;
+	private String number;
+	private Interested interested;
+	private Subject subject;
+	private Organization originEntity;
+	private Situation situation;
+	private String observation;
+	private Organization destinationEntity; //para onde o processo é dirigido quando concluido
+	private LocalDateTime registrationDate; //Hora registro do processo no banco
+	private LocalDateTime dispatchDate; //Hora que altera e grava situação para concluido
 
 	public Process() {
 
 	}
 
-	public Process(Long id, boolean tipoOficio, String numero, String observacao) {
+	public Process(Long id, boolean tipoOficio, String number, String observation) {
 		this.id = id;
-		this.tipoOficio = tipoOficio;
-		this.numero = numero;
-		this.observacao = observacao;
+		this.oficio = tipoOficio;
+		this.number = number;
+		this.observation = observation;
 	}
 
 	/**
@@ -57,168 +57,168 @@ public class Process {
 		return id;
 	}
 
-	public void setId(Long processoId) {
-		this.id = processoId;
+	public void setId(Long processId) {
+		this.id = processId;
 	}
 
 	/**
 	 * @return the tipoOficio
 	 */
 	@XmlTransient
-	public boolean isTipoOficio() {
-		return tipoOficio;
+	public boolean isOficio() {
+		return oficio;
 	}
 
 	/**
-	 * @param tipoOficio the tipoOficio to set
+	 * @param oficio the tipoOficio to set
 	 */
-	public void setTipoOficio(boolean tipoOficio) {
-		this.tipoOficio = tipoOficio;
+	public void setTipoOficio(boolean oficio) {
+		this.oficio = oficio;
 	}
 	
 	@XmlElement(name="type")
-	public String getTipo () {
-		return this.tipoOficio? "Ofício" : "Processo";
+	public String getType () {
+		return this.oficio? "Ofício" : "Processo";
 	}
 
 	@XmlElement(name="number")
-	public String getFormatedNumero() {
-		if(this.isTipoOficio()) {
-			return this.numero.replaceAll("(\\d{4})(\\d{4})(\\w)", "$1/$2-$3");
+	public String getFormattedNumber() {
+		if(this.isOficio()) {
+			return this.number.replaceAll("(\\d{4})(\\d{4})(\\w)", "$1/$2-$3");
 		}
 		else {
-			return this.numero.replaceAll("(\\d{5})(\\d{6})(\\d{4})(\\d{2})", "$1.$2/$3-$4");
+			return this.number.replaceAll("(\\d{5})(\\d{6})(\\d{4})(\\d{2})", "$1.$2/$3-$4");
 		}
 	}
 	
 	@XmlTransient
-	public String getNumero() {
-		return numero;
+	public String getNumber() {
+		return number;
 	}
 
-	public void setNumero(String numero) throws ValidationException {
-		if(this.tipoOficio == true) {
-			if(numero.length() < 8) {
+	public void setNumber(String number) throws ValidationException {
+		if(this.oficio == true) {
+			if(number.length() < 8) {
 				throw new ValidationException("O número digitado é inválido.");
 			}
 			else {
-				if(!numero.substring(0, 7).matches("[0-9]+")) {
+				if(!number.substring(0, 7).matches("[0-9]+")) {
 					throw new ValidationException("O número digitado é inválido.");
 				}
 			}
 		}
 		else {
-			if(!(numero.length() == 17) || !(numero.matches("[0-9]+"))) {
+			if(!(number.length() == 17) || !(number.matches("[0-9]+"))) {
 				throw new ValidationException("O número digitado é inválido.");
 			}
 		}
-		this.numero = numero;
+		this.number = number;
 	}
 	
 	@XmlElement(name="interested")
-	public Interested getInteressado() {
-		return interessado;
+	public Interested getIntersted() {
+		return interested;
 	}
 
-	public void setInteressado(Interested interessado) {
-		this.interessado = interessado;
+	public void setInterested(Interested interested) {
+		this.interested = interested;
 	}
 
 	
 	@XmlElement(name="subject")
 	public String getSubjectString() {
-		return assunto.getText();
+		return subject.getText();
 	}
 	
 	/**
 	 * @return assunto
 	 */
 	public Subject getSubject() {
-		return assunto;
+		return subject;
 	}
 
 	/**
 	 * @throws ValidationException 
 	 */
-	public void setAssuntoById(int idAssunto) throws ValidationException {
-		if(idAssunto == 0) {
+	public void setSubjectById(int subjectId) throws ValidationException {
+		if(subjectId == 0) {
 			throw new ValidationException("Campo assunto é obrigatório.");
 		}
-		this.assunto = Subject.getAssuntoPorId(idAssunto);
+		this.subject = Subject.getSubjectById(subjectId);
 	}
 	
 	@XmlElement(name="origin-entity")
 	public String getOriginEntityString(){
-		return unidadeOrigem.getNomeExt();
+		return originEntity.getFullName();
 	}
 	
-	public Organization getUnidadeOrigem() {
-		return unidadeOrigem;
+	public Organization getOriginEntity() {
+		return originEntity;
 	}
 	
 	/**
 	 * @throws ValidationException 
 	 */
-	public void setUnidadeOrigemById(int idUnidadeOrigem) throws ValidationException {
-		if(idUnidadeOrigem == 0) {
+	public void setOriginEntityById(int originEntityId) throws ValidationException {
+		if(originEntityId == 0) {
 			throw new ValidationException("O campo Orgão é obrigatório.");
 		}
-		this.unidadeOrigem = Organization.getOrgaoPorId(idUnidadeOrigem);
+		this.originEntity = Organization.getOrganizationById(originEntityId);
 	}
 	
 	@XmlElement(name="situation")
 	public String getSituationString() {
-		return situacao.getStatus();
+		return situation.getStatus();
 	}
 	
-	public Situation getSituacao() {
-		return situacao;
+	public Situation getSituation() {
+		return situation;
 	}
 
 	/**
 	 * @throws ValidationException 
 	 */
-	public void setSituacaoById(int idSituacao) throws ValidationException {
-		if(idSituacao == 0) {
+	public void setSituationById(int situationId) throws ValidationException {
+		if(situationId == 0) {
 			throw new ValidationException("O campo Situação é obrigatório.");
 		}
-		this.situacao = Situation.getSituacaoPorId(idSituacao);
+		this.situation = Situation.getSituationById(situationId);
 	}
 	
 	@XmlElement(name="observation")
-	public String getObservacao() {
-		return observacao;
+	public String getObservation() {
+		return observation;
 	}
 
-	public void setObservacao(String observacao) {
-		this.observacao = observacao;
+	public void setObservation(String observation) {
+		this.observation = observation;
 	}
 	
 	@XmlElement(name="entry-date")
-	public LocalDateTime getDataEntrada() {
-		return dataEntrada;
+	public LocalDateTime getRegistrationDate() {
+		return registrationDate;
 	}
 
-	public void setDataEntrada(LocalDateTime dataEntrada) {
-		this.dataEntrada = dataEntrada;
+	public void setRegistrationDate(LocalDateTime registrationDate) {
+		this.registrationDate = registrationDate;
 	}
 	
-	public Organization getUnidadeDestino() {
-		return unidadeDestino;
+	public Organization getDestinationEntity() {
+		return destinationEntity;
 	}
 
-	public void setUnidadeDestino(Organization unidadeDestino) {
-		this.unidadeDestino = unidadeDestino;
+	public void setDestinationEntity(Organization destinationEntity) {
+		this.destinationEntity = destinationEntity;
 	}
 	
 	@XmlElement(name="out")
-	public LocalDateTime getDataSaida() {
-		return dataSaida;
+	public LocalDateTime getDispatchDate() {
+		return dispatchDate;
 	}
 
-	public void setDataSaida(LocalDateTime dataSaida) throws ValidationException {
-		if(dataSaida.isAfter(this.dataEntrada)) {
-			this.dataSaida = dataSaida;
+	public void setDispatchDate(LocalDateTime dispatchDate) throws ValidationException {
+		if(dispatchDate.isAfter(this.registrationDate)) {
+			this.dispatchDate = dispatchDate;
 		}
 		else {
 			throw new ValidationException("Verifique a Data e a Hora do seu computador.");
