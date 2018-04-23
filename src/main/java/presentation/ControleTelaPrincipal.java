@@ -194,7 +194,7 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 			statisticsGraphsScreen.setTitle(VISUALIZAR_GRAFICOS);
 			statisticsGraphsScreen.initModality(Modality.WINDOW_MODAL);
 			statisticsGraphsScreen.initOwner(this.painel.getScene().getWindow());
-			statisticsGraphsScreen.setScene(new Scene(novoPainel, 820, 660));			
+			statisticsGraphsScreen.setScene(new Scene(novoPainel, 940, 570));			
 			
 			statisticsGraphsScreen.show();
 		} catch (IOException e) {

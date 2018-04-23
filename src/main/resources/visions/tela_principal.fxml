@@ -31,6 +31,14 @@
 			layoutY="119.0" mnemonicParsing="false" onAction="#criarDialogAdmPassword"
 			prefHeight="26.0" prefWidth="140.0" text="Apagar"
 			AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="133.0" />
+		<Button layoutX="25.0" layoutY="359.0" mnemonicParsing="false"
+			onAction="#criarTelaBusca" prefHeight="26.0" prefWidth="140.0"
+			text="Buscar" AnchorPane.topAnchor="169.0"
+			AnchorPane.leftAnchor="10.0" />
+		<Button layoutX="25.0" layoutY="359.0" mnemonicParsing="false"
+			onAction="#createStatisticScreen" prefHeight="26.0" prefWidth="140.0"
+			text="Estatísticas" AnchorPane.bottomAnchor="20.0"
+			AnchorPane.leftAnchor="10.0" />
 		<AnchorPane layoutX="186.0" layoutY="19.0" prefHeight="355.0"
 			prefWidth="397.0" styleClass="painel-borda" stylesheets="@../fx_css/styles.css"
 			AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="170.0"
@@ -56,13 +64,5 @@
 				</TableView>
 			</children>
 		</AnchorPane>
-		<Button layoutX="25.0" layoutY="359.0" mnemonicParsing="false"
-			onAction="#createStatisticScreen" prefHeight="26.0" prefWidth="140.0"
-			text="Gráficos" AnchorPane.bottomAnchor="56.0"
-			AnchorPane.leftAnchor="10.0" />
-		<Button layoutX="25.0" layoutY="359.0" mnemonicParsing="false"
-			onAction="#criarTelaBusca" prefHeight="26.0" prefWidth="140.0"
-			text="Buscar" AnchorPane.bottomAnchor="20.0"
-			AnchorPane.leftAnchor="10.0" />
 	</children>
 </AnchorPane>
