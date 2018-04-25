@@ -88,9 +88,10 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 		this.configurarTabela();
 		try {
 			this.atualizarTabela(this.processService.getList());
-		} catch (ValidationException | DatabaseException e) {
-			// TODO ANALISAR NOVO TRY-CATCH
-			e.printStackTrace();
+		} catch (ValidationException e) {
+			logger.error(e.getMessage(), e);
+		} catch (DatabaseException e) {
+			logger.error(e.getMessage(), e);
 		}
 	}
 	
@@ -99,11 +100,9 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 		try {
 			this.atualizarTabela(this.processService.getList());
 		} catch (ValidationException e) {
-			// TODO VERIFICAR CATCH CONTROLADOR
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} catch (DatabaseException e) {
-			// TODO VERIFICAR CATCH CONTROLADOR
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 

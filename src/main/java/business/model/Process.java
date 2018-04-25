@@ -34,7 +34,6 @@ public class Process {
 	private Organization originEntity;
 	private Situation situation;
 	private String observation;
-	private Organization destinationEntity; //para onde o processo é dirigido quando concluido
 	private LocalDateTime registrationDate; //Hora registro do processo no banco
 	private LocalDateTime dispatchDate; //Hora que altera e grava situação para concluido
 
@@ -201,14 +200,6 @@ public class Process {
 
 	public void setRegistrationDate(LocalDateTime registrationDate) {
 		this.registrationDate = registrationDate;
-	}
-	
-	public Organization getDestinationEntity() {
-		return destinationEntity;
-	}
-
-	public void setDestinationEntity(Organization destinationEntity) {
-		this.destinationEntity = destinationEntity;
 	}
 	
 	@XmlElement(name="out")

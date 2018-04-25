@@ -232,8 +232,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 
 	        alert.showAndWait();
 		} catch (DatabaseException e) {
-			// TODO VERIFICAR CATCH CONTROLADOR
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -401,11 +400,9 @@ public class ControleTelaEdicao implements Initializable, Observer{
 				try {
 					processService.save(processo);
 				} catch (ValidationException e) {
-					// TODO VERIFICAR CATCH CONTROLADOR
-					e.printStackTrace();
+					logger.error(e.getMessage(), e);
 				} catch (DatabaseException e) {
-					// TODO VERIFICAR CATCH CONTROLADOR
-					e.printStackTrace();
+					logger.error(e.getMessage(), e);
 				}
 		
 			} else {
@@ -414,8 +411,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 				try {
 					processService.update(processo);
 				} catch (DatabaseException e) {
-					// TODO VERIFICAR CATCH CONTROLADOR
-					e.printStackTrace();
+					logger.error(e.getMessage(), e);
 				}
 			}
 		
