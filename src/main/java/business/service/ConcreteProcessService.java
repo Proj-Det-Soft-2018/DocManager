@@ -48,7 +48,7 @@ import org.xml.sax.InputSource;
 import business.exception.ValidationException;
 import business.model.Process;
 import business.model.Situation;
-import persistence.DaoFactory;
+import persistence.DaoFactoryJDBC;
 import persistence.ProcessoDao;
 import persistence.exception.DatabaseException;
 
@@ -75,7 +75,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 	private static final ConcreteProcessService instance = new ConcreteProcessService();
 
 	private ConcreteProcessService() {
-		processoDao = DaoFactory.getProcessDao();
+		processoDao = DaoFactoryJDBC.getProcessDao();
 
 		// Inicilização do Apache Shiro -- utiliza o resources/shiro.ini
 		IniRealm iniRealm = new IniRealm("classpath:shiro.ini");

@@ -1,13 +1,21 @@
+/**
+ * 
+ */
 package persistence;
 
-public class DaoFactory {
+/**
+ * @author clah
+ *
+ */
+public abstract class DaoFactory {
 	
-	public static ProcessoDao getProcessDao(){
-		return new ProcessoDaoMySql();
+	public static ProcessoDao getProcessDao() {
+		return null;
 	}
 	
-	public static InteressadoDao getInterestedDao(){
-		return new InteressadoDaoMySql();
+	public static InteressadoDao getInterestedDao() {
+		return null;
 	}
+
 
 }
