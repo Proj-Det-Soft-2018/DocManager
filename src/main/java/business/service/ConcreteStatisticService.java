@@ -6,7 +6,7 @@ package business.service;
 import java.util.ArrayList;
 import java.util.Map;
 
-import persistence.DaoFactory;
+import persistence.DaoFactoryJDBC;
 import persistence.ProcessoDao;
 import persistence.exception.DatabaseException;
 
@@ -22,7 +22,7 @@ public class ConcreteStatisticService implements StatisticService {
 	private static final ConcreteStatisticService instance = new ConcreteStatisticService();
 
 	private ConcreteStatisticService() {
-		processoDao = DaoFactory.getProcessDao();
+		processoDao = DaoFactoryJDBC.getProcessDao();
 	}
 
 	public static ConcreteStatisticService getInstance() {
