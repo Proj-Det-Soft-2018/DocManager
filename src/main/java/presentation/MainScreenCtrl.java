@@ -1,5 +1,13 @@
 package presentation;
 
+
+import business.exception.ValidationException;
+import business.model.Process;
+import business.service.Observer;
+import business.service.ProcessService;
+import persistence.exception.DatabaseException;
+import presentation.utils.StringConstants;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -7,36 +15,28 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
-import business.exception.ValidationException;
-import business.model.HealthProcess;
-import business.model.Process;
-import business.service.ConcreteProcessService;
-import business.service.Observer;
-import business.service.ProcessService;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import persistence.exception.DatabaseException;
 
 /**
  * @author hugotho
  * 
  */
-public class ControleTelaPrincipal implements Initializable, Observer {
+public abstract class MainScreenCtrl implements Initializable, Observer {
 
-	private static final URL ARQUIVO_FXML_TELA_EDICAO = ControleTelaPrincipal.class.getResource("/visions/tela_editar_processo.fxml");
-	private static final URL ARQUIVO_FXML_DIALOG_PASSWORD = ControleTelaPrincipal.class.getResource("/visions/dialog_adm_password.fxml");
-	private static final URL ARQUIVO_FXML_TELA_BUSCA = ControleTelaPrincipal.class.getResource("/visions/tela_buscar_processos.fxml");
-	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_PDF = ControleTelaPrincipal.class.getResource("/visions/tela_visualizar_pdf.fxml");
-	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_GRAFICOS = ControleTelaPrincipal.class.getResource("/visions/tela_statistics_graphs.fxml");
+	private static final URL ARQUIVO_FXML_TELA_EDICAO = MainScreenCtrl.class.getResource("/visions/tela_editar_processo.fxml");
+	private static final URL ARQUIVO_FXML_DIALOG_PASSWORD = MainScreenCtrl.class.getResource("/visions/dialog_adm_password.fxml");
+	private static final URL ARQUIVO_FXML_TELA_BUSCA = MainScreenCtrl.class.getResource("/visions/tela_buscar_processos.fxml");
+	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_PDF = MainScreenCtrl.class.getResource("/visions/tela_visualizar_pdf.fxml");
+	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_GRAFICOS = MainScreenCtrl.class.getResource("/visions/tela_statistics_graphs.fxml");
 	
 	private static final String CRIAR_PROCESSO = "Novo Processo / Ofício";
 	private static final String EDITAR_PROCESSO = "Editar Processo";
@@ -45,66 +45,63 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 	private static final String VISUALIZAR_GRAFICOS = "Gráficos Administrativos";
 	private static final String DIALOG_ADM_PASS_TITLE = "Autorização";
 
+	private final Logger logger;
+	
 	private ProcessService processService;
-	private Process processoSelecionado;
+	private ControllerFactory controllerFactory;
+	
+	protected Process selectedProcess;
 
 	@FXML
-	private Pane painel;
+	protected Node root;
 
 	@FXML
-	private Button btnNovo;
+	protected Button btnNew;
 
 	@FXML
-	private Button btnVerEditar;
+	protected Button btnEdit;
 	
 	@FXML
-	private Button btnCertidaoPdf;
+	protected Button btnPdfDoc;
 
 	@FXML
-	private Button btnApagar;
+	protected Button btnDelete;
 
 	@FXML
-	private TableView<HealthProcess> tabelaProcessosOficios;
+	protected TableView<Process> tabProcesses;
 
-	@FXML
-	private TableColumn<HealthProcess, String> tabColunaTipo;
-
-	@FXML
-	private TableColumn<HealthProcess, String> tabColunaNumero;
-
-	@FXML
-	private TableColumn<HealthProcess, String> tabColunaInteressado;
-
-	@FXML
-	private TableColumn<HealthProcess, String> tabColunaSituacao;
-
-	private Logger logger = Logger.getLogger(ControleTelaPrincipal.class);
+	public static void showMainScreen(Stage primaryStage, MainScreenCtrl controller) {
+		
+		FXMLLoader loader = new FXMLLoader(controller.getFxmlPath());
+		loader.setController(controller);
+		try {
+			Pane newPane = loader.load();
+			primaryStage.setScene(new Scene(newPane, 940, 570));
+			primaryStage.setTitle(StringConstants.TITULO_APLICACAO.getText());
+			primaryStage.show();
+		} catch (IOException e) {
+			//TODO Alert Erro de geração de tela
+			Logger.getLogger(HealthMainScreenCtrl.class).error(e.getMessage(), e);
+		}
+	}
+	
+	protected MainScreenCtrl(ProcessService processService, ControllerFactory controllerFactory, Logger logger) {
+		this.processService = processService;
+		this.controllerFactory = controllerFactory;
+		this.logger = logger;
+		this.selectedProcess = null;
+	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		this.processoSelecionado = null;
-		processService = ConcreteProcessService.getInstance();
 		processService.attach(this);
-		
-		this.configurarTabela();
-		try {
-			this.atualizarTabela(this.processService.getList());
-		} catch (ValidationException e) {
-			logger.error(e.getMessage(), e);
-		} catch (DatabaseException e) {
-			logger.error(e.getMessage(), e);
-		}
+		configureTable();
+		updateTable();
 	}
 	
 	@Override
 	public void update() {
-		try {
-			this.atualizarTabela(this.processService.getList());
-		} catch (ValidationException e) {
-			logger.error(e.getMessage(), e);
-		} catch (DatabaseException e) {
-			logger.error(e.getMessage(), e);
-		}
+		updateTable();
 	}
 
 	@FXML
@@ -114,7 +111,7 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 
 	@FXML
 	private void criarFormularioEdicao() {
-		this.criarTelaEdicao(EDITAR_PROCESSO, processoSelecionado);
+		this.criarTelaEdicao(EDITAR_PROCESSO, selectedProcess);
 	}
 
 	private void criarTelaEdicao(String titulo, Process processo) {
@@ -126,7 +123,7 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 			Stage telaEdicao = new Stage();
 			telaEdicao.setTitle(titulo);
 			telaEdicao.initModality(Modality.WINDOW_MODAL);
-			telaEdicao.initOwner(this.painel.getScene().getWindow());
+			telaEdicao.initOwner(this.root.getScene().getWindow());
 			telaEdicao.setScene(new Scene(novoPainel, 720, 540));
 
 			ControleTelaEdicao controleTelaEdicao = loader.getController();
@@ -148,11 +145,11 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 			Stage dialogAdmPassword = new Stage();
 			dialogAdmPassword.setTitle(DIALOG_ADM_PASS_TITLE);
 			dialogAdmPassword.initModality(Modality.WINDOW_MODAL);
-			dialogAdmPassword.initOwner(this.painel.getScene().getWindow());
+			dialogAdmPassword.initOwner(this.root.getScene().getWindow());
 			dialogAdmPassword.setScene(new Scene(novoPainel, 300, 190));
 
 			ControleDialogAdmPassword dialAdmPassController = loader.getController();
-			dialAdmPassController.setProcesso(processoSelecionado);
+			dialAdmPassController.setProcesso(selectedProcess);
 			
 			dialogAdmPassword.show();
 		} catch (IOException e) {
@@ -170,12 +167,12 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 			Stage pdfViewerScreen = new Stage();
 			pdfViewerScreen.setTitle(VISUALIZAR_PDF);
 			pdfViewerScreen.initModality(Modality.WINDOW_MODAL);
-			pdfViewerScreen.initOwner(this.painel.getScene().getWindow());
+			pdfViewerScreen.initOwner(this.root.getScene().getWindow());
 			pdfViewerScreen.setScene(new Scene(novoPainel, 820, 660));
 
 			PdfViewerController pdfViewerController = loader.getController();
 			pdfViewerController.engineConfigurations();
-			pdfViewerController.setVisualizedProcess(processoSelecionado);
+			pdfViewerController.setVisualizedProcess(selectedProcess);
 			
 			pdfViewerScreen.show();
 		} catch (IOException e) {
@@ -193,7 +190,7 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 			Stage statisticsGraphsScreen = new Stage();
 			statisticsGraphsScreen.setTitle(VISUALIZAR_GRAFICOS);
 			statisticsGraphsScreen.initModality(Modality.WINDOW_MODAL);
-			statisticsGraphsScreen.initOwner(this.painel.getScene().getWindow());
+			statisticsGraphsScreen.initOwner(this.root.getScene().getWindow());
 			statisticsGraphsScreen.setScene(new Scene(novoPainel, 940, 570));			
 			
 			statisticsGraphsScreen.show();
@@ -212,7 +209,7 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 			Stage telaBusca = new Stage();
 			telaBusca.setTitle(BUSCAR_PROCESSO);
 			telaBusca.initModality(Modality.WINDOW_MODAL);
-			telaBusca.initOwner(this.painel.getScene().getWindow());
+			telaBusca.initOwner(this.root.getScene().getWindow());
 			telaBusca.setScene(new Scene(novoPainel, 720, 660));
 
 			ControleTelaBusca controleTelaBusca = loader.getController();
@@ -223,29 +220,19 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 			logger.error(e.getMessage(), e);
 		}
 	}
-
-	private void configurarTabela() {
-		// inicia as colunas
-		tabColunaTipo.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getType()));
-		tabColunaNumero.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getFormattedNumber()));
-		tabColunaInteressado.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getIntersted().getName()));
-		tabColunaSituacao.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituation().getStatus()));
-
-		// eventHandle para detectar o processo selecionado
-		tabelaProcessosOficios.getSelectionModel().selectedItemProperty().addListener(
-				(observavel, selecionandoAnterior, selecionadoNovo) -> {
-					this.processoSelecionado = selecionadoNovo;
-					this.btnVerEditar.setDisable(selecionadoNovo!=null? false : true);
-					this.btnCertidaoPdf.setDisable(selecionadoNovo!=null? false : true);
-					this.btnApagar.setDisable(selecionadoNovo!=null? false : true);
-				});
+	
+	private void updateTable() {
+		try {
+			List<Process> lista = this.processService.pullList();
+			tabProcesses.getItems().setAll(lista);
+		} catch (ValidationException | DatabaseException e) {
+			// TODO Alert Banco de Dados)
+			logger.error(e.getMessage(), e);
+		}
+		
 	}
-
-	private void atualizarTabela(List<HealthProcess> lista) {
-		tabelaProcessosOficios.getItems().setAll(lista);
-	}
+	
+	protected abstract void configureTable();
+	
+	public abstract URL getFxmlPath();
 }

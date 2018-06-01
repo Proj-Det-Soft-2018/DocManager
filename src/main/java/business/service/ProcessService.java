@@ -9,7 +9,7 @@ import persistence.exception.DatabaseException;
 
 public interface ProcessService {
 
-	public List<HealthProcess> getList() throws ValidationException, DatabaseException;
+	public List<Process> pullList() throws ValidationException, DatabaseException;
 	
 	public void save(Process process) throws ValidationException, DatabaseException;
 	
@@ -17,7 +17,7 @@ public interface ProcessService {
 	
 	public void delete(Process process, String admUser, String password) throws DatabaseException;
 	
-	public List<HealthProcess> search(String number, String name, String cpf, int situation, int organization, int subject) throws ValidationException, DatabaseException;
+	public List<Process> search(String number, String name, String cpf, int situation, int organization, int subject) throws ValidationException, DatabaseException;
 	
 	public byte[] getPdf(Process process);
 	
