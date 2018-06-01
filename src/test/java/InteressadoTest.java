@@ -7,6 +7,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import business.exception.ValidationException;
+import business.model.HealthInterested;
 import business.model.Interested;
 
 @RunWith(value = Parameterized.class)
@@ -35,7 +36,7 @@ public class InteressadoTest {
 
 	@Test(expected = ValidationException.class)
 	public void creationTest() throws ValidationException {
-		Interested i = new Interested();
+		Interested i = new HealthInterested();
 		i.setName(this.nome);
 		i.setContact(this.contato);
 	}

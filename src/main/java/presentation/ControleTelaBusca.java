@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 import business.exception.ValidationException;
+import business.model.HealthProcess;
 import business.model.Process;
 import business.service.ConcreteListService;
 import business.service.ConcreteProcessService;
@@ -121,19 +122,19 @@ public class ControleTelaBusca implements Initializable, Observer {
 	private ChoiceBox<String> choiceSituacao;
 
 	@FXML
-	private TableView<Process> tableResultados;
+	private TableView<HealthProcess> tableResultados;
 
 	@FXML
-	private TableColumn<Process, String> tabColTipo;
+	private TableColumn<HealthProcess, String> tabColTipo;
 
 	@FXML
-	private TableColumn<Process, String> tabColNumero;
+	private TableColumn<HealthProcess, String> tabColNumero;
 
 	@FXML
-	private TableColumn<Process, String> tabColInteressado;
+	private TableColumn<HealthProcess, String> tabColInteressado;
 
 	@FXML
-	private TableColumn<Process, String> tabColSituacao;
+	private TableColumn<HealthProcess, String> tabColSituacao;
 
 	@FXML
 	private Button btnVerEditar;
@@ -163,7 +164,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 	public void update() {
 		if (this.ultimaBusca != null) {
 			//TODO verificar resultado = null
-			List<Process> resultado = null;
+			List<HealthProcess> resultado = null;
 			try {
 				resultado = this.processService.search(
 						ultimaBusca.numero,
@@ -192,7 +193,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 		int idSituacao = checkSituacao.isSelected()? choiceSituacao.getSelectionModel().getSelectedIndex() : 0;
 
 		try {
-			List<Process> resultado = this.processService.search(numProcesso, nomeInteressado, cpfInteressado, idSituacao, idOrgao, idAssunto);
+			List<HealthProcess> resultado = this.processService.search(numProcesso, nomeInteressado, cpfInteressado, idSituacao, idOrgao, idAssunto);
 			this.ultimaBusca = new UltimaBusca(numProcesso, nomeInteressado, cpfInteressado, idOrgao, idAssunto, idSituacao);
 			atualizarTabela(resultado);
 		} catch (ValidationException ve) {
@@ -419,7 +420,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 				);
 	}
 
-	private void atualizarTabela(List<Process> lista) {
+	private void atualizarTabela(List<HealthProcess> lista) {
 		tableResultados.getItems().setAll(lista);
 	}
 

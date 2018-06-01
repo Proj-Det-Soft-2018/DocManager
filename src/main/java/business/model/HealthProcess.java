@@ -21,10 +21,10 @@ import business.exception.ValidationException;
  *
  */
 @XmlRootElement
-@XmlSeeAlso(Interested.class)
-public class Process {
+@XmlSeeAlso(HealthInterested.class)
+public class HealthProcess implements Process {
 	
-	private static final Logger logger = Logger.getLogger(Process.class);
+	private static final Logger logger = Logger.getLogger(HealthProcess.class);
 	
 	private Long id;
 	private boolean oficio;
@@ -37,49 +37,64 @@ public class Process {
 	private LocalDateTime registrationDate; //Hora registro do processo no banco
 	private LocalDateTime dispatchDate; //Hora que altera e grava situação para concluido
 
-	public Process() {
+	public HealthProcess() {
 
 	}
 
-	public Process(Long id, boolean tipoOficio, String number, String observation) {
+	public HealthProcess(Long id, boolean tipoOficio, String number, String observation) {
 		this.id = id;
 		this.oficio = tipoOficio;
 		this.number = number;
 		this.observation = observation;
 	}
 
-	/**
-	 * @return the id
+	/* (non-Javadoc)
+	 * @see business.model.Process#getId()
 	 */
+	@Override
 	@XmlTransient
 	public Long getId() {
 		return id;
 	}
 
+	/* (non-Javadoc)
+	 * @see business.model.Process#setId(java.lang.Long)
+	 */
+	@Override
 	public void setId(Long processId) {
 		this.id = processId;
 	}
 
-	/**
-	 * @return the tipoOficio
+	/* (non-Javadoc)
+	 * @see business.model.Process#isOficio()
 	 */
+	@Override
 	@XmlTransient
 	public boolean isOficio() {
 		return oficio;
 	}
 
-	/**
-	 * @param oficio the tipoOficio to set
+	/* (non-Javadoc)
+	 * @see business.model.Process#setTipoOficio(boolean)
 	 */
+	@Override
 	public void setTipoOficio(boolean oficio) {
 		this.oficio = oficio;
 	}
 	
+	/* (non-Javadoc)
+	 * @see business.model.Process#getType()
+	 */
+	@Override
 	@XmlElement(name="type")
 	public String getType () {
 		return this.oficio? "Ofício" : "Processo";
 	}
 
+	/* (non-Javadoc)
+	 * @see business.model.Process#getFormattedNumber()
+	 */
+	@Override
 	@XmlElement(name="number")
 	public String getFormattedNumber() {
 		if(this.isOficio()) {
@@ -90,11 +105,19 @@ public class Process {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see business.model.Process#getNumber()
+	 */
+	@Override
 	@XmlTransient
 	public String getNumber() {
 		return number;
 	}
 
+	/* (non-Javadoc)
+	 * @see business.model.Process#setNumber(java.lang.String)
+	 */
+	@Override
 	public void setNumber(String number) throws ValidationException {
 		if(this.oficio == true) {
 			if(number.length() < 8) {
@@ -114,31 +137,45 @@ public class Process {
 		this.number = number;
 	}
 	
+	/* (non-Javadoc)
+	 * @see business.model.Process#getIntersted()
+	 */
+	@Override
 	@XmlElement(name="interested")
 	public Interested getIntersted() {
 		return interested;
 	}
 
+	/* (non-Javadoc)
+	 * @see business.model.Process#setInterested(business.model.HealthInterested)
+	 */
+	@Override
 	public void setInterested(Interested interested) {
 		this.interested = interested;
 	}
 
 	
+	/* (non-Javadoc)
+	 * @see business.model.Process#getSubjectString()
+	 */
+	@Override
 	@XmlElement(name="subject")
 	public String getSubjectString() {
 		return subject.getText();
 	}
 	
-	/**
-	 * @return assunto
+	/* (non-Javadoc)
+	 * @see business.model.Process#getSubject()
 	 */
+	@Override
 	public Subject getSubject() {
 		return subject;
 	}
 
-	/**
-	 * @throws ValidationException 
+	/* (non-Javadoc)
+	 * @see business.model.Process#setSubjectById(int)
 	 */
+	@Override
 	public void setSubjectById(int subjectId) throws ValidationException {
 		if(subjectId == 0) {
 			throw new ValidationException("Campo assunto é obrigatório.");
@@ -146,18 +183,27 @@ public class Process {
 		this.subject = Subject.getSubjectById(subjectId);
 	}
 	
+	/* (non-Javadoc)
+	 * @see business.model.Process#getOriginEntityString()
+	 */
+	@Override
 	@XmlElement(name="origin-entity")
 	public String getOriginEntityString(){
 		return originEntity.getFullName();
 	}
 	
+	/* (non-Javadoc)
+	 * @see business.model.Process#getOriginEntity()
+	 */
+	@Override
 	public Organization getOriginEntity() {
 		return originEntity;
 	}
 	
-	/**
-	 * @throws ValidationException 
+	/* (non-Javadoc)
+	 * @see business.model.Process#setOriginEntityById(int)
 	 */
+	@Override
 	public void setOriginEntityById(int originEntityId) throws ValidationException {
 		if(originEntityId == 0) {
 			throw new ValidationException("O campo Orgão é obrigatório.");
@@ -165,18 +211,27 @@ public class Process {
 		this.originEntity = Organization.getOrganizationById(originEntityId);
 	}
 	
+	/* (non-Javadoc)
+	 * @see business.model.Process#getSituationString()
+	 */
+	@Override
 	@XmlElement(name="situation")
 	public String getSituationString() {
 		return situation.getStatus();
 	}
 	
+	/* (non-Javadoc)
+	 * @see business.model.Process#getSituation()
+	 */
+	@Override
 	public Situation getSituation() {
 		return situation;
 	}
 
-	/**
-	 * @throws ValidationException 
+	/* (non-Javadoc)
+	 * @see business.model.Process#setSituationById(int)
 	 */
+	@Override
 	public void setSituationById(int situationId) throws ValidationException {
 		if(situationId == 0) {
 			throw new ValidationException("O campo Situação é obrigatório.");
@@ -184,29 +239,53 @@ public class Process {
 		this.situation = Situation.getSituationById(situationId);
 	}
 	
+	/* (non-Javadoc)
+	 * @see business.model.Process#getObservation()
+	 */
+	@Override
 	@XmlElement(name="observation")
 	public String getObservation() {
 		return observation;
 	}
 
+	/* (non-Javadoc)
+	 * @see business.model.Process#setObservation(java.lang.String)
+	 */
+	@Override
 	public void setObservation(String observation) {
 		this.observation = observation;
 	}
 	
+	/* (non-Javadoc)
+	 * @see business.model.Process#getRegistrationDate()
+	 */
+	@Override
 	@XmlElement(name="entry-date")
 	public LocalDateTime getRegistrationDate() {
 		return registrationDate;
 	}
 
+	/* (non-Javadoc)
+	 * @see business.model.Process#setRegistrationDate(java.time.LocalDateTime)
+	 */
+	@Override
 	public void setRegistrationDate(LocalDateTime registrationDate) {
 		this.registrationDate = registrationDate;
 	}
 	
+	/* (non-Javadoc)
+	 * @see business.model.Process#getDispatchDate()
+	 */
+	@Override
 	@XmlElement(name="out")
 	public LocalDateTime getDispatchDate() {
 		return dispatchDate;
 	}
 
+	/* (non-Javadoc)
+	 * @see business.model.Process#setDispatchDate(java.time.LocalDateTime)
+	 */
+	@Override
 	public void setDispatchDate(LocalDateTime dispatchDate) throws ValidationException {
 		if(dispatchDate.isAfter(this.registrationDate)) {
 			this.dispatchDate = dispatchDate;
@@ -216,6 +295,10 @@ public class Process {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see business.model.Process#toXml()
+	 */
+	@Override
 	public String toXml() {
 		
 		StringWriter stringWriter = new StringWriter();

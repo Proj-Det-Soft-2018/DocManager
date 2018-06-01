@@ -9,11 +9,11 @@ package persistence;
  */
 public abstract class DaoFactory {
 	
-	public static ProcessoDao getProcessDao() {
+	public static ProcessDao getProcessDao() {
 		return null;
 	}
 	
-	public static InteressadoDao getInterestedDao() {
+	public static InterestedDao getInterestedDao() {
 		return null;
 	}
 

@@ -7,8 +7,9 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 import business.exception.ValidationException;
-import business.model.Interested;
 import business.model.Process;
+import business.model.HealthProcess;
+import business.model.Interested;
 import business.service.ConcreteInterestedService;
 import business.service.ConcreteListService;
 import business.service.ConcreteProcessService;
@@ -329,7 +330,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	private void save() {
 		//TODO refatorar
 		
-		Process processo = new Process();
+		Process processo = new HealthProcess();
 		boolean failure = false;
 		StringBuilder failureMsg = new StringBuilder();
 

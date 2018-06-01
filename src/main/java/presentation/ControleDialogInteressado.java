@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 import business.exception.ValidationException;
+import business.model.HealthInterested;
 import business.model.Interested;
 import business.service.ConcreteInterestedService;
 import business.service.InterestedService;
@@ -88,7 +89,7 @@ public class ControleDialogInteressado implements Initializable {
 	@FXML
 	private void salvar() {
 		
-		Interested interessado = new Interested();
+		Interested interessado = new HealthInterested();
 		boolean failure = false;
 		StringBuilder failureMsg = new StringBuilder();
 		

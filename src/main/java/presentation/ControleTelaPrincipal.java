@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 import business.exception.ValidationException;
+import business.model.HealthProcess;
 import business.model.Process;
 import business.service.ConcreteProcessService;
 import business.service.Observer;
@@ -63,19 +64,19 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 	private Button btnApagar;
 
 	@FXML
-	private TableView<Process> tabelaProcessosOficios;
+	private TableView<HealthProcess> tabelaProcessosOficios;
 
 	@FXML
-	private TableColumn<Process, String> tabColunaTipo;
+	private TableColumn<HealthProcess, String> tabColunaTipo;
 
 	@FXML
-	private TableColumn<Process, String> tabColunaNumero;
+	private TableColumn<HealthProcess, String> tabColunaNumero;
 
 	@FXML
-	private TableColumn<Process, String> tabColunaInteressado;
+	private TableColumn<HealthProcess, String> tabColunaInteressado;
 
 	@FXML
-	private TableColumn<Process, String> tabColunaSituacao;
+	private TableColumn<HealthProcess, String> tabColunaSituacao;
 
 	private Logger logger = Logger.getLogger(ControleTelaPrincipal.class);
 
@@ -244,7 +245,7 @@ public class ControleTelaPrincipal implements Initializable, Observer {
 				});
 	}
 
-	private void atualizarTabela(List<Process> lista) {
+	private void atualizarTabela(List<HealthProcess> lista) {
 		tabelaProcessosOficios.getItems().setAll(lista);
 	}
 }

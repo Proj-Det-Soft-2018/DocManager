@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import business.model.HealthInterested;
 import business.model.Interested;
 import persistence.exception.DatabaseException;
 
@@ -17,7 +18,7 @@ import persistence.exception.DatabaseException;
  * @author clah
  * @since 30/03/2018
  */
-public class InteressadoDaoMySql implements InteressadoDao{
+public class HealthInterestedDaoMySql implements InterestedDao{
 
 	@Override
 	public void save(Interested novoInteressado) throws DatabaseException {
@@ -109,7 +110,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 			
 			if(resultSet.next()) {
 				//criando o objeto Interessado
-				interessado = new Interested(
+				interessado = new HealthInterested(
 						resultSet.getLong("id"),
 						resultSet.getString("nome"),
 						resultSet.getString("cpf"),
@@ -143,7 +144,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 			
 			if(resultSet.next()) {
 				//criando o objeto Interessado
-				interested = new Interested(
+				interested = new HealthInterested(
 						resultSet.getLong("id"),
 						resultSet.getString("nome"),
 						resultSet.getString("cpf"),
@@ -169,7 +170,7 @@ public class InteressadoDaoMySql implements InteressadoDao{
 	}
 
 	@Override
-	public List<Interested> getAll() throws DatabaseException {
+	public List<HealthInterested> getAll() throws DatabaseException {
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -179,11 +180,11 @@ public class InteressadoDaoMySql implements InteressadoDao{
 			connection = ConnectionFactory.getConnection();
 			statement = connection.prepareStatement("SELECT * FROM interessados");
 			resultSet = statement.executeQuery();
-			List<Interested> interestedList = new ArrayList<Interested>();
+			List<HealthInterested> interestedList = new ArrayList<HealthInterested>();
 			
 			while(resultSet.next()) {
 				//criando o objeto Interessado
-				Interested interested = new Interested(
+				HealthInterested interested = new HealthInterested(
 						resultSet.getLong("id"),
 						resultSet.getString("nome"),
 						resultSet.getString("cpf"),

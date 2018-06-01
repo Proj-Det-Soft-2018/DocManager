@@ -7,6 +7,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import business.exception.ValidationException;
+import business.model.HealthProcess;
 import business.model.Process;
 /**
  * 
@@ -14,7 +15,7 @@ import business.model.Process;
  *
  */
 @RunWith(value = Parameterized.class)
-public class ProcessoTest {
+public class HealthProcessoTest {
 	@Parameters
 	public static Collection <Object[]> data(){
 		return Arrays.asList(new Object[][] {
@@ -33,7 +34,7 @@ public class ProcessoTest {
 	private int orgao;
 	private int situacao;
 
-	public ProcessoTest(boolean oficio, String numero, int assunto, int orgao, int situacao) {
+	public HealthProcessoTest(boolean oficio, String numero, int assunto, int orgao, int situacao) {
 		this.oficio = oficio;
 		this.numero = numero;
 		this.assunto = assunto;
@@ -43,7 +44,8 @@ public class ProcessoTest {
 	
 	@Test(expected = ValidationException.class)
 	public void creationTest() throws ValidationException {
-		Process p = new Process();
+		
+		Process p = new HealthProcess();
 		p.setTipoOficio(this.oficio);
 		p.setNumber(this.numero);
 		p.setSubjectById(this.assunto);
