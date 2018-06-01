@@ -1,14 +1,14 @@
-
-import java.io.IOException;
 import java.net.URL;
 
-import org.apache.log4j.Logger;
-
+import business.service.ConcreteInterestedService;
+import business.service.ConcreteListService;
+import business.service.ConcreteProcessService;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+import presentation.ControllerFactory;
+import presentation.HealthControllerFactory;
+import presentation.MainScreenCtrl;
+import presentation.utils.StringConstants;
 
 /**
  * @author hugotho
@@ -16,25 +16,19 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 	
-	private static final String TITULO_APLICACAO = "DocManager"; 
-	private static final Logger logger = Logger.getLogger(Main.class);
-	
 	public static void main(String[] args) {
         launch(args);
 	}
 	
 	@Override
-	public void start(Stage palco) {
-		URL arquivoFxml = this.getClass().getResource("/visions/tela_principal.fxml");
+	public void start(Stage primaryStage) {
+		URL fxmlUrl = this.getClass().getResource("/visions/tela_principal.fxml");
 		
-		Parent fxmlParent;
-		try {
-			fxmlParent = FXMLLoader.load(arquivoFxml);
-			palco.setScene(new Scene(fxmlParent, 940, 570));
-			palco.setTitle(TITULO_APLICACAO);		
-			palco.show();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
+		ControllerFactory hcf = new HealthControllerFactory(
+				ConcreteProcessService.getInstance(),
+				ConcreteInterestedService.getInstance(),
+				ConcreteListService.getInstance());
+		
+		MainScreenCtrl.showMainScreen(primaryStage, hcf.createMainScreenCtrl());
 	}
 }

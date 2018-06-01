@@ -18,7 +18,7 @@ public class ConcreteInterestedService extends Observable implements InterestedS
 	private static final ConcreteInterestedService instance = new ConcreteInterestedService();
 
 	private ConcreteInterestedService() {
-		interessadoDao = DaoFactoryJDBC.getInterestedDao();
+		interessadoDao = new DaoFactoryJDBC().getInterestedDao(); // TODO Mudar para Injeção
 	}
 
 	public static ConcreteInterestedService getInstance() {
