@@ -89,48 +89,11 @@ public class ControleDialogInteressado implements Initializable {
 	@FXML
 	private void salvar() {
 		
-		Interested interessado = new HealthInterested();
-		boolean failure = false;
-		StringBuilder failureMsg = new StringBuilder();
-		
-		interessado.setCpf(cpf);
+		Interested interessado = new HealthInterested(this.txtNome.getText(), this.cpf, this.txtContato.plainTextProperty().getValue());
 		
 		try {
-			interessado.setName(this.txtNome.getText());
-		} catch (ValidationException ve) {
-			failure = true;
-			if (failureMsg.length() != 0) {
-				failureMsg.append("\n\n");
-			}
-			failureMsg.append(ve.getMessage());
-		}
-		
-		try {
-			interessado.setContact(this.txtContato.plainTextProperty().getValue());
-		} catch (ValidationException ve) {
-			failure = true;
-			if (failureMsg.length() != 0) {
-				failureMsg.append("\n\n");
-			}
-			failureMsg.append(ve.getMessage());
-		}
-		
-		if (failure) {
-			failureMsg.append("\n\n");
-			Alert alert = new Alert(AlertType.ERROR, failureMsg.toString());
-			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(
-					node -> {
-						((Label)node).setMinHeight(Region.USE_PREF_SIZE);
-						((Label)node).setTextFill(Color.RED);
-					});
-			alert.setHeaderText(null);
-			alert.setGraphic(null);
-	        alert.initOwner(raiz.getScene().getWindow());
-
-	        alert.showAndWait();
-		}
-		
-		else {
+			interessado.validate();
+			
 			if(interessadoOriginal == null) {
 				try {
 					interestedService.save(interessado);
@@ -146,6 +109,20 @@ public class ControleDialogInteressado implements Initializable {
 				}
 			}
 			this.fecharJanela();
+			
+		}
+		catch (ValidationException ve) {
+			Alert alert = new Alert(AlertType.ERROR, ve.getMessage());
+			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(
+					node -> {
+						((Label)node).setMinHeight(Region.USE_PREF_SIZE);
+						((Label)node).setTextFill(Color.RED);
+					});
+			alert.setHeaderText(null);
+			alert.setGraphic(null);
+	        alert.initOwner(raiz.getScene().getWindow());
+
+	        alert.showAndWait();
 		}
 	}
 }

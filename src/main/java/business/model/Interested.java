@@ -1,8 +1,5 @@
 package business.model;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
-
 import business.exception.ValidationException;
 
 public interface Interested {
@@ -19,7 +16,7 @@ public interface Interested {
 
 	String getName();
 
-	void setName(String name) throws ValidationException;
+	void setName(String name);
 
 	String getFormatedCpf();
 
@@ -31,6 +28,8 @@ public interface Interested {
 
 	String getContact();
 
-	void setContact(String contact) throws ValidationException;
+	void setContact(String contact);
+	
+	public void validate() throws ValidationException;
 
 }

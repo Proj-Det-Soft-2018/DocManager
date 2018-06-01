@@ -8,8 +8,11 @@ import org.apache.log4j.Logger;
 
 import business.exception.ValidationException;
 import business.model.Process;
+import business.model.Situation;
+import business.model.Subject;
 import business.model.HealthProcess;
 import business.model.Interested;
+import business.model.Organization;
 import business.service.ConcreteInterestedService;
 import business.service.ConcreteListService;
 import business.service.ConcreteProcessService;
@@ -329,71 +332,29 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	@FXML
 	private void save() {
 		//TODO refatorar
-		
-		Process processo = new HealthProcess();
-		boolean failure = false;
-		StringBuilder failureMsg = new StringBuilder();
+		String number;
+		boolean oficio = false;
 
-		processo.setTipoOficio(this.rbOficio.isSelected());
-
-		try {
-			if (this.rbOficio.isSelected()) {
-				String oficioNum = this.txtNumProcesso.plainTextProperty().getValue() +
-						(cbOrgao.getSelectionModel().getSelectedItem().split(" - ")[0]);
-				processo.setNumber(oficioNum);
-			} else {
-				processo.setNumber(this.txtNumProcesso.plainTextProperty().getValue());
-			}
-		} catch (ValidationException ve) {
-			failure = true;
-			failureMsg.append(ve.getMessage());
+		//processo.setTipoOficio(this.rbOficio.isSelected());
+		if (this.rbOficio.isSelected()) {
+			oficio = true;
+			number = this.txtNumProcesso.plainTextProperty().getValue() +
+					(cbOrgao.getSelectionModel().getSelectedItem().split(" - ")[0]);
+		} else {
+			number = this.txtNumProcesso.plainTextProperty().getValue();
 		}
 		
-		processo.setInterested(this.interessado);
-		
+		Process processo = new HealthProcess(
+				oficio,
+				number,
+				this.interessado,
+				Organization.getOrganizationById(this.cbOrgao.getSelectionModel().getSelectedIndex()),
+				Subject.getSubjectById(this.cbAssunto.getSelectionModel().getSelectedIndex()),
+				Situation.getSituationById(this.cbSituacao.getSelectionModel().getSelectedIndex()),
+				this.txtObservacao.getText());
 		try {
-			processo.setOriginEntityById(this.cbOrgao.getSelectionModel().getSelectedIndex());
-		} catch (ValidationException ve) {
-			failure = true;
-			if (failureMsg.length() != 0) {
-				failureMsg.append("\n\n");
-			}
-			failureMsg.append(ve.getMessage());
-		}
-		try {
-			processo.setSubjectById(this.cbAssunto.getSelectionModel().getSelectedIndex());
-		} catch (ValidationException ve) {
-			failure = true;
-			if (failureMsg.length() != 0) {
-				failureMsg.append("\n\n");
-			}
-			failureMsg.append(ve.getMessage());
-		}
-		try {
-			processo.setSituationById(this.cbSituacao.getSelectionModel().getSelectedIndex());
-		} catch (ValidationException ve) {
-			failure = true;
-			if (failureMsg.length() != 0) {
-				failureMsg.append("\n\n");
-			}
-			failureMsg.append(ve.getMessage());
-		}
-		processo.setObservation(this.txtObservacao.getText());
-
-		if (failure) {
-			failureMsg.append("\n\n");
-			Alert alert = new Alert(AlertType.ERROR, failureMsg.toString());
-			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(
-					node -> {
-						((Label)node).setMinHeight(Region.USE_PREF_SIZE);
-						((Label)node).setTextFill(Color.RED);
-					});
-			alert.setHeaderText(null);
-			alert.setGraphic(null);
-	        alert.initOwner(raiz.getScene().getWindow());
-
-	        alert.showAndWait();
-		} else {		
+			processo.validate();
+			
 			interestedService.dettach(this);
 			
 			if (processoOriginal == null ) {
@@ -417,6 +378,19 @@ public class ControleTelaEdicao implements Initializable, Observer{
 			}
 		
 			this.closeWindow();
+		}
+		catch (ValidationException ve) {
+			Alert alert = new Alert(AlertType.ERROR, ve.getMessage());
+			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(
+					node -> {
+						((Label)node).setMinHeight(Region.USE_PREF_SIZE);
+						((Label)node).setTextFill(Color.RED);
+					});
+			alert.setHeaderText(null);
+			alert.setGraphic(null);
+	        alert.initOwner(raiz.getScene().getWindow());
+
+	        alert.showAndWait();
 		}
 	}
 }

@@ -18,8 +18,11 @@ import java.util.Map;
 import business.exception.ValidationException;
 import business.model.HealthInterested;
 import business.model.Process;
+import business.model.Situation;
+import business.model.Subject;
 import business.model.HealthProcess;
 import business.model.Interested;
+import business.model.Organization;
 import persistence.exception.DatabaseException;
 
 /**
@@ -135,7 +138,7 @@ public class HealthProcessDaoMySql implements ProcessDao{
 	
 	
 	@Override
-	public Process getById(Long id) throws ValidationException, DatabaseException {
+	public Process getById(Long id) throws DatabaseException {
 		String sql = "WHERE p.id="+id.toString();
 		List<HealthProcess> processList = this.searcher(sql);
 		if(processList.isEmpty() || processList ==null) {
@@ -148,7 +151,7 @@ public class HealthProcessDaoMySql implements ProcessDao{
 	}
 
 	@Override
-	public boolean contains(Process process) throws ValidationException, DatabaseException {		
+	public boolean contains(Process process) throws DatabaseException {		
 		Process foundProcess = this.getById(process.getId());
 		
 		return (foundProcess!=null) ? true : false;
@@ -156,14 +159,14 @@ public class HealthProcessDaoMySql implements ProcessDao{
 	}
 	
 	@Override
-	public List<HealthProcess> getAll() throws ValidationException, DatabaseException {
+	public List<HealthProcess> getAll() throws DatabaseException {
 		String sql = "ORDER BY data_entrada DESC LIMIT 50";
 		return this.searcher(sql);
 		
 	}
 
 	
-	private List<HealthProcess> searcher(String whereStament) throws ValidationException, DatabaseException {
+	private List<HealthProcess> searcher(String whereStament) throws DatabaseException {
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -192,20 +195,30 @@ public class HealthProcessDaoMySql implements ProcessDao{
 						resultSet.getString("cpf"),
 						resultSet.getString("contato"));
 				
+				try {
+					interested.validate();
+				}
+				catch (ValidationException ve) {
+					throw new DatabaseException("Não foi possível validar Interessado, Banco de dados comprometido.");
+				}
+				
 				//criando o objeto Processo
 				HealthProcess process = new HealthProcess(
 						resultSet.getLong("id"),
 						resultSet.getBoolean("eh_oficio"),
 						resultSet.getString("numero"),
+						interested,
+						Organization.getOrganizationById(resultSet.getInt("orgao_origem")),
+						Subject.getSubjectById(resultSet.getInt("assunto")),
+						Situation.getSituationById(resultSet.getInt("situacao")),
 						resultSet.getString("observacao"));
-				process.setInterested(interested);
-				
-				//falta resolver unidade destino /orgao_saida, se vai ter ou não
-				process.setSubjectById(resultSet.getInt("assunto"));
-				process.setOriginEntityById(resultSet.getInt("orgao_origem"));
-				process.setSituationById(resultSet.getInt("situacao"));
+				try {
+					process.validate();
+				}
+				catch (ValidationException ve) {
+					throw new DatabaseException("Não foi possível validar Processo, Banco de Dados comprometido.");
+				}
 
-				
 				//Convertendo data entrada de java.sql.Date para LocalDateTime
 				Date jdbcRegistrationDate = resultSet.getDate("data_entrada");
 				if(jdbcRegistrationDate != null) {
@@ -230,6 +243,8 @@ public class HealthProcessDaoMySql implements ProcessDao{
 
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível buscar o processo no Banco.");
+		} catch (ValidationException e) {
+			throw new DatabaseException("Problema ao alterar a data de Despacho.");
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
@@ -237,13 +252,13 @@ public class HealthProcessDaoMySql implements ProcessDao{
 	
 	
 	@Override
-	public List<HealthProcess> searchByNumber(String number) throws ValidationException, DatabaseException {
+	public List<HealthProcess> searchByNumber(String number) throws DatabaseException {
 		String sql = "WHERE numero LIKE '"+number+"'";
 		return this.searcher(sql);
 	}
 
 	public List<HealthProcess> multipleSearch(String number, String name, String cpf, int organizationId,
-			int subjectId, int situationId) throws ValidationException, DatabaseException {
+			int subjectId, int situationId) throws DatabaseException {
 		StringBuilder sql = new StringBuilder("WHERE ");
 		final String AND = " AND ";
 		

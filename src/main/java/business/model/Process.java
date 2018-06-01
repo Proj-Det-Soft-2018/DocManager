@@ -2,9 +2,6 @@ package business.model;
 
 import java.time.LocalDateTime;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
-
 import business.exception.ValidationException;
 
 public interface Process {
@@ -32,7 +29,7 @@ public interface Process {
 
 	String getNumber();
 
-	void setNumber(String number) throws ValidationException;
+	void setNumber(String number);
 
 	Interested getIntersted();
 
@@ -48,7 +45,7 @@ public interface Process {
 	/**
 	 * @throws ValidationException 
 	 */
-	void setSubjectById(int subjectId) throws ValidationException;
+	void setSubjectById(int subjectId);
 
 	String getOriginEntityString();
 
@@ -57,7 +54,7 @@ public interface Process {
 	/**
 	 * @throws ValidationException 
 	 */
-	void setOriginEntityById(int originEntityId) throws ValidationException;
+	void setOriginEntityById(int originEntityId);
 
 	String getSituationString();
 
@@ -66,7 +63,7 @@ public interface Process {
 	/**
 	 * @throws ValidationException 
 	 */
-	void setSituationById(int situationId) throws ValidationException;
+	void setSituationById(int situationId);
 
 	String getObservation();
 
@@ -81,5 +78,7 @@ public interface Process {
 	void setDispatchDate(LocalDateTime dispatchDate) throws ValidationException;
 
 	String toXml();
+	
+	public void validate() throws ValidationException;
 
 }

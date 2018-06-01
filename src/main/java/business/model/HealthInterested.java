@@ -32,6 +32,12 @@ public class HealthInterested implements Interested {
 		this.contact = contato;
 	}
 	
+	public HealthInterested(String nome, String cpf, String contato) {
+		this.name = nome;
+		this.cpf = cpf;
+		this.contact = contato;
+	}
+	
 	public HealthInterested() {}
 
 	/* (non-Javadoc)
@@ -65,13 +71,7 @@ public class HealthInterested implements Interested {
 	 * @see business.model.Interested#setName(java.lang.String)
 	 */
 	@Override
-	public void setName(String name) throws ValidationException {
-		if(name == null || name.isEmpty()) {
-			throw new ValidationException("O campo Nome não pode ser vazio.");
-		}
-		else if(!name.matches("[a-zA-Z\\s]+")) {
-			throw new ValidationException("O campo Nome deve conter apenas letras.");
-		}
+	public void setName(String name){
 		this.name = name;
 	}
 	
@@ -124,10 +124,37 @@ public class HealthInterested implements Interested {
 	 * @see business.model.Interested#setContact(java.lang.String)
 	 */
 	@Override
-	public void setContact(String contact) throws ValidationException {
-		if(contact == null || (!contact.isEmpty() && contact.length() < 10)){
-			throw new ValidationException("O contato inserido está incompleto");
-		}
+	public void setContact(String contact){
 		this.contact = contact;
+	}
+
+	@Override
+	public void validate() throws ValidationException {
+		
+		StringBuilder failureMsg = new StringBuilder();
+		boolean failure = false;
+		
+		if(this.name == null || this.name.isEmpty()) {
+			failure = true;
+			System.out.println(this.name);
+			failureMsg.append("O campo Nome não pode ser vazio.\n\n");
+		}
+		else if(!this.name.matches("[a-zA-Z\\s]+")) {
+			failure = true;
+			System.out.println("a"+this.name);
+			failureMsg.append("O campo Nome deve conter apenas letras.\n\n");
+		}
+		
+		if(this.contact == null || (!this.contact.isEmpty() && this.contact.length() < 10)){
+			failure = true;
+			System.out.println(this.contact);
+			failureMsg.append("O contato inserido está incompleto.\n\n");
+		}
+		
+		if(failure) {
+			failureMsg.delete(failureMsg.length() - 2, failureMsg.length());
+			throw new ValidationException(failureMsg.toString());
+		}
+		
 	}
 }
