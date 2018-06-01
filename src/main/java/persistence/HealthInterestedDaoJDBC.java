@@ -18,7 +18,7 @@ import persistence.exception.DatabaseException;
  * @author clah
  * @since 30/03/2018
  */
-public class HealthInterestedDaoMySql implements InterestedDao{
+public class HealthInterestedDaoJDBC implements InterestedDao{
 
 	@Override
 	public void save(Interested novoInteressado) throws DatabaseException {

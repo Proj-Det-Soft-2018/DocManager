@@ -48,9 +48,9 @@ public class ControleTelaBusca implements Initializable, Observer {
 
 	private static Logger logger = Logger.getLogger(ControleTelaBusca.class);
 
-	private static final URL ARQUIVO_FXML_TELA_EDICAO = ControleTelaPrincipal.class.getResource("/visions/tela_editar_processo.fxml");
-	private static final URL ARQUIVO_FXML_DIALOG_PASSWORD = ControleTelaPrincipal.class.getResource("/visions/dialog_adm_password.fxml");
-	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_PDF = ControleTelaPrincipal.class.getResource("/visions/tela_visualizar_pdf.fxml");
+	private static final URL ARQUIVO_FXML_TELA_EDICAO = MainScreenCtrl.class.getResource("/visions/tela_editar_processo.fxml");
+	private static final URL ARQUIVO_FXML_DIALOG_PASSWORD = MainScreenCtrl.class.getResource("/visions/dialog_adm_password.fxml");
+	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_PDF = MainScreenCtrl.class.getResource("/visions/tela_visualizar_pdf.fxml");
 	private static final String MASCARA_NUM_OFICIO = "####/####";
 	private static final String MASCARA_CPF = "###.###.###-##";
 	private static final String DIALOG_ADM_PASS_TITLE = "Autorização";
@@ -122,7 +122,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 	private ChoiceBox<String> choiceSituacao;
 
 	@FXML
-	private TableView<HealthProcess> tableResultados;
+	private TableView<Process> tableResultados;
 
 	@FXML
 	private TableColumn<HealthProcess, String> tabColTipo;
@@ -164,7 +164,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 	public void update() {
 		if (this.ultimaBusca != null) {
 			//TODO verificar resultado = null
-			List<HealthProcess> resultado = null;
+			List<Process> resultado = null;
 			try {
 				resultado = this.processService.search(
 						ultimaBusca.numero,
@@ -193,7 +193,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 		int idSituacao = checkSituacao.isSelected()? choiceSituacao.getSelectionModel().getSelectedIndex() : 0;
 
 		try {
-			List<HealthProcess> resultado = this.processService.search(numProcesso, nomeInteressado, cpfInteressado, idSituacao, idOrgao, idAssunto);
+			List<Process> resultado = this.processService.search(numProcesso, nomeInteressado, cpfInteressado, idSituacao, idOrgao, idAssunto);
 			this.ultimaBusca = new UltimaBusca(numProcesso, nomeInteressado, cpfInteressado, idOrgao, idAssunto, idSituacao);
 			atualizarTabela(resultado);
 		} catch (ValidationException ve) {
@@ -420,7 +420,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 				);
 	}
 
-	private void atualizarTabela(List<HealthProcess> lista) {
+	private void atualizarTabela(List<Process> lista) {
 		tableResultados.getItems().setAll(lista);
 	}
 

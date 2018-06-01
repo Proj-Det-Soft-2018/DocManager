@@ -22,7 +22,7 @@ public class ConcreteStatisticService implements StatisticService {
 	private static final ConcreteStatisticService instance = new ConcreteStatisticService();
 
 	private ConcreteStatisticService() {
-		processoDao = DaoFactoryJDBC.getProcessDao();
+		processoDao = new DaoFactoryJDBC().getProcessDao(); // TODO Mudar para injeção
 	}
 
 	public static ConcreteStatisticService getInstance() {

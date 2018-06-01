@@ -2,12 +2,14 @@ package persistence;
 
 public class DaoFactoryJDBC extends DaoFactory {
 	
-	public static ProcessDao getProcessDao(){
-		return new HealthProcessDaoMySql();
+	@Override
+	public ProcessDao getProcessDao(){
+		return new HealthProcessDaoJDBC();
 	}
 	
-	public static InterestedDao getInterestedDao(){
-		return new HealthInterestedDaoMySql();
+	@Override
+	public InterestedDao getInterestedDao(){
+		return new HealthInterestedDaoJDBC();
 	}
 
 }
