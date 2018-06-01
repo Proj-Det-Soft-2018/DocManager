@@ -26,7 +26,7 @@ import persistence.exception.DatabaseException;
  * @author clah
  * @since 01/04/2018
  */
-public class HealthProcessDaoMySql implements ProcessDao{
+public class HealthProcessDaoJDBC implements ProcessDao{
 	
 	@Override
 	public void save(Process process) throws DatabaseException {
