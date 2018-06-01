@@ -3,7 +3,10 @@ package presentation;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 import business.exception.ValidationException;
+import business.model.HealthInterested;
 import business.model.Interested;
 import business.service.ConcreteInterestedService;
 import business.service.InterestedService;
@@ -52,6 +55,8 @@ public class ControleDialogInteressado implements Initializable {
 	
 	@FXML
 	private Button btnSalvar;
+	
+	private Logger logger = Logger.getLogger(ControleDialogInteressado.class);
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -84,7 +89,7 @@ public class ControleDialogInteressado implements Initializable {
 	@FXML
 	private void salvar() {
 		
-		Interested interessado = new Interested();
+		Interested interessado = new HealthInterested();
 		boolean failure = false;
 		StringBuilder failureMsg = new StringBuilder();
 		
@@ -130,16 +135,14 @@ public class ControleDialogInteressado implements Initializable {
 				try {
 					interestedService.save(interessado);
 				} catch (DatabaseException e) {
-					// TODO VERIFICAR CATCH CONTROLADOR
-					e.printStackTrace();
+					logger.error(e.getMessage(), e);
 				}
 			} else {
 				interessado.setId(interessadoOriginal.getId());
 				try {
 					interestedService.update(interessado);
 				} catch (DatabaseException e) {
-					// TODO VERIFICAR CATCH CONTROLADOR
-					e.printStackTrace();
+					logger.error(e.getMessage(), e);
 				}
 			}
 			this.fecharJanela();

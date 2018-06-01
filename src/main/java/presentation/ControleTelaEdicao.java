@@ -7,8 +7,9 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 import business.exception.ValidationException;
-import business.model.Interested;
 import business.model.Process;
+import business.model.HealthProcess;
+import business.model.Interested;
 import business.service.ConcreteInterestedService;
 import business.service.ConcreteListService;
 import business.service.ConcreteProcessService;
@@ -232,8 +233,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 
 	        alert.showAndWait();
 		} catch (DatabaseException e) {
-			// TODO VERIFICAR CATCH CONTROLADOR
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -330,7 +330,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	private void save() {
 		//TODO refatorar
 		
-		Process processo = new Process();
+		Process processo = new HealthProcess();
 		boolean failure = false;
 		StringBuilder failureMsg = new StringBuilder();
 
@@ -401,11 +401,9 @@ public class ControleTelaEdicao implements Initializable, Observer{
 				try {
 					processService.save(processo);
 				} catch (ValidationException e) {
-					// TODO VERIFICAR CATCH CONTROLADOR
-					e.printStackTrace();
+					logger.error(e.getMessage(), e);
 				} catch (DatabaseException e) {
-					// TODO VERIFICAR CATCH CONTROLADOR
-					e.printStackTrace();
+					logger.error(e.getMessage(), e);
 				}
 		
 			} else {
@@ -414,8 +412,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 				try {
 					processService.update(processo);
 				} catch (DatabaseException e) {
-					// TODO VERIFICAR CATCH CONTROLADOR
-					e.printStackTrace();
+					logger.error(e.getMessage(), e);
 				}
 			}
 		

@@ -3,7 +3,7 @@ package business.service;
 import business.exception.ValidationException;
 import business.model.Interested;
 import persistence.DaoFactoryJDBC;
-import persistence.InteressadoDao;
+import persistence.InterestedDao;
 import persistence.exception.DatabaseException;
 /**
  * 
@@ -12,7 +12,7 @@ import persistence.exception.DatabaseException;
  */
 public class ConcreteInterestedService extends Observable implements InterestedService {
 	
-	private InteressadoDao interessadoDao;
+	private InterestedDao interessadoDao;
 
 	// Singleton
 	private static final ConcreteInterestedService instance = new ConcreteInterestedService();

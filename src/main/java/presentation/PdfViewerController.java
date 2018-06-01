@@ -10,10 +10,9 @@ import java.util.ResourceBundle;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
+import business.model.Process;
 import business.service.ConcreteProcessService;
 import business.service.ProcessService;
-import business.model.Process;
-
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

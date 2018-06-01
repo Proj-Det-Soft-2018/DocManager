@@ -16,15 +16,17 @@ import java.util.List;
 import java.util.Map;
 
 import business.exception.ValidationException;
-import business.model.Interested;
+import business.model.HealthInterested;
 import business.model.Process;
+import business.model.HealthProcess;
+import business.model.Interested;
 import persistence.exception.DatabaseException;
 
 /**
  * @author clah
  * @since 01/04/2018
  */
-public class ProcessoDaoMySql implements ProcessoDao{
+public class HealthProcessDaoMySql implements ProcessDao{
 	
 	@Override
 	public void save(Process process) throws DatabaseException {
@@ -135,7 +137,7 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	@Override
 	public Process getById(Long id) throws ValidationException, DatabaseException {
 		String sql = "WHERE p.id="+id.toString();
-		List<Process> processList = this.searcher(sql);
+		List<HealthProcess> processList = this.searcher(sql);
 		if(processList.isEmpty() || processList ==null) {
 			return null;
 		}else {
@@ -154,14 +156,14 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	}
 	
 	@Override
-	public List<Process> getAll() throws ValidationException, DatabaseException {
+	public List<HealthProcess> getAll() throws ValidationException, DatabaseException {
 		String sql = "ORDER BY data_entrada DESC LIMIT 50";
 		return this.searcher(sql);
 		
 	}
 
 	
-	private List<Process> searcher(String whereStament) throws ValidationException, DatabaseException {
+	private List<HealthProcess> searcher(String whereStament) throws ValidationException, DatabaseException {
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -179,19 +181,19 @@ public class ProcessoDaoMySql implements ProcessoDao{
 			
 			resultSet = statement.executeQuery();
 			
-			List<Process> processList = new ArrayList<>();
+			List<HealthProcess> processList = new ArrayList<>();
 			
 			while(resultSet.next()) {
 				
 				//criando objeto Interessado
-				Interested interested = new Interested(
+				Interested interested = new HealthInterested(
 						resultSet.getLong("interessado_id"),
 						resultSet.getString("nome"),
 						resultSet.getString("cpf"),
 						resultSet.getString("contato"));
 				
 				//criando o objeto Processo
-				Process process = new Process(
+				HealthProcess process = new HealthProcess(
 						resultSet.getLong("id"),
 						resultSet.getBoolean("eh_oficio"),
 						resultSet.getString("numero"),
@@ -235,12 +237,12 @@ public class ProcessoDaoMySql implements ProcessoDao{
 	
 	
 	@Override
-	public List<Process> searchByNumber(String number) throws ValidationException, DatabaseException {
+	public List<HealthProcess> searchByNumber(String number) throws ValidationException, DatabaseException {
 		String sql = "WHERE numero LIKE '"+number+"'";
 		return this.searcher(sql);
 	}
 
-	public List<Process> multipleSearch(String number, String name, String cpf, int organizationId,
+	public List<HealthProcess> multipleSearch(String number, String name, String cpf, int organizationId,
 			int subjectId, int situationId) throws ValidationException, DatabaseException {
 		StringBuilder sql = new StringBuilder("WHERE ");
 		final String AND = " AND ";
