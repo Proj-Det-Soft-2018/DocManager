@@ -7,16 +7,16 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 
 import business.exception.ValidationException;
-import business.model.Process;
 import business.model.HealthProcess;
 import business.model.Interested;
+import business.model.Process;
 import business.service.ConcreteInterestedService;
-import business.service.ConcreteListService;
+import business.service.ConcreteHealthListService;
 import business.service.ConcreteProcessService;
 import business.service.InterestedService;
+import business.service.ListServiceAbstract;
 import business.service.Observer;
 import business.service.ProcessService;
-import business.service.ListService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -58,7 +58,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	private static final String MASCARA_NUM_OFICIO = "####/####";
 	private static final String MASCARA_NUM_PROCESSO = "#####.######/####-##";
 
-	private ListService listService;
+	private ListServiceAbstract listService;
 	private ProcessService processService;
 	private InterestedService interestedService;
 	private Process processoOriginal;
@@ -127,7 +127,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	public void initialize(URL location, ResourceBundle resources) {
 		processoOriginal = null;
 		interessado = null;
-		listService = ConcreteListService.getInstance();
+		listService = ConcreteHealthListService.getInstance();
 		processService = ConcreteProcessService.getInstance();
 		interestedService = ConcreteInterestedService.getInstance();
 		interestedService.attach(this);

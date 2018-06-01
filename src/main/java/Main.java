@@ -1,7 +1,7 @@
 import java.net.URL;
 
 import business.service.ConcreteInterestedService;
-import business.service.ConcreteListService;
+import business.service.ConcreteHealthListService;
 import business.service.ConcreteProcessService;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -27,7 +27,7 @@ public class Main extends Application {
 		ControllerFactory hcf = new HealthControllerFactory(
 				ConcreteProcessService.getInstance(),
 				ConcreteInterestedService.getInstance(),
-				ConcreteListService.getInstance());
+				ConcreteHealthListService.getInstance());
 		
 		MainScreenCtrl.showMainScreen(primaryStage, hcf.createMainScreenCtrl());
 	}

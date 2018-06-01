@@ -11,11 +11,11 @@ import org.apache.log4j.Logger;
 import business.exception.ValidationException;
 import business.model.HealthProcess;
 import business.model.Process;
-import business.service.ConcreteListService;
+import business.service.ConcreteHealthListService;
 import business.service.ConcreteProcessService;
+import business.service.ListServiceAbstract;
 import business.service.Observer;
 import business.service.ProcessService;
-import business.service.ListService;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -57,7 +57,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 	private static final String EDITAR_PROCESSO_TITLE = "Editar Processo";
 	private static final String VISUALIZAR_PDF = "Certidão";
 
-	private ListService listService;
+	private ListServiceAbstract listService;
 	private ProcessService processService;
 	private Process processoSelecionado;
 	private MaskedTextField mTxtCpf;
@@ -147,7 +147,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		listService = ConcreteListService.getInstance();
+		listService = ConcreteHealthListService.getInstance();
 		processService = ConcreteProcessService.getInstance();
 		processService.attach(this);
 		processoSelecionado = null;
