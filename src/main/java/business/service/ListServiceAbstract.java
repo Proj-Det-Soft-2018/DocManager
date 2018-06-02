@@ -37,17 +37,17 @@ public abstract class ListServiceAbstract {
 		return subjectsList;
 		
 	}
-
+	
 	public List<String> getSituationsList(){
-		Situation current = getCurrentProcessSituation();
-		
-		List<String> situationListReorganized = this.reorganizeByPriotity(current);
-		
 		return situationsList;
 	}
 
-	protected abstract List<String> reorganizeByPriotity(Situation current);
-	protected abstract Situation getCurrentProcessSituation();
+	public List<String> getSituationsListByCurrentSituation(Situation current){
+				
+		return this.reorganizeByCurrentSituation(null);
+	}
+
+	protected abstract List<String> reorganizeByCurrentSituation(Situation current);
 	
 	
 

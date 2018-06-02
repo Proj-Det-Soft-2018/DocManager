@@ -315,7 +315,11 @@ public class ControleTelaEdicao implements Initializable, Observer{
 		this.cbAssunto.getSelectionModel().select(0);
 
 		ObservableList<String> obsListaSituacoes = this.cbSituacao.getItems();
-		obsListaSituacoes.addAll(listService.getSituationsList());
+		if(processoOriginal == null) {
+			obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(null));
+		}else {
+			obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(processoOriginal.getSituation()));
+		}
 		this.cbSituacao.getSelectionModel().select(0);
 	}
 
