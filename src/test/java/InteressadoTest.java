@@ -16,19 +16,23 @@ public class InteressadoTest {
 	@Parameters
 	public static Collection <Object[]> data(){
 		return Arrays.asList(new Object[][] {
-			{null, "84999999999"},
-			{"teste dois", null},
-			{"", "84999999999"},
-			{"teste1", "8433334444"},
-			{"teste1", "8433"},
+			{null, "12345678910", "84999999999"},
+			{"teste dois", "12345678910", null},
+			{"", "12345678910", "84999999999"},
+			{"teste1","12345678910", "8433334444"},
+			{"teste","12345678910", "8433"},
+			{"teste","1234567891", "8433334444"},
+			{"teste","123456789101", "8433334444"},
 		});
 	}
 	
 	private String nome;
+	private String cpf;
 	private String contato;
 	
-	public InteressadoTest(String nome, String contato) {
+	public InteressadoTest(String nome, String cpf, String contato) {
 		this.nome = nome;
+		this.cpf = cpf;
 		this.contato = contato;
 	}
 
@@ -36,9 +40,8 @@ public class InteressadoTest {
 
 	@Test(expected = ValidationException.class)
 	public void creationTest() throws ValidationException {
-		Interested i = new HealthInterested();
-		i.setName(this.nome);
-		i.setContact(this.contato);
+		Interested i = new HealthInterested(nome, cpf, contato);
+		i.validate();
 	}
 
 }
