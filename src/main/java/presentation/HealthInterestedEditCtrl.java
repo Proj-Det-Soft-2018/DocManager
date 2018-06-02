@@ -17,7 +17,7 @@ import presentation.utils.widget.MaskedContactTextField;
 public class HealthInterestedEditCtrl extends InterestedEditCtrl {
 	
 	private static final Logger LOGGER = Logger.getLogger(HealthInterestedEditCtrl.class);
-	private static final URL FXML_PATH = HealthInterestedEditCtrl.class.getResource("/visions/dialog_editar_interessado.fxml");
+	private static final URL FXML_PATH = HealthInterestedEditCtrl.class.getResource("/visions/health_interested_edit_screen.fxml");
 	
 	@FXML
 	private Label lblAlert;

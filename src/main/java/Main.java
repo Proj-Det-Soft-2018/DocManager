@@ -1,6 +1,7 @@
 import business.service.ConcreteInterestedService;
 import business.service.ConcreteListService;
 import business.service.ConcreteProcessService;
+import business.service.ConcreteStatisticService;
 import presentation.ControllerFactory;
 import presentation.HealthControllerFactory;
 import presentation.MainScreenCtrl;
@@ -24,7 +25,8 @@ public class Main extends Application {
 		ControllerFactory hcf = new HealthControllerFactory(
 				ConcreteProcessService.getInstance(),
 				ConcreteInterestedService.getInstance(),
-				ConcreteListService.getInstance());
+				ConcreteListService.getInstance(),
+				ConcreteStatisticService.getInstance());
 		
 		MainScreenCtrl.showMainScreen(primaryStage, hcf.createMainScreenCtrl());
 	}

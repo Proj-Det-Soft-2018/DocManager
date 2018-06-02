@@ -3,6 +3,7 @@ package presentation.utils;
 public enum StringConstants {
 	TITLE_APPLICATION ("DocManager"),
 	TITLE_PDF_VIEWER_SCREEN ("Certidão"),
+	TITTLE_PDF_SAVE_SCREEN ("Salvar Documento"),
 	TITLE_CREATE_PROCESS_SCREEN ("Novo Processo / Ofício"),
 	TITLE_EDIT_PROCESS_SCREEN ("Editar Processo"),
 	TITLE_CREATE_INTERESTED_SCREEN ("Novo Interessado"),

@@ -35,12 +35,10 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 
 	private static final URL ARQUIVO_FXML_TELA_EDICAO = MainScreenCtrl.class.getResource("/visions/tela_editar_processo.fxml");
 	private static final URL ARQUIVO_FXML_TELA_BUSCA = MainScreenCtrl.class.getResource("/visions/tela_buscar_processos.fxml");
-	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_GRAFICOS = MainScreenCtrl.class.getResource("/visions/tela_statistics_graphs.fxml");
 	
 	private static final String CRIAR_PROCESSO = "Novo Processo / Ofício";
 	private static final String EDITAR_PROCESSO = "Editar Processo";
 	private static final String BUSCAR_PROCESSO = "Buscar Processos / Ofícios";
-	private static final String VISUALIZAR_GRAFICOS = "Gráficos Administrativos";
 
 	private final Logger logger;
 	
@@ -135,12 +133,14 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 	
 	@FXML
 	private void showDeleteDialog() {
-		DeleteDialogCtrl.showDeleteDialog(root.getScene().getWindow(), selectedProcess, processService);
+		DeleteDialogCtrl.showDeleteDialog(root.getScene().getWindow(),
+				controllerFactory.createDeleteDialogCtrl(),	selectedProcess);
 	}
 	
 	@FXML
 	private void showPdfViewer() {
-		PdfViewerCtrl.showPdfView(root.getScene().getWindow(), selectedProcess, processService);
+		PdfViewerCtrl.showPdfView(root.getScene().getWindow(),
+				controllerFactory.createPdfViewerCtrl(), selectedProcess);
 	}
 	
 	@FXML
@@ -158,6 +158,7 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 
 			SearchScreenCtrl controleTelaBusca = loader.getController();
 			controleTelaBusca.configurarFechamento();
+			controleTelaBusca.setControllerFactory(controllerFactory);
 			
 			telaBusca.show();
 		} catch (IOException e) {
@@ -167,21 +168,8 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 	
 	@FXML
 	private void createStatisticScreen() {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(ARQUIVO_FXML_TELA_VISUALIZAR_GRAFICOS);
-			Pane novoPainel = loader.load();
-
-			Stage statisticsGraphsScreen = new Stage();
-			statisticsGraphsScreen.setTitle(VISUALIZAR_GRAFICOS);
-			statisticsGraphsScreen.initModality(Modality.WINDOW_MODAL);
-			statisticsGraphsScreen.initOwner(this.root.getScene().getWindow());
-			statisticsGraphsScreen.setScene(new Scene(novoPainel, 940, 570));			
-			
-			statisticsGraphsScreen.show();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
+		StatisticsScreenCtrl.showStatisticsScreen(root.getScene().getWindow(),
+				controllerFactory.createStatisticsScreenCtrl());
 	}
 	
 	private void updateTable() {

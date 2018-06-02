@@ -53,7 +53,6 @@ public class ControleTelaEdicao implements Initializable, Observer{
 
 	private Logger logger = Logger.getLogger(ControleTelaEdicao.class);
 
-	private static final URL ARQUIVO_FXML_DIALOG_INTERESSADO = MainScreenCtrl.class.getResource("/visions/dialog_editar_interessado.fxml");
 	private static final String LABEL_BTN_ATUALIZAR = "Atualizar"; 
 	private static final String LABEL_BTN_EDITAR_INTERESSADO = "Editar"; 
 	private static final String LABEL_BTN_LIMPAR_INTERESSADO = "Limpar"; 

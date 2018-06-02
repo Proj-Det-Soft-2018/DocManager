@@ -41,12 +41,11 @@ public class DeleteDialogCtrl {
 	@FXML
 	private PasswordField txtPassword;
 
-	public static void showDeleteDialog(Window ownerWindow, Process process, ProcessService processService){
+	public static void showDeleteDialog(Window ownerWindow, DeleteDialogCtrl controller, Process process){
 		try {
 			FXMLLoader loader = new FXMLLoader(FXML_PATH);
-			DeleteDialogCtrl deleteDialogCtrl = new DeleteDialogCtrl(processService);
-			deleteDialogCtrl.setProcess(process);
-			loader.setController(deleteDialogCtrl);
+			controller.setProcess(process);
+			loader.setController(controller);
 			Pane newPane = loader.load();
 
 			Stage deleteDialogStage = new Stage();
@@ -61,7 +60,7 @@ public class DeleteDialogCtrl {
 		}
 	}
 	
-	private DeleteDialogCtrl(ProcessService processService) {
+	public DeleteDialogCtrl(ProcessService processService) {
 		this.processService = processService;
 	}
 	

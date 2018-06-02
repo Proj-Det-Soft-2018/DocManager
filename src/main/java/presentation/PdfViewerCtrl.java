@@ -49,12 +49,11 @@ public class PdfViewerCtrl implements Initializable {
 	@FXML
 	private WebView pdfView;
 
-	public static void showPdfView(Window ownerWindow, Process process, ProcessService processService) {
+	public static void showPdfView(Window ownerWindow, PdfViewerCtrl controller, Process process) {
 		try {
 			FXMLLoader loader = new FXMLLoader(FXML_PATH);
-			PdfViewerCtrl pdfViewerController = new PdfViewerCtrl(processService);
-			pdfViewerController.setProcess(process);
-			loader.setController(pdfViewerController);
+			controller.setProcess(process);
+			loader.setController(controller);
 			Pane newPane = loader.load();
 
 			Stage pdfViewerScreen = new Stage();
@@ -70,7 +69,7 @@ public class PdfViewerCtrl implements Initializable {
 		}
 	}
 	
-	private PdfViewerCtrl(ProcessService processService) {
+	public PdfViewerCtrl(ProcessService processService) {
 		this.processService = processService;
 	}
 	
@@ -113,6 +112,8 @@ public class PdfViewerCtrl implements Initializable {
         //Set extension filter for text files
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("arquivos PDF (*.pdf)", "*.pdf");
         fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.setTitle(StringConstants.TITTLE_PDF_SAVE_SCREEN.getText());
+        fileChooser.setInitialFileName("Certidão.pdf");
 
         //Show save file dialog
         File file = fileChooser.showSaveDialog(root.getScene().getWindow());

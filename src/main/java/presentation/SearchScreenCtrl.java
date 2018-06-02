@@ -53,9 +53,12 @@ public class SearchScreenCtrl implements Initializable, Observer {
 	private static final String MASCARA_CPF = "###.###.###-##";
 	private static final String EDITAR_PROCESSO_TITLE = "Editar Processo";
 
+	private ControllerFactory controllerFactory;
 	private ListService listService;
 	private ProcessService processService;
+	
 	private Process selectedProcess;
+	
 	private MaskedTextField mTxtCpf;
 	private DynamicMaskTextField dmTxtOficioNum;
 	private UltimaBusca ultimaBusca;
@@ -155,6 +158,12 @@ public class SearchScreenCtrl implements Initializable, Observer {
 		configureForm();
 		configurarTabela();
 	}
+
+	public void setControllerFactory(ControllerFactory controllerFactory) {
+		this.controllerFactory = controllerFactory;
+	}
+
+
 
 	@Override
 	public void update() {
@@ -430,7 +439,8 @@ public class SearchScreenCtrl implements Initializable, Observer {
 
 	@FXML
 	private void criarDialogAdmPassword() {
-		DeleteDialogCtrl.showDeleteDialog(root.getScene().getWindow(), selectedProcess, processService);
+		DeleteDialogCtrl.showDeleteDialog(root.getScene().getWindow(),
+				controllerFactory.createDeleteDialogCtrl(),	selectedProcess);
 	}
 
 	@FXML
@@ -457,7 +467,8 @@ public class SearchScreenCtrl implements Initializable, Observer {
 	
 	@FXML
 	private void criarTelaPdf() {
-		PdfViewerCtrl.showPdfView(root.getScene().getWindow(), selectedProcess, processService);
+		PdfViewerCtrl.showPdfView(root.getScene().getWindow(),
+				controllerFactory.createPdfViewerCtrl(), selectedProcess);
 	}
 
 	/* Estrutura de Dados para armazenar a ultima busca */
