@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import business.exception.ValidationException;
 import business.model.HealthInterested;
 import business.model.HealthProcess;
@@ -27,6 +29,8 @@ import persistence.exception.DatabaseException;
  * @since 01/04/2018
  */
 public class HealthProcessDaoJDBC implements ProcessDao{
+	
+	private static final Logger LOGGER = Logger.getLogger(HealthInterestedDaoJDBC.class);
 	
 	@Override
 	public void save(Process process) throws DatabaseException {
@@ -135,7 +139,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	
 	
 	@Override
-	public Process getById(Long id) throws ValidationException, DatabaseException {
+	public Process getById(Long id) throws DatabaseException {
 		String sql = "WHERE p.id="+id.toString();
 		List<Process> processList = this.searcher(sql);
 		if(processList.isEmpty() || processList ==null) {
@@ -148,7 +152,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	}
 
 	@Override
-	public boolean contains(Process process) throws ValidationException, DatabaseException {		
+	public boolean contains(Process process) throws DatabaseException {		
 		Process foundProcess = this.getById(process.getId());
 		
 		return (foundProcess!=null) ? true : false;
@@ -156,14 +160,14 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	}
 	
 	@Override
-	public List<Process> getAll() throws ValidationException, DatabaseException {
+	public List<Process> getAll() throws DatabaseException {
 		String sql = "ORDER BY data_entrada DESC LIMIT 50";
 		return this.searcher(sql);
 		
 	}
 
 	
-	private List<Process> searcher(String whereStament) throws ValidationException, DatabaseException {
+	private List<Process> searcher(String whereStament) throws DatabaseException {
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -174,14 +178,14 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 						+ "ON p.interessado_id=i.id "
 						+ whereStament;
 		
+		List<Process> processList = new ArrayList<>();
+		
 		try {
 			connection = ConnectionFactory.getConnection();
 			
 			statement = connection.prepareStatement(query);
 			
 			resultSet = statement.executeQuery();
-			
-			List<Process> processList = new ArrayList<>();
 			
 			while(resultSet.next()) {
 				
@@ -225,25 +229,27 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 				processList.add(process);
 			
 			}
-			
-			return processList;
-
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível buscar o processo no Banco.");
+		} catch (ValidationException e) {
+			// TODO Lançar nova DBException específica
+			LOGGER.error(e.getMessage(), e);
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
+		
+		return processList;
 	}
 	
 	
 	@Override
-	public List<Process> searchByNumber(String number) throws ValidationException, DatabaseException {
+	public List<Process> searchByNumber(String number) throws DatabaseException {
 		String sql = "WHERE numero LIKE '"+number+"'";
 		return this.searcher(sql);
 	}
 
 	public List<Process> multipleSearch(String number, String name, String cpf, int organizationId,
-			int subjectId, int situationId) throws ValidationException, DatabaseException {
+			int subjectId, int situationId) throws DatabaseException {
 		StringBuilder sql = new StringBuilder("WHERE ");
 		final String AND = " AND ";
 		

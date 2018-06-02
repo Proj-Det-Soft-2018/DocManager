@@ -41,10 +41,20 @@ public class HealthProcess implements Process {
 
 	}
 
-	public HealthProcess(Long id, boolean tipoOficio, String number, String observation) {
+	public HealthProcess(Long id, boolean tipoOficio, String number,  String observation) {
 		this.id = id;
 		this.oficio = tipoOficio;
 		this.number = number;
+		this.observation = observation;
+	}
+	
+	public HealthProcess(boolean tipoOficio, String number, Interested interested, Organization originEntity, Subject subject, Situation situation, String observation) {
+		this.oficio = tipoOficio;
+		this.number = number;
+		this.interested = interested;
+		this.originEntity = originEntity;
+		this.subject = subject;
+		this.situation = situation;
 		this.observation = observation;
 	}
 
@@ -118,22 +128,7 @@ public class HealthProcess implements Process {
 	 * @see business.model.Process#setNumber(java.lang.String)
 	 */
 	@Override
-	public void setNumber(String number) throws ValidationException {
-		if(this.oficio == true) {
-			if(number.length() < 8) {
-				throw new ValidationException("O número digitado é inválido.");
-			}
-			else {
-				if(!number.substring(0, 7).matches("[0-9]+")) {
-					throw new ValidationException("O número digitado é inválido.");
-				}
-			}
-		}
-		else {
-			if(!(number.length() == 17) || !(number.matches("[0-9]+"))) {
-				throw new ValidationException("O número digitado é inválido.");
-			}
-		}
+	public void setNumber(String number){
 		this.number = number;
 	}
 	
@@ -176,10 +171,7 @@ public class HealthProcess implements Process {
 	 * @see business.model.Process#setSubjectById(int)
 	 */
 	@Override
-	public void setSubjectById(int subjectId) throws ValidationException {
-		if(subjectId == 0) {
-			throw new ValidationException("Campo assunto é obrigatório.");
-		}
+	public void setSubjectById(int subjectId){
 		this.subject = Subject.getSubjectById(subjectId);
 	}
 	
@@ -204,10 +196,7 @@ public class HealthProcess implements Process {
 	 * @see business.model.Process#setOriginEntityById(int)
 	 */
 	@Override
-	public void setOriginEntityById(int originEntityId) throws ValidationException {
-		if(originEntityId == 0) {
-			throw new ValidationException("O campo Orgão é obrigatório.");
-		}
+	public void setOriginEntityById(int originEntityId){
 		this.originEntity = Organization.getOrganizationById(originEntityId);
 	}
 	
@@ -232,10 +221,7 @@ public class HealthProcess implements Process {
 	 * @see business.model.Process#setSituationById(int)
 	 */
 	@Override
-	public void setSituationById(int situationId) throws ValidationException {
-		if(situationId == 0) {
-			throw new ValidationException("O campo Situação é obrigatório.");
-		}
+	public void setSituationById(int situationId){
 		this.situation = Situation.getSituationById(situationId);
 	}
 	
@@ -324,8 +310,52 @@ public class HealthProcess implements Process {
 				logger.fatal(e.getMessage(), e);
 			}
 		}
-		
-		System.out.println(xml);
 		return xml;
+	}
+	
+	@Override
+	public void validate() throws ValidationException {
+		
+		StringBuilder failureMsg = new StringBuilder();
+		boolean failure = false;
+		
+		if(this.oficio == true) {
+			if(number.length() < 8) {
+				failure = true;
+				failureMsg.append("O número digitado é inválido.\n\n");
+			}
+			else {
+				if(!number.substring(0, 7).matches("[0-9]+")) {
+					failure = true;
+					failureMsg.append("O número digitado é inválido.\n\n");
+				}
+			}
+		}
+		else {
+			if(!(number.length() == 17) || !(number.matches("[0-9]+"))) {
+				failure = true;
+				failureMsg.append("O número digitado é inválido.\n\n");
+			}
+		}
+		
+		if(this.originEntity == Organization.NULL) {
+			failure = true;
+			failureMsg.append("O campo Orgão é obrigatório.\n\n");
+		}
+		
+		if(this.subject == Subject.NULL) {
+			failure = true;
+			failureMsg.append("Campo assunto é obrigatório.\n\n");
+		}
+		
+		if(this.situation == Situation.NULL) {
+			failure = true;
+			failureMsg.append("O campo Situação é obrigatório.\n\n");
+		}
+		
+		if(failure) {
+			failureMsg.delete(failureMsg.length() - 2, failureMsg.length());
+			throw new ValidationException(failureMsg.toString());
+		}
 	}
 }

@@ -16,7 +16,7 @@ public interface Interested {
 
 	String getName();
 
-	void setName(String name) throws ValidationException;
+	void setName(String name);
 
 	String getFormatedCpf();
 
@@ -28,6 +28,8 @@ public interface Interested {
 
 	String getContact();
 
-	void setContact(String contact) throws ValidationException;
+	void setContact(String contact);
+	
+	public void validate() throws ValidationException;
 
 }
