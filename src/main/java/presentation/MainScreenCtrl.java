@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
@@ -40,7 +41,6 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 	private static final String EDITAR_PROCESSO = "Editar Processo";
 	private static final String BUSCAR_PROCESSO = "Buscar Processos / Ofícios";
 	private static final String VISUALIZAR_GRAFICOS = "Gráficos Administrativos";
-	private static final String DIALOG_ADM_PASS_TITLE = "Autorização";
 
 	private final Logger logger;
 	
@@ -72,8 +72,8 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 		FXMLLoader loader = new FXMLLoader(controller.getFxmlPath());
 		loader.setController(controller);
 		try {
-			Pane newPane = loader.load();
-			primaryStage.setScene(new Scene(newPane, 940, 570));
+			Parent rootParent = loader.load();
+			primaryStage.setScene(new Scene(rootParent, 940, 570));
 			primaryStage.setTitle(StringConstants.TITLE_APPLICATION.getText());
 			primaryStage.show();
 		} catch (IOException e) {
@@ -125,6 +125,7 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 
 			ControleTelaEdicao controleTelaEdicao = loader.getController();
 			controleTelaEdicao.montarFormulario(processo);
+			controleTelaEdicao.setControllerFactory(controllerFactory);
 			
 			telaEdicao.show();
 		} catch (IOException e) {

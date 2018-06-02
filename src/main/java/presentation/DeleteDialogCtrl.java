@@ -47,13 +47,13 @@ public class DeleteDialogCtrl {
 			DeleteDialogCtrl deleteDialogCtrl = new DeleteDialogCtrl(processService);
 			deleteDialogCtrl.setProcess(process);
 			loader.setController(deleteDialogCtrl);
-			Pane novoPainel = loader.load();
+			Pane newPane = loader.load();
 
 			Stage deleteDialogStage = new Stage();
 			deleteDialogStage.setTitle(StringConstants.TITLE_DELETE_DIALOG.getText());
 			deleteDialogStage.initModality(Modality.WINDOW_MODAL);
 			deleteDialogStage.initOwner(ownerWindow);
-			deleteDialogStage.setScene(new Scene(novoPainel, 300, 190));
+			deleteDialogStage.setScene(new Scene(newPane, 300, 190));
 			
 			deleteDialogStage.show();
 		} catch (IOException e) {

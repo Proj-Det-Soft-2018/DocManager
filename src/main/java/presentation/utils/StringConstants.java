@@ -5,6 +5,8 @@ public enum StringConstants {
 	TITLE_PDF_VIEWER_SCREEN ("Certidão"),
 	TITLE_CREATE_PROCESS_SCREEN ("Novo Processo / Ofício"),
 	TITLE_EDIT_PROCESS_SCREEN ("Editar Processo"),
+	TITLE_CREATE_INTERESTED_SCREEN ("Novo Interessado"),
+	TITLE_EDIT_INTERESTED_SCREEN ("Editar Interessado"),
 	TITLE_SEARCH_SCREEN ("Buscar Processos / Ofícios"),
 	TITLE_STATISTICS_SCREEN ("Gráficos Administrativos"),
 	TITLE_DELETE_DIALOG ("Autorização"),

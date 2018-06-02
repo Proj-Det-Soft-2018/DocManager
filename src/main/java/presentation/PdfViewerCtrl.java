@@ -55,13 +55,13 @@ public class PdfViewerCtrl implements Initializable {
 			PdfViewerCtrl pdfViewerController = new PdfViewerCtrl(processService);
 			pdfViewerController.setProcess(process);
 			loader.setController(pdfViewerController);
-			Pane novoPainel = loader.load();
+			Pane newPane = loader.load();
 
 			Stage pdfViewerScreen = new Stage();
 			pdfViewerScreen.setTitle(StringConstants.TITLE_PDF_VIEWER_SCREEN.getText());
 			pdfViewerScreen.initModality(Modality.WINDOW_MODAL);
 			pdfViewerScreen.initOwner(ownerWindow);
-			pdfViewerScreen.setScene(new Scene(novoPainel, 820, 660));
+			pdfViewerScreen.setScene(new Scene(newPane, 820, 660));
 			
 			pdfViewerScreen.show();
 		} catch (IOException e) {

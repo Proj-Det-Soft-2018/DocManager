@@ -10,6 +10,7 @@ import business.exception.ValidationException;
 import business.model.Process;
 import business.model.Situation;
 import business.model.Subject;
+import business.model.HealthInterested;
 import business.model.HealthProcess;
 import business.model.Interested;
 import business.model.Organization;
@@ -53,8 +54,6 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	private Logger logger = Logger.getLogger(ControleTelaEdicao.class);
 
 	private static final URL ARQUIVO_FXML_DIALOG_INTERESSADO = MainScreenCtrl.class.getResource("/visions/dialog_editar_interessado.fxml");
-	private static final String CRIAR_INTERESSADO = "Novo Interessado";
-	private static final String EDITAR_INTERESSADO = "Editar Interessado";
 	private static final String LABEL_BTN_ATUALIZAR = "Atualizar"; 
 	private static final String LABEL_BTN_EDITAR_INTERESSADO = "Editar"; 
 	private static final String LABEL_BTN_LIMPAR_INTERESSADO = "Limpar"; 
@@ -67,7 +66,12 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	private Process processoOriginal;
 	private Interested interessado;
 	
-	
+	private ControllerFactory controllerFactory;
+
+	// TODO Remover após refatoração
+	public void setControllerFactory(ControllerFactory controllerFactory) {
+		this.controllerFactory = controllerFactory;
+	}
 
 	@FXML
 	private VBox raiz;
@@ -198,7 +202,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 			this.hBoxInteressado.getChildren().remove(btnBuscarInteressado);
 
 			Button btnEditarInteressado = new Button(LABEL_BTN_EDITAR_INTERESSADO);
-			btnEditarInteressado.setOnAction(evento -> this.editarInteressado());
+			btnEditarInteressado.setOnAction(evento -> this.showInterestedEditScreen());
 			Button btnLimparInteressado = new Button(LABEL_BTN_LIMPAR_INTERESSADO);
 			btnLimparInteressado.setOnAction(evento -> this.limparInteressado());
 
@@ -219,7 +223,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 		try {
 			this.interessado = interestedService.searchByCpf(this.txtCpfInteressado.plainTextProperty().getValue());
 			if (interessado == null) {
-				this.criarNovoInteressado();
+				this.showInterestedCreateScreen();
 			} else {
 				this.preencherInteressado();
 			}
@@ -240,36 +244,18 @@ public class ControleTelaEdicao implements Initializable, Observer{
 		}
 	}
 
-	private void editarInteressado() {
-		criarDialogEdicao(EDITAR_INTERESSADO, interessado);
+	private void showInterestedEditScreen() {
+		InterestedEditCtrl.showIntestedEditScreen(
+				raiz.getScene().getWindow(),
+				controllerFactory.createInterestedEditCtrl(),
+				interessado);
 	}
 
-	private void criarNovoInteressado() {
-		criarDialogEdicao(CRIAR_INTERESSADO, null);
-	}
-
-	private void criarDialogEdicao(String titulo, Interested interessado) {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(ARQUIVO_FXML_DIALOG_INTERESSADO);
-			Pane novoPainel = loader.load();
-
-			Stage dialogEdicao = new Stage();
-			dialogEdicao.setTitle(titulo);
-			dialogEdicao.initModality(Modality.WINDOW_MODAL);
-			dialogEdicao.initOwner(this.raiz.getScene().getWindow());
-			ControleDialogInteressado controleDialog = loader.getController();
-			if (interessado == null) {
-				controleDialog.setCpfOnForm(this.txtCpfInteressado.plainTextProperty().getValue());
-				dialogEdicao.setScene(new Scene(novoPainel, 400, 260));
-			} else {
-				controleDialog.populeForm(interessado);
-				dialogEdicao.setScene(new Scene(novoPainel, 400, 230));
-			}
-			dialogEdicao.show();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
+	private void showInterestedCreateScreen() {
+		Interested newInterested = createInterested();
+		InterestedEditCtrl.showIntestedEditScreen(raiz.getScene().getWindow(),
+				controllerFactory.createInterestedEditCtrl(),
+				newInterested);
 	}
 
 	private void limparInteressado() {
@@ -392,5 +378,11 @@ public class ControleTelaEdicao implements Initializable, Observer{
 
 	        alert.showAndWait();
 		}
+	}
+	
+	protected Interested createInterested() {
+		Interested interested = new HealthInterested();
+		interested.setCpf(this.txtCpfInteressado.plainTextProperty().getValue());
+		return interested;
 	}
 }

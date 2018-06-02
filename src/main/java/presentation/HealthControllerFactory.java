@@ -21,4 +21,9 @@ public class HealthControllerFactory implements ControllerFactory {
 	public MainScreenCtrl createMainScreenCtrl() {
 		return new HealthMainScreenCtrl (processService, this);
 	}
+	
+	@Override
+	public InterestedEditCtrl createInterestedEditCtrl() {
+		return new HealthInterestedEditCtrl (interestedService);
+	}
 }
