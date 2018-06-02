@@ -35,13 +35,11 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 	private static final URL ARQUIVO_FXML_TELA_EDICAO = MainScreenCtrl.class.getResource("/visions/tela_editar_processo.fxml");
 	private static final URL ARQUIVO_FXML_DIALOG_PASSWORD = MainScreenCtrl.class.getResource("/visions/dialog_adm_password.fxml");
 	private static final URL ARQUIVO_FXML_TELA_BUSCA = MainScreenCtrl.class.getResource("/visions/tela_buscar_processos.fxml");
-	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_PDF = MainScreenCtrl.class.getResource("/visions/tela_visualizar_pdf.fxml");
 	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_GRAFICOS = MainScreenCtrl.class.getResource("/visions/tela_statistics_graphs.fxml");
 	
 	private static final String CRIAR_PROCESSO = "Novo Processo / Ofício";
 	private static final String EDITAR_PROCESSO = "Editar Processo";
 	private static final String BUSCAR_PROCESSO = "Buscar Processos / Ofícios";
-	private static final String VISUALIZAR_PDF = "Certidão";
 	private static final String VISUALIZAR_GRAFICOS = "Gráficos Administrativos";
 	private static final String DIALOG_ADM_PASS_TITLE = "Autorização";
 
@@ -159,25 +157,7 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 	
 	@FXML
 	private void criarTelaPdf() {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(ARQUIVO_FXML_TELA_VISUALIZAR_PDF);
-			Pane novoPainel = loader.load();
-
-			Stage pdfViewerScreen = new Stage();
-			pdfViewerScreen.setTitle(VISUALIZAR_PDF);
-			pdfViewerScreen.initModality(Modality.WINDOW_MODAL);
-			pdfViewerScreen.initOwner(this.root.getScene().getWindow());
-			pdfViewerScreen.setScene(new Scene(novoPainel, 820, 660));
-
-			PdfViewerController pdfViewerController = loader.getController();
-			pdfViewerController.engineConfigurations();
-			pdfViewerController.setVisualizedProcess(selectedProcess);
-			
-			pdfViewerScreen.show();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
+		PdfViewerController.showPdfView(root.getScene().getWindow(), selectedProcess, processService);
 	}
 	
 	@FXML

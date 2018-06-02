@@ -255,6 +255,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 		try (
 				StringReader sourceReader = new StringReader(fo);
 				ByteArrayOutputStream resultStream = new ByteArrayOutputStream();
+				
 				) {
 			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, this.foUserAgent, resultStream);
 

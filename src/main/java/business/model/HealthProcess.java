@@ -20,7 +20,7 @@ import business.exception.ValidationException;
  * @author lets
  *
  */
-@XmlRootElement
+@XmlRootElement(name="process")
 @XmlSeeAlso(HealthInterested.class)
 public class HealthProcess implements Process {
 	
@@ -141,7 +141,7 @@ public class HealthProcess implements Process {
 	 * @see business.model.Process#getIntersted()
 	 */
 	@Override
-	@XmlElement(name="interested")
+	@XmlElement(name="interested", type=HealthInterested.class)
 	public Interested getIntersted() {
 		return interested;
 	}
@@ -313,7 +313,7 @@ public class HealthProcess implements Process {
 			
 			xml = stringWriter.toString();
 		} catch (JAXBException e) {
-			// TODO Nova Exceção?
+			// TODO Criar Excessão para conversão
 			logger.error(e.getMessage(), e);
 		} finally {
 			// Fecha o reader e o writer
@@ -325,6 +325,7 @@ public class HealthProcess implements Process {
 			}
 		}
 		
+		System.out.println(xml);
 		return xml;
 	}
 }

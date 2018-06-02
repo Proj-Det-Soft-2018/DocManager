@@ -11,25 +11,33 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import business.model.Process;
-import business.service.ConcreteProcessService;
 import business.service.ProcessService;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import presentation.utils.StringConstants;
 
 public class PdfViewerController implements Initializable {
 	
-	private final static Logger LOGGER = Logger.getLogger(PdfViewerController.class);
+	private static final Logger LOGGER = Logger.getLogger(PdfViewerController.class);
+	
+	private static final URL FXML_PATH = PdfViewerController.class.getResource("/visions/pdf_viewer.fxml");
+	
 
 	private ProcessService processService;
 	
@@ -37,18 +45,43 @@ public class PdfViewerController implements Initializable {
 	private boolean dataReady;
 	
 	@FXML
-	private VBox root;
+	private Node root;
 	
 	@FXML
 	private WebView pdfView;
 
+	public static void showPdfView(Window ownerWindow, Process process, ProcessService processService) {
+		try {
+			FXMLLoader loader = new FXMLLoader(FXML_PATH);
+			PdfViewerController pdfViewerController = new PdfViewerController(processService);
+			pdfViewerController.setVisualizedProcess(process);
+			loader.setController(pdfViewerController);
+			Pane novoPainel = loader.load();
+
+			Stage pdfViewerScreen = new Stage();
+			pdfViewerScreen.setTitle(StringConstants.TITLE_PDF_VIEWER.getText());
+			pdfViewerScreen.initModality(Modality.WINDOW_MODAL);
+			pdfViewerScreen.initOwner(ownerWindow);
+			pdfViewerScreen.setScene(new Scene(novoPainel, 820, 660));
+			
+			pdfViewerScreen.show();
+		} catch (IOException e) {
+			//TODO Alert Erro de geração de tela
+			LOGGER.error(e.getMessage(), e);
+		}
+	}
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		processService = ConcreteProcessService.getInstance();
+		configureEngine();
+	}
+	
+	private PdfViewerController(ProcessService processService) {
+		this.processService = processService;
 		dataReady = false;
 	}
 
-	public void engineConfigurations() {
+	private void configureEngine() {
 
 		WebEngine engine = pdfView.getEngine();
 
@@ -92,8 +125,7 @@ public class PdfViewerController implements Initializable {
         }
 	}
 
-	public void setVisualizedProcess(Process visualizedProcess) {
-		
+	private void setVisualizedProcess(Process visualizedProcess) {
 		pdfData = processService.getPdf(visualizedProcess);
 		dataReady = true;
 	}

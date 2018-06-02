@@ -490,8 +490,8 @@ public class ControleTelaBusca implements Initializable, Observer {
 			pdfViewerScreen.setScene(new Scene(novoPainel, 820, 660));
 
 			PdfViewerController pdfViewerController = loader.getController();
-			pdfViewerController.engineConfigurations();
-			pdfViewerController.setVisualizedProcess(processoSelecionado);
+			//pdfViewerController.engineConfigurations();
+			//pdfViewerController.setVisualizedProcess(processoSelecionado);
 			
 			pdfViewerScreen.show();
 		} catch (IOException e) {
