@@ -44,22 +44,18 @@ import persistence.exception.DatabaseException;
 import presentation.utils.widget.DynamicMaskTextField;
 import presentation.utils.widget.MaskedTextField;
 
-public class ControleTelaBusca implements Initializable, Observer {
+public class SearchScreenCtrl implements Initializable, Observer {
 
-	private static Logger logger = Logger.getLogger(ControleTelaBusca.class);
+	private static Logger logger = Logger.getLogger(SearchScreenCtrl.class);
 
 	private static final URL ARQUIVO_FXML_TELA_EDICAO = MainScreenCtrl.class.getResource("/visions/tela_editar_processo.fxml");
-	private static final URL ARQUIVO_FXML_DIALOG_PASSWORD = MainScreenCtrl.class.getResource("/visions/dialog_adm_password.fxml");
-	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_PDF = MainScreenCtrl.class.getResource("/visions/tela_visualizar_pdf.fxml");
 	private static final String MASCARA_NUM_OFICIO = "####/####";
 	private static final String MASCARA_CPF = "###.###.###-##";
-	private static final String DIALOG_ADM_PASS_TITLE = "Autorização";
 	private static final String EDITAR_PROCESSO_TITLE = "Editar Processo";
-	private static final String VISUALIZAR_PDF = "Certidão";
 
 	private ListService listService;
 	private ProcessService processService;
-	private Process processoSelecionado;
+	private Process selectedProcess;
 	private MaskedTextField mTxtCpf;
 	private DynamicMaskTextField dmTxtOficioNum;
 	private UltimaBusca ultimaBusca;
@@ -150,7 +146,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 		listService = ConcreteListService.getInstance();
 		processService = ConcreteProcessService.getInstance();
 		processService.attach(this);
-		processoSelecionado = null;
+		selectedProcess = null;
 		ultimaBusca = null;
 		mTxtCpf = new MaskedTextField(MASCARA_CPF);
 		mTxtCpf.setMaxWidth(520.0);
@@ -407,7 +403,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 		// eventHandle para detectar o processo selecionado
 		tableResultados.getSelectionModel().selectedItemProperty().addListener(
 				(observavel, selecionandoAnterior, selecionadoNovo) -> {
-					this.processoSelecionado = selecionadoNovo;
+					this.selectedProcess = selecionadoNovo;
 					this.btnVerEditar.setDisable(selecionadoNovo!=null? false : true);
 					this.btnCertidaoPdf.setDisable(selecionadoNovo!=null? false : true);
 					this.btnApagar.setDisable(selecionadoNovo!=null? false : true);
@@ -434,24 +430,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 
 	@FXML
 	private void criarDialogAdmPassword() {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(ARQUIVO_FXML_DIALOG_PASSWORD);
-			Pane novoPainel = loader.load();
-
-			Stage dialogAdmPassword = new Stage();
-			dialogAdmPassword.setTitle(DIALOG_ADM_PASS_TITLE);
-			dialogAdmPassword.initModality(Modality.WINDOW_MODAL);
-			dialogAdmPassword.initOwner(this.root.getScene().getWindow());
-			dialogAdmPassword.setScene(new Scene(novoPainel, 300, 190));
-
-			ControleDialogAdmPassword dialAdmPassController = loader.getController();
-			dialAdmPassController.setProcesso(this.processoSelecionado);
-
-			dialogAdmPassword.show();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
+		DeleteDialogCtrl.showDeleteDialog(root.getScene().getWindow(), selectedProcess, processService);
 	}
 
 	@FXML
@@ -468,7 +447,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 			telaEdicao.setScene(new Scene(novoPainel, 720, 540));
 
 			ControleTelaEdicao controleTelaEdicao = loader.getController();
-			controleTelaEdicao.montarFormulario(this.processoSelecionado);
+			controleTelaEdicao.montarFormulario(this.selectedProcess);
 
 			telaEdicao.show();
 		} catch (IOException e) {
@@ -478,25 +457,7 @@ public class ControleTelaBusca implements Initializable, Observer {
 	
 	@FXML
 	private void criarTelaPdf() {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(ARQUIVO_FXML_TELA_VISUALIZAR_PDF);
-			Pane novoPainel = loader.load();
-
-			Stage pdfViewerScreen = new Stage();
-			pdfViewerScreen.setTitle(VISUALIZAR_PDF);
-			pdfViewerScreen.initModality(Modality.WINDOW_MODAL);
-			pdfViewerScreen.initOwner(this.root.getScene().getWindow());
-			pdfViewerScreen.setScene(new Scene(novoPainel, 820, 660));
-
-			PdfViewerController pdfViewerController = loader.getController();
-			//pdfViewerController.engineConfigurations();
-			//pdfViewerController.setVisualizedProcess(processoSelecionado);
-			
-			pdfViewerScreen.show();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
+		PdfViewerCtrl.showPdfView(root.getScene().getWindow(), selectedProcess, processService);
 	}
 
 	/* Estrutura de Dados para armazenar a ultima busca */

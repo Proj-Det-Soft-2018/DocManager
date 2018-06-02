@@ -3,7 +3,6 @@ package business.service;
 import java.util.List;
 
 import business.exception.ValidationException;
-import business.model.HealthProcess;
 import business.model.Process;
 import persistence.exception.DatabaseException;
 

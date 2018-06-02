@@ -32,17 +32,16 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import presentation.utils.StringConstants;
 
-public class PdfViewerController implements Initializable {
+public class PdfViewerCtrl implements Initializable {
 	
-	private static final Logger LOGGER = Logger.getLogger(PdfViewerController.class);
+	private static final Logger LOGGER = Logger.getLogger(PdfViewerCtrl.class);
 	
-	private static final URL FXML_PATH = PdfViewerController.class.getResource("/visions/pdf_viewer.fxml");
+	private static final URL FXML_PATH = PdfViewerCtrl.class.getResource("/visions/pdf_viewer.fxml");
 	
 
 	private ProcessService processService;
 	
 	private byte[] pdfData;
-	private boolean dataReady;
 	
 	@FXML
 	private Node root;
@@ -53,13 +52,13 @@ public class PdfViewerController implements Initializable {
 	public static void showPdfView(Window ownerWindow, Process process, ProcessService processService) {
 		try {
 			FXMLLoader loader = new FXMLLoader(FXML_PATH);
-			PdfViewerController pdfViewerController = new PdfViewerController(processService);
-			pdfViewerController.setVisualizedProcess(process);
+			PdfViewerCtrl pdfViewerController = new PdfViewerCtrl(processService);
+			pdfViewerController.setProcess(process);
 			loader.setController(pdfViewerController);
 			Pane novoPainel = loader.load();
 
 			Stage pdfViewerScreen = new Stage();
-			pdfViewerScreen.setTitle(StringConstants.TITLE_PDF_VIEWER.getText());
+			pdfViewerScreen.setTitle(StringConstants.TITLE_PDF_VIEWER_SCREEN.getText());
 			pdfViewerScreen.initModality(Modality.WINDOW_MODAL);
 			pdfViewerScreen.initOwner(ownerWindow);
 			pdfViewerScreen.setScene(new Scene(novoPainel, 820, 660));
@@ -71,14 +70,17 @@ public class PdfViewerController implements Initializable {
 		}
 	}
 	
+	private PdfViewerCtrl(ProcessService processService) {
+		this.processService = processService;
+	}
+	
+	private void setProcess(Process visualizedProcess) {
+		pdfData = processService.getPdf(visualizedProcess);
+	}
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		configureEngine();
-	}
-	
-	private PdfViewerController(ProcessService processService) {
-		this.processService = processService;
-		dataReady = false;
 	}
 
 	private void configureEngine() {
@@ -91,7 +93,7 @@ public class PdfViewerController implements Initializable {
 		engine.load(url);
 		
 		engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-			if (newState == Worker.State.SUCCEEDED && dataReady) {
+			if (newState == Worker.State.SUCCEEDED) {
 				loadPdfFile();
 			}
 		});
@@ -123,11 +125,6 @@ public class PdfViewerController implements Initializable {
         	savePdfToFile(file);
         	closeWindow();
         }
-	}
-
-	private void setVisualizedProcess(Process visualizedProcess) {
-		pdfData = processService.getPdf(visualizedProcess);
-		dataReady = true;
 	}
 	
 	private void loadPdfFile() {

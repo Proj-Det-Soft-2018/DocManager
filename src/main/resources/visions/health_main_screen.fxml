@@ -23,11 +23,11 @@
 			prefHeight="26.0" prefWidth="140.0" text="Ver / Editar"
 			AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="61.0" />
 		<Button fx:id="btnPdfDoc" disable="true" layoutX="25.0"
-			layoutY="119.0" mnemonicParsing="false" onAction="#criarTelaPdf"
+			layoutY="119.0" mnemonicParsing="false" onAction="#showPdfViewer"
 			prefHeight="26.0" prefWidth="140.0" text="Certidão PDF"
 			AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="97.0" />
 		<Button fx:id="btnDelete" disable="true" layoutX="25.0"
-			layoutY="119.0" mnemonicParsing="false" onAction="#criarDialogAdmPassword"
+			layoutY="119.0" mnemonicParsing="false" onAction="#showDeleteDialog"
 			prefHeight="26.0" prefWidth="140.0" text="Apagar"
 			AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="133.0" />
 		<Button layoutX="25.0" layoutY="359.0" mnemonicParsing="false"
@@ -51,13 +51,13 @@
 					AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
 					AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="15.0">
 					<columns>
-						<TableColumn fx:id="tabColunaTipo" editable="false"
+						<TableColumn fx:id="tabColumnType" editable="false"
 							prefWidth="75.0" style="-fx-alignment: CENTER" text="Tipo" />
-						<TableColumn fx:id="tabColunaNumero" editable="false"
+						<TableColumn fx:id="tabColumnNumber" editable="false"
 							prefWidth="199.0" style="-fx-alignment: CENTER" text="Número" />
-						<TableColumn fx:id="tabColunaInteressado" editable="false"
+						<TableColumn fx:id="tabColumnInterested" editable="false"
 							prefWidth="309.0" style="-fx-alignment: CENTER" text="Nome Interessado" />
-						<TableColumn fx:id="tabColunaSituacao" editable="false"
+						<TableColumn fx:id="tabColumnSituation" editable="false"
 							prefWidth="123.0" style="-fx-alignment: CENTER" text="Situação" />
 					</columns>
 				</TableView>

@@ -14,7 +14,7 @@
 <VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
 	minHeight="-Infinity" minWidth="-Infinity" prefHeight="190.0"
 	prefWidth="300.0" spacing="5.0" xmlns="http://javafx.com/javafx/8.0.141"
-	xmlns:fx="http://javafx.com/fxml/1" fx:controller="presentation.ControleDialogAdmPassword">
+	xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<VBox prefHeight="180.0" spacing="5.0" styleClass="painel-borda"
 			stylesheets="@../fx_css/styles.css">

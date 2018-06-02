@@ -1,14 +1,12 @@
-import java.net.URL;
-
 import business.service.ConcreteInterestedService;
 import business.service.ConcreteListService;
 import business.service.ConcreteProcessService;
-import javafx.application.Application;
-import javafx.stage.Stage;
 import presentation.ControllerFactory;
 import presentation.HealthControllerFactory;
 import presentation.MainScreenCtrl;
-import presentation.utils.StringConstants;
+
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
  * @author hugotho
@@ -22,7 +20,6 @@ public class Main extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
-		URL fxmlUrl = this.getClass().getResource("/visions/tela_principal.fxml");
 		
 		ControllerFactory hcf = new HealthControllerFactory(
 				ConcreteProcessService.getInstance(),

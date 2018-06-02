@@ -33,7 +33,6 @@ import javafx.stage.Stage;
 public abstract class MainScreenCtrl implements Initializable, Observer {
 
 	private static final URL ARQUIVO_FXML_TELA_EDICAO = MainScreenCtrl.class.getResource("/visions/tela_editar_processo.fxml");
-	private static final URL ARQUIVO_FXML_DIALOG_PASSWORD = MainScreenCtrl.class.getResource("/visions/dialog_adm_password.fxml");
 	private static final URL ARQUIVO_FXML_TELA_BUSCA = MainScreenCtrl.class.getResource("/visions/tela_buscar_processos.fxml");
 	private static final URL ARQUIVO_FXML_TELA_VISUALIZAR_GRAFICOS = MainScreenCtrl.class.getResource("/visions/tela_statistics_graphs.fxml");
 	
@@ -75,7 +74,7 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 		try {
 			Pane newPane = loader.load();
 			primaryStage.setScene(new Scene(newPane, 940, 570));
-			primaryStage.setTitle(StringConstants.TITULO_APLICACAO.getText());
+			primaryStage.setTitle(StringConstants.TITLE_APPLICATION.getText());
 			primaryStage.show();
 		} catch (IOException e) {
 			//TODO Alert Erro de geração de tela
@@ -134,30 +133,35 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 	}
 	
 	@FXML
-	private void criarDialogAdmPassword() {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(ARQUIVO_FXML_DIALOG_PASSWORD);
-			Pane novoPainel = loader.load();
-
-			Stage dialogAdmPassword = new Stage();
-			dialogAdmPassword.setTitle(DIALOG_ADM_PASS_TITLE);
-			dialogAdmPassword.initModality(Modality.WINDOW_MODAL);
-			dialogAdmPassword.initOwner(this.root.getScene().getWindow());
-			dialogAdmPassword.setScene(new Scene(novoPainel, 300, 190));
-
-			ControleDialogAdmPassword dialAdmPassController = loader.getController();
-			dialAdmPassController.setProcesso(selectedProcess);
-			
-			dialogAdmPassword.show();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
+	private void showDeleteDialog() {
+		DeleteDialogCtrl.showDeleteDialog(root.getScene().getWindow(), selectedProcess, processService);
 	}
 	
 	@FXML
-	private void criarTelaPdf() {
-		PdfViewerController.showPdfView(root.getScene().getWindow(), selectedProcess, processService);
+	private void showPdfViewer() {
+		PdfViewerCtrl.showPdfView(root.getScene().getWindow(), selectedProcess, processService);
+	}
+	
+	@FXML
+	private void criarTelaBusca() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(ARQUIVO_FXML_TELA_BUSCA);
+			Pane novoPainel = loader.load();
+
+			Stage telaBusca = new Stage();
+			telaBusca.setTitle(BUSCAR_PROCESSO);
+			telaBusca.initModality(Modality.WINDOW_MODAL);
+			telaBusca.initOwner(this.root.getScene().getWindow());
+			telaBusca.setScene(new Scene(novoPainel, 720, 660));
+
+			SearchScreenCtrl controleTelaBusca = loader.getController();
+			controleTelaBusca.configurarFechamento();
+			
+			telaBusca.show();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
 	}
 	
 	@FXML
@@ -174,28 +178,6 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 			statisticsGraphsScreen.setScene(new Scene(novoPainel, 940, 570));			
 			
 			statisticsGraphsScreen.show();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
-	}
-	
-	@FXML
-	private void criarTelaBusca() {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(ARQUIVO_FXML_TELA_BUSCA);
-			Pane novoPainel = loader.load();
-
-			Stage telaBusca = new Stage();
-			telaBusca.setTitle(BUSCAR_PROCESSO);
-			telaBusca.initModality(Modality.WINDOW_MODAL);
-			telaBusca.initOwner(this.root.getScene().getWindow());
-			telaBusca.setScene(new Scene(novoPainel, 720, 660));
-
-			ControleTelaBusca controleTelaBusca = loader.getController();
-			controleTelaBusca.configurarFechamento();
-			
-			telaBusca.show();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}

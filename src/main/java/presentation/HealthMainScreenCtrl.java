@@ -17,20 +17,20 @@ import javafx.scene.control.TableColumn;
  */
 public class HealthMainScreenCtrl extends MainScreenCtrl {
 	
-	private static final URL FXML_PATH = MainScreenCtrl.class.getResource("/visions/main_screen.fxml");
+	private static final URL FXML_PATH = MainScreenCtrl.class.getResource("/visions/health_main_screen.fxml");
 	private static final Logger LOGGER = Logger.getLogger(HealthMainScreenCtrl.class);
 	
 	@FXML
-	private TableColumn<HealthProcess, String> tabColunaTipo;
+	private TableColumn<HealthProcess, String> tabColumnType;
 
 	@FXML
-	private TableColumn<HealthProcess, String> tabColunaNumero;
+	private TableColumn<HealthProcess, String> tabColumnNumber;
 
 	@FXML
-	private TableColumn<HealthProcess, String> tabColunaInteressado;
+	private TableColumn<HealthProcess, String> tabColumnInterested;
 
 	@FXML
-	private TableColumn<HealthProcess, String> tabColunaSituacao;
+	private TableColumn<HealthProcess, String> tabColumnSituation;
 
 	public HealthMainScreenCtrl(ProcessService processService, ControllerFactory controllerFactory) {
 		super(processService, controllerFactory, LOGGER);
@@ -39,22 +39,22 @@ public class HealthMainScreenCtrl extends MainScreenCtrl {
 	@Override
 	protected void configureTable() {
 		// inicia as colunas
-		tabColunaTipo.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getType()));
-		tabColunaNumero.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getFormattedNumber()));
-		tabColunaInteressado.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getIntersted().getName()));
-		tabColunaSituacao.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituation().getStatus()));
+		tabColumnType.setCellValueFactory(
+				content -> new ReadOnlyStringWrapper(content.getValue().getType()));
+		tabColumnNumber.setCellValueFactory(
+				content -> new ReadOnlyStringWrapper(content.getValue().getFormattedNumber()));
+		tabColumnInterested.setCellValueFactory(
+				content -> new ReadOnlyStringWrapper(content.getValue().getIntersted().getName()));
+		tabColumnSituation.setCellValueFactory(
+				content -> new ReadOnlyStringWrapper(content.getValue().getSituation().getStatus()));
 
 		// eventHandle para detectar o processo selecionado
 		tabProcesses.getSelectionModel().selectedItemProperty().addListener(
-				(observavel, selecionandoAnterior, selecionadoNovo) -> {
-					super.selectedProcess = selecionadoNovo;
-					super.btnEdit.setDisable(selecionadoNovo!=null? false : true);
-					super.btnPdfDoc.setDisable(selecionadoNovo!=null? false : true);
-					super.btnDelete.setDisable(selecionadoNovo!=null? false : true);
+				(observable, oldValue, newValue) -> {
+					super.selectedProcess = newValue;
+					super.btnEdit.setDisable(newValue!=null? false : true);
+					super.btnPdfDoc.setDisable(newValue!=null? false : true);
+					super.btnDelete.setDisable(newValue!=null? false : true);
 				});
 	}
 	
