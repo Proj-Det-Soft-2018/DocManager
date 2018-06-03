@@ -11,14 +11,14 @@ import business.model.Subject;
  * @since 06.01.2018
  *
  */
-public abstract class ListServiceAbstract {
+public abstract class ListService {
 	private static final String DEFAULT_CHOICEBOX_START = "-- SELECIONE --";
 	
 	protected List<String> organizationsList;
 	protected List<String> subjectsList;
 	protected List<String> situationsList;
 	
-	public ListServiceAbstract() {
+	public ListService() {
 		organizationsList = Organization.getOrganization();
 		organizationsList.add(0, DEFAULT_CHOICEBOX_START);
 		
@@ -43,12 +43,9 @@ public abstract class ListServiceAbstract {
 	}
 
 	public List<String> getSituationsListByCurrentSituation(Situation current){
-				
+		// TODO Ligar com a tela de edição
 		return this.reorganizeByCurrentSituation(null);
 	}
 
 	protected abstract List<String> reorganizeByCurrentSituation(Situation current);
-	
-	
-
 }

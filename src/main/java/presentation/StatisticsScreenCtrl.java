@@ -84,7 +84,7 @@ public class StatisticsScreenCtrl implements Initializable {
 			Parent rootParent = loader.load();
 
 			Stage statisticsScreen = new Stage();
-			statisticsScreen.setTitle(StringConstants.TITLE_PDF_VIEWER_SCREEN.getText());
+			statisticsScreen.setTitle(StringConstants.TITLE_STATISTICS_SCREEN.getText());
 			statisticsScreen.initModality(Modality.WINDOW_MODAL);
 			statisticsScreen.initOwner(ownerWindow);
 			statisticsScreen.setScene(new Scene(rootParent, 940, 610));

@@ -5,11 +5,11 @@ import java.util.List;
 
 import business.model.Situation;
 
-public class ConcreteHealthListService extends ListServiceAbstract {
+public class HealthListService extends ListService {
 		
-	private static ConcreteHealthListService instance = new ConcreteHealthListService();
+	private static HealthListService instance = new HealthListService();
 	
-	public static ConcreteHealthListService getInstance() {
+	public static HealthListService getInstance() {
 		return instance;
 	}
 

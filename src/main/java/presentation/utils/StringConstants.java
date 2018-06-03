@@ -9,7 +9,7 @@ public enum StringConstants {
 	TITLE_CREATE_INTERESTED_SCREEN ("Novo Interessado"),
 	TITLE_EDIT_INTERESTED_SCREEN ("Editar Interessado"),
 	TITLE_SEARCH_SCREEN ("Buscar Processos / Ofícios"),
-	TITLE_STATISTICS_SCREEN ("Gráficos Administrativos"),
+	TITLE_STATISTICS_SCREEN ("Gráficos Estatísticos"),
 	TITLE_DELETE_DIALOG ("Autorização"),
 	
 	ERROR_PASSWORD ("Usuário ou Senha Incorretos!");

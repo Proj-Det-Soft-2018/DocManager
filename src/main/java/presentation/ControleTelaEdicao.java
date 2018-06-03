@@ -15,10 +15,10 @@ import business.model.HealthProcess;
 import business.model.Interested;
 import business.model.Organization;
 import business.service.ConcreteInterestedService;
-import business.service.ConcreteHealthListService;
+import business.service.HealthListService;
 import business.service.ConcreteProcessService;
 import business.service.InterestedService;
-import business.service.ListServiceAbstract;
+import business.service.ListService;
 import business.service.Observer;
 import business.service.ProcessService;
 import javafx.collections.ObservableList;
@@ -59,7 +59,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	private static final String MASCARA_NUM_OFICIO = "####/####";
 	private static final String MASCARA_NUM_PROCESSO = "#####.######/####-##";
 
-	private ListServiceAbstract listService;
+	private ListService listService;
 	private ProcessService processService;
 	private InterestedService interestedService;
 	private Process processoOriginal;
@@ -133,7 +133,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	public void initialize(URL location, ResourceBundle resources) {
 		processoOriginal = null;
 		interessado = null;
-		listService = ConcreteHealthListService.getInstance();
+		listService = HealthListService.getInstance();
 		processService = ConcreteProcessService.getInstance();
 		interestedService = ConcreteInterestedService.getInstance();
 		interestedService.attach(this);

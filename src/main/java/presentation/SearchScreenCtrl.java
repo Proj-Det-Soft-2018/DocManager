@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import business.exception.ValidationException;
 import business.model.HealthProcess;
 import business.model.Process;
-import business.service.ConcreteListService;
+import business.service.HealthListService;
 import business.service.ConcreteProcessService;
 import business.service.Observer;
 import business.service.ProcessService;
@@ -146,7 +146,7 @@ public class SearchScreenCtrl implements Initializable, Observer {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		listService = ConcreteListService.getInstance();
+		listService = HealthListService.getInstance();
 		processService = ConcreteProcessService.getInstance();
 		processService.attach(this);
 		selectedProcess = null;
