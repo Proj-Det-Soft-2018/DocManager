@@ -8,6 +8,10 @@ import presentation.MainScreenCtrl;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import presentation.ControllerFactory;
+import presentation.HealthControllerFactory;
+import presentation.MainScreenCtrl;
+import presentation.utils.StringConstants;
 
 /**
  * @author hugotho

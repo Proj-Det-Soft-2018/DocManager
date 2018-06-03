@@ -15,12 +15,12 @@ import business.model.HealthProcess;
 import business.model.Interested;
 import business.model.Organization;
 import business.service.ConcreteInterestedService;
-import business.service.ConcreteListService;
+import business.service.ConcreteHealthListService;
 import business.service.ConcreteProcessService;
 import business.service.InterestedService;
+import business.service.ListServiceAbstract;
 import business.service.Observer;
 import business.service.ProcessService;
-import business.service.ListService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -59,7 +59,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	private static final String MASCARA_NUM_OFICIO = "####/####";
 	private static final String MASCARA_NUM_PROCESSO = "#####.######/####-##";
 
-	private ListService listService;
+	private ListServiceAbstract listService;
 	private ProcessService processService;
 	private InterestedService interestedService;
 	private Process processoOriginal;
@@ -133,7 +133,7 @@ public class ControleTelaEdicao implements Initializable, Observer{
 	public void initialize(URL location, ResourceBundle resources) {
 		processoOriginal = null;
 		interessado = null;
-		listService = ConcreteListService.getInstance();
+		listService = ConcreteHealthListService.getInstance();
 		processService = ConcreteProcessService.getInstance();
 		interestedService = ConcreteInterestedService.getInstance();
 		interestedService.attach(this);
@@ -303,7 +303,11 @@ public class ControleTelaEdicao implements Initializable, Observer{
 		this.cbAssunto.getSelectionModel().select(0);
 
 		ObservableList<String> obsListaSituacoes = this.cbSituacao.getItems();
-		obsListaSituacoes.addAll(listService.getSituationsList());
+		if(processoOriginal == null) {
+			obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(null));
+		}else {
+			obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(processoOriginal.getSituation()));
+		}
 		this.cbSituacao.getSelectionModel().select(0);
 	}
 
