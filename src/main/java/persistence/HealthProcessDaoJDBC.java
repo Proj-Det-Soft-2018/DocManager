@@ -144,7 +144,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	public Process getById(Long id) throws DatabaseException {
 		String sql = "WHERE p.id="+id.toString();
 		List<Process> processList = this.searcher(sql);
-		if(processList.isEmpty() || processList ==null) {
+		if(processList.isEmpty()) {
 			return null;
 		}else {
 			//TODO verificar o getById
@@ -250,7 +250,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 		return this.searcher(sql);
 	}
 
-	public List<Process> multipleSearch(Search searchData) throws DatabaseException {
+	public List<Process> searchAll(Search searchData) throws DatabaseException {
 	    HealthProcessSearch search = (HealthProcessSearch) searchData;
 		StringBuilder sql = new StringBuilder("WHERE ");
 		final String AND = " AND ";

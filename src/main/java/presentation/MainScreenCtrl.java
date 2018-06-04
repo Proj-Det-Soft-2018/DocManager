@@ -23,8 +23,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -32,10 +30,6 @@ import javafx.stage.Stage;
  * 
  */
 public abstract class MainScreenCtrl implements Initializable, Observer {
-
-	private static final URL ARQUIVO_FXML_TELA_BUSCA = MainScreenCtrl.class.getResource("/visions/health_process_search_screen.fxml");
-	
-	private static final String BUSCAR_PROCESSO = "Buscar Processos / Ofícios";
 
 	private final Logger logger;
 	
@@ -95,6 +89,19 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 	public void update() {
 		updateTable();
 	}
+	
+	private void configureTable() {
+        // eventHandle para detectar o processo selecionado
+        tabProcesses.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    selectedProcess = newValue;
+                    btnEdit.setDisable(newValue!=null? false : true);
+                    btnPdfDoc.setDisable(newValue!=null? false : true);
+                    btnDelete.setDisable(newValue!=null? false : true);
+                });
+     // chama o método abstrato para configurar as colunas
+        configureColumns();
+    }
 
 	@FXML
 	private void criarFormularioNovo() {
@@ -122,25 +129,8 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 	
 	@FXML
 	private void criarTelaBusca() {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(ARQUIVO_FXML_TELA_BUSCA);
-			Pane novoPainel = loader.load();
-
-			Stage telaBusca = new Stage();
-			telaBusca.setTitle(BUSCAR_PROCESSO);
-			telaBusca.initModality(Modality.WINDOW_MODAL);
-			telaBusca.initOwner(this.root.getScene().getWindow());
-			telaBusca.setScene(new Scene(novoPainel, 720, 660));
-
-			SearchScreenCtrl controleTelaBusca = loader.getController();
-			controleTelaBusca.configurarFechamento();
-			controleTelaBusca.setControllerFactory(controllerFactory);
-			
-			telaBusca.show();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
+		SearchScreenCtrl.showProcessEditScreen(root.getScene().getWindow(),
+		        controllerFactory.createSearchScreenCtrl());
 	}
 	
 	@FXML
@@ -160,7 +150,7 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 		
 	}
 	
-	protected abstract void configureTable();
+	protected abstract void configureColumns();
 	
 	public abstract URL getFxmlPath();
 }

@@ -6,10 +6,12 @@ import java.util.Objects;
 import org.apache.log4j.Logger;
 
 import business.model.HealthInterested;
+import business.model.HealthInterestedSearch;
 import business.model.HealthProcess;
 import business.model.Interested;
 import business.model.Organization;
 import business.model.Process;
+import business.model.Search;
 import business.model.Situation;
 import business.model.Subject;
 import business.service.InterestedService;
@@ -120,8 +122,10 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
     }
 
     @Override
-    protected String catchInterestedUniqueKey() {
-        return this.txtCpfInteressado.plainTextProperty().getValue();
+    protected Search mountSearch() {
+        HealthInterestedSearch search = new HealthInterestedSearch();
+        search.setCpf(txtCpfInteressado.plainTextProperty().getValue());
+        return search; 
     }
 
     @Override

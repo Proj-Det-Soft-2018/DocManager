@@ -24,7 +24,8 @@ public interface ProcessDao{
 	public boolean contains(Process process) throws DatabaseException;
 	public List<Process> getAll() throws DatabaseException;
 	public List<Process> searchByNumber(String number) throws DatabaseException;
-	public List<Process> multipleSearch(Search searchData) throws DatabaseException;
+	public List<Process> searchAll(Search searchData) throws DatabaseException;
+	
 	//Statistics lists
 	public Map<Integer, ArrayList<Integer>> getQuantityProcessPerMonthYearList() throws DatabaseException;
 	public Map<Integer, Integer> getQuantityProcessPerSituationList() throws DatabaseException;

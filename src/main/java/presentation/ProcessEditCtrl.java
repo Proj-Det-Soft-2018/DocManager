@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import business.exception.ValidationException;
 import business.model.Process;
+import business.model.Search;
 import business.model.Interested;
 import business.service.InterestedService;
 import business.service.ListService;
@@ -81,7 +82,7 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
             processEditScreen.show();
         } catch (IOException e) {
             //TODO Alert Erro de geração de tela
-            Logger.getLogger(InterestedEditCtrl.class).error(e.getMessage(), e);
+            Logger.getLogger(ProcessEditCtrl.class).error(e.getMessage(), e);
         }
     }
 
@@ -117,7 +118,7 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
     @FXML
     private void searchInterestedByUniqueKey() {
         try {
-            this.interested = interestedService.searchByCpf(catchInterestedUniqueKey());
+            this.interested = interestedService.search(mountSearch());
             if (interested == null) {
                 this.showInterestedCreateScreen();
             } else {
@@ -236,7 +237,7 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
 
     protected abstract Interested createInterested();
 
-    protected abstract String catchInterestedUniqueKey();
+    protected abstract Search mountSearch();
 
     protected abstract void fillInterestedField();
 

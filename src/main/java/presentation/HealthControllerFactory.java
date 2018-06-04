@@ -26,4 +26,9 @@ public class HealthControllerFactory extends ControllerFactory {
 	public ProcessEditCtrl createProcessEditCtrl() {
 	    return new HealthProcessEditCtrl(listService, processService, interestedService, this);
 	}
+
+    @Override
+    public SearchScreenCtrl createSearchScreenCtrl() {
+        return new HealthSearchScreenCtrl(processService, listService, this);
+    }
 }

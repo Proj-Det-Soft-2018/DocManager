@@ -17,7 +17,7 @@ public interface ProcessService {
 	
 	public void delete(Process process, String admUser, String password) throws DatabaseException;
 	
-	public List<Process> search(Search searchData) throws ValidationException, DatabaseException;
+	public List<Process> searchAll(Search searchData) throws ValidationException, DatabaseException;
 	
 	public byte[] getPdf(Process process);
 	

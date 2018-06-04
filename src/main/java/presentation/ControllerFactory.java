@@ -37,4 +37,6 @@ public abstract class ControllerFactory {
 	public abstract ProcessEditCtrl createProcessEditCtrl();
 	
 	public abstract InterestedEditCtrl createInterestedEditCtrl();
+	
+	public abstract SearchScreenCtrl createSearchScreenCtrl();
 }

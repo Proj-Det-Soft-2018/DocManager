@@ -127,15 +127,18 @@ public class ConcreteProcessService extends Observable implements ProcessService
 		currentUser.logout();
 	}
 
+	@Override
+	public List<Process> searchAll(Search searchData) throws ValidationException, DatabaseException {
+		searchData.validate();
+		return processoDao.searchAll(searchData);
+	}
+	
+	@Override
 	public List<Process> pullList() throws ValidationException, DatabaseException{
 		return processoDao.getAll();
 	}
 
-	public List<Process> search(Search searchData) throws ValidationException, DatabaseException {
-		searchData.validate();
-		return processoDao.multipleSearch(searchData);
-	}
-
+	@Override
 	public byte[] getPdf(Process process) {
 
 		String xml = process.toXml();
