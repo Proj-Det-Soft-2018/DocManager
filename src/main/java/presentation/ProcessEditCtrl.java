@@ -11,11 +11,9 @@ import business.model.Process;
 import business.model.Search;
 import business.model.Interested;
 import business.service.InterestedService;
-import business.service.ListService;
 import business.service.Observer;
 import business.service.ProcessService;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,7 +22,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -42,7 +39,6 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
 
     private Logger logger;
 
-    private ListService listService;
     private ProcessService processService;
     private InterestedService interestedService;
     private ControllerFactory controllerFactory;
@@ -52,15 +48,6 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
 
     @FXML
     private Node root;
-
-    @FXML
-    protected ChoiceBox<String> cbOrgao;
-
-    @FXML
-    protected ChoiceBox<String> cbAssunto;
-
-    @FXML
-    protected ChoiceBox<String> cbSituacao;
 
     public static void showProcessEditScreen(Window ownerWindow, ProcessEditCtrl controller, Process process) {
         try {
@@ -86,10 +73,8 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
         }
     }
 
-    protected ProcessEditCtrl(ListService listService, ProcessService processService,
-            InterestedService interestedService, ControllerFactory controllerFactory,
-            Logger logger) {
-        this.listService = listService;
+    protected ProcessEditCtrl(ProcessService processService, InterestedService interestedService,
+            ControllerFactory controllerFactory, Logger logger) {
         this.processService = processService;
         this.interestedService = interestedService;
         this.controllerFactory = controllerFactory;
@@ -105,7 +90,6 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         interestedService.attach(this);
-        fillChoiceBoxes();
         initializeForm();
         Platform.runLater(this::configureClosure);
     }
@@ -206,30 +190,6 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
         } catch (DatabaseException e) {
             // TODO Criar alerta do database
             logger.error(e.getMessage(), e);
-        }
-    }
-
-    private void fillChoiceBoxes() {
-        if (cbOrgao != null) {
-            ObservableList<String> obsListaOrgaos = cbOrgao.getItems();
-            obsListaOrgaos.addAll(listService.getOrganizationsList());
-            cbOrgao.getSelectionModel().select(0);
-        }
-
-        if (cbAssunto != null) {
-            ObservableList<String> obsListaAssuntos = cbAssunto.getItems();
-            obsListaAssuntos.addAll(listService.getSubjectsList());
-            cbAssunto.getSelectionModel().select(0);
-        }
-
-        if (cbSituacao != null) {
-            ObservableList<String> obsListaSituacoes = cbSituacao.getItems();
-            if(process != null) {
-                obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(process.getSituation()));
-            }else {
-                obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(null));
-            }
-            this.cbSituacao.getSelectionModel().select(0);
         }
     }
 

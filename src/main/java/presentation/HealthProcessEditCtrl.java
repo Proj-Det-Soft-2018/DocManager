@@ -19,9 +19,10 @@ import business.service.ListService;
 import business.service.ProcessService;
 import presentation.ControllerFactory;
 import presentation.utils.widget.MaskedTextField;
-
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
@@ -41,6 +42,8 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
     
     private static final String MASCARA_NUM_OFICIO = "####/####";
     private static final String MASCARA_NUM_PROCESSO = "#####.######/####-##";
+    
+    private ListService listService;
 
     @FXML
     private RadioButton rbProcesso;
@@ -77,6 +80,15 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
 
     @FXML
     private Label lblTxtContatoInteressado;
+    
+    @FXML
+    protected ChoiceBox<String> cbOrgao;
+
+    @FXML
+    protected ChoiceBox<String> cbAssunto;
+
+    @FXML
+    protected ChoiceBox<String> cbSituacao;
 
     @FXML
     private TextArea txtObservacao;
@@ -89,12 +101,13 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
 
     public HealthProcessEditCtrl(ListService listService, ProcessService processService,
             InterestedService interestedService, ControllerFactory controllerFactory) {
-        super(listService, processService, interestedService,
-                controllerFactory, LOGGER);
+        super(processService, interestedService, controllerFactory, LOGGER);
+        this.listService = listService;
     }
     
     @Override
     protected void initializeForm() {
+        fillChoiceBoxes();
         configureRadioButtons();
         configureEntityChoiceBox();
         if (super.process != null) {
@@ -119,6 +132,24 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
             this.cbSituacao.getSelectionModel().select(healthProcess.getSituationString());
             this.txtObservacao.setText(healthProcess.getObservation());
         }
+    }
+    
+    private void fillChoiceBoxes() {
+        ObservableList<String> obsListaOrgaos = cbOrgao.getItems();
+        obsListaOrgaos.addAll(listService.getOrganizationsList());
+        cbOrgao.getSelectionModel().select(0);
+    
+        ObservableList<String> obsListaAssuntos = cbAssunto.getItems();
+        obsListaAssuntos.addAll(listService.getSubjectsList());
+        cbAssunto.getSelectionModel().select(0);
+    
+        ObservableList<String> obsListaSituacoes = cbSituacao.getItems();
+        if(process != null) {
+            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(process.getSituation()));
+        }else {
+            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(null));
+        }
+        this.cbSituacao.getSelectionModel().select(0);
     }
 
     @Override
