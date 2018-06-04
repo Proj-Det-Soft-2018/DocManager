@@ -64,7 +64,7 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
             } else {
                 processEditScreen.setTitle(StringConstants.TITLE_EDIT_PROCESS_SCREEN.getText());
             }
-            processEditScreen.setScene(new Scene(rootParent, 720, 540));
+            processEditScreen.setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
 
             processEditScreen.show();
         } catch (IOException e) {

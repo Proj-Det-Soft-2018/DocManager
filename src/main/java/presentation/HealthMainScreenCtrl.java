@@ -45,7 +45,7 @@ public class HealthMainScreenCtrl extends MainScreenCtrl {
 		tabColumnInterested.setCellValueFactory(
 				content -> new ReadOnlyStringWrapper(content.getValue().getIntersted().getName()));
 		tabColumnSituation.setCellValueFactory(
-				content -> new ReadOnlyStringWrapper(content.getValue().getSituation().getStatus()));
+				content -> new ReadOnlyStringWrapper(content.getValue().getSituation().getDescription()));
 	}
 	
 	@Override

@@ -52,9 +52,9 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			statement.setBoolean(1, process.isOficio());
 			statement.setString(2, process.getNumber());
 			statement.setLong(3, process.getIntersted().getId());
-			statement.setInt(4, process.getSubject().ordinal());
-			statement.setInt(5, process.getSituation().ordinal());
-			statement.setInt(6, process.getOriginEntity().ordinal());
+			statement.setInt(4, process.getSubject().getId());
+			statement.setInt(5, process.getSituation().getId());
+			statement.setInt(6, process.getOriginEntity().getId());
 			statement.setString(7, process.getObservation());
 			
 			//Definindo data de entrada no banco de dados
@@ -96,9 +96,9 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			statement = connection.prepareStatement(query);
 			statement.setString(1, process.getNumber());
 			statement.setLong(2, process.getIntersted().getId());
-			statement.setInt(3, process.getSubject().ordinal());
-			statement.setInt(4, process.getSituation().ordinal());
-			statement.setInt(5, process.getOriginEntity().ordinal());
+			statement.setInt(3, process.getSubject().getId());
+			statement.setInt(4, process.getSituation().getId());
+			statement.setInt(5, process.getOriginEntity().getId());
 			statement.setString(6, process.getObservation());
 			statement.setBoolean(7, process.isOficio());
 			

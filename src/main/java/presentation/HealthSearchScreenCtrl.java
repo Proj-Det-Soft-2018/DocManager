@@ -28,9 +28,6 @@ public class HealthSearchScreenCtrl extends SearchScreenCtrl {
 
     private static final URL FXML_PATH = HealthSearchScreenCtrl.class.getResource("/visions/health_process_search_screen.fxml");
 	private static final Logger LOGGER = Logger.getLogger(HealthSearchScreenCtrl.class);
-
-	private static final String MASCARA_NUM_OFICIO = "####/####";
-	private static final String MASCARA_CPF = "###.###.###-##";
 	
 	private ListService listService;
 	
@@ -107,6 +104,12 @@ public class HealthSearchScreenCtrl extends SearchScreenCtrl {
 	        ControllerFactory controllerFactory) {
         super(controllerFactory, processService, LOGGER);
         this.listService = listService;
+        
+        /* Inicializa os campos de número de Ofício e CPF                     */
+        mTxtCpf = new MaskedTextField("###.###.###-##");
+        mTxtCpf.setMaxWidth(520.0);
+        dmTxtOficioNum = new DynamicMaskTextField("####/####-*", 9);
+        dmTxtOficioNum.setMaxWidth(520.0);
     }
 
 	@FXML
@@ -130,11 +133,6 @@ public class HealthSearchScreenCtrl extends SearchScreenCtrl {
 
 	@Override
 	protected void configureForm() {
-	    mTxtCpf = new MaskedTextField(MASCARA_CPF);
-        mTxtCpf.setMaxWidth(520.0);
-        dmTxtOficioNum = new DynamicMaskTextField(MASCARA_NUM_OFICIO + "-*", 9);
-        dmTxtOficioNum.setMaxWidth(520.0);
-        
 		preencherChoiceBoxes();
 		configurarRadioButtons();
 		configurarChoiceBoxOrgao();
@@ -146,23 +144,23 @@ public class HealthSearchScreenCtrl extends SearchScreenCtrl {
 	}
 
 	private void preencherChoiceBoxes() {
-		ObservableList<String> obsListaOrgaos = this.choiceOrgao.getItems();
+		ObservableList<String> obsListaOrgaos = choiceOrgao.getItems();
 		obsListaOrgaos.addAll(listService.getOrganizationsList());
-		this.choiceOrgao.getSelectionModel().select(0);
+		choiceOrgao.getSelectionModel().select(0);
 
-		ObservableList<String> obsListaAssuntos = this.choiceAssunto.getItems();
-		obsListaAssuntos.addAll(listService.getSubjectsList());
-		this.choiceAssunto.getSelectionModel().select(0);
+		ObservableList<String> obsListaAssuntos = choiceAssunto.getItems();
+		obsListaAssuntos.addAll(listService.getSubjectsDescritionList());
+		choiceAssunto.getSelectionModel().select(0);
 
-		ObservableList<String> obsListaSituacoes = this.choiceSituacao.getItems();
-		obsListaSituacoes.addAll(listService.getSituationsList());
-		this.choiceSituacao.getSelectionModel().select(0);
+		ObservableList<String> obsListaSituacoes = choiceSituacao.getItems();
+		obsListaSituacoes.addAll(listService.getSituationsDescritionList());
+		choiceSituacao.getSelectionModel().select(0);
 	}
 
 	private void configurarRadioButtons() {
-		this.tgProcessoOficio.selectedToggleProperty().addListener(
+		tgProcessoOficio.selectedToggleProperty().addListener(
 				(observavel, valorAnterior, novoValor) ->  {
-					if(Objects.equals(novoValor, this.radioProcesso)) {
+					if(Objects.equals(novoValor, radioProcesso)) {
 						this.vbNumero.getChildren().remove(this.dmTxtOficioNum);
 						this.vbNumero.getChildren().add(this.mTxtProcessoNum);
 					} else {
@@ -173,12 +171,12 @@ public class HealthSearchScreenCtrl extends SearchScreenCtrl {
 				});
 		this.tgNomeCpf.selectedToggleProperty().addListener(
 				(observavel, valorAnterior, novoValor) -> {
-					if(Objects.equals(novoValor, this.radioNome)) {
-						this.vbInteressado.getChildren().remove(this.mTxtCpf);
-						this.vbInteressado.getChildren().add(this.txtNome);
+					if(Objects.equals(novoValor, radioNome)) {
+						vbInteressado.getChildren().remove(mTxtCpf);
+						vbInteressado.getChildren().add(txtNome);
 					} else {
-						this.vbInteressado.getChildren().remove(this.txtNome);
-						this.vbInteressado.getChildren().add(this.mTxtCpf);
+						vbInteressado.getChildren().remove(txtNome);
+						vbInteressado.getChildren().add(mTxtCpf);
 					}
 				});
 	}
@@ -187,7 +185,7 @@ public class HealthSearchScreenCtrl extends SearchScreenCtrl {
 		choiceOrgao.getSelectionModel().selectedIndexProperty().addListener(
 				(observableValue, oldValue, newValue) -> { 
 					if (newValue.intValue() == 0) {
-						this.dmTxtOficioNum.setDynamic(true);
+						dmTxtOficioNum.setDynamic(true);
 						if (oldValue.intValue() != 0 && maskIsCompletelyFilled(dmTxtOficioNum, "#")) {	
 							int oldIndex = oldValue.intValue();
 							StringBuilder newText = new StringBuilder(dmTxtOficioNum.getPlainText());
@@ -202,8 +200,8 @@ public class HealthSearchScreenCtrl extends SearchScreenCtrl {
 						}
 						int newIndex = newValue.intValue();
 						String initials = choiceOrgao.getItems().get(newIndex).split(" - ")[0];
-						this.dmTxtOficioNum.setDynamic(false);
-						this.dmTxtOficioNum.setMask(MASCARA_NUM_OFICIO + "-" + initials);
+						dmTxtOficioNum.setDynamic(false);
+						dmTxtOficioNum.setMask("####/####-" + initials);
 					}
 				});
 	}
@@ -228,12 +226,12 @@ public class HealthSearchScreenCtrl extends SearchScreenCtrl {
 		checkOrgao.selectedProperty().addListener(
 				(valorObservado, valorAntigo, valorNovo) -> {
 					if (valorNovo && choiceOrgao.getSelectionModel().getSelectedIndex() != 0) {
-						this.dmTxtOficioNum.setDynamic(false);
+						dmTxtOficioNum.setDynamic(false);
 						String orgao = choiceOrgao.getSelectionModel().getSelectedItem();
-						this.dmTxtOficioNum.setMask(MASCARA_NUM_OFICIO + "-" + orgao.split(" - ")[0]);
+						dmTxtOficioNum.setMask("####/####-" + orgao.split(" - ")[0]);
 
 					} else {
-						this.dmTxtOficioNum.setDynamic(true);
+						dmTxtOficioNum.setDynamic(true);
 						boolean validChoice = choiceOrgao.getSelectionModel().getSelectedIndex() != 0;
 
 						if (validChoice && maskIsCompletelyFilled(dmTxtOficioNum, "#")) {
@@ -293,7 +291,7 @@ public class HealthSearchScreenCtrl extends SearchScreenCtrl {
 		tabColInteressado.setCellValueFactory(
 				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getIntersted().getName()));
 		tabColSituacao.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituation().getStatus()));
+				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituation().getDescription()));
 	}
 
     @Override

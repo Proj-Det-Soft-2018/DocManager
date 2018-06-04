@@ -17,11 +17,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
@@ -49,18 +49,18 @@ public class PdfViewerCtrl implements Initializable {
 	@FXML
 	private WebView pdfView;
 
-	public static void showPdfView(Window ownerWindow, PdfViewerCtrl controller, Process process) {
+	public static void showPdfViewer(Window ownerWindow, PdfViewerCtrl controller, Process process) {
 		try {
 			FXMLLoader loader = new FXMLLoader(FXML_PATH);
 			controller.setProcess(process);
 			loader.setController(controller);
-			Pane newPane = loader.load();
+			Parent rootParent = loader.load();
 
 			Stage pdfViewerScreen = new Stage();
 			pdfViewerScreen.setTitle(StringConstants.TITLE_PDF_VIEWER_SCREEN.getText());
 			pdfViewerScreen.initModality(Modality.WINDOW_MODAL);
 			pdfViewerScreen.initOwner(ownerWindow);
-			pdfViewerScreen.setScene(new Scene(newPane, 820, 660));
+			pdfViewerScreen.setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
 			
 			pdfViewerScreen.show();
 		} catch (IOException e) {
