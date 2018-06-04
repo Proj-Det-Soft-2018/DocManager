@@ -36,7 +36,7 @@ public class PdfViewerCtrl implements Initializable {
 	
 	private static final Logger LOGGER = Logger.getLogger(PdfViewerCtrl.class);
 	
-	private static final URL FXML_PATH = PdfViewerCtrl.class.getResource("/visions/pdf_viewer.fxml");
+	private static final URL FXML_PATH = PdfViewerCtrl.class.getResource("/visions/pdf_viewer_screen.fxml");
 	
 
 	private ProcessService processService;
@@ -100,9 +100,9 @@ public class PdfViewerCtrl implements Initializable {
 	
 	@FXML
 	private void closeWindow() {
-		Stage janela = (Stage) root.getScene().getWindow();
-		if (janela != null)
-			janela.close();
+		Stage window = (Stage) root.getScene().getWindow();
+		if (window != null)
+			window.close();
 	}
 	
 	@FXML
@@ -116,14 +116,14 @@ public class PdfViewerCtrl implements Initializable {
         fileChooser.setInitialFileName("Certidão.pdf");
 
         //Show save file dialog
-        File file = fileChooser.showSaveDialog(root.getScene().getWindow());
+        File outputFile = fileChooser.showSaveDialog(root.getScene().getWindow());
 
-        if (file != null) {
+        if (outputFile != null) {
         	// Testa a extenção do arquivo de destino e troca, quando necessário
-        	if (!FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("pdf")) {
-        	    file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName())+".pdf");
+        	if (!FilenameUtils.getExtension(outputFile.getName()).equalsIgnoreCase("pdf")) {
+        	    outputFile = new File(outputFile.getParentFile(), FilenameUtils.getBaseName(outputFile.getName())+".pdf");
         	}
-        	savePdfToFile(file);
+        	savePdfToFile(outputFile);
         	closeWindow();
         }
 	}
@@ -133,8 +133,8 @@ public class PdfViewerCtrl implements Initializable {
 		pdfView.getEngine().executeScript("openFileFromBase64('" + pdfBase64 + "')");
 	}
 	
-	private void savePdfToFile(File destiny) {
-		try (FileOutputStream fos = new FileOutputStream(destiny)) {
+	private void savePdfToFile(File outputFile) {
+		try (FileOutputStream fos = new FileOutputStream(outputFile)) {
 			   fos.write(pdfData);
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);

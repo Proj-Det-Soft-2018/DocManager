@@ -1,6 +1,5 @@
 package presentation;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
@@ -19,10 +18,8 @@ import business.service.ListService;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -34,11 +31,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import persistence.exception.DatabaseException;
 import presentation.utils.widget.DynamicMaskTextField;
@@ -48,10 +43,8 @@ public class SearchScreenCtrl implements Initializable, Observer {
 
 	private static Logger logger = Logger.getLogger(SearchScreenCtrl.class);
 
-	private static final URL ARQUIVO_FXML_TELA_EDICAO = MainScreenCtrl.class.getResource("/visions/tela_editar_processo.fxml");
 	private static final String MASCARA_NUM_OFICIO = "####/####";
 	private static final String MASCARA_CPF = "###.###.###-##";
-	private static final String EDITAR_PROCESSO_TITLE = "Editar Processo";
 
 	private ControllerFactory controllerFactory;
 	private ListService listService;
@@ -445,24 +438,8 @@ public class SearchScreenCtrl implements Initializable, Observer {
 
 	@FXML
 	private void criarTelaEdicao() {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(ARQUIVO_FXML_TELA_EDICAO);
-			Pane novoPainel = loader.load();
-
-			Stage telaEdicao = new Stage();
-			telaEdicao.setTitle(EDITAR_PROCESSO_TITLE);
-			telaEdicao.initModality(Modality.WINDOW_MODAL);
-			telaEdicao.initOwner(this.root.getScene().getWindow());
-			telaEdicao.setScene(new Scene(novoPainel, 720, 540));
-
-			ControleTelaEdicao controleTelaEdicao = loader.getController();
-			controleTelaEdicao.montarFormulario(this.selectedProcess);
-
-			telaEdicao.show();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
+		ProcessEditCtrl.showProcessEditScreen(root.getScene().getWindow(), 
+		        controllerFactory.createProcessEditCtrl(), selectedProcess);
 	}
 	
 	@FXML

@@ -33,11 +33,8 @@ import javafx.stage.Stage;
  */
 public abstract class MainScreenCtrl implements Initializable, Observer {
 
-	private static final URL ARQUIVO_FXML_TELA_EDICAO = MainScreenCtrl.class.getResource("/visions/tela_editar_processo.fxml");
-	private static final URL ARQUIVO_FXML_TELA_BUSCA = MainScreenCtrl.class.getResource("/visions/tela_buscar_processos.fxml");
+	private static final URL ARQUIVO_FXML_TELA_BUSCA = MainScreenCtrl.class.getResource("/visions/health_process_search_screen.fxml");
 	
-	private static final String CRIAR_PROCESSO = "Novo Processo / Ofício";
-	private static final String EDITAR_PROCESSO = "Editar Processo";
 	private static final String BUSCAR_PROCESSO = "Buscar Processos / Ofícios";
 
 	private final Logger logger;
@@ -101,34 +98,14 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 
 	@FXML
 	private void criarFormularioNovo() {
-		this.criarTelaEdicao(CRIAR_PROCESSO, null);
+		ProcessEditCtrl.showProcessEditScreen(root.getScene().getWindow(),
+		        controllerFactory.createProcessEditCtrl(), null);
 	}
 
 	@FXML
 	private void criarFormularioEdicao() {
-		this.criarTelaEdicao(EDITAR_PROCESSO, selectedProcess);
-	}
-
-	private void criarTelaEdicao(String titulo, Process processo) {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(ARQUIVO_FXML_TELA_EDICAO);
-			Pane novoPainel = loader.load();
-
-			Stage telaEdicao = new Stage();
-			telaEdicao.setTitle(titulo);
-			telaEdicao.initModality(Modality.WINDOW_MODAL);
-			telaEdicao.initOwner(this.root.getScene().getWindow());
-			telaEdicao.setScene(new Scene(novoPainel, 720, 540));
-
-			ControleTelaEdicao controleTelaEdicao = loader.getController();
-			controleTelaEdicao.montarFormulario(processo);
-			controleTelaEdicao.setControllerFactory(controllerFactory);
-			
-			telaEdicao.show();
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
+	    ProcessEditCtrl.showProcessEditScreen(root.getScene().getWindow(),
+                controllerFactory.createProcessEditCtrl(), selectedProcess);
 	}
 	
 	@FXML

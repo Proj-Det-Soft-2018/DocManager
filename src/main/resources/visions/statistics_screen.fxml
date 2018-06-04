@@ -20,12 +20,12 @@
 			maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
 			prefHeight="569.0" prefWidth="940.0" tabClosingPolicy="UNAVAILABLE">
 			<tabs>
-				<Tab text="QuantidadePorAnoMes">
+				<Tab text="Quantidade por mês e ano">
 					<content>
 						<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 							prefHeight="180.0" prefWidth="200.0">
 							<children>
-								<BarChart fx:id="barChartMonthYear" layoutX="51.0"
+								<BarChart fx:id="bcPerMonthYear" layoutX="51.0"
 									layoutY="35.0" prefHeight="464.0" prefWidth="838.0"
 									title="Quantidade de Processos Por Mês e Ano">
 									<xAxis>
@@ -39,12 +39,12 @@
 						</AnchorPane>
 					</content>
 				</Tab>
-				<Tab text="QuantidadeUltimos12Meses">
+				<Tab text="Quantidade nos últimos 12 meses">
 					<content>
 						<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 							prefHeight="180.0" prefWidth="200.0">
 							<children>
-								<BarChart fx:id="barChartLastYear" layoutX="51.0"
+								<BarChart fx:id="bcLastTwelveMonths" layoutX="51.0"
 									layoutY="35.0" prefHeight="464.0" prefWidth="838.0"
 									title="Quantidade de Processos Nos Últimos 12 Meses">
 									<xAxis>
@@ -58,7 +58,7 @@
 						</AnchorPane>
 					</content>
 				</Tab>
-				<Tab text="QuantidadePorCategoria">
+				<Tab text="Quantidade por categoria">
 					<content>
 						<AnchorPane id="Content" minHeight="0.0" minWidth="0.0"
 							prefHeight="180.0" prefWidth="200.0">
@@ -70,29 +70,27 @@
 										<AnchorPane minHeight="0.0" minWidth="0.0"
 											prefHeight="430.0" prefWidth="940.0">
 											<children>
-												<RadioButton id="radioBtn1" fx:id="radioBtnSubject"
-													layoutX="14.0" layoutY="14.0" mnemonicParsing="false"
-													onAction="#createPieChartSubject" selected="true" text="Assunto">
+												<RadioButton layoutX="14.0" layoutY="14.0"
+													mnemonicParsing="false" onAction="#createPieChartSubject"
+													selected="true" text="Assunto">
 													<toggleGroup>
 														<ToggleGroup fx:id="tgCategory" />
 													</toggleGroup>
 												</RadioButton>
-												<RadioButton id="radioBtn2" fx:id="radioBtnOrganization"
-													layoutX="14.0" layoutY="48.0" mnemonicParsing="false"
-													onAction="#createPieChartOrganization" text="Orgao"
-													toggleGroup="$tgCategory" />
-												<RadioButton id="radioBtnSituacao" fx:id="radioBtnSituation"
-													layoutX="14.0" layoutY="80.0" mnemonicParsing="false"
-													onAction="#createPieChartSituation" text="Situaçao"
-													toggleGroup="$tgCategory" />
+												<RadioButton layoutX="14.0" layoutY="48.0"
+													mnemonicParsing="false" onAction="#createPieChartOrganization"
+													text="Orgao" toggleGroup="$tgCategory" />
+												<RadioButton layoutX="14.0" layoutY="80.0"
+													mnemonicParsing="false" onAction="#createPieChartSituation"
+													text="Situaçao" toggleGroup="$tgCategory" />
 											</children>
 										</AnchorPane>
 										<AnchorPane minHeight="0.0" minWidth="0.0"
 											prefHeight="506.0" prefWidth="725.0">
 											<children>
-												<PieChart id="PieChart" fx:id="pieChart" layoutX="33.0"
-													layoutY="37.0" legendSide="RIGHT" prefHeight="430.0"
-													prefWidth="700.0" title="" />
+												<PieChart fx:id="pieChart" layoutX="33.0" layoutY="37.0"
+													legendSide="RIGHT" prefHeight="430.0" prefWidth="700.0"
+													title="" />
 											</children>
 										</AnchorPane>
 									</items>
