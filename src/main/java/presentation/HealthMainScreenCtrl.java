@@ -37,8 +37,7 @@ public class HealthMainScreenCtrl extends MainScreenCtrl {
 	}
 	
 	@Override
-	protected void configureTable() {
-		// inicia as colunas
+	protected void configureColumns() {
 		tabColumnType.setCellValueFactory(
 				content -> new ReadOnlyStringWrapper(content.getValue().getType()));
 		tabColumnNumber.setCellValueFactory(
@@ -47,15 +46,6 @@ public class HealthMainScreenCtrl extends MainScreenCtrl {
 				content -> new ReadOnlyStringWrapper(content.getValue().getIntersted().getName()));
 		tabColumnSituation.setCellValueFactory(
 				content -> new ReadOnlyStringWrapper(content.getValue().getSituation().getStatus()));
-
-		// eventHandle para detectar o processo selecionado
-		tabProcesses.getSelectionModel().selectedItemProperty().addListener(
-				(observable, oldValue, newValue) -> {
-					super.selectedProcess = newValue;
-					super.btnEdit.setDisable(newValue!=null? false : true);
-					super.btnPdfDoc.setDisable(newValue!=null? false : true);
-					super.btnDelete.setDisable(newValue!=null? false : true);
-				});
 	}
 	
 	@Override

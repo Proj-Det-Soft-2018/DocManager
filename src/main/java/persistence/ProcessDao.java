@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import business.model.Process;
+import business.model.Search;
 import persistence.exception.DatabaseException;
 
 /**
@@ -23,8 +24,8 @@ public interface ProcessDao{
 	public boolean contains(Process process) throws DatabaseException;
 	public List<Process> getAll() throws DatabaseException;
 	public List<Process> searchByNumber(String number) throws DatabaseException;
-	public List<Process> multipleSearch(String number, String interestedName, String interestedCpf, int organizationId,
-			int subjectId, int situationId) throws DatabaseException;
+	public List<Process> searchAll(Search searchData) throws DatabaseException;
+	
 	//Statistics lists
 	public Map<Integer, ArrayList<Integer>> getQuantityProcessPerMonthYearList() throws DatabaseException;
 	public Map<Integer, Integer> getQuantityProcessPerSituationList() throws DatabaseException;

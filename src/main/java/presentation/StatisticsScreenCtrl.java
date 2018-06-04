@@ -51,21 +51,21 @@ public class StatisticsScreenCtrl implements Initializable {
 
 	private StatisticService statisticService;
 	
-	private ObservableList<String> observableMonthsList = FXCollections.observableArrayList();
-	private ObservableList<String> observableMonthsList2 = FXCollections.observableArrayList();
+	private ObservableList<String> monthsObsList = FXCollections.observableArrayList();
+	private ObservableList<String> lastTwelveMonthsObsList = FXCollections.observableArrayList();
 
 	@FXML
 	private Node root;
 
 	//First Tab
 	@FXML
-	private BarChart<String, Number> barChartMonthYear;
+	private BarChart<String, Number> bcPerMonthYear;
 	@FXML
 	private CategoryAxis categoryAxisMonthYear;
 
 	//Second tab
 	@FXML
-	private BarChart<String, Number> barChartLastYear;
+	private BarChart<String, Number> bcLastTwelveMonths;
 	@FXML
 	private CategoryAxis categoryAxisLastYear;
 
@@ -105,22 +105,22 @@ public class StatisticsScreenCtrl implements Initializable {
 
 	private void createChartQntPerMonthAndYear(){
 		/* Converte o array em uma lista e adiciona em nossa ObservableList de meses.*/
-		observableMonthsList.addAll(Arrays.asList(Month.getAll()));
+		monthsObsList.addAll(Arrays.asList(Month.getAll()));
 		/* Associa os nomes de mês como categorias para o eixo horizontal. */        
-		categoryAxisMonthYear.setCategories(observableMonthsList);
+		categoryAxisMonthYear.setCategories(monthsObsList);
 
-		Map<Integer, ArrayList<Integer>> dados = null;
+		Map<Integer, ArrayList<Integer>> qntPerMonthData = null;
 		try {
-			dados = statisticService.quantityProcessPerMonthYear();
+			qntPerMonthData = statisticService.quantityProcessPerMonthYear();
 		} catch (DatabaseException e) {
-			//TODO fazer um alert e tratar
+			//TODO fazer um alert para erro no banco
 			LOGGER.error(e.getMessage(), e);
 		}
 
-		if(dados == null || dados.isEmpty()) {
+		if(qntPerMonthData == null || qntPerMonthData.isEmpty()) {
 			//TODO fazer um alert e tratar
 		} else {
-			for (Entry<Integer, ArrayList<Integer>> itemData : dados.entrySet()) {
+			for (Entry<Integer, ArrayList<Integer>> itemData : qntPerMonthData.entrySet()) {
 				XYChart.Series<String, Number> series = new XYChart.Series<>();
 				series.setName(itemData.getKey().toString());
 				for (int i = 0; i < itemData.getValue().size(); i = i + 2) {
@@ -130,7 +130,7 @@ public class StatisticsScreenCtrl implements Initializable {
 					quantity = itemData.getValue().get(i + 1);
 					series.getData().add(new XYChart.Data<>(month, quantity));
 				}
-				barChartMonthYear.getData().add(series);
+				bcPerMonthYear.getData().add(series);
 			}
 		}
 	}
@@ -138,15 +138,15 @@ public class StatisticsScreenCtrl implements Initializable {
 	private void createChartQntLastYear() {
 
 		// Converte o array em uma lista e adiciona em nossa ObservableList de meses.
-		observableMonthsList2.addAll(this.getMonthList(Calendar.getInstance()));
+		lastTwelveMonthsObsList.addAll(this.getMonthList(Calendar.getInstance()));
 		// Associa os nomes de mês como categorias para o eixo horizontal.        
-		categoryAxisLastYear.setCategories(observableMonthsList2);
+		categoryAxisLastYear.setCategories(lastTwelveMonthsObsList);
 
 		Map<Integer, ArrayList<Integer>> dados = null;
 		try {
 			dados = statisticService.quantityProcessFromLastYear();
 		} catch (DatabaseException e) {
-			//TODO fazer um alert e tratar
+			//TODO fazer um alert para erro no banco
 			LOGGER.error(e.getMessage(), e);
 		}
 
@@ -164,7 +164,7 @@ public class StatisticsScreenCtrl implements Initializable {
 					quantity = itemData.getValue().get(i + 1);
 					series.getData().add(new XYChart.Data<>(month, quantity));
 				}
-				barChartLastYear.getData().add(series);
+				bcLastTwelveMonths.getData().add(series);
 			}
 		}
 

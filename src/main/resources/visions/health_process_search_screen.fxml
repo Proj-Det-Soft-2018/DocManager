@@ -20,8 +20,7 @@
 
 <VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
 	minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0"
-	prefWidth="720.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="presentation.SearchScreenCtrl">
+	prefWidth="720.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
 	<padding>
 		<Insets bottom="10.0" left="10.0" right="10.0" top="15.0" />
 	</padding>
@@ -113,7 +112,7 @@
 					prefWidth="80.0" text="Voltar" />
 				<Button mnemonicParsing="false" onAction="#limparFormulario"
 					prefWidth="80.0" text="Limpar" />
-				<Button mnemonicParsing="false" onAction="#buscar" prefWidth="80.0"
+				<Button mnemonicParsing="false" onAction="#search" prefWidth="80.0"
 					styleClass="button-accent" stylesheets="@../fx_css/styles.css"
 					text="Buscar" />
 			</children>

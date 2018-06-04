@@ -20,7 +20,9 @@ import org.apache.log4j.Logger;
 import business.exception.ValidationException;
 import business.model.HealthInterested;
 import business.model.HealthProcess;
+import business.model.HealthProcessSearch;
 import business.model.Process;
+import business.model.Search;
 import business.model.Interested;
 import persistence.exception.DatabaseException;
 
@@ -142,7 +144,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	public Process getById(Long id) throws DatabaseException {
 		String sql = "WHERE p.id="+id.toString();
 		List<Process> processList = this.searcher(sql);
-		if(processList.isEmpty() || processList ==null) {
+		if(processList.isEmpty()) {
 			return null;
 		}else {
 			//TODO verificar o getById
@@ -248,36 +250,47 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 		return this.searcher(sql);
 	}
 
-	public List<Process> multipleSearch(String number, String name, String cpf, int organizationId,
-			int subjectId, int situationId) throws DatabaseException {
+	public List<Process> searchAll(Search searchData) throws DatabaseException {
+	    HealthProcessSearch search = (HealthProcessSearch) searchData;
 		StringBuilder sql = new StringBuilder("WHERE ");
 		final String AND = " AND ";
 		
+		String number = search.getNumber();
 		if (number != null && !number.equalsIgnoreCase("")) {
 			sql.append("numero LIKE '"+number+"' AND ");
 		}
+		
+		String name = search.getName();
 		if (name != null && !name.equalsIgnoreCase("")) {
 			sql.append("nome LIKE '%"+name+"%' AND ");
 		}
+		
+		String cpf = search.getCpf();
 		if (cpf != null && !cpf.equalsIgnoreCase("")) {
 			sql.append("cpf= '"+cpf+"' AND ");
 		}
+		
+		int organizationId = search.getOrganizationId();
 		if (organizationId != 0) {
 			sql.append("orgao_origem="+organizationId+AND);
 		}
+		
+		int subjectId = search.getSubjectId();
 		if (subjectId != 0) {
 			sql.append("assunto="+subjectId+AND);
 		}
+		
+		int situationId = search.getSituationId();
 		if (situationId != 0) {
 			sql.append("situacao="+situationId);
 		} else {
 			sql.delete(sql.lastIndexOf(AND), sql.length());
 		}
+		
 		return this.searcher(sql.toString());
 	}
 	
 	//Methods to resolve statistic solutions
-
 	@Override
 	public Map<Integer, ArrayList<Integer>> getQuantityProcessPerMonthYearList() throws DatabaseException {
 		String query = "SELECT COUNT(id), EXTRACT(year from data_entrada) as ano, EXTRACT(month from data_entrada) AS mes "

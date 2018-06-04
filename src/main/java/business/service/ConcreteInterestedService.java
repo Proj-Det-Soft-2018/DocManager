@@ -2,6 +2,7 @@ package business.service;
 
 import business.exception.ValidationException;
 import business.model.Interested;
+import business.model.Search;
 import persistence.DaoFactoryJDBC;
 import persistence.InterestedDao;
 import persistence.exception.DatabaseException;
@@ -44,10 +45,8 @@ public class ConcreteInterestedService extends Observable implements InterestedS
 	}
 
 	@Override
-	public Interested searchByCpf(String cpf) throws ValidationException, DatabaseException{
-		if(cpf == null || cpf.length() != 11) {
-			throw new ValidationException("O CPF buscado está incompleto!");
-		}
-		return interessadoDao.getByCpf(cpf);
+	public Interested search(Search searchData) throws ValidationException, DatabaseException {
+	    searchData.validate();
+		return interessadoDao.search(searchData);
 	} 
 }

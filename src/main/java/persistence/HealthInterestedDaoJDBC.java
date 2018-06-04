@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import business.model.HealthInterested;
+import business.model.HealthInterestedSearch;
 import business.model.Interested;
+import business.model.Search;
 import persistence.exception.DatabaseException;
 
 /**
@@ -127,7 +129,8 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 	}
 	
 	@Override
-	public Interested getByCpf(String cpf) throws DatabaseException {
+	public Interested search(Search searchData) throws DatabaseException {
+	    HealthInterestedSearch search = (HealthInterestedSearch) searchData;
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
@@ -136,7 +139,7 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 			connection = ConnectionFactory.getConnection();
 			
 			statement = connection.prepareStatement("SELECT * FROM interessados WHERE cpf=?");
-			statement.setString(1, cpf);
+			statement.setString(1, search.getCpf());
 			
 			resultSet = statement.executeQuery();
 			
@@ -180,7 +183,7 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 			connection = ConnectionFactory.getConnection();
 			statement = connection.prepareStatement("SELECT * FROM interessados");
 			resultSet = statement.executeQuery();
-			List<HealthInterested> interestedList = new ArrayList<HealthInterested>();
+			List<HealthInterested> interestedList = new ArrayList<>();
 			
 			while(resultSet.next()) {
 				//criando o objeto Interessado
@@ -197,7 +200,6 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
-	
 	}
 
 }

@@ -42,9 +42,9 @@ public abstract class ListService {
 		return situationsList;
 	}
 
-	public List<String> getSituationsListByCurrentSituation(Situation current){
+	public List<String> getSituationsListByCurrentSituation(Situation currentSituation){
 		// TODO Ligar com a tela de edição
-		return this.reorganizeByCurrentSituation(null);
+		return this.reorganizeByCurrentSituation(currentSituation);
 	}
 
 	protected abstract List<String> reorganizeByCurrentSituation(Situation current);
