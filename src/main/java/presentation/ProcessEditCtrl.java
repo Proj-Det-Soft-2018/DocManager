@@ -182,41 +182,29 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
         Process processo = mountProcess();
         try {
             processo.validate();
-
             if (process == null ) {
-                /* Criar novo Processo */
-                try {
-                    processService.save(processo);
-                } catch (ValidationException e) {
-                    logger.error(e.getMessage(), e);
-                } catch (DatabaseException e) {
-                    logger.error(e.getMessage(), e);
-                }
-
+                processService.save(processo);
             } else {
-                /* Alterar Processo Existente */
                 processo.setId(process.getId());
-                try {
-                    processService.update(processo);
-                } catch (DatabaseException e) {
-                    logger.error(e.getMessage(), e);
-                }
             }
-
             this.closeWindow();
         }
         catch (ValidationException ve) {
             Alert alert = new Alert(AlertType.ERROR, ve.getMessage());
-            alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(
-                    node -> {
-                        ((Label)node).setMinHeight(Region.USE_PREF_SIZE);
-                        ((Label)node).setTextFill(Color.RED);
-                    });
+            alert.getDialogPane().getChildren().stream()
+                    .filter(node -> node instanceof Label)
+                    .forEach(node -> {
+                            ((Label)node).setMinHeight(Region.USE_PREF_SIZE);
+                            ((Label)node).setTextFill(Color.RED);
+                        });
             alert.setHeaderText(null);
             alert.setGraphic(null);
             alert.initOwner(root.getScene().getWindow());
 
             alert.showAndWait();
+        } catch (DatabaseException e) {
+            // TODO Criar alerta do database
+            logger.error(e.getMessage(), e);
         }
     }
 

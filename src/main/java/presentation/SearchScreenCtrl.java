@@ -9,7 +9,9 @@ import org.apache.log4j.Logger;
 
 import business.exception.ValidationException;
 import business.model.HealthProcess;
+import business.model.HealthProcessSearch;
 import business.model.Process;
+import business.model.Search;
 import business.service.HealthListService;
 import business.service.ConcreteProcessService;
 import business.service.Observer;
@@ -54,7 +56,7 @@ public class SearchScreenCtrl implements Initializable, Observer {
 	
 	private MaskedTextField mTxtCpf;
 	private DynamicMaskTextField dmTxtOficioNum;
-	private UltimaBusca ultimaBusca;
+	private Search ultimaBusca;
 
 	@FXML
 	private Node root;
@@ -164,13 +166,7 @@ public class SearchScreenCtrl implements Initializable, Observer {
 			//TODO verificar resultado = null
 			List<Process> resultado = null;
 			try {
-				resultado = this.processService.search(
-						ultimaBusca.numero,
-						ultimaBusca.nomeInteressado,
-						ultimaBusca.cpfInteressado,
-						ultimaBusca.idSituacao,
-						ultimaBusca.idOrgao,
-						ultimaBusca.idAssunto);
+				resultado = this.processService.search(ultimaBusca);
 			} catch (ValidationException e) {
 				logger.error(e.getMessage(), e);
 			} catch (DatabaseException e) {
@@ -191,8 +187,16 @@ public class SearchScreenCtrl implements Initializable, Observer {
 		int idSituacao = checkSituacao.isSelected()? choiceSituacao.getSelectionModel().getSelectedIndex() : 0;
 
 		try {
-			List<Process> resultado = this.processService.search(numProcesso, nomeInteressado, cpfInteressado, idSituacao, idOrgao, idAssunto);
-			this.ultimaBusca = new UltimaBusca(numProcesso, nomeInteressado, cpfInteressado, idOrgao, idAssunto, idSituacao);
+		    HealthProcessSearch search = new HealthProcessSearch();
+		    search.setNumber(numProcesso);
+		    search.setName(nomeInteressado);
+		    search.setCpf(cpfInteressado);
+		    search.setOrganizationId(idOrgao);
+		    search.setSubjectId(idAssunto);
+		    search.setSituationId(idSituacao);
+		    
+			List<Process> resultado = processService.search(search);
+			ultimaBusca = search;
 			atualizarTabela(resultado);
 		} catch (ValidationException ve) {
 			Alert alert = new Alert(AlertType.ERROR, ve.getMessage() + "\n\n");
@@ -446,24 +450,5 @@ public class SearchScreenCtrl implements Initializable, Observer {
 	private void criarTelaPdf() {
 		PdfViewerCtrl.showPdfView(root.getScene().getWindow(),
 				controllerFactory.createPdfViewerCtrl(), selectedProcess);
-	}
-
-	/* Estrutura de Dados para armazenar a ultima busca */
-	private class UltimaBusca {
-		private String numero; 
-		private String nomeInteressado;
-		private String cpfInteressado;
-		private int idOrgao;
-		private int idAssunto;
-		private int idSituacao; 
-
-		public UltimaBusca(String num, String nomeInter, String cpfInter, int idOrg, int idAss, int idSit) {
-			numero = num; 
-			nomeInteressado = nomeInter;
-			cpfInteressado = cpfInter;
-			idOrgao = idOrg;
-			idAssunto = idAss;
-			idSituacao = idSit;
-		}
 	}
 }

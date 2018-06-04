@@ -47,6 +47,7 @@ import org.xml.sax.InputSource;
 
 import business.exception.ValidationException;
 import business.model.Process;
+import business.model.Search;
 import business.model.Situation;
 import persistence.DaoFactoryJDBC;
 import persistence.ProcessDao;
@@ -130,19 +131,9 @@ public class ConcreteProcessService extends Observable implements ProcessService
 		return processoDao.getAll();
 	}
 
-	public List<Process> search(String number, String name, String cpf, int situation, int organization, int subject) throws ValidationException, DatabaseException {
-
-		boolean invalidNumber = (number == null || number.isEmpty());
-		boolean invalidName = (name == null || name.isEmpty());
-		boolean invalidCpf = (cpf == null || cpf.isEmpty());
-		boolean invalidSituation = (situation == 0);
-		boolean invalidOrganization = (organization == 0);
-		boolean invalidSubject = (subject == 0);
-
-		if(invalidNumber && invalidName && invalidCpf && invalidSituation && invalidOrganization && invalidSubject) {
-			throw new ValidationException("Não foram inseridos valores para busca!");
-		}
-		return processoDao.multipleSearch(number, name, cpf, organization, subject, situation);
+	public List<Process> search(Search searchData) throws ValidationException, DatabaseException {
+		searchData.validate();
+		return processoDao.multipleSearch(searchData);
 	}
 
 	public byte[] getPdf(Process process) {
