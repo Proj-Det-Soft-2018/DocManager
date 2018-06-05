@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import business.exception.ValidationException;
 import business.model.Process;
 import business.model.Search;
 import persistence.exception.DatabaseException;
@@ -17,7 +18,7 @@ import persistence.exception.DatabaseException;
  */
 public interface ProcessDao{
 	
-	public void save(Process newProcess) throws DatabaseException;
+	public void save(Process newProcess) throws DatabaseException, ValidationException;
 	public void update(Process modifiedProcess) throws DatabaseException;
 	public void delete(Process process) throws DatabaseException;
 	public Process getById(Long id) throws DatabaseException;

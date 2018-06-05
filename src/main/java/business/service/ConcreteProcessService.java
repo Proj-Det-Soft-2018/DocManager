@@ -46,7 +46,6 @@ import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 
 import business.exception.ValidationException;
-import business.model.HealthSituation;
 import business.model.Process;
 import business.model.Search;
 import persistence.DaoFactoryJDBC;
@@ -96,8 +95,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 
 	@Override
 	public void save(Process process) throws ValidationException, DatabaseException {
-		//Antes de salvar verificar os campos que nao podem ser nulos
-		this.validarNumeroDuplicado(process.getNumber());
+	
 
 		processoDao.save(process);
 		this.notifyObservers();
@@ -147,28 +145,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 		return fo2PdfTransform(fo);
 	}
 
-	/**
-	 *  Método procura no banco se tem outro processo com o mesmo número. Se tem, o registro deve
-	 *  estar com a situação definida como concluída. Caso contrário, pede confirmação do 
-	 *  usuário para modificar situacao do registro antigo como concluido.
-	 *  
-	 * @param numero Numero do processo que está sendo inserido.
-	 * @throws ValidationException 
-	 * @throws DatabaseException 
-	 */
-	// TODO tem que passar a responsabilidade de processo duplicado para o banco
-	private void validarNumeroDuplicado(String numero) throws ValidationException, DatabaseException {
-		List<Process> duplicados = processoDao.searchByNumber(numero);
-		if(duplicados != null && !duplicados.isEmpty()) {
-			//verifica se a situacao dos processos encontrados estao como concluido
-			for (Process processo : duplicados) {
-				if(!(processo.getSituation().getId()==HealthSituation.CONCLUIDO.getId()) ) {
-					//TODO Tem que remover isso daqui
-					throw new ValidationException("Existe outro processo cadastrado com situação não concluída");
-				}				
-			}			
-		}		
-	}
+	
 
 	private String xml2FoTransform(String xml) {
 

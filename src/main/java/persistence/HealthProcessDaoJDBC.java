@@ -21,10 +21,10 @@ import business.exception.ValidationException;
 import business.model.HealthInterested;
 import business.model.HealthProcess;
 import business.model.HealthProcessSearch;
+import business.model.HealthSituation;
+import business.model.Interested;
 import business.model.Process;
 import business.model.Search;
-import business.model.Situation;
-import business.model.Interested;
 import persistence.exception.DatabaseException;
 
 /**
@@ -36,7 +36,10 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	private static final Logger LOGGER = Logger.getLogger(HealthInterestedDaoJDBC.class);
 	
 	@Override
-	public void save(Process process) throws DatabaseException {
+	public void save(Process process) throws DatabaseException, ValidationException {
+		//Antes de salvar verificar os campos que nao podem ser nulos
+		this.checkDuplicate(process.getNumber());
+		
 		
 		String sql = "INSERT INTO processos"
 					+ "(eh_oficio,numero,interessado_id,"
@@ -171,9 +174,8 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	
 	@Override
 	public List<Process> getAllProcessesByPriority() throws DatabaseException {
-		int situationId = Situation.CONCLUIDO.ordinal();
+		int situationId = HealthSituation.CONCLUIDO.ordinal();
 		String sql = "WHERE situacao != "+situationId+" ORDER BY data_entrada DESC";
-		
 		
 		return this.searchProcessList(sql);
 		
@@ -408,6 +410,28 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
+	}
+	
+	/**
+	 *  Método procura no banco se tem outro processo com o mesmo número. Se tem, o registro deve
+	 *  estar com a situação definida como concluída. Caso contrário, pede confirmação do 
+	 *  usuário para modificar situacao do registro antigo como concluido.
+	 *  
+	 * @param numero Numero do processo que está sendo inserido.
+	 * @throws ValidationException 
+	 * @throws DatabaseException 
+	 */
+	private void checkDuplicate(String numero) throws ValidationException, DatabaseException {
+		List<Process> duplicados = this.searchByNumber(numero);
+		if(duplicados != null && !duplicados.isEmpty()) {
+			//verifica se a situacao dos processos encontrados estao como concluido
+			for (Process processo : duplicados) {
+				if(!(processo.getSituation().getId()==HealthSituation.CONCLUIDO.getId()) ) {
+					//TODO Tem que remover isso daqui
+					throw new ValidationException("Existe outro processo cadastrado com situação não concluída");
+				}				
+			}			
+		}		
 	}
 
 
