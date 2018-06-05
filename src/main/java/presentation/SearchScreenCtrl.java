@@ -19,18 +19,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import persistence.exception.DatabaseException;
 import presentation.utils.StringConstants;
+import presentation.utils.widget.ExceptionAlert;
 
 public abstract class SearchScreenCtrl implements Initializable, Observer {
 
@@ -71,7 +67,7 @@ public abstract class SearchScreenCtrl implements Initializable, Observer {
 
             searchScreen.show();
         } catch (IOException e) {
-            //TODO Alert Erro de geração de tela
+        	ExceptionAlert.show("Não foi possível gerar a tela!");
             Logger.getLogger(SearchScreenCtrl.class).error(e.getMessage(), e);
         }
     }
@@ -99,9 +95,12 @@ public abstract class SearchScreenCtrl implements Initializable, Observer {
 			List<Process> resultado = null;
 			try {
 				resultado = this.processService.searchAll(ultimaBusca);
-			} catch (ValidationException | DatabaseException e) {
-			    // TODO Gerar alert genérico, pois a última busca já foi validada 
+			} catch (DatabaseException e) {
+				ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow()); 
 				logger.error(e.getMessage(), e);
+			}
+			catch (ValidationException e) {
+				ExceptionAlert.show(e.getMessage(), root.getScene().getWindow());
 			}
 			atualizarTabela(resultado);
 		}
@@ -129,20 +128,9 @@ public abstract class SearchScreenCtrl implements Initializable, Observer {
 			ultimaBusca = search;
 			atualizarTabela(resultado);
 		} catch (ValidationException ve) {
-			//TODO alert
-			Alert alert = new Alert(AlertType.ERROR, ve.getMessage() + "\n\n");
-			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(
-					node -> {
-						((Label)node).setMinHeight(Region.USE_PREF_SIZE);
-						((Label)node).setTextFill(Color.RED);
-					});
-			alert.setHeaderText(null);
-			alert.setGraphic(null);
-			alert.initOwner(root.getScene().getWindow());
-
-			alert.showAndWait();
+			ExceptionAlert.show(ve.getMessage(), root.getScene().getWindow());
 		} catch (DatabaseException e) {
-		    // TODO Criar alert para Database
+		    ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
 			logger.error(e.getMessage(), e);
 		}
 	}

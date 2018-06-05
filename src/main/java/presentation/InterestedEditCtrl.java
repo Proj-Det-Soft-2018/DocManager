@@ -14,12 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -60,8 +55,7 @@ public abstract class InterestedEditCtrl implements Initializable{
 			interestedEditScreen.setScene(controller.dimensionScene(rootParent));
 			interestedEditScreen.show();
 		} catch (IOException e) {
-			//TODO analisar o texto que deve ser apresentado ao usuario
-			ExceptionAlert.show(e.getMessage(), ownerWindow);
+			ExceptionAlert.show("ERRO! Contate o administrador do sistema.", ownerWindow);
 			Logger.getLogger(InterestedEditCtrl.class).error(e.getMessage(), e);
 		}
 	}
@@ -103,21 +97,9 @@ public abstract class InterestedEditCtrl implements Initializable{
 			this.closeWindow();
 		}
 		catch (ValidationException e) {
-			
-			//TODO alterar alert
-			Alert alert = new Alert(AlertType.ERROR, e.getMessage());
-			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(
-					node -> {
-						((Label)node).setMinHeight(Region.USE_PREF_SIZE);
-						((Label)node).setTextFill(Color.RED);
-					});
-			alert.setHeaderText(null);
-			alert.setGraphic(null);
-	        alert.initOwner(root.getScene().getWindow());
-
-	        alert.showAndWait();
+			ExceptionAlert.show(e.getMessage(), root.getScene().getWindow());
 		} catch (DatabaseException e) {
-			// TODO Alert de problema no banco
+			ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
 			logger.error(e.getMessage(), e);
 		}
 	}

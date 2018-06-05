@@ -15,15 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import business.exception.ValidationException;
 import business.model.HealthInterested;
 import business.model.HealthProcess;
 import business.model.HealthProcessSearch;
+import business.model.Interested;
 import business.model.Process;
 import business.model.Search;
-import business.model.Interested;
 import persistence.exception.DatabaseException;
 
 /**
@@ -31,8 +29,6 @@ import persistence.exception.DatabaseException;
  * @since 01/04/2018
  */
 public class HealthProcessDaoJDBC implements ProcessDao{
-	
-	private static final Logger LOGGER = Logger.getLogger(HealthInterestedDaoJDBC.class);
 	
 	@Override
 	public void save(Process process) throws DatabaseException {
@@ -147,7 +143,6 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 		if(processList.isEmpty()) {
 			return null;
 		}else {
-			//TODO verificar o getById
 			return processList.get(0);
 		} 
 		
@@ -234,8 +229,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível buscar o processo no Banco.", e);
 		} catch (ValidationException e) {
-			// TODO Lançar nova DBException específica
-			LOGGER.error(e.getMessage(), e);
+			throw new DatabaseException("Banco corrompido!", e);
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}

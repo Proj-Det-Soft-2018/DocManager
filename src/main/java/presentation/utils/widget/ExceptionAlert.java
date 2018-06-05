@@ -21,5 +21,17 @@ public class ExceptionAlert {
         alert.initOwner(ownerWindow.getScene().getWindow());
         alert.showAndWait();
 	}
+	
+	public static void show(String message) {
+		Alert alert = new Alert(AlertType.ERROR, message);
+		alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(
+				node -> {
+					((Label)node).setMinHeight(Region.USE_PREF_SIZE);
+					((Label)node).setTextFill(Color.RED);
+				});
+		alert.setHeaderText(null);
+		alert.setGraphic(null);
+        alert.showAndWait();
+	}
 
 }

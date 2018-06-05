@@ -8,6 +8,7 @@ import org.apache.shiro.authc.AuthenticationException;
 
 import persistence.exception.DatabaseException;
 import presentation.utils.StringConstants;
+import presentation.utils.widget.ExceptionAlert;
 import business.model.Process;
 import business.service.ProcessService;
 
@@ -84,7 +85,7 @@ public class DeleteDialogCtrl {
 			errorLabel.setTextFill(Color.RED);
 			this.root.getChildren().add(0, errorLabel);
 		} catch (DatabaseException e) {
-			// TODO Alert erro de banco
+			ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
 			LOGGER.error(e.getMessage(), e);
 		}
 	}

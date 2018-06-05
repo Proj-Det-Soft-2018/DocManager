@@ -39,6 +39,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import persistence.exception.DatabaseException;
 import presentation.utils.StringConstants;
+import presentation.utils.widget.ExceptionAlert;
 
 /**
  * @author clah
@@ -91,7 +92,7 @@ public class StatisticsScreenCtrl implements Initializable {
 			
 			statisticsScreen.show();
 		} catch (IOException e) {
-			//TODO Alert Erro de geração de tela
+			ExceptionAlert.show("Não foi possível gerar a tela!");
 			LOGGER.error(e.getMessage(), e);
 		}
 	}
@@ -113,7 +114,7 @@ public class StatisticsScreenCtrl implements Initializable {
 		try {
 			qntPerMonthData = statisticService.quantityProcessPerMonthYear();
 		} catch (DatabaseException e) {
-			//TODO fazer um alert para erro no banco
+			ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
 			LOGGER.error(e.getMessage(), e);
 		}
 
@@ -146,7 +147,7 @@ public class StatisticsScreenCtrl implements Initializable {
 		try {
 			dados = statisticService.quantityProcessFromLastYear();
 		} catch (DatabaseException e) {
-			//TODO fazer um alert para erro no banco
+			ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
 			LOGGER.error(e.getMessage(), e);
 		}
 
@@ -201,7 +202,7 @@ public class StatisticsScreenCtrl implements Initializable {
 			Map<Integer, Integer> dados = statisticService.quantityProcessPerSituation();
 			this.createPieChart("Situação",dados);
 		} catch (DatabaseException e) {
-			// TODO Alert Banco de Dados
+			ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
 			LOGGER.error(e.getMessage(), e);
 		}
 	}
@@ -213,7 +214,7 @@ public class StatisticsScreenCtrl implements Initializable {
 			Map<Integer, Integer> dados = statisticService.quantityProcessPerOrganization();
 			this.createPieChart("Órgão",dados);
 		} catch (DatabaseException e) {
-			// TODO Alert Banco de Dados
+			ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
 			LOGGER.error(e.getMessage(), e);
 		}
 	}
@@ -225,7 +226,7 @@ public class StatisticsScreenCtrl implements Initializable {
 			Map<Integer, Integer> data = statisticService.quantityProcessPerSubject();
 			this.createPieChart("Assunto",data);
 		} catch (DatabaseException e) {
-			// TODO Alert Banco de Dados
+			ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
 			LOGGER.error(e.getMessage(), e);
 		}
 	}

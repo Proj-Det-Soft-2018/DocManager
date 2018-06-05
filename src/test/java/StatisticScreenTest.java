@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
+
 import business.model.Situation;
 import business.service.ConcreteStatisticService;
 import business.service.StatisticService;
@@ -27,6 +29,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import persistence.exception.DatabaseException;
+import presentation.utils.widget.ExceptionAlert;
 
 /**
  * @author clah
@@ -34,7 +37,7 @@ import persistence.exception.DatabaseException;
  */
 public class StatisticScreenTest extends Application {
 
-	
+	private static final Logger LOGGER = Logger.getLogger(StatisticScreenTest.class);
 	private static final int GRAFICO_ALTURA = 300;
 	private static final int GRAFICO_LARGURA = 300;
 	private StatisticService statisticService;
@@ -65,8 +68,8 @@ public class StatisticScreenTest extends Application {
 			try {
 				dados = statisticService.quantityProcessPerSituation();
 			} catch (DatabaseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ExceptionAlert.show("ERRO! Contate o administrador do sistema.");
+				LOGGER.error(e.getMessage(), e);
 			}
 			
 			if(dados == null || dados.isEmpty()) {
@@ -148,8 +151,8 @@ public class StatisticScreenTest extends Application {
 		try {
 			dados = statisticService.quantityProcessPerMonthYear();
 		} catch (DatabaseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ExceptionAlert.show("ERRO! Contate o administrador do sistema.");
+			LOGGER.error(e.getMessage(), e);
 		}
 		if(dados == null || dados.isEmpty()) {
 			System.out.println("ta dando ruim!");

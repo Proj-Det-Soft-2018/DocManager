@@ -18,12 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
@@ -31,6 +26,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import presentation.utils.StringConstants;
+import presentation.utils.widget.ExceptionAlert;
 
 public class PdfViewerCtrl implements Initializable {
 	
@@ -64,7 +60,6 @@ public class PdfViewerCtrl implements Initializable {
 			
 			pdfViewerScreen.show();
 		} catch (IOException e) {
-			//TODO Alert Erro de geração de tela
 			LOGGER.error(e.getMessage(), e);
 		}
 	}
@@ -137,18 +132,8 @@ public class PdfViewerCtrl implements Initializable {
 		try (FileOutputStream fos = new FileOutputStream(outputFile)) {
 			   fos.write(pdfData);
 		} catch (IOException e) {
+			ExceptionAlert.show("Falha ao tentar salvar o arquivo!", root.getScene().getWindow());
 			LOGGER.error(e.getMessage(), e);
-			
-			//TODO Gera um Alert em caso de falha
-			Alert alert = new Alert(AlertType.ERROR, "Falha ao tentar salvar o arquivo!");
-			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(
-					node -> {
-						((Label)node).setMinHeight(Region.USE_PREF_SIZE);
-						((Label)node).setTextFill(Color.RED);
-					});
-			alert.setHeaderText(null);
-			alert.setGraphic(null);
-	        alert.initOwner(root.getScene().getWindow());
 		}
 	}
 }
