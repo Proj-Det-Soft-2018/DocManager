@@ -141,13 +141,11 @@ public class HealthInterested implements Interested {
 		}
 		else if(!this.name.matches("[a-zA-Z\\s]+")) {
 			failure = true;
-			System.out.println("a"+this.name);
 			failureMsg.append("O campo Nome deve conter apenas letras.\n\n");
 		}
 		
 		if(this.contact == null || (!this.contact.isEmpty() && this.contact.length() < 10)){
 			failure = true;
-			System.out.println(this.contact);
 			failureMsg.append("O contato inserido está incompleto.\n\n");
 		}
 		

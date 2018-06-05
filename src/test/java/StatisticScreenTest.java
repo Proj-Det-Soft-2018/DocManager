@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
-import business.model.Situation;
 import business.service.ConcreteStatisticService;
 import business.service.HealthListService;
 import business.service.ListService;

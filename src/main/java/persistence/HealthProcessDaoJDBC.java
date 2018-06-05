@@ -139,34 +139,6 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 		
 	}
 	
-	
-	@Override
-	public Process getById(Long id) throws DatabaseException {
-		String sql = "WHERE p.id="+id.toString();
-		List<Process> processList = this.searchProcessList(sql);
-		if(processList.isEmpty()) {
-			return null;
-		}else {
-			return processList.get(0);
-		} 
-		
-	}
-
-	@Override
-	public boolean contains(Process process) throws DatabaseException {		
-		Process foundProcess = this.getById(process.getId());
-		
-		return (foundProcess!=null) ? true : false;
-		
-	}
-	
-	@Override
-	public List<Process> getAll() throws DatabaseException {
-		String sql = "ORDER BY data_entrada DESC LIMIT 50";
-		return this.searchProcessList(sql);
-		
-	}
-	
 	@Override
 	public List<Process> getAllProcessesByPriority() throws DatabaseException {
 		int situationId = HealthSituation.CONCLUIDO.ordinal();

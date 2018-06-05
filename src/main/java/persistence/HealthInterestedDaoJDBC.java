@@ -7,8 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import business.model.HealthInterested;
 import business.model.HealthInterestedSearch;
@@ -93,41 +91,6 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 		
 	}
 	
-	
-	@Override
-	public Interested getById(Long id) throws DatabaseException {
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-
-		try {
-			connection = ConnectionFactory.getConnection();
-			
-			statement = connection.prepareStatement("SELECT * FROM interessados WHERE id=?");
-			statement.setLong(1, id);
-			
-			resultSet = statement.executeQuery();
-			
-			Interested interessado = null;
-			
-			if(resultSet.next()) {
-				//criando o objeto Interessado
-				interessado = new HealthInterested(
-						resultSet.getLong("id"),
-						resultSet.getString("nome"),
-						resultSet.getString("cpf"),
-						resultSet.getString("contato"));
-			}
-			
-			return interessado;
-			
-		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível recuperar o interessado por ID", e);
-		}finally {
-			ConnectionFactory.closeConnection(connection, statement, resultSet);
-		}
-	}
-	
 	@Override
 	public Interested search(Search searchData) throws DatabaseException {
 	    HealthInterestedSearch search = (HealthInterestedSearch) searchData;
@@ -159,44 +122,6 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 			
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível recuperar o interessado pelo CPF", e);
-		}finally {
-			ConnectionFactory.closeConnection(connection, statement, resultSet);
-		}
-	}
-
-	@Override
-	public boolean contains(Interested interested) throws DatabaseException {
-		Interested foundInterested = this.getById(interested.getId());
-		
-		return (foundInterested!=null) ? true: false;
-		
-	}
-
-	@Override
-	public List<HealthInterested> getAll() throws DatabaseException {
-		
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-		
-		try {
-			connection = ConnectionFactory.getConnection();
-			statement = connection.prepareStatement("SELECT * FROM interessados");
-			resultSet = statement.executeQuery();
-			List<HealthInterested> interestedList = new ArrayList<>();
-			
-			while(resultSet.next()) {
-				//criando o objeto Interessado
-				HealthInterested interested = new HealthInterested(
-						resultSet.getLong("id"),
-						resultSet.getString("nome"),
-						resultSet.getString("cpf"),
-						resultSet.getString("contato"));
-				interestedList.add(interested);
-			}
-			return interestedList;
-		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível recuperar todos os interessados.", e);
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}

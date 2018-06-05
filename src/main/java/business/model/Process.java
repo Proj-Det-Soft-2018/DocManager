@@ -67,7 +67,7 @@ public interface Process {
 
 	String getObservation();
 
-	void setObservation(String observation);
+	//void setObservation(String observation);
 
 	LocalDateTime getRegistrationDate();
 

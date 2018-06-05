@@ -236,14 +236,6 @@ public class HealthProcess implements Process {
 	}
 
 	/* (non-Javadoc)
-	 * @see business.model.Process#setObservation(java.lang.String)
-	 */
-	@Override
-	public void setObservation(String observation) {
-		this.observation = observation;
-	}
-	
-	/* (non-Javadoc)
 	 * @see business.model.Process#getRegistrationDate()
 	 */
 	@Override
