@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import persistence.exception.DatabaseException;
 import presentation.utils.StringConstants;
+import presentation.utils.widget.ExceptionAlert;
 
 /**
  * @author hugotho
@@ -59,7 +60,8 @@ public abstract class InterestedEditCtrl implements Initializable{
 			interestedEditScreen.setScene(controller.dimensionScene(rootParent));
 			interestedEditScreen.show();
 		} catch (IOException e) {
-			//TODO Alert Erro de geração de tela
+			//TODO analisar o texto que deve ser apresentado ao usuario
+			ExceptionAlert.show(e.getMessage(), ownerWindow);
 			Logger.getLogger(InterestedEditCtrl.class).error(e.getMessage(), e);
 		}
 	}
@@ -101,6 +103,8 @@ public abstract class InterestedEditCtrl implements Initializable{
 			this.closeWindow();
 		}
 		catch (ValidationException e) {
+			
+			//TODO alterar alert
 			Alert alert = new Alert(AlertType.ERROR, e.getMessage());
 			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(
 					node -> {

@@ -69,7 +69,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível salvar o processo no Banco de Dados.");
+			throw new DatabaseException("Não foi possível salvar o processo no Banco de Dados.", e);
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement);
 		}
@@ -110,7 +110,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível atualizar o processo no Banco de Dados.");
+			throw new DatabaseException("Não foi possível atualizar o processo no Banco de Dados.", e);
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement);
 		}
@@ -132,7 +132,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível deletar o processo do Banco de Dados.");
+			throw new DatabaseException("Não foi possível deletar o processo do Banco de Dados.", e);
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement);
 		}
@@ -232,7 +232,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível buscar o processo no Banco.");
+			throw new DatabaseException("Não foi possível buscar o processo no Banco.", e);
 		} catch (ValidationException e) {
 			// TODO Lançar nova DBException específica
 			LOGGER.error(e.getMessage(), e);
@@ -339,7 +339,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			return list;
 
 		} catch (SQLException e) {
-			throw new DatabaseException("Problema no SQL:"+e.getMessage());
+			throw new DatabaseException("Problema no JDBC", e);
 		}
 		finally {
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
@@ -393,7 +393,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			return list;
 
 		} catch (SQLException e) {
-			throw new DatabaseException("Problema no SQL:"+e.getMessage());
+			throw new DatabaseException("Problema no JDBC", e);
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}

@@ -3,17 +3,11 @@ package business.exception;
 @SuppressWarnings("serial")
 public class ValidationException extends Exception{
 	
-	/**
-	 * 
-	 */
-	private final String message;
-	
+	public ValidationException(String message, Throwable ex) {
+		super(message, ex);
+	}
 	public ValidationException(String message) {
-		this.message = message;
+		super(message);
 	}
-
-	@Override
-	public String getMessage() {
-		return message;
-	}
+ 
 }

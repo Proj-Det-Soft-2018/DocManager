@@ -129,6 +129,7 @@ public abstract class SearchScreenCtrl implements Initializable, Observer {
 			ultimaBusca = search;
 			atualizarTabela(resultado);
 		} catch (ValidationException ve) {
+			//TODO alert
 			Alert alert = new Alert(AlertType.ERROR, ve.getMessage() + "\n\n");
 			alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(
 					node -> {

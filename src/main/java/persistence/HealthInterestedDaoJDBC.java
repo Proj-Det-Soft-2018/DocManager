@@ -40,7 +40,7 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 			statement.executeUpdate();
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível salvar o interessado no Banco de Dados.");
+			throw new DatabaseException("Não foi possível salvar o interessado no Banco de Dados.", e);
 		}
 		finally {
 			ConnectionFactory.closeConnection(connection, statement);
@@ -67,7 +67,7 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 	        statement.executeUpdate();
 	        
 	    } catch (SQLException e) {
-	        throw new DatabaseException("Não foi possível atualizar o interessado no Banco de Dados.");
+	        throw new DatabaseException("Não foi possível atualizar o interessado no Banco de Dados.", e);
 	    }finally {
 			ConnectionFactory.closeConnection(connection, statement);
 		}
@@ -86,7 +86,7 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 	        statement.executeUpdate();
 	        
 	    } catch (SQLException e) {
-	        throw new DatabaseException("Não foi possível deletar o processo do Banco de Dados.");
+	        throw new DatabaseException("Não foi possível deletar o processo do Banco de Dados.", e);
 	    }finally {
 	    	ConnectionFactory.closeConnection(connection, statement);
 		}
@@ -122,7 +122,7 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 			return interessado;
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível recuperar o interessado por ID");
+			throw new DatabaseException("Não foi possível recuperar o interessado por ID", e);
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
@@ -158,7 +158,7 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 			return interested;
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível recuperar o interessado pelo CPF");
+			throw new DatabaseException("Não foi possível recuperar o interessado pelo CPF", e);
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
@@ -196,7 +196,7 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 			}
 			return interestedList;
 		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível recuperar todos os interessados.");
+			throw new DatabaseException("Não foi possível recuperar todos os interessados.", e);
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}

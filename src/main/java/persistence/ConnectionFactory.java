@@ -25,7 +25,7 @@ public class ConnectionFactory {
 		try {
 			return DriverManager.getConnection(driver,user,pass);
 		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível estabelecer conexão com o Banco de Dados.");
+			throw new DatabaseException("Não foi possível estabelecer conexão com o Banco de Dados.", e);
 		}		
 		
 	}
@@ -38,7 +38,7 @@ public class ConnectionFactory {
 			}
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível encerrar conexão com o Banco de Dados.");
+			throw new DatabaseException("Não foi possível encerrar conexão com o Banco de Dados.", e);
 		}
 	}
 	
@@ -51,7 +51,7 @@ public class ConnectionFactory {
 			}
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível destruir o statement construído.");
+			throw new DatabaseException("Não foi possível destruir o statement construído.", e);
 
 		}
 	}
@@ -65,7 +65,7 @@ public class ConnectionFactory {
 			}
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível destruir o Result Set.");
+			throw new DatabaseException("Não foi possível destruir o Result Set.", e);
 
 		}
 	}

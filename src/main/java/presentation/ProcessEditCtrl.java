@@ -175,6 +175,7 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
             this.closeWindow();
         }
         catch (ValidationException ve) {
+        	//TODO alert
             Alert alert = new Alert(AlertType.ERROR, ve.getMessage());
             alert.getDialogPane().getChildren().stream()
                     .filter(node -> node instanceof Label)
