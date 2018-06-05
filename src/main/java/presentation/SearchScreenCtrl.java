@@ -67,7 +67,7 @@ public abstract class SearchScreenCtrl implements Initializable, Observer {
             searchScreen.initModality(Modality.WINDOW_MODAL);
             searchScreen.initOwner(ownerWindow);
             searchScreen.setTitle(StringConstants.TITLE_SEARCH_SCREEN.getText());
-            searchScreen.setScene(new Scene(rootParent, 720, 660));
+            searchScreen.setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
 
             searchScreen.show();
         } catch (IOException e) {
@@ -177,7 +177,7 @@ public abstract class SearchScreenCtrl implements Initializable, Observer {
 	
 	@FXML
 	private void criarTelaPdf() {
-		PdfViewerCtrl.showPdfView(root.getScene().getWindow(),
+		PdfViewerCtrl.showPdfViewer(root.getScene().getWindow(),
 				controllerFactory.createPdfViewerCtrl(), selectedProcess);
 	}
 	

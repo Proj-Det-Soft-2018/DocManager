@@ -3,6 +3,9 @@ package business.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import business.model.HealthOrganization;
+import business.model.HealthSituation;
+import business.model.HealthSubject;
 import business.model.Situation;
 
 public class HealthListService extends ListService {
@@ -13,169 +16,174 @@ public class HealthListService extends ListService {
 		return instance;
 	}
 
-	@Override
+	private HealthListService() {
+        super( HealthOrganization.getAll(),
+                HealthSubject.getAll(), 
+                HealthSituation.getAll());
+    }
+
+    @Override
 	protected List<String> reorganizeByCurrentSituation(Situation current) {
 		List<String> list = new ArrayList<>();
 		
 		if(current == null) {
-			list.add(Situation.ANALISE.getStatus());
-			list.add(Situation.AGUARDANDOPERITO.getStatus());
+			list.add(HealthSituation.ANALISE.getDescription());
+			list.add(HealthSituation.AGUARDANDOPERITO.getDescription());
 			return list;
 		}
 
-		if(current == Situation.AGUARDANDOPERITO) {
-			list.add(Situation.ANALISE.getStatus());
-			list.add(Situation.AGUARDANDOPERITO.getStatus());
-			list.add(Situation.PRONTODESPACHAR.getStatus());
+		if(current == HealthSituation.AGUARDANDOPERITO) {
+			list.add(HealthSituation.ANALISE.getDescription());
+			list.add(HealthSituation.AGUARDANDOPERITO.getDescription());
+			list.add(HealthSituation.PRONTODESPACHAR.getDescription());
 			return list;
 		}
 		
-		if(current ==Situation.ANALISE) {
-			list.add(Situation.ANALISE.getStatus());
-			list.add(Situation.AGUARDANDOPERITO.getStatus());
-			list.add(Situation.CONVOCAR.getStatus());
-			list.add(Situation.SOLICITARDOCUMENTO.getStatus());
-			list.add(Situation.INTERESSADOIMPEDIDO.getStatus());
+		if(current ==HealthSituation.ANALISE) {
+			list.add(HealthSituation.ANALISE.getDescription());
+			list.add(HealthSituation.AGUARDANDOPERITO.getDescription());
+			list.add(HealthSituation.CONVOCAR.getDescription());
+			list.add(HealthSituation.SOLICITARDOCUMENTO.getDescription());
+			list.add(HealthSituation.INTERESSADOIMPEDIDO.getDescription());
 			return list;
 		}
 		
-		if(current ==Situation.INTERESSADOIMPEDIDO) {
-			list.add(Situation.ANALISE.getStatus());
-			list.add(Situation.CONVOCAR.getStatus());
+		if(current ==HealthSituation.INTERESSADOIMPEDIDO) {
+			list.add(HealthSituation.ANALISE.getDescription());
+			list.add(HealthSituation.CONVOCAR.getDescription());
 			return list;
 		}
 		
-		if(current ==Situation.SOLICITARDOCUMENTO) {
-			list.add(Situation.ANALISE.getStatus());
-			list.add(Situation.AGUARDANDODOCUMENTO.getStatus());
-			list.add(Situation.SEMEXITO1.getStatus());
+		if(current ==HealthSituation.SOLICITARDOCUMENTO) {
+			list.add(HealthSituation.ANALISE.getDescription());
+			list.add(HealthSituation.AGUARDANDODOCUMENTO.getDescription());
+			list.add(HealthSituation.SEMEXITO1.getDescription());
 			return list;
 		}
 		
-		if(current ==Situation.CONVOCAR) {
-			list.add(Situation.INTERESSADOIMPEDIDO.getStatus());
-			list.add(Situation.ANALISE.getStatus());
-			list.add(Situation.CONVOCADO.getStatus());
-			list.add(Situation.SEMEXITO1.getStatus());
-			list.add(Situation.AGUARDANDOEXTERNA.getStatus());
-			list.add(Situation.ENCAMINHADOCOVEPS.getStatus());			
+		if(current ==HealthSituation.CONVOCAR) {
+			list.add(HealthSituation.INTERESSADOIMPEDIDO.getDescription());
+			list.add(HealthSituation.ANALISE.getDescription());
+			list.add(HealthSituation.CONVOCADO.getDescription());
+			list.add(HealthSituation.SEMEXITO1.getDescription());
+			list.add(HealthSituation.AGUARDANDOEXTERNA.getDescription());
+			list.add(HealthSituation.ENCAMINHADOCOVEPS.getDescription());			
 			return list;
 		}
 		
-		if(current == Situation.AGUARDANDODOCUMENTO) {
-			list.add(Situation.SOLICITARDOCUMENTO.getStatus());
-			list.add(Situation.CONVOCADO.getStatus());
-			list.add(Situation.SEMEXITO1.getStatus());
-			list.add(Situation.AGUARDANDOPERITO.getStatus());
+		if(current == HealthSituation.AGUARDANDODOCUMENTO) {
+			list.add(HealthSituation.SOLICITARDOCUMENTO.getDescription());
+			list.add(HealthSituation.CONVOCADO.getDescription());
+			list.add(HealthSituation.SEMEXITO1.getDescription());
+			list.add(HealthSituation.AGUARDANDOPERITO.getDescription());
 			return list;
 		}
 		
-		if(current == Situation.SEMEXITO1) {
-			list.add(Situation.SOLICITARDOCUMENTO.getStatus());
-			list.add(Situation.CONVOCAR.getStatus());
-			list.add(Situation.CONVOCADO.getStatus());
-			list.add(Situation.AGUARDANDODOCUMENTO.getStatus());
-			list.add(Situation.SEMEXITO1.getStatus());
-			list.add(Situation.SEMEXITO2.getStatus());
+		if(current == HealthSituation.SEMEXITO1) {
+			list.add(HealthSituation.SOLICITARDOCUMENTO.getDescription());
+			list.add(HealthSituation.CONVOCAR.getDescription());
+			list.add(HealthSituation.CONVOCADO.getDescription());
+			list.add(HealthSituation.AGUARDANDODOCUMENTO.getDescription());
+			list.add(HealthSituation.SEMEXITO1.getDescription());
+			list.add(HealthSituation.SEMEXITO2.getDescription());
 			return list;
 		}
 		
-		if(current == Situation.SEMEXITO2) {
-			list.add(Situation.CONVOCADO.getStatus());
-			list.add(Situation.AGUARDANDODOCUMENTO.getStatus());
-			list.add(Situation.SEMEXITO3.getStatus());
+		if(current == HealthSituation.SEMEXITO2) {
+			list.add(HealthSituation.CONVOCADO.getDescription());
+			list.add(HealthSituation.AGUARDANDODOCUMENTO.getDescription());
+			list.add(HealthSituation.SEMEXITO3.getDescription());
 			return list;
 		}
 		
-		if(current == Situation.SEMEXITO3) {
-			list.add(Situation.CONVOCADO.getStatus());
-			list.add(Situation.AGUARDANDODOCUMENTO.getStatus());
-			list.add(Situation.PRONTODESPACHAR.getStatus());
+		if(current == HealthSituation.SEMEXITO3) {
+			list.add(HealthSituation.CONVOCADO.getDescription());
+			list.add(HealthSituation.AGUARDANDODOCUMENTO.getDescription());
+			list.add(HealthSituation.PRONTODESPACHAR.getDescription());
 			return list;
 		}
 		
-		if(current == Situation.AGUARDANDOEXTERNA) {
-			list.add(Situation.CONVOCAR.getStatus());
-			list.add(Situation.AGUARDANDOEXTERNA.getStatus());
-			list.add(Situation.AGENDADAEXTERNA.getStatus());
+		if(current == HealthSituation.AGUARDANDOEXTERNA) {
+			list.add(HealthSituation.CONVOCAR.getDescription());
+			list.add(HealthSituation.AGUARDANDOEXTERNA.getDescription());
+			list.add(HealthSituation.AGENDADAEXTERNA.getDescription());
 			return list;
 		}
 		
-		if(current == Situation.AGENDADAEXTERNA) {
-			list.add(Situation.AGUARDANDOEXTERNA.getStatus());
-			list.add(Situation.AGENDADAEXTERNA.getStatus());
-			list.add(Situation.PRONTODESPACHAR.getStatus());
+		if(current == HealthSituation.AGENDADAEXTERNA) {
+			list.add(HealthSituation.AGUARDANDOEXTERNA.getDescription());
+			list.add(HealthSituation.AGENDADAEXTERNA.getDescription());
+			list.add(HealthSituation.PRONTODESPACHAR.getDescription());
 			return list;
 		}
 		
-		if(current == Situation.ENCAMINHADOCOVEPS) {
-			list.add(Situation.AGUARDANDOPERITO.getStatus());
-			list.add(Situation.ANALISE.getStatus());
-			list.add(Situation.PROBLEMASIAPE.getStatus());
-			list.add(Situation.ENCAMINHADOCOVEPS.getStatus());
+		if(current == HealthSituation.ENCAMINHADOCOVEPS) {
+			list.add(HealthSituation.AGUARDANDOPERITO.getDescription());
+			list.add(HealthSituation.ANALISE.getDescription());
+			list.add(HealthSituation.PROBLEMASIAPE.getDescription());
+			list.add(HealthSituation.ENCAMINHADOCOVEPS.getDescription());
 			return list;
 		}
 		
-		if(current == Situation.AGUARDANDOPERITO) {
-			list.add(Situation.AGUARDANDODOCUMENTO.getStatus());
-			list.add(Situation.ENCAMINHADOCOVEPS.getStatus());
-			list.add(Situation.AGUARDANDOPERITO.getStatus());
-			list.add(Situation.ANALISE.getStatus());
-			list.add(Situation.AGUARDANDODOCUMENTO.getStatus());
-			list.add(Situation.PRONTODESPACHAR.getStatus());
-
-			return list;
-		}
-		
-		if(current == Situation.ENCAMINHADOEQUIPEMULTI) {
-			list.add(Situation.AGENDADAEXTERNA.getStatus());
-			list.add(Situation.CONVOCADO.getStatus());
-			list.add(Situation.ENCAMINHADOEQUIPEMULTI.getStatus());
-			list.add(Situation.AGUARDANDOPERITO.getStatus());
+		if(current == HealthSituation.AGUARDANDOPERITO) {
+			list.add(HealthSituation.AGUARDANDODOCUMENTO.getDescription());
+			list.add(HealthSituation.ENCAMINHADOCOVEPS.getDescription());
+			list.add(HealthSituation.AGUARDANDOPERITO.getDescription());
+			list.add(HealthSituation.ANALISE.getDescription());
+			list.add(HealthSituation.AGUARDANDODOCUMENTO.getDescription());
+			list.add(HealthSituation.PRONTODESPACHAR.getDescription());
 
 			return list;
 		}
 		
-		if(current == Situation.CONVOCADO) {
-			list.add(Situation.AGUARDANDODOCUMENTO.getStatus());
-			list.add(Situation.CONVOCAR.getStatus());
-			list.add(Situation.SEMEXITO1.getStatus());
-			list.add(Situation.SEMEXITO2.getStatus());
-			list.add(Situation.SEMEXITO3.getStatus());
-			list.add(Situation.ENCAMINHADOEQUIPEMULTI.getStatus());
-			list.add(Situation.PRONTODESPACHAR.getStatus());
-			list.add(Situation.PROBLEMASIAPE.getStatus());
+		if(current == HealthSituation.ENCAMINHADOEQUIPEMULTI) {
+			list.add(HealthSituation.AGENDADAEXTERNA.getDescription());
+			list.add(HealthSituation.CONVOCADO.getDescription());
+			list.add(HealthSituation.ENCAMINHADOEQUIPEMULTI.getDescription());
+			list.add(HealthSituation.AGUARDANDOPERITO.getDescription());
 
 			return list;
 		}
 		
-		if(current == Situation.PROBLEMASIAPE) {
-			list.add(Situation.CONVOCADO.getStatus());
-			list.add(Situation.PROBLEMASIAPE.getStatus());
-			list.add(Situation.PRONTODESPACHAR.getStatus());
-			list.add(Situation.ENCAMINHADOCOVEPS.getStatus());
-			return list;
-		}
-		
-		if(current == Situation.PRONTODESPACHAR) {
-			list.add(Situation.AGENDADAEXTERNA.getStatus());
-			list.add(Situation.CONVOCADO.getStatus());
-			list.add(Situation.AGUARDANDOPERITO.getStatus());
-			list.add(Situation.PRONTODESPACHAR.getStatus());
-			list.add(Situation.CONCLUIDO.getStatus());
+		if(current == HealthSituation.CONVOCADO) {
+			list.add(HealthSituation.AGUARDANDODOCUMENTO.getDescription());
+			list.add(HealthSituation.CONVOCAR.getDescription());
+			list.add(HealthSituation.SEMEXITO1.getDescription());
+			list.add(HealthSituation.SEMEXITO2.getDescription());
+			list.add(HealthSituation.SEMEXITO3.getDescription());
+			list.add(HealthSituation.ENCAMINHADOEQUIPEMULTI.getDescription());
+			list.add(HealthSituation.PRONTODESPACHAR.getDescription());
+			list.add(HealthSituation.PROBLEMASIAPE.getDescription());
 
 			return list;
 		}
 		
-		if(current == Situation.CONCLUIDO) {
-			list.add(Situation.PRONTODESPACHAR.getStatus());
-			list.add(Situation.CONCLUIDO.getStatus());
+		if(current == HealthSituation.PROBLEMASIAPE) {
+			list.add(HealthSituation.CONVOCADO.getDescription());
+			list.add(HealthSituation.PROBLEMASIAPE.getDescription());
+			list.add(HealthSituation.PRONTODESPACHAR.getDescription());
+			list.add(HealthSituation.ENCAMINHADOCOVEPS.getDescription());
+			return list;
+		}
+		
+		if(current == HealthSituation.PRONTODESPACHAR) {
+			list.add(HealthSituation.AGENDADAEXTERNA.getDescription());
+			list.add(HealthSituation.CONVOCADO.getDescription());
+			list.add(HealthSituation.AGUARDANDOPERITO.getDescription());
+			list.add(HealthSituation.PRONTODESPACHAR.getDescription());
+			list.add(HealthSituation.CONCLUIDO.getDescription());
+
+			return list;
+		}
+		
+		if(current == HealthSituation.CONCLUIDO) {
+			list.add(HealthSituation.PRONTODESPACHAR.getDescription());
+			list.add(HealthSituation.CONCLUIDO.getDescription());
 			
 			return list;
 		}
 
-		
-		return super.situationsList;
+		return super.situationsDescritionList;
 	}
 
 }

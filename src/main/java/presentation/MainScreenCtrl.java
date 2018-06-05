@@ -62,7 +62,7 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 		loader.setController(controller);
 		try {
 			Parent rootParent = loader.load();
-			primaryStage.setScene(new Scene(rootParent, 940, 570));
+			primaryStage.setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
 			primaryStage.setTitle(StringConstants.TITLE_APPLICATION.getText());
 			primaryStage.show();
 		} catch (IOException e) {
@@ -123,7 +123,7 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 	
 	@FXML
 	private void showPdfViewer() {
-		PdfViewerCtrl.showPdfView(root.getScene().getWindow(),
+		PdfViewerCtrl.showPdfViewer(root.getScene().getWindow(),
 				controllerFactory.createPdfViewerCtrl(), selectedProcess);
 	}
 	

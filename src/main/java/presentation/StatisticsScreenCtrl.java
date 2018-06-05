@@ -15,10 +15,7 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 
 import java.util.ResourceBundle;
-
-import business.model.Organization;
-import business.model.Situation;
-import business.model.Subject;
+import business.service.ListService;
 import business.service.StatisticService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -50,6 +47,7 @@ public class StatisticsScreenCtrl implements Initializable {
 	private static final Logger LOGGER = Logger.getLogger(StatisticsScreenCtrl.class);
 
 	private StatisticService statisticService;
+	private ListService listService;
 	
 	private ObservableList<String> monthsObsList = FXCollections.observableArrayList();
 	private ObservableList<String> lastTwelveMonthsObsList = FXCollections.observableArrayList();
@@ -73,8 +71,9 @@ public class StatisticsScreenCtrl implements Initializable {
 	@FXML
 	private PieChart pieChart;
 	
-	public StatisticsScreenCtrl(StatisticService statisticService) {
+	public StatisticsScreenCtrl(StatisticService statisticService, ListService listService) {
 		this.statisticService = statisticService;
+		this.listService = listService;
 	}
 	
 	public static void showStatisticsScreen(Window ownerWindow, StatisticsScreenCtrl controller) {
@@ -87,7 +86,7 @@ public class StatisticsScreenCtrl implements Initializable {
 			statisticsScreen.setTitle(StringConstants.TITLE_STATISTICS_SCREEN.getText());
 			statisticsScreen.initModality(Modality.WINDOW_MODAL);
 			statisticsScreen.initOwner(ownerWindow);
-			statisticsScreen.setScene(new Scene(rootParent, 940, 610));
+			statisticsScreen.setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
 			
 			statisticsScreen.show();
 		} catch (IOException e) {
@@ -265,11 +264,11 @@ public class StatisticsScreenCtrl implements Initializable {
 
 	private String getCategoryNameById(int categoryId, String category) {
 		if(category.equalsIgnoreCase("Situação")){
-			return Situation.getSituationById(categoryId).getStatus();
+			return listService.getSituationDescritionById(categoryId);
 		}else if(category.equalsIgnoreCase("Órgão")){
-			return Organization.getOrganizationById(categoryId).name();
+			return listService.getOrganizationInitialsById(categoryId);
 		}else if(category.equalsIgnoreCase("Assunto")) {
-			return Subject.getSubjectById(categoryId).getShortText();
+			return listService.getSujectShortDescritionById(categoryId);
 		}else {
 			return null;
 		}
