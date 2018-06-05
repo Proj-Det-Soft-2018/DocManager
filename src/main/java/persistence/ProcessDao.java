@@ -23,6 +23,7 @@ public interface ProcessDao{
 	public Process getById(Long id) throws DatabaseException;
 	public boolean contains(Process process) throws DatabaseException;
 	public List<Process> getAll() throws DatabaseException;
+	public List<Process> getAllProcessesByPriority() throws DatabaseException; 
 	public List<Process> searchByNumber(String number) throws DatabaseException;
 	public List<Process> searchAll(Search searchData) throws DatabaseException;
 	

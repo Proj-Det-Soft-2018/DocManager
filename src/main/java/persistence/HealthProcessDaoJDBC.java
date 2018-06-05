@@ -23,11 +23,12 @@ import business.model.HealthProcess;
 import business.model.HealthProcessSearch;
 import business.model.Process;
 import business.model.Search;
+import business.model.Situation;
 import business.model.Interested;
 import persistence.exception.DatabaseException;
 
 /**
- * @author clah
+ * @author clarissa - clahzita@gmail.com
  * @since 01/04/2018
  */
 public class HealthProcessDaoJDBC implements ProcessDao{
@@ -143,7 +144,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	@Override
 	public Process getById(Long id) throws DatabaseException {
 		String sql = "WHERE p.id="+id.toString();
-		List<Process> processList = this.searcher(sql);
+		List<Process> processList = this.searchProcessList(sql);
 		if(processList.isEmpty()) {
 			return null;
 		}else {
@@ -164,12 +165,22 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	@Override
 	public List<Process> getAll() throws DatabaseException {
 		String sql = "ORDER BY data_entrada DESC LIMIT 50";
-		return this.searcher(sql);
+		return this.searchProcessList(sql);
+		
+	}
+	
+	@Override
+	public List<Process> getAllProcessesByPriority() throws DatabaseException {
+		int situationId = Situation.CONCLUIDO.ordinal();
+		String sql = "WHERE situacao != "+situationId+" ORDER BY data_entrada DESC";
+		
+		
+		return this.searchProcessList(sql);
 		
 	}
 
 	
-	private List<Process> searcher(String whereStament) throws DatabaseException {
+	private List<Process> searchProcessList(String whereStament) throws DatabaseException {
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -247,7 +258,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	@Override
 	public List<Process> searchByNumber(String number) throws DatabaseException {
 		String sql = "WHERE numero LIKE '"+number+"'";
-		return this.searcher(sql);
+		return this.searchProcessList(sql);
 	}
 
 	public List<Process> searchAll(Search searchData) throws DatabaseException {
@@ -287,7 +298,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			sql.delete(sql.lastIndexOf(AND), sql.length());
 		}
 		
-		return this.searcher(sql.toString());
+		return this.searchProcessList(sql.toString());
 	}
 	
 	//Methods to resolve statistic solutions
@@ -398,4 +409,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
 	}
+
+
+
 }

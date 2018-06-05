@@ -135,7 +135,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 	
 	@Override
 	public List<Process> pullList() throws ValidationException, DatabaseException{
-		return processoDao.getAll();
+		return processoDao.getAllProcessesByPriority();
 	}
 
 	@Override
