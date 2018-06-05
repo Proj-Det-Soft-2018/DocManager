@@ -10,6 +10,7 @@ import business.model.HealthProcessSearch;
 import business.model.Search;
 import business.service.ProcessService;
 import business.service.ListService;
+import presentation.utils.DateUtil;
 import presentation.utils.widget.DynamicMaskTextField;
 import presentation.utils.widget.MaskedTextField;
 
@@ -99,6 +100,9 @@ public class HealthSearchScreenCtrl extends SearchScreenCtrl {
 
 	@FXML
 	private TableColumn<HealthProcess, String> tabColSituacao;
+
+    @FXML
+    private TableColumn<HealthProcess, String> tabColumnRegDate;
 	
 	public HealthSearchScreenCtrl(ProcessService processService, ListService listService,
 	        ControllerFactory controllerFactory) {
@@ -292,6 +296,8 @@ public class HealthSearchScreenCtrl extends SearchScreenCtrl {
 				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getIntersted().getName()));
 		tabColSituacao.setCellValueFactory(
 				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituation().getDescription()));
+        tabColumnRegDate.setCellValueFactory(
+                content -> new ReadOnlyStringWrapper(DateUtil.format(content.getValue().getRegistrationDate())));
 	}
 
     @Override

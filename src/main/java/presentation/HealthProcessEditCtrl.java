@@ -106,8 +106,8 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
         fillChoiceBoxes();
         configureRadioButtons();
         configureEntityChoiceBox();
-        if (super.process != null) {
-            HealthProcess healthProcess = (HealthProcess) super.process;
+        if (super.originalProcess != null) {
+            HealthProcess healthProcess = (HealthProcess) super.originalProcess;
             btnCadastrar.setText("Atualizar");
 
             if (healthProcess.isOficio()) {
@@ -121,7 +121,7 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
             txtNumProcesso.setPlainText(healthProcess.getNumber());
             txtNumProcesso.setDisable(true);
 
-            interested = super.process.getIntersted();
+            interested = super.originalProcess.getIntersted();
             fillInterestedField();
 
             cbAssunto.getSelectionModel().select(healthProcess.getSubject().getId());
@@ -140,8 +140,8 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
         cbAssunto.getSelectionModel().select(0);
     
         ObservableList<String> obsListaSituacoes = cbSituacao.getItems();
-        if(process != null) {
-            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(super.process.getSituation()));
+        if(originalProcess != null) {
+            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(super.originalProcess.getSituation()));
         }else {
             obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(null));
         }
@@ -202,25 +202,31 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
     protected Process mountProcess() {
         
         String number;
-        boolean oficio = false;
+        boolean isOficio = false;
 
         if (rbOficio.isSelected()) {
-            oficio = true;
+            isOficio = true;
             number = txtNumProcesso.plainTextProperty().getValue() +
                     (cbOrgao.getSelectionModel().getSelectedItem().split(" - ")[0]);
         } else {
             number = txtNumProcesso.plainTextProperty().getValue();
         }
         
+        Interested interested = super.interested;
+        int organizationId = cbOrgao.getSelectionModel().getSelectedIndex();
+        int subjectId = cbAssunto.getSelectionModel().getSelectedIndex();
+        int situationId = listService.getSituationsDescritionList()
+                .indexOf(cbSituacao.getSelectionModel().getSelectedItem());
+        String observations = txtObservacao.getText();
+        
         return new HealthProcess(
-                oficio,
+                isOficio,
                 number,
-                super.interested,
-                HealthOrganization.getOrganizationById(cbOrgao.getSelectionModel().getSelectedIndex()),
-                HealthSubject.getSubjectById(cbAssunto.getSelectionModel().getSelectedIndex()),
-                HealthSituation.getSituationById(cbSituacao.getSelectionModel().getSelectedIndex()),
-                txtObservacao.getText()
-                );
+                interested,
+                HealthOrganization.getOrganizationById(organizationId),
+                HealthSubject.getSubjectById(subjectId),
+                HealthSituation.getSituationById(situationId),
+                observations);
     }
 
     private void configureRadioButtons() {
