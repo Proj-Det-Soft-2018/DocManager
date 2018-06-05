@@ -39,7 +39,7 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
     private InterestedService interestedService;
     private ControllerFactory controllerFactory;
 
-    protected Process process;
+    protected Process originalProcess;
     protected Interested interested;
 
     @FXML
@@ -48,7 +48,7 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
     public static void showProcessEditScreen(Window ownerWindow, ProcessEditCtrl controller, Process process) {
         try {
             FXMLLoader loader = new FXMLLoader(controller.getFxmlPath());
-            controller.setProcess(process);
+            controller.setOriginalProcess(process);
             loader.setController(controller);
             Parent rootParent = loader.load();
 
@@ -60,7 +60,7 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
             } else {
                 processEditScreen.setTitle(StringConstants.TITLE_EDIT_PROCESS_SCREEN.getText());
             }
-            processEditScreen.setScene(new Scene(rootParent, 720, 540));
+            processEditScreen.setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
 
             processEditScreen.show();
         } catch (IOException e) {
@@ -75,12 +75,12 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
         this.interestedService = interestedService;
         this.controllerFactory = controllerFactory;
         this.logger = logger;
-        this.process = null;
+        this.originalProcess = null;
         this.interested = null;
     }
 
-    private void setProcess(Process process) {
-        this.process = process;
+    private void setOriginalProcess(Process originalProcess) {
+        this.originalProcess = originalProcess;
     }
 
     @Override
@@ -149,13 +149,14 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
 
     @FXML
     private void save() {
-        Process processo = mountProcess();
+        Process editedProcess = mountProcess();
         try {
-            processo.validate();
-            if (process == null ) {
-                processService.save(processo);
+            editedProcess.validate();
+            if (originalProcess == null ) {
+                processService.save(editedProcess);
             } else {
-                processo.setId(process.getId());
+                editedProcess.setId(originalProcess.getId());
+                processService.update(editedProcess);
             }
             this.closeWindow();
         }

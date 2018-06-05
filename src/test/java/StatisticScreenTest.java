@@ -13,6 +13,8 @@ import org.apache.log4j.Logger;
 
 import business.model.Situation;
 import business.service.ConcreteStatisticService;
+import business.service.HealthListService;
+import business.service.ListService;
 import business.service.StatisticService;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -41,6 +43,7 @@ public class StatisticScreenTest extends Application {
 	private static final int GRAFICO_ALTURA = 300;
 	private static final int GRAFICO_LARGURA = 300;
 	private StatisticService statisticService;
+	private ListService listService;
 	private ObservableList<String> observableListMeses = FXCollections.observableArrayList();
 	
 	
@@ -51,6 +54,7 @@ public class StatisticScreenTest extends Application {
 	@Override
 	public void start(Stage s) throws Exception {
 		 statisticService = ConcreteStatisticService.getInstance();
+		 listService = HealthListService.getInstance();
 			
 		s.setScene(new Scene(new FlowPane(createQuantityProcessPerSituationPieChart(),
 				criarGraficoLinha(), createBarChartQuantityProcessPerMonthYear())));
@@ -81,7 +85,7 @@ public class StatisticScreenTest extends Application {
 				Map.Entry<Integer, Integer> pair = (Map.Entry<Integer, Integer>)it.next();
 				
 				int situacaoId = Integer.parseInt( pair.getKey().toString() );
-				String situationName = Situation.getSituationById(situacaoId).getStatus();
+				String situationName = listService.getSituationDescritionById(situacaoId);
 				double quantity = Double.parseDouble(pair.getValue().toString());
 				
 				Data slice = new PieChart.Data(situationName,quantity);

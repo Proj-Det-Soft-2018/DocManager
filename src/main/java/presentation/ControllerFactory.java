@@ -29,7 +29,7 @@ public abstract class ControllerFactory {
 	}
 	
 	public StatisticsScreenCtrl createStatisticsScreenCtrl() {
-		return new StatisticsScreenCtrl(statisticService);
+		return new StatisticsScreenCtrl(statisticService, listService);
 	}
 	
 	public abstract MainScreenCtrl createMainScreenCtrl();

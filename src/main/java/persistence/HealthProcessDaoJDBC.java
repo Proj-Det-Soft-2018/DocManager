@@ -19,19 +19,23 @@ import business.exception.ValidationException;
 import business.model.HealthInterested;
 import business.model.HealthProcess;
 import business.model.HealthProcessSearch;
+import business.model.HealthSituation;
 import business.model.Interested;
 import business.model.Process;
 import business.model.Search;
 import persistence.exception.DatabaseException;
 
 /**
- * @author clah
+ * @author clarissa - clahzita@gmail.com
  * @since 01/04/2018
  */
 public class HealthProcessDaoJDBC implements ProcessDao{
 	
 	@Override
-	public void save(Process process) throws DatabaseException {
+	public void save(Process process) throws DatabaseException, ValidationException {
+		//Antes de salvar verificar os campos que nao podem ser nulos
+		this.checkDuplicate(process.getNumber());
+		
 		
 		String sql = "INSERT INTO processos"
 					+ "(eh_oficio,numero,interessado_id,"
@@ -48,9 +52,9 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			statement.setBoolean(1, process.isOficio());
 			statement.setString(2, process.getNumber());
 			statement.setLong(3, process.getIntersted().getId());
-			statement.setInt(4, process.getSubject().ordinal());
-			statement.setInt(5, process.getSituation().ordinal());
-			statement.setInt(6, process.getOriginEntity().ordinal());
+			statement.setInt(4, process.getSubject().getId());
+			statement.setInt(5, process.getSituation().getId());
+			statement.setInt(6, process.getOriginEntity().getId());
 			statement.setString(7, process.getObservation());
 			
 			//Definindo data de entrada no banco de dados
@@ -92,9 +96,9 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			statement = connection.prepareStatement(query);
 			statement.setString(1, process.getNumber());
 			statement.setLong(2, process.getIntersted().getId());
-			statement.setInt(3, process.getSubject().ordinal());
-			statement.setInt(4, process.getSituation().ordinal());
-			statement.setInt(5, process.getOriginEntity().ordinal());
+			statement.setInt(3, process.getSubject().getId());
+			statement.setInt(4, process.getSituation().getId());
+			statement.setInt(5, process.getOriginEntity().getId());
 			statement.setString(6, process.getObservation());
 			statement.setBoolean(7, process.isOficio());
 			
@@ -139,7 +143,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	@Override
 	public Process getById(Long id) throws DatabaseException {
 		String sql = "WHERE p.id="+id.toString();
-		List<Process> processList = this.searcher(sql);
+		List<Process> processList = this.searchProcessList(sql);
 		if(processList.isEmpty()) {
 			return null;
 		}else {
@@ -159,12 +163,21 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	@Override
 	public List<Process> getAll() throws DatabaseException {
 		String sql = "ORDER BY data_entrada DESC LIMIT 50";
-		return this.searcher(sql);
+		return this.searchProcessList(sql);
+		
+	}
+	
+	@Override
+	public List<Process> getAllProcessesByPriority() throws DatabaseException {
+		int situationId = HealthSituation.CONCLUIDO.ordinal();
+		String sql = "WHERE situacao != "+situationId+" ORDER BY data_entrada DESC";
+		
+		return this.searchProcessList(sql);
 		
 	}
 
 	
-	private List<Process> searcher(String whereStament) throws DatabaseException {
+	private List<Process> searchProcessList(String whereStament) throws DatabaseException {
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -241,7 +254,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	@Override
 	public List<Process> searchByNumber(String number) throws DatabaseException {
 		String sql = "WHERE numero LIKE '"+number+"'";
-		return this.searcher(sql);
+		return this.searchProcessList(sql);
 	}
 
 	public List<Process> searchAll(Search searchData) throws DatabaseException {
@@ -281,7 +294,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			sql.delete(sql.lastIndexOf(AND), sql.length());
 		}
 		
-		return this.searcher(sql.toString());
+		return this.searchProcessList(sql.toString());
 	}
 	
 	//Methods to resolve statistic solutions
@@ -392,4 +405,29 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
 	}
+	
+	/**
+	 *  Método procura no banco se tem outro processo com o mesmo número. Se tem, o registro deve
+	 *  estar com a situação definida como concluída. Caso contrário, pede confirmação do 
+	 *  usuário para modificar situacao do registro antigo como concluido.
+	 *  
+	 * @param numero Numero do processo que está sendo inserido.
+	 * @throws ValidationException 
+	 * @throws DatabaseException 
+	 */
+	private void checkDuplicate(String numero) throws ValidationException, DatabaseException {
+		List<Process> duplicados = this.searchByNumber(numero);
+		if(duplicados != null && !duplicados.isEmpty()) {
+			//verifica se a situacao dos processos encontrados estao como concluido
+			for (Process processo : duplicados) {
+				if(!(processo.getSituation().getId()==HealthSituation.CONCLUIDO.getId()) ) {
+					//TODO Tem que remover isso daqui
+					throw new ValidationException("Existe outro processo cadastrado com situação não concluída");
+				}				
+			}			
+		}		
+	}
+
+
+
 }

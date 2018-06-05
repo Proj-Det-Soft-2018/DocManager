@@ -14,11 +14,11 @@ import business.service.ProcessService;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -47,13 +47,13 @@ public class DeleteDialogCtrl {
 			FXMLLoader loader = new FXMLLoader(FXML_PATH);
 			controller.setProcess(process);
 			loader.setController(controller);
-			Pane newPane = loader.load();
+			Parent rootParent = loader.load();
 
 			Stage deleteDialogStage = new Stage();
 			deleteDialogStage.setTitle(StringConstants.TITLE_DELETE_DIALOG.getText());
 			deleteDialogStage.initModality(Modality.WINDOW_MODAL);
 			deleteDialogStage.initOwner(ownerWindow);
-			deleteDialogStage.setScene(new Scene(newPane, 300, 190));
+			deleteDialogStage.setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
 			
 			deleteDialogStage.show();
 		} catch (IOException e) {

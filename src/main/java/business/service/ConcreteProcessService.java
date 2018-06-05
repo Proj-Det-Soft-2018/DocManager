@@ -48,7 +48,6 @@ import org.xml.sax.InputSource;
 import business.exception.ValidationException;
 import business.model.Process;
 import business.model.Search;
-import business.model.Situation;
 import persistence.DaoFactoryJDBC;
 import persistence.ProcessDao;
 import persistence.exception.DatabaseException;
@@ -96,8 +95,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 
 	@Override
 	public void save(Process process) throws ValidationException, DatabaseException {
-		//Antes de salvar verificar os campos que nao podem ser nulos
-		this.validarNumeroDuplicado(process.getNumber());
+	
 
 		processoDao.save(process);
 		this.notifyObservers();
@@ -135,7 +133,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 	
 	@Override
 	public List<Process> pullList() throws ValidationException, DatabaseException{
-		return processoDao.getAll();
+		return processoDao.getAllProcessesByPriority();
 	}
 
 	@Override
@@ -147,27 +145,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 		return fo2PdfTransform(fo);
 	}
 
-	/**
-	 *  Método procura no banco se tem outro processo com o mesmo número. Se tem, o registro deve
-	 *  estar com a situação definida como concluída. Caso contrário, pede confirmação do 
-	 *  usuário para modificar situacao do registro antigo como concluido.
-	 *  
-	 * @param numero Numero do processo que está sendo inserido.
-	 * @throws ValidationException 
-	 * @throws DatabaseException 
-	 */
-	private void validarNumeroDuplicado(String numero) throws ValidationException, DatabaseException {
-		List<Process> duplicados = processoDao.searchByNumber(numero);
-		if(duplicados != null && !duplicados.isEmpty()) {
-			//verifica se a situacao dos processos encontrados estao como concluido
-			for (Process processo : duplicados) {
-				if(!(processo.getSituation().ordinal()==Situation.CONCLUIDO.ordinal()) ) {
-					//TODO tratar e criar Exception
-					throw new ValidationException("Existe outro processo cadastrado com situação não concluída");
-				}				
-			}			
-		}		
-	}
+	
 
 	private String xml2FoTransform(String xml) {
 

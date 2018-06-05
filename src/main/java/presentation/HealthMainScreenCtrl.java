@@ -10,6 +10,7 @@ import business.service.ProcessService;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
+import presentation.utils.DateUtil;
 
 /**
  * @author hugotho
@@ -31,6 +32,9 @@ public class HealthMainScreenCtrl extends MainScreenCtrl {
 
 	@FXML
 	private TableColumn<HealthProcess, String> tabColumnSituation;
+	
+	@FXML
+	private TableColumn<HealthProcess, String> tabColumnRegDate;
 
 	public HealthMainScreenCtrl(ProcessService processService, ControllerFactory controllerFactory) {
 		super(processService, controllerFactory, LOGGER);
@@ -45,7 +49,9 @@ public class HealthMainScreenCtrl extends MainScreenCtrl {
 		tabColumnInterested.setCellValueFactory(
 				content -> new ReadOnlyStringWrapper(content.getValue().getIntersted().getName()));
 		tabColumnSituation.setCellValueFactory(
-				content -> new ReadOnlyStringWrapper(content.getValue().getSituation().getStatus()));
+				content -> new ReadOnlyStringWrapper(content.getValue().getSituation().getDescription()));
+		tabColumnRegDate.setCellValueFactory(
+		        content -> new ReadOnlyStringWrapper(DateUtil.format(content.getValue().getRegistrationDate())));
 	}
 	
 	@Override

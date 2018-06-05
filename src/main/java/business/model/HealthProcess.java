@@ -157,7 +157,7 @@ public class HealthProcess implements Process {
 	@Override
 	@XmlElement(name="subject")
 	public String getSubjectString() {
-		return subject.getText();
+		return subject.getDescription();
 	}
 	
 	/* (non-Javadoc)
@@ -173,7 +173,7 @@ public class HealthProcess implements Process {
 	 */
 	@Override
 	public void setSubjectById(int subjectId){
-		this.subject = Subject.getSubjectById(subjectId);
+		this.subject = HealthSubject.getSubjectById(subjectId);
 	}
 	
 	/* (non-Javadoc)
@@ -198,7 +198,7 @@ public class HealthProcess implements Process {
 	 */
 	@Override
 	public void setOriginEntityById(int originEntityId){
-		this.originEntity = Organization.getOrganizationById(originEntityId);
+		this.originEntity = HealthOrganization.getOrganizationById(originEntityId);
 	}
 	
 	/* (non-Javadoc)
@@ -207,7 +207,7 @@ public class HealthProcess implements Process {
 	@Override
 	@XmlElement(name="situation")
 	public String getSituationString() {
-		return situation.getStatus();
+		return situation.getDescription();
 	}
 	
 	/* (non-Javadoc)
@@ -223,7 +223,7 @@ public class HealthProcess implements Process {
 	 */
 	@Override
 	public void setSituationById(int situationId){
-		this.situation = Situation.getSituationById(situationId);
+		this.situation = HealthSituation.getSituationById(situationId);
 	}
 	
 	/* (non-Javadoc)
@@ -339,17 +339,17 @@ public class HealthProcess implements Process {
 			}
 		}
 		
-		if(this.originEntity == Organization.NULL) {
+		if(this.originEntity == HealthOrganization.NULL) {
 			failure = true;
 			failureMsg.append("O campo Orgão é obrigatório.\n\n");
 		}
 		
-		if(this.subject == Subject.NULL) {
+		if(this.subject == HealthSubject.NULL) {
 			failure = true;
 			failureMsg.append("Campo assunto é obrigatório.\n\n");
 		}
 		
-		if(this.situation == Situation.NULL) {
+		if(this.situation == HealthSituation.NULL) {
 			failure = true;
 			failureMsg.append("O campo Situação é obrigatório.\n\n");
 		}
