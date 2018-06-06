@@ -21,7 +21,8 @@ import persistence.exception.DatabaseException;
 public class HealthInterestedDaoJDBC implements InterestedDao{
 
 	@Override
-	public void save(Interested novoInteressado) throws DatabaseException {
+	public void save(Interested interested) throws DatabaseException {
+		HealthInterested healthInterested = (HealthInterested)interested;
 		String sql = "INSERT INTO interessados " +
                 		"(nome,cpf,contato)" +
                 		" VALUES (?,?,?)";
@@ -31,9 +32,9 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 		try {
 			connection = ConnectionFactory.getConnection();
 			statement = connection.prepareStatement(sql);
-			statement.setString(1,novoInteressado.getName());
-	        statement.setString(2,novoInteressado.getCpf());
-	        statement.setString(3,novoInteressado.getContact());
+			statement.setString(1,healthInterested.getName());
+	        statement.setString(2,healthInterested.getCpf());
+	        statement.setString(3,healthInterested.getContact());
 	        
 			statement.executeUpdate();
 			
@@ -47,7 +48,8 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 	
 	
 	@Override
-	public void update(Interested modifiedInterested) throws DatabaseException {
+	public void update(Interested interested) throws DatabaseException {
+		HealthInterested healthInterested = (HealthInterested)interested;
 		String sql = "UPDATE interessados " +
 					 "SET nome=?, cpf=?, contato=? " +
 					 "WHERE id=?";
@@ -57,10 +59,10 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 	    	connection = ConnectionFactory.getConnection();
 			statement = connection.prepareStatement(sql);
 			
-			statement.setString(1, modifiedInterested.getName());
-	        statement.setString(2, modifiedInterested.getCpf());
-	        statement.setString(3, modifiedInterested.getContact());
-	        statement.setLong(4, modifiedInterested.getId());
+			statement.setString(1, healthInterested.getName());
+	        statement.setString(2, healthInterested.getCpf());
+	        statement.setString(3, healthInterested.getContact());
+	        statement.setLong(4, healthInterested.getId());
 	        
 	        statement.executeUpdate();
 	        

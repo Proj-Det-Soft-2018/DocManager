@@ -121,7 +121,7 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
             txtNumProcesso.setPlainText(healthProcess.getNumber());
             txtNumProcesso.setDisable(true);
 
-            interested = super.originalProcess.getIntersted();
+            interested = ((HealthProcess)super.originalProcess).getIntersted();
             fillInterestedField();
 
             cbAssunto.getSelectionModel().select(healthProcess.getSubject().getId());
@@ -141,7 +141,7 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
     
         ObservableList<String> obsListaSituacoes = cbSituacao.getItems();
         if(originalProcess != null) {
-            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(super.originalProcess.getSituation()));
+            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(((HealthProcess)super.originalProcess).getSituation()));
         }else {
             obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(null));
         }
@@ -157,7 +157,7 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
 
     @Override
     protected Interested createInterested() {
-        Interested interested = new HealthInterested();
+        HealthInterested interested = new HealthInterested();
         interested.setCpf(txtCpfInteressado.plainTextProperty().getValue());
         return interested;
     }

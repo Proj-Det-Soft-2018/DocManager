@@ -4,6 +4,7 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
+import business.model.HealthInterested;
 import business.model.HealthProcess;
 import business.service.ProcessService;
 
@@ -47,7 +48,7 @@ public class HealthMainScreenCtrl extends MainScreenCtrl {
 		tabColumnNumber.setCellValueFactory(
 				content -> new ReadOnlyStringWrapper(content.getValue().getFormattedNumber()));
 		tabColumnInterested.setCellValueFactory(
-				content -> new ReadOnlyStringWrapper(content.getValue().getIntersted().getName()));
+				content -> new ReadOnlyStringWrapper(((HealthInterested)content.getValue().getIntersted()).getName()));
 		tabColumnSituation.setCellValueFactory(
 				content -> new ReadOnlyStringWrapper(content.getValue().getSituation().getDescription()));
 		tabColumnRegDate.setCellValueFactory(

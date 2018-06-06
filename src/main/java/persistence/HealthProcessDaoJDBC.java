@@ -34,7 +34,8 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	@Override
 	public void save(Process process) throws DatabaseException, ValidationException {
 		//Antes de salvar verificar os campos que nao podem ser nulos
-		this.checkDuplicate(process.getNumber());
+		HealthProcess healthProcess = (HealthProcess)process;
+		this.checkDuplicate(healthProcess.getNumber());
 		
 		
 		String sql = "INSERT INTO processos"
@@ -49,17 +50,17 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			connection = ConnectionFactory.getConnection();
 			statement = connection.prepareStatement(sql);
 			
-			statement.setBoolean(1, process.isOficio());
-			statement.setString(2, process.getNumber());
-			statement.setLong(3, process.getIntersted().getId());
-			statement.setInt(4, process.getSubject().getId());
-			statement.setInt(5, process.getSituation().getId());
-			statement.setInt(6, process.getOriginEntity().getId());
-			statement.setString(7, process.getObservation());
+			statement.setBoolean(1, healthProcess.isOficio());
+			statement.setString(2, healthProcess.getNumber());
+			statement.setLong(3, healthProcess.getIntersted().getId());
+			statement.setInt(4, healthProcess.getSubject().getId());
+			statement.setInt(5, healthProcess.getSituation().getId());
+			statement.setInt(6, healthProcess.getOriginEntity().getId());
+			statement.setString(7, healthProcess.getObservation());
 			
 			//Definindo data de entrada no banco de dados
 			LocalDateTime date = LocalDateTime.now();
-			process.setRegistrationDate(date);
+			healthProcess.setRegistrationDate(date);
 			
 			Timestamp stamp = Timestamp.valueOf(date);
 			Date registrationDate = new Date (stamp.getTime());
@@ -81,6 +82,8 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	@Override
 	public void update(Process process) throws DatabaseException {
 		
+		HealthProcess healthProcess = (HealthProcess)process;
+		
 		String query = "UPDATE processos SET "
 					+ "numero=?, interessado_id=?, assunto=?,"
 					+ "situacao=?, orgao_origem=?, observacao=?,"
@@ -94,16 +97,16 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			
 			connection = ConnectionFactory.getConnection();
 			statement = connection.prepareStatement(query);
-			statement.setString(1, process.getNumber());
-			statement.setLong(2, process.getIntersted().getId());
-			statement.setInt(3, process.getSubject().getId());
-			statement.setInt(4, process.getSituation().getId());
-			statement.setInt(5, process.getOriginEntity().getId());
-			statement.setString(6, process.getObservation());
-			statement.setBoolean(7, process.isOficio());
+			statement.setString(1, healthProcess.getNumber());
+			statement.setLong(2, healthProcess.getIntersted().getId());
+			statement.setInt(3, healthProcess.getSubject().getId());
+			statement.setInt(4, healthProcess.getSituation().getId());
+			statement.setInt(5, healthProcess.getOriginEntity().getId());
+			statement.setString(6, healthProcess.getObservation());
+			statement.setBoolean(7, healthProcess.isOficio());
 			
 			//setando id do processo a ser modificado
-			statement.setLong(8, process.getId());
+			statement.setLong(8, healthProcess.getId());
 			
 			
 			statement.executeUpdate();
@@ -179,7 +182,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 						resultSet.getString("contato"));
 				
 				//criando o objeto Processo
-				Process process = new HealthProcess(
+				HealthProcess process = new HealthProcess(
 						resultSet.getLong("id"),
 						resultSet.getBoolean("eh_oficio"),
 						resultSet.getString("numero"),
@@ -392,7 +395,8 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 		if(duplicados != null && !duplicados.isEmpty()) {
 			//verifica se a situacao dos processos encontrados estao como concluido
 			for (Process processo : duplicados) {
-				if(!(processo.getSituation().getId()==HealthSituation.CONCLUIDO.getId()) ) {
+				HealthProcess healthProcess = (HealthProcess)processo;
+				if(!(healthProcess.getSituation().getId()==HealthSituation.CONCLUIDO.getId()) ) {
 					//TODO Tem que remover isso daqui
 					throw new ValidationException("Existe outro processo cadastrado com situação não concluída");
 				}				

@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
+import business.model.HealthInterested;
 import business.model.HealthProcess;
 import business.model.HealthProcessSearch;
 import business.model.Search;
@@ -293,7 +294,7 @@ public class HealthSearchScreenCtrl extends SearchScreenCtrl {
 		tabColNumero.setCellValueFactory(
 				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getFormattedNumber()));
 		tabColInteressado.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getIntersted().getName()));
+				conteudo -> new ReadOnlyStringWrapper(((HealthInterested)conteudo.getValue().getIntersted()).getName()));
 		tabColSituacao.setCellValueFactory(
 				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituation().getDescription()));
         tabColumnRegDate.setCellValueFactory(

@@ -79,7 +79,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#isOficio()
 	 */
-	@Override
 	@XmlTransient
 	public boolean isOficio() {
 		return oficio;
@@ -88,7 +87,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#setTipoOficio(boolean)
 	 */
-	@Override
 	public void setTipoOficio(boolean oficio) {
 		this.oficio = oficio;
 	}
@@ -96,7 +94,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#getType()
 	 */
-	@Override
 	@XmlElement(name="type")
 	public String getType () {
 		return this.oficio? "Ofício" : "Processo";
@@ -105,7 +102,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#getFormattedNumber()
 	 */
-	@Override
 	@XmlElement(name="number")
 	public String getFormattedNumber() {
 		if(this.isOficio()) {
@@ -119,7 +115,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#getNumber()
 	 */
-	@Override
 	@XmlTransient
 	public String getNumber() {
 		return number;
@@ -128,7 +123,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#setNumber(java.lang.String)
 	 */
-	@Override
 	public void setNumber(String number){
 		this.number = number;
 	}
@@ -136,7 +130,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#getIntersted()
 	 */
-	@Override
 	@XmlElement(name="interested", type=HealthInterested.class)
 	public Interested getIntersted() {
 		return interested;
@@ -145,7 +138,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#setInterested(business.model.HealthInterested)
 	 */
-	@Override
 	public void setInterested(Interested interested) {
 		this.interested = interested;
 	}
@@ -154,7 +146,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#getSubjectString()
 	 */
-	@Override
 	@XmlElement(name="subject")
 	public String getSubjectString() {
 		return subject.getDescription();
@@ -163,7 +154,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#getSubject()
 	 */
-	@Override
 	public Subject getSubject() {
 		return subject;
 	}
@@ -171,7 +161,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#setSubjectById(int)
 	 */
-	@Override
 	public void setSubjectById(int subjectId){
 		this.subject = HealthSubject.getSubjectById(subjectId);
 	}
@@ -179,7 +168,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#getOriginEntityString()
 	 */
-	@Override
 	@XmlElement(name="origin-entity")
 	public String getOriginEntityString(){
 		return originEntity.getFullName();
@@ -188,7 +176,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#getOriginEntity()
 	 */
-	@Override
 	public Organization getOriginEntity() {
 		return originEntity;
 	}
@@ -196,7 +183,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#setOriginEntityById(int)
 	 */
-	@Override
 	public void setOriginEntityById(int originEntityId){
 		this.originEntity = HealthOrganization.getOrganizationById(originEntityId);
 	}
@@ -204,7 +190,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#getSituationString()
 	 */
-	@Override
 	@XmlElement(name="situation")
 	public String getSituationString() {
 		return situation.getDescription();
@@ -213,7 +198,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#getSituation()
 	 */
-	@Override
 	public Situation getSituation() {
 		return situation;
 	}
@@ -221,7 +205,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#setSituationById(int)
 	 */
-	@Override
 	public void setSituationById(int situationId){
 		this.situation = HealthSituation.getSituationById(situationId);
 	}
@@ -229,7 +212,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#getObservation()
 	 */
-	@Override
 	@XmlElement(name="observation")
 	public String getObservation() {
 		return observation;
@@ -238,7 +220,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#getRegistrationDate()
 	 */
-	@Override
 	@XmlElement(name="entry-date")
 	public LocalDateTime getRegistrationDate() {
 		return registrationDate;
@@ -247,7 +228,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#setRegistrationDate(java.time.LocalDateTime)
 	 */
-	@Override
 	public void setRegistrationDate(LocalDateTime registrationDate) {
 		this.registrationDate = registrationDate;
 	}
@@ -255,7 +235,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#getDispatchDate()
 	 */
-	@Override
 	@XmlElement(name="out")
 	public LocalDateTime getDispatchDate() {
 		return dispatchDate;
@@ -264,7 +243,6 @@ public class HealthProcess implements Process {
 	/* (non-Javadoc)
 	 * @see business.model.Process#setDispatchDate(java.time.LocalDateTime)
 	 */
-	@Override
 	public void setDispatchDate(LocalDateTime dispatchDate) throws ValidationException {
 		if(dispatchDate.isAfter(this.registrationDate)) {
 			this.dispatchDate = dispatchDate;
