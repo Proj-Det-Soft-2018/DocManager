@@ -7,6 +7,7 @@ import business.service.Observer;
 import business.service.ProcessService;
 import persistence.exception.DatabaseException;
 import presentation.utils.StringConstants;
+import presentation.utils.widget.ExceptionAlert;
 
 import java.io.IOException;
 import java.net.URL;
@@ -66,7 +67,7 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 			primaryStage.setTitle(StringConstants.TITLE_APPLICATION.getText());
 			primaryStage.show();
 		} catch (IOException e) {
-			//TODO Alert Erro de geração de tela
+			ExceptionAlert.show("Não foi possível gerar a tela!");
 			Logger.getLogger(HealthMainScreenCtrl.class).error(e.getMessage(), e);
 		}
 	}
@@ -143,8 +144,11 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 		try {
 			List<Process> lista = this.processService.pullList();
 			tabProcesses.getItems().setAll(lista);
-		} catch (ValidationException | DatabaseException e) {
-			// TODO Alert Banco de Dados)
+		} catch (ValidationException e) {
+			ExceptionAlert.show(e.getMessage(), root.getScene().getWindow());
+		}
+		catch (DatabaseException e) {
+			ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
 			logger.error(e.getMessage(), e);
 		}
 		

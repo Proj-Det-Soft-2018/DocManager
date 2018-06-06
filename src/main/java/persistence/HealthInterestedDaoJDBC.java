@@ -7,8 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import business.model.HealthInterested;
 import business.model.HealthInterestedSearch;
@@ -23,7 +21,8 @@ import persistence.exception.DatabaseException;
 public class HealthInterestedDaoJDBC implements InterestedDao{
 
 	@Override
-	public void save(Interested novoInteressado) throws DatabaseException {
+	public void save(Interested interested) throws DatabaseException {
+		HealthInterested healthInterested = (HealthInterested)interested;
 		String sql = "INSERT INTO interessados " +
                 		"(nome,cpf,contato)" +
                 		" VALUES (?,?,?)";
@@ -33,14 +32,14 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 		try {
 			connection = ConnectionFactory.getConnection();
 			statement = connection.prepareStatement(sql);
-			statement.setString(1,novoInteressado.getName());
-	        statement.setString(2,novoInteressado.getCpf());
-	        statement.setString(3,novoInteressado.getContact());
+			statement.setString(1,healthInterested.getName());
+	        statement.setString(2,healthInterested.getCpf());
+	        statement.setString(3,healthInterested.getContact());
 	        
 			statement.executeUpdate();
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível salvar o interessado no Banco de Dados.");
+			throw new DatabaseException("Não foi possível salvar o interessado no Banco de Dados.", e);
 		}
 		finally {
 			ConnectionFactory.closeConnection(connection, statement);
@@ -49,7 +48,8 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 	
 	
 	@Override
-	public void update(Interested modifiedInterested) throws DatabaseException {
+	public void update(Interested interested) throws DatabaseException {
+		HealthInterested healthInterested = (HealthInterested)interested;
 		String sql = "UPDATE interessados " +
 					 "SET nome=?, cpf=?, contato=? " +
 					 "WHERE id=?";
@@ -59,15 +59,15 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 	    	connection = ConnectionFactory.getConnection();
 			statement = connection.prepareStatement(sql);
 			
-			statement.setString(1, modifiedInterested.getName());
-	        statement.setString(2, modifiedInterested.getCpf());
-	        statement.setString(3, modifiedInterested.getContact());
-	        statement.setLong(4, modifiedInterested.getId());
+			statement.setString(1, healthInterested.getName());
+	        statement.setString(2, healthInterested.getCpf());
+	        statement.setString(3, healthInterested.getContact());
+	        statement.setLong(4, healthInterested.getId());
 	        
 	        statement.executeUpdate();
 	        
 	    } catch (SQLException e) {
-	        throw new DatabaseException("Não foi possível atualizar o interessado no Banco de Dados.");
+	        throw new DatabaseException("Não foi possível atualizar o interessado no Banco de Dados.", e);
 	    }finally {
 			ConnectionFactory.closeConnection(connection, statement);
 		}
@@ -86,46 +86,11 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 	        statement.executeUpdate();
 	        
 	    } catch (SQLException e) {
-	        throw new DatabaseException("Não foi possível deletar o processo do Banco de Dados.");
+	        throw new DatabaseException("Não foi possível deletar o processo do Banco de Dados.", e);
 	    }finally {
 	    	ConnectionFactory.closeConnection(connection, statement);
 		}
 		
-	}
-	
-	
-	@Override
-	public Interested getById(Long id) throws DatabaseException {
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-
-		try {
-			connection = ConnectionFactory.getConnection();
-			
-			statement = connection.prepareStatement("SELECT * FROM interessados WHERE id=?");
-			statement.setLong(1, id);
-			
-			resultSet = statement.executeQuery();
-			
-			Interested interessado = null;
-			
-			if(resultSet.next()) {
-				//criando o objeto Interessado
-				interessado = new HealthInterested(
-						resultSet.getLong("id"),
-						resultSet.getString("nome"),
-						resultSet.getString("cpf"),
-						resultSet.getString("contato"));
-			}
-			
-			return interessado;
-			
-		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível recuperar o interessado por ID");
-		}finally {
-			ConnectionFactory.closeConnection(connection, statement, resultSet);
-		}
 	}
 	
 	@Override
@@ -158,45 +123,7 @@ public class HealthInterestedDaoJDBC implements InterestedDao{
 			return interested;
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível recuperar o interessado pelo CPF");
-		}finally {
-			ConnectionFactory.closeConnection(connection, statement, resultSet);
-		}
-	}
-
-	@Override
-	public boolean contains(Interested interested) throws DatabaseException {
-		Interested foundInterested = this.getById(interested.getId());
-		
-		return (foundInterested!=null) ? true: false;
-		
-	}
-
-	@Override
-	public List<HealthInterested> getAll() throws DatabaseException {
-		
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-		
-		try {
-			connection = ConnectionFactory.getConnection();
-			statement = connection.prepareStatement("SELECT * FROM interessados");
-			resultSet = statement.executeQuery();
-			List<HealthInterested> interestedList = new ArrayList<>();
-			
-			while(resultSet.next()) {
-				//criando o objeto Interessado
-				HealthInterested interested = new HealthInterested(
-						resultSet.getLong("id"),
-						resultSet.getString("nome"),
-						resultSet.getString("cpf"),
-						resultSet.getString("contato"));
-				interestedList.add(interested);
-			}
-			return interestedList;
-		} catch (SQLException e) {
-			throw new DatabaseException("Não foi possível recuperar todos os interessados.");
+			throw new DatabaseException("Não foi possível recuperar o interessado pelo CPF", e);
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}

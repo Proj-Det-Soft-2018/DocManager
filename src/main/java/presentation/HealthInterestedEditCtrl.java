@@ -46,7 +46,7 @@ public class HealthInterestedEditCtrl extends InterestedEditCtrl {
 	
 	@Override
 	protected void populeForm() {
-		lblTxtCpf.setText(interested.getFormatedCpf());
+		lblTxtCpf.setText(((HealthInterested)interested).getFormatedCpf());
 		
 		if (interested.getId() != null) {
 			HealthInterested healthInterested = (HealthInterested) interested;
@@ -59,7 +59,7 @@ public class HealthInterestedEditCtrl extends InterestedEditCtrl {
 	
 	@Override
 	protected Interested mountInterested() {
-		return new HealthInterested(txtName.getText(), super.interested.getCpf(), txtContact.plainTextProperty().getValue());
+		return new HealthInterested(txtName.getText(), ((HealthInterested)super.interested).getCpf(), txtContact.plainTextProperty().getValue());
 	}
 
 	@Override
