@@ -27,6 +27,7 @@ public class HealthListService extends ListService {
 		List<String> list = new ArrayList<>();
 		
 		if(current == null) {
+		    list.add(super.subjectsDescritionList.get(0));
 			list.add(HealthSituation.ANALISE.getDescription());
 			list.add(HealthSituation.AGUARDANDOPERITO.getDescription());
 			return list;

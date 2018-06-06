@@ -309,6 +309,11 @@ public class HealthProcess implements Process {
 			}
 		}
 		
+		if (this.interested == null) {
+		    failure = true;
+            failureMsg.append("O campo Interessado é obrigatório.\n\n");
+		}
+		
 		if(this.originEntity == HealthOrganization.NULL) {
 			failure = true;
 			failureMsg.append("O campo Orgão é obrigatório.\n\n");

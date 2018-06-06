@@ -144,15 +144,22 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	
 	@Override
 	public List<Process> getAllProcessesByPriority() throws DatabaseException {
-		int situationId = HealthSituation.CONCLUIDO.ordinal();
-		String sql = "WHERE situacao != "+situationId+" ORDER BY data_entrada DESC";
-		
-		return this.searchProcessList(sql);
-		
+		int situationId = HealthSituation.CONCLUIDO.getId();
+		String sql = "WHERE situacao != "+situationId+
+		             " ORDER BY data_entrada ASC" +
+		             " LIMIT 50";
+		List<Process> intermediaryList = pullProcessList(sql);
+		if (intermediaryList.size() < 50) {
+		    sql = "WHERE situacao = "+situationId+
+		          " ORDER BY data_entrada DESC"+
+		          " LIMIT "+(50 - intermediaryList.size());
+		    intermediaryList.addAll(pullProcessList(sql));
+		}
+		return intermediaryList;
 	}
 
 	
-	private List<Process> searchProcessList(String whereStament) throws DatabaseException {
+	private List<Process> pullProcessList(String whereStament) throws DatabaseException {
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -229,7 +236,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 	@Override
 	public List<Process> searchByNumber(String number) throws DatabaseException {
 		String sql = "WHERE numero LIKE '"+number+"'";
-		return this.searchProcessList(sql);
+		return this.pullProcessList(sql);
 	}
 
 	public List<Process> searchAll(Search searchData) throws DatabaseException {
@@ -269,7 +276,7 @@ public class HealthProcessDaoJDBC implements ProcessDao{
 			sql.delete(sql.lastIndexOf(AND), sql.length());
 		}
 		
-		return this.searchProcessList(sql.toString());
+		return this.pullProcessList(sql.toString());
 	}
 	
 	//Methods to resolve statistic solutions
