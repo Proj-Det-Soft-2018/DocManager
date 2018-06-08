@@ -67,7 +67,7 @@ public abstract class SearchScreenCtrl implements Initializable, Observer {
 
             searchScreen.show();
         } catch (IOException e) {
-        	ExceptionAlert.show("Não foi possível gerar a tela!");
+        	ExceptionAlert.show("Não foi possível gerar a tela!", ownerWindow);
             Logger.getLogger(SearchScreenCtrl.class).error(e.getMessage(), e);
         }
     }

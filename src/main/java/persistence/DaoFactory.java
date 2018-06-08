@@ -7,11 +7,9 @@ package persistence;
  * @author clah
  *
  */
-public abstract class DaoFactory {
+public interface DaoFactory {
 	
-	public abstract ProcessDao getProcessDao();
+	ProcessDao getProcessDao();
 	
-	public abstract InterestedDao getInterestedDao();
-
-
+	InterestedDao getInterestedDao();
 }

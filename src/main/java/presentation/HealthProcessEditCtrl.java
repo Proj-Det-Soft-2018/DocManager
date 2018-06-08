@@ -143,7 +143,7 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
         if(originalProcess != null) {
             obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(((HealthProcess)super.originalProcess).getSituation()));
         }else {
-            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(null));
+            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(HealthSituation.NULL));
         }
         cbSituacao.getSelectionModel().select(0);
     }

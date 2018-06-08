@@ -11,8 +11,11 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
+import business.model.HealthOrganization;
+import business.model.HealthSituation;
+import business.model.HealthSubject;
+import business.service.ConcreteListService;
 import business.service.ConcreteStatisticService;
-import business.service.HealthListService;
 import business.service.ListService;
 import business.service.StatisticService;
 import javafx.application.Application;
@@ -29,8 +32,9 @@ import javafx.scene.chart.PieChart.Data;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
+import persistence.DaoFactory;
+import persistence.DaoFactoryJDBC;
 import persistence.exception.DatabaseException;
-import presentation.utils.widget.ExceptionAlert;
 
 /**
  * @author clah
@@ -52,8 +56,12 @@ public class StatisticScreenTest extends Application {
 
 	@Override
 	public void start(Stage s) throws Exception {
-		 statisticService = ConcreteStatisticService.getInstance();
-		 listService = HealthListService.getInstance();
+	     DaoFactory daoFactory = new DaoFactoryJDBC();
+		 statisticService = new ConcreteStatisticService(daoFactory);
+		 listService = new ConcreteListService(
+                HealthOrganization.getAll(),
+                HealthSubject.getAll(),
+                HealthSituation.getAll());
 			
 		s.setScene(new Scene(new FlowPane(createQuantityProcessPerSituationPieChart(),
 				criarGraficoLinha(), createBarChartQuantityProcessPerMonthYear())));
@@ -71,7 +79,6 @@ public class StatisticScreenTest extends Application {
 			try {
 				dados = statisticService.quantityProcessPerSituation();
 			} catch (DatabaseException e) {
-				ExceptionAlert.show("ERRO! Contate o administrador do sistema.");
 				LOGGER.error(e.getMessage(), e);
 			}
 			
@@ -154,7 +161,6 @@ public class StatisticScreenTest extends Application {
 		try {
 			dados = statisticService.quantityProcessPerMonthYear();
 		} catch (DatabaseException e) {
-			ExceptionAlert.show("ERRO! Contate o administrador do sistema.");
 			LOGGER.error(e.getMessage(), e);
 		}
 		if(dados == null || dados.isEmpty()) {

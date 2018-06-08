@@ -91,7 +91,7 @@ public class StatisticsScreenCtrl implements Initializable {
 			
 			statisticsScreen.show();
 		} catch (IOException e) {
-			ExceptionAlert.show("Não foi possível gerar a tela!");
+			ExceptionAlert.show("Não foi possível gerar a tela!", ownerWindow);
 			LOGGER.error(e.getMessage(), e);
 		}
 	}

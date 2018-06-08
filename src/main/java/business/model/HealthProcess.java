@@ -15,7 +15,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.apache.log4j.Logger;
 
 import business.exception.ValidationException;
-import presentation.utils.widget.ExceptionAlert;
 
 /**
  * @author lets
@@ -270,14 +269,16 @@ public class HealthProcess implements Process {
 			
 			xml = stringWriter.toString();
 		} catch (JAXBException e) {
-			ExceptionAlert.show("Não foi possível converter o objeto para XML!");
+			// TODO Mandar uma exception para o controller
+		    //ExceptionAlert.show("Não foi possível converter o objeto para XML!");
 			logger.error(e.getMessage(), e);
 		} finally {
 			// Fecha o reader e o writer
 			try {
 				stringWriter.close();
 			} catch (IOException e) {
-				ExceptionAlert.show("Não foi possível encerrar os processos!");
+			    // TODO Mandar uma exception para o controller
+				//ExceptionAlert.show("Não foi possível encerrar os processos!");
 				logger.fatal(e.getMessage(), e);
 			}
 		}

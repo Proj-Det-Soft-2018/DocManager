@@ -64,7 +64,7 @@ public abstract class ProcessEditCtrl implements Initializable, Observer{
 
             processEditScreen.show();
         } catch (IOException e) {
-        	ExceptionAlert.show("Não foi possível gerar a tela!");
+        	ExceptionAlert.show("Não foi possível gerar a tela!", ownerWindow);
             Logger.getLogger(ProcessEditCtrl.class).error(e.getMessage(), e);
         }
     }

@@ -1,6 +1,6 @@
 package persistence;
 
-public class DaoFactoryJDBC extends DaoFactory {
+public class DaoFactoryJDBC implements DaoFactory {
 	
 	@Override
 	public ProcessDao getProcessDao(){
