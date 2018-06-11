@@ -1,6 +1,7 @@
-package business.model;
+package health.model;
 
 import business.exception.ValidationException;
+import business.model.Search;
 
 public class HealthInterestedSearch implements Search {
     

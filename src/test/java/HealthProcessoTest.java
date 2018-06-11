@@ -7,16 +7,16 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import business.exception.ValidationException;
-import business.model.HealthInterested;
-import business.model.HealthOrganization;
-import business.model.HealthProcess;
-import business.model.HealthSituation;
-import business.model.HealthSubject;
 import business.model.Interested;
 import business.model.Organization;
 import business.model.Process;
 import business.model.Situation;
 import business.model.Subject;
+import health.model.HealthInterested;
+import health.model.HealthOrganization;
+import health.model.HealthProcess;
+import health.model.HealthSituation;
+import health.model.HealthSubject;
 /**
  * 
  * @author Allan
@@ -27,12 +27,12 @@ public class HealthProcessoTest {
 	@Parameters
 	public static Collection <Object[]> data(){
 		return Arrays.asList(new Object[][] {
-			{false, "00000010110145", new HealthInterested("John Doe", "12345678910", "8484848484"), HealthSubject.NULL, HealthOrganization.AGU, HealthSituation.AGENDADAEXTERNA, ""},
+			{false, "00000010110145", new HealthInterested("John Doe", "12345678910", "8484848484"), HealthSubject.NULL, HealthOrganization.AGU, HealthSituation.AGENDEXT, ""},
 			{false, "00000010110141", new HealthInterested("John Doe", "12345678910", "8484848484"), HealthSubject.APO, HealthOrganization.NULL, HealthSituation.CONCLUIDO, ""},
 			{false, "00000010110143", new HealthInterested("John Doe", "12345678910", "8484848484"), HealthSubject.APO, HealthOrganization.CGU, HealthSituation.NULL, ""},
-			{false, "000000101101430", new HealthInterested("John Doe", "12345678910", "8484848484"), HealthSubject.APO, HealthOrganization.CGU, HealthSituation.AGENDADAEXTERNA, ""},
-			{true, "a1234567", new HealthInterested("John Doe", "12345678910", "8484848484"), HealthSubject.APO, HealthOrganization.CGU, HealthSituation.AGENDADAEXTERNA, ""},
-			{true, "1112", new HealthInterested("John Doe", "12345678910", "8484848484"), HealthSubject.APO, HealthOrganization.CGU, HealthSituation.AGENDADAEXTERNA, ""},
+			{false, "000000101101430", new HealthInterested("John Doe", "12345678910", "8484848484"), HealthSubject.APO, HealthOrganization.CGU, HealthSituation.AGENDEXT, ""},
+			{true, "a1234567", new HealthInterested("John Doe", "12345678910", "8484848484"), HealthSubject.APO, HealthOrganization.CGU, HealthSituation.AGENDEXT, ""},
+			{true, "1112", new HealthInterested("John Doe", "12345678910", "8484848484"), HealthSubject.APO, HealthOrganization.CGU, HealthSituation.AGENDEXT, ""},
 		});
 	}
 	

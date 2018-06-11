@@ -1,22 +1,24 @@
-import business.model.HealthOrganization;
-import business.model.HealthSituation;
-import business.model.HealthSubject;
+package health;
+
 import business.service.ConcreteInterestedService;
 import business.service.ConcreteListService;
 import business.service.ListService;
 import business.service.ProcessService;
 import business.service.StatisticService;
+import health.model.HealthOrganization;
+import health.model.HealthSituation;
+import health.model.HealthSubject;
+import health.persistence.DaoFactoryJDBC;
+import health.presentation.HealthControllerFactory;
 import business.service.ConcreteProcessService;
 import business.service.ConcreteStatisticService;
 import business.service.InterestedService;
 import presentation.ControllerFactory;
-import presentation.HealthControllerFactory;
 import presentation.MainScreenCtrl;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
 import persistence.DaoFactory;
-import persistence.DaoFactoryJDBC;
 
 
 /**

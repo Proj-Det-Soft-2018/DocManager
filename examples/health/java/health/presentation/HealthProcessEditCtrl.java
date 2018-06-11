@@ -1,23 +1,24 @@
-package presentation;
+package health.presentation;
 
 import java.net.URL;
 import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
-import business.model.HealthInterested;
-import business.model.HealthInterestedSearch;
-import business.model.HealthOrganization;
-import business.model.HealthProcess;
-import business.model.HealthSituation;
-import business.model.HealthSubject;
 import business.model.Interested;
 import business.model.Process;
 import business.model.Search;
 import business.service.InterestedService;
 import business.service.ListService;
 import business.service.ProcessService;
+import health.model.HealthInterested;
+import health.model.HealthInterestedSearch;
+import health.model.HealthOrganization;
+import health.model.HealthProcess;
+import health.model.HealthSituation;
+import health.model.HealthSubject;
 import presentation.ControllerFactory;
+import presentation.ProcessEditCtrl;
 import presentation.utils.widget.MaskedTextField;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

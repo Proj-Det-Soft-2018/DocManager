@@ -1,7 +1,7 @@
 /**
  * 
  */
-package persistence;
+package health.persistence;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,4 +1,8 @@
-package persistence;
+package health.persistence;
+
+import persistence.DaoFactory;
+import persistence.InterestedDao;
+import persistence.ProcessDao;
 
 public class DaoFactoryJDBC implements DaoFactory {
 	

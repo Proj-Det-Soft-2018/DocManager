@@ -1,13 +1,14 @@
 /**
  * 
  */
-package business.model;
+package health.model;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import business.exception.ValidationException;
+import business.model.Interested;
 
 /**
  * Classe representa o interessado do processo, pessoa vinculada ao processo como
@@ -128,7 +129,6 @@ public class HealthInterested implements Interested {
 		
 		if(this.name == null || this.name.isEmpty()) {
 			failure = true;
-			System.out.println(this.name);
 			failureMsg.append("O campo Nome não pode ser vazio.\n\n");
 		}
 		else if(!this.name.matches("[a-zA-Z\\s]+")) {

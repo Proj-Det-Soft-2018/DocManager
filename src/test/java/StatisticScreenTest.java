@@ -11,13 +11,14 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
-import business.model.HealthOrganization;
-import business.model.HealthSituation;
-import business.model.HealthSubject;
 import business.service.ConcreteListService;
 import business.service.ConcreteStatisticService;
 import business.service.ListService;
 import business.service.StatisticService;
+import health.model.HealthOrganization;
+import health.model.HealthSituation;
+import health.model.HealthSubject;
+import health.persistence.DaoFactoryJDBC;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,7 +34,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import persistence.DaoFactory;
-import persistence.DaoFactoryJDBC;
 import persistence.exception.DatabaseException;
 
 /**

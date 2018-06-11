@@ -1,17 +1,18 @@
 /**
  * 
  */
-package persistence;
+package health.persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import business.model.HealthInterested;
-import business.model.HealthInterestedSearch;
 import business.model.Interested;
 import business.model.Search;
+import health.model.HealthInterested;
+import health.model.HealthInterestedSearch;
+import persistence.InterestedDao;
 import persistence.exception.DatabaseException;
 
 /**

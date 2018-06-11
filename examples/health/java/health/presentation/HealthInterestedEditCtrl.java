@@ -1,17 +1,18 @@
-package presentation;
+package health.presentation;
 
 import java.net.URL;
 
 import org.apache.log4j.Logger;
 
-import business.model.HealthInterested;
 import business.model.Interested;
 import business.service.InterestedService;
+import health.model.HealthInterested;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import presentation.InterestedEditCtrl;
 import presentation.utils.widget.MaskedContactTextField;
 
 public class HealthInterestedEditCtrl extends InterestedEditCtrl {

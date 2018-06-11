@@ -1,7 +1,7 @@
 /**
  * 
  */
-package persistence;
+package health.persistence;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -16,13 +16,14 @@ import java.util.List;
 import java.util.Map;
 
 import business.exception.ValidationException;
-import business.model.HealthInterested;
-import business.model.HealthProcess;
-import business.model.HealthProcessSearch;
-import business.model.HealthSituation;
 import business.model.Interested;
 import business.model.Process;
 import business.model.Search;
+import health.model.HealthInterested;
+import health.model.HealthProcess;
+import health.model.HealthProcessSearch;
+import health.model.HealthSituation;
+import persistence.ProcessDao;
 import persistence.exception.DatabaseException;
 
 /**

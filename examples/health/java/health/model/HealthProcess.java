@@ -1,4 +1,4 @@
-package business.model;
+package health.model;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -15,6 +15,11 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.apache.log4j.Logger;
 
 import business.exception.ValidationException;
+import business.model.Interested;
+import business.model.Organization;
+import business.model.Process;
+import business.model.Situation;
+import business.model.Subject;
 
 /**
  * @author lets

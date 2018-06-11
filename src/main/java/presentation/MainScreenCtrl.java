@@ -5,6 +5,7 @@ import business.exception.ValidationException;
 import business.model.Process;
 import business.service.Observer;
 import business.service.ProcessService;
+import health.presentation.HealthMainScreenCtrl;
 import persistence.exception.DatabaseException;
 import presentation.utils.StringConstants;
 import presentation.utils.widget.ExceptionAlert;
