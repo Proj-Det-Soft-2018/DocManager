@@ -1,23 +1,24 @@
-package presentation;
+package health.presentation;
 
 import java.net.URL;
 import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
-import business.model.HealthInterested;
-import business.model.HealthInterestedSearch;
-import business.model.HealthOrganization;
-import business.model.HealthProcess;
-import business.model.HealthSituation;
-import business.model.HealthSubject;
 import business.model.Interested;
 import business.model.Process;
 import business.model.Search;
 import business.service.InterestedService;
 import business.service.ListService;
 import business.service.ProcessService;
+import health.model.HealthInterested;
+import health.model.HealthInterestedSearch;
+import health.model.HealthOrganization;
+import health.model.HealthProcess;
+import health.model.HealthSituation;
+import health.model.HealthSubject;
 import presentation.ControllerFactory;
+import presentation.ProcessEditCtrl;
 import presentation.utils.widget.MaskedTextField;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -121,7 +122,7 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
             txtNumProcesso.setPlainText(healthProcess.getNumber());
             txtNumProcesso.setDisable(true);
 
-            interested = super.originalProcess.getIntersted();
+            interested = ((HealthProcess)super.originalProcess).getIntersted();
             fillInterestedField();
 
             cbAssunto.getSelectionModel().select(healthProcess.getSubject().getId());
@@ -141,9 +142,9 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
     
         ObservableList<String> obsListaSituacoes = cbSituacao.getItems();
         if(originalProcess != null) {
-            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(super.originalProcess.getSituation()));
+            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(((HealthProcess)super.originalProcess).getSituation()));
         }else {
-            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(null));
+            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(HealthSituation.NULL));
         }
         cbSituacao.getSelectionModel().select(0);
     }
@@ -157,7 +158,7 @@ public class HealthProcessEditCtrl extends ProcessEditCtrl{
 
     @Override
     protected Interested createInterested() {
-        Interested interested = new HealthInterested();
+        HealthInterested interested = new HealthInterested();
         interested.setCpf(txtCpfInteressado.plainTextProperty().getValue());
         return interested;
     }

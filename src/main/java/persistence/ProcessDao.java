@@ -21,9 +21,9 @@ public interface ProcessDao{
 	public void save(Process newProcess) throws DatabaseException, ValidationException;
 	public void update(Process modifiedProcess) throws DatabaseException;
 	public void delete(Process process) throws DatabaseException;
-	public Process getById(Long id) throws DatabaseException;
-	public boolean contains(Process process) throws DatabaseException;
-	public List<Process> getAll() throws DatabaseException;
+	//public Process getById(Long id) throws DatabaseException;
+	//public boolean contains(Process process) throws DatabaseException;
+	//public List<Process> getAll() throws DatabaseException;
 	public List<Process> getAllProcessesByPriority() throws DatabaseException; 
 	public List<Process> searchByNumber(String number) throws DatabaseException;
 	public List<Process> searchAll(Search searchData) throws DatabaseException;

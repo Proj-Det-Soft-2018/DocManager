@@ -3,7 +3,7 @@ package business.service;
 import business.exception.ValidationException;
 import business.model.Interested;
 import business.model.Search;
-import persistence.DaoFactoryJDBC;
+import persistence.DaoFactory;
 import persistence.InterestedDao;
 import persistence.exception.DatabaseException;
 /**
@@ -15,15 +15,8 @@ public class ConcreteInterestedService extends Observable implements InterestedS
 	
 	private InterestedDao interessadoDao;
 
-	// Singleton
-	private static final ConcreteInterestedService instance = new ConcreteInterestedService();
-
-	private ConcreteInterestedService() {
-		interessadoDao = new DaoFactoryJDBC().getInterestedDao(); // TODO Mudar para Injeção
-	}
-
-	public static ConcreteInterestedService getInstance() {
-		return instance;
+	public ConcreteInterestedService(DaoFactory daoFactory) {
+		interessadoDao = daoFactory.getInterestedDao();
 	}
 
 	@Override

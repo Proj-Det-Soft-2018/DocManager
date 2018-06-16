@@ -6,7 +6,7 @@ package business.service;
 import java.util.ArrayList;
 import java.util.Map;
 
-import persistence.DaoFactoryJDBC;
+import persistence.DaoFactory;
 import persistence.ProcessDao;
 import persistence.exception.DatabaseException;
 
@@ -18,17 +18,10 @@ public class ConcreteStatisticService implements StatisticService {
 	
 	private ProcessDao processoDao;
 
-	// Singleton
-	private static final ConcreteStatisticService instance = new ConcreteStatisticService();
-
-	private ConcreteStatisticService() {
-		processoDao = new DaoFactoryJDBC().getProcessDao(); // TODO Mudar para injeção
+	public ConcreteStatisticService(DaoFactory daoFactory) {
+		processoDao = daoFactory.getProcessDao();
 	}
 
-	public static ConcreteStatisticService getInstance() {
-		return instance;
-	}
-	
 	@Override
 	public Map<Integer, ArrayList<Integer>> quantityProcessPerMonthYear() throws DatabaseException {
 		return processoDao.getQuantityProcessPerMonthYearList();

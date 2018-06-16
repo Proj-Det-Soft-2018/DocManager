@@ -1,7 +1,9 @@
-package business.model;
+package health.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import business.model.Subject;
 
 public enum HealthSubject implements Subject {
 	

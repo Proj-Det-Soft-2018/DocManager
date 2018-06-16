@@ -4,4 +4,5 @@ public interface Situation {
 	
     String getDescription();
     int getId();
+    int[] getNeighborhoodIndexes();
 }

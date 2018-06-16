@@ -1,17 +1,18 @@
-package presentation;
+package health.presentation;
 
 import java.net.URL;
 
 import org.apache.log4j.Logger;
 
-import business.model.HealthInterested;
 import business.model.Interested;
 import business.service.InterestedService;
+import health.model.HealthInterested;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import presentation.InterestedEditCtrl;
 import presentation.utils.widget.MaskedContactTextField;
 
 public class HealthInterestedEditCtrl extends InterestedEditCtrl {
@@ -46,7 +47,7 @@ public class HealthInterestedEditCtrl extends InterestedEditCtrl {
 	
 	@Override
 	protected void populeForm() {
-		lblTxtCpf.setText(interested.getFormatedCpf());
+		lblTxtCpf.setText(((HealthInterested)interested).getFormatedCpf());
 		
 		if (interested.getId() != null) {
 			HealthInterested healthInterested = (HealthInterested) interested;
@@ -59,7 +60,7 @@ public class HealthInterestedEditCtrl extends InterestedEditCtrl {
 	
 	@Override
 	protected Interested mountInterested() {
-		return new HealthInterested(txtName.getText(), super.interested.getCpf(), txtContact.plainTextProperty().getValue());
+		return new HealthInterested(txtName.getText(), ((HealthInterested)super.interested).getCpf(), txtContact.plainTextProperty().getValue());
 	}
 
 	@Override

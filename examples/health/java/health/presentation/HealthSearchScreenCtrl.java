@@ -1,15 +1,18 @@
-package presentation;
+package health.presentation;
 
 import java.net.URL;
 import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
-import business.model.HealthProcess;
-import business.model.HealthProcessSearch;
 import business.model.Search;
 import business.service.ProcessService;
+import health.model.HealthInterested;
+import health.model.HealthProcess;
+import health.model.HealthProcessSearch;
 import business.service.ListService;
+import presentation.ControllerFactory;
+import presentation.SearchScreenCtrl;
 import presentation.utils.DateUtil;
 import presentation.utils.widget.DynamicMaskTextField;
 import presentation.utils.widget.MaskedTextField;
@@ -293,7 +296,7 @@ public class HealthSearchScreenCtrl extends SearchScreenCtrl {
 		tabColNumero.setCellValueFactory(
 				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getFormattedNumber()));
 		tabColInteressado.setCellValueFactory(
-				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getIntersted().getName()));
+				conteudo -> new ReadOnlyStringWrapper(((HealthInterested)conteudo.getValue().getIntersted()).getName()));
 		tabColSituacao.setCellValueFactory(
 				conteudo -> new ReadOnlyStringWrapper(conteudo.getValue().getSituation().getDescription()));
         tabColumnRegDate.setCellValueFactory(

@@ -1,13 +1,14 @@
 /**
  * 
  */
-package business.model;
+package health.model;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import business.exception.ValidationException;
+import business.model.Interested;
 
 /**
  * Classe representa o interessado do processo, pessoa vinculada ao processo como
@@ -60,7 +61,6 @@ public class HealthInterested implements Interested {
 	/* (non-Javadoc)
 	 * @see business.model.Interested#getName()
 	 */
-	@Override
 	@XmlElement
 	public String getName() {
 		return name;
@@ -70,7 +70,6 @@ public class HealthInterested implements Interested {
 	/* (non-Javadoc)
 	 * @see business.model.Interested#setName(java.lang.String)
 	 */
-	@Override
 	public void setName(String name){
 		this.name = name;
 	}
@@ -78,7 +77,6 @@ public class HealthInterested implements Interested {
 	/* (non-Javadoc)
 	 * @see business.model.Interested#getFormatedCpf()
 	 */
-	@Override
 	@XmlElement(name="cpf")
 	public String getFormatedCpf() {
 		return cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
@@ -87,7 +85,6 @@ public class HealthInterested implements Interested {
 	/* (non-Javadoc)
 	 * @see business.model.Interested#getCpf()
 	 */
-	@Override
 	@XmlTransient
 	public String getCpf() {
 		return cpf;
@@ -97,7 +94,6 @@ public class HealthInterested implements Interested {
 	/* (non-Javadoc)
 	 * @see business.model.Interested#setCpf(java.lang.String)
 	 */
-	@Override
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
@@ -105,7 +101,6 @@ public class HealthInterested implements Interested {
 	/* (non-Javadoc)
 	 * @see business.model.Interested#getFormatedContact()
 	 */
-	@Override
 	@XmlElement(name="contact")
 	public String getFormatedContact() {
 		return contact.replaceAll("(\\d{2})(\\d{5}|\\d{4})(\\d{4})", "($1) $2-$3");
@@ -114,7 +109,6 @@ public class HealthInterested implements Interested {
 	/* (non-Javadoc)
 	 * @see business.model.Interested#getContact()
 	 */
-	@Override
 	@XmlTransient
 	public String getContact() {
 		return contact;
@@ -123,7 +117,6 @@ public class HealthInterested implements Interested {
 	/* (non-Javadoc)
 	 * @see business.model.Interested#setContact(java.lang.String)
 	 */
-	@Override
 	public void setContact(String contact){
 		this.contact = contact;
 	}
@@ -136,18 +129,15 @@ public class HealthInterested implements Interested {
 		
 		if(this.name == null || this.name.isEmpty()) {
 			failure = true;
-			System.out.println(this.name);
 			failureMsg.append("O campo Nome não pode ser vazio.\n\n");
 		}
 		else if(!this.name.matches("[a-zA-Z\\s]+")) {
 			failure = true;
-			System.out.println("a"+this.name);
 			failureMsg.append("O campo Nome deve conter apenas letras.\n\n");
 		}
 		
 		if(this.contact == null || (!this.contact.isEmpty() && this.contact.length() < 10)){
 			failure = true;
-			System.out.println(this.contact);
 			failureMsg.append("O contato inserido está incompleto.\n\n");
 		}
 		

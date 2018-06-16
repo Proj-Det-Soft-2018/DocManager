@@ -48,7 +48,7 @@ import org.xml.sax.InputSource;
 import business.exception.ValidationException;
 import business.model.Process;
 import business.model.Search;
-import persistence.DaoFactoryJDBC;
+import persistence.DaoFactory;
 import persistence.ProcessDao;
 import persistence.exception.DatabaseException;
 
@@ -71,11 +71,8 @@ public class ConcreteProcessService extends Observable implements ProcessService
 	private FopFactory fopFactory;
 	private FOUserAgent foUserAgent;
 
-	// Singleton
-	private static final ConcreteProcessService instance = new ConcreteProcessService();
-
-	private ConcreteProcessService() {
-		processoDao = new DaoFactoryJDBC().getProcessDao(); // TODO Mudar para injeção
+	public ConcreteProcessService(DaoFactory daoFactory) {
+		processoDao = daoFactory.getProcessDao();
 
 		// Inicilização do Apache Shiro -- utiliza o resources/shiro.ini
 		IniRealm iniRealm = new IniRealm("classpath:shiro.ini");
@@ -87,11 +84,6 @@ public class ConcreteProcessService extends Observable implements ProcessService
 		fopFactory = generateFopFactory();
 		foUserAgent = generateFOUserAgent();
 	}
-
-	public static ConcreteProcessService getInstance() {
-		return instance;
-	}
-
 
 	@Override
 	public void save(Process process) throws ValidationException, DatabaseException {

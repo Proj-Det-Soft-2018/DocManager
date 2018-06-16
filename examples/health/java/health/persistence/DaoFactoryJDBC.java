@@ -1,6 +1,10 @@
-package persistence;
+package health.persistence;
 
-public class DaoFactoryJDBC extends DaoFactory {
+import persistence.DaoFactory;
+import persistence.InterestedDao;
+import persistence.ProcessDao;
+
+public class DaoFactoryJDBC implements DaoFactory {
 	
 	@Override
 	public ProcessDao getProcessDao(){

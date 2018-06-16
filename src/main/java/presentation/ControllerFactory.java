@@ -7,10 +7,10 @@ import business.service.StatisticService;
 
 public abstract class ControllerFactory {
 
-	ProcessService processService;
-	InterestedService interestedService;
-	ListService listService;
-	StatisticService statisticService;
+	protected ProcessService processService;
+	protected InterestedService interestedService;
+	protected ListService listService;
+	protected StatisticService statisticService;
 
 	public ControllerFactory(ProcessService processService, InterestedService interestedService,
 			ListService listService, StatisticService statisticService) {

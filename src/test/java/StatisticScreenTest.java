@@ -9,10 +9,16 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
+
+import business.service.ConcreteListService;
 import business.service.ConcreteStatisticService;
-import business.service.HealthListService;
 import business.service.ListService;
 import business.service.StatisticService;
+import health.model.HealthOrganization;
+import health.model.HealthSituation;
+import health.model.HealthSubject;
+import health.persistence.DaoFactoryJDBC;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,6 +33,7 @@ import javafx.scene.chart.PieChart.Data;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
+import persistence.DaoFactory;
 import persistence.exception.DatabaseException;
 
 /**
@@ -35,7 +42,7 @@ import persistence.exception.DatabaseException;
  */
 public class StatisticScreenTest extends Application {
 
-	
+	private static final Logger LOGGER = Logger.getLogger(StatisticScreenTest.class);
 	private static final int GRAFICO_ALTURA = 300;
 	private static final int GRAFICO_LARGURA = 300;
 	private StatisticService statisticService;
@@ -49,8 +56,12 @@ public class StatisticScreenTest extends Application {
 
 	@Override
 	public void start(Stage s) throws Exception {
-		 statisticService = ConcreteStatisticService.getInstance();
-		 listService = HealthListService.getInstance();
+	     DaoFactory daoFactory = new DaoFactoryJDBC();
+		 statisticService = new ConcreteStatisticService(daoFactory);
+		 listService = new ConcreteListService(
+                HealthOrganization.getAll(),
+                HealthSubject.getAll(),
+                HealthSituation.getAll());
 			
 		s.setScene(new Scene(new FlowPane(createQuantityProcessPerSituationPieChart(),
 				criarGraficoLinha(), createBarChartQuantityProcessPerMonthYear())));
@@ -68,8 +79,7 @@ public class StatisticScreenTest extends Application {
 			try {
 				dados = statisticService.quantityProcessPerSituation();
 			} catch (DatabaseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.error(e.getMessage(), e);
 			}
 			
 			if(dados == null || dados.isEmpty()) {
@@ -151,8 +161,7 @@ public class StatisticScreenTest extends Application {
 		try {
 			dados = statisticService.quantityProcessPerMonthYear();
 		} catch (DatabaseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		if(dados == null || dados.isEmpty()) {
 			System.out.println("ta dando ruim!");
