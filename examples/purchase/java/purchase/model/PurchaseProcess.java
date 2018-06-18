@@ -1,9 +1,16 @@
 package purchase.model;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.log4j.Logger;
 
@@ -17,31 +24,38 @@ import business.model.Subject;
 @XmlRootElement(name="process")
 @XmlSeeAlso(PurchaseInterested.class)
 public class PurchaseProcess implements Process {
-	
+
 	private static final Logger LOGGER = Logger.getLogger(PurchaseInterested.class);
-	
+
 	private Long id;
-    private String number;
-    private String description;
-    private Interested interested;
-    private Subject subject;
-    private Organization originEntity;
-    private Situation situation;
-    private String observation;
-    private LocalDateTime registrationDate; //Hora registro do processo no banco
-	
+	private String number;
+	private String description;
+	private Interested interested;
+	private Subject subject;
+	private Organization originEntity;
+	private Situation situation;
+	private String observation;
+	private LocalDateTime registrationDate; //Hora registro do processo no banco
+
 	@Override
+	@XmlTransient
 	public Long getId() {
 		return id;
 	}
 
 	@Override
 	public void setId(Long processId) {
-		this.id = id;
+		this.id = processId;
 	}
 
+	@XmlTransient
 	public String getNumber() {
 		return number;
+	}
+
+	@XmlElement(name="number")
+	public String getFormattedNumber() {
+		return this.number.replaceAll("(\\d{5})(\\d{6})(\\d{4})(\\d{2})", "$1.$2/$3-$4");
 	}
 
 	public void setNumber(String number) {
@@ -56,6 +70,7 @@ public class PurchaseProcess implements Process {
 		this.description = description;
 	}
 
+	@XmlElement(name="interested", type=PurchaseInterested.class)
 	public Interested getInterested() {
 		return interested;
 	}
@@ -64,28 +79,40 @@ public class PurchaseProcess implements Process {
 		this.interested = interested;
 	}
 
-	public Subject getSubject() {
-		return subject;
+	@XmlElement(name="subject")
+	public String getSubjectString() {
+		return subject.getDescription();
 	}
 
-	public void setSubject(Subject subject) {
-		this.subject = subject;
+	public void setSubjectById(int subjectId){
+		this.subject = PurchaseSubject.getSubjectById(subjectId);
 	}
+
 
 	public Organization getOriginEntity() {
 		return originEntity;
 	}
 
-	public void setOriginEntity(Organization originEntity) {
-		this.originEntity = originEntity;
+	@XmlElement(name="origin-entity")
+	public String getOriginEntityString(){
+		return originEntity.getFullName();
+	}
+
+	public void setOriginEntityById(int originEntityId){
+		this.originEntity = PurchaseOrganization.getOrganizationById(originEntityId);
 	}
 
 	public Situation getSituation() {
 		return situation;
 	}
 
-	public void setSituation(Situation situation) {
-		this.situation = situation;
+	@XmlElement(name="situation")
+	public String getSituationString() {
+		return situation.getDescription();
+	}
+
+	public void setSituationById(int situationId){
+		this.situation = PurchaseSituation.getSituationById(situationId);
 	}
 
 	public String getObservation() {
@@ -96,6 +123,7 @@ public class PurchaseProcess implements Process {
 		this.observation = observation;
 	}
 
+	@XmlElement(name="entry-date")
 	public LocalDateTime getRegistrationDate() {
 		return registrationDate;
 	}
@@ -106,8 +134,32 @@ public class PurchaseProcess implements Process {
 
 	@Override
 	public String toXml() {
-		// TODO Auto-generated method stub
-		return null;
+		StringWriter stringWriter = new StringWriter();
+		String xml = null;
+
+		try {
+			// Conversão do Objeto para um XML
+			JAXBContext jaxbContext = JAXBContext.newInstance(this.getClass());
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
+			jaxbMarshaller.marshal(this, stringWriter);
+
+			xml = stringWriter.toString();
+		} catch (JAXBException e) {
+			// TODO Mandar uma exception para o controller
+			//ExceptionAlert.show("Não foi possível converter o objeto para XML!");
+			LOGGER.error(e.getMessage(), e);
+		} finally {
+			// Fecha o reader e o writer
+			try {
+				stringWriter.close();
+			} catch (IOException e) {
+				// TODO Mandar uma exception para o controller
+				//ExceptionAlert.show("Não foi possível encerrar os processos!");
+				LOGGER.fatal(e.getMessage(), e);
+			}
+		}
+		return xml;
 	}
 
 	@Override
