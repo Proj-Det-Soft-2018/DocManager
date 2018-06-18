@@ -3,15 +3,8 @@
  */
 package business.service;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.net.URI;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -20,19 +13,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.fop.apps.FOPException;
-import org.apache.fop.apps.FOUserAgent;
-import org.apache.fop.apps.Fop;
-import org.apache.fop.apps.FopFactory;
-import org.apache.fop.apps.MimeConstants;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -58,259 +42,120 @@ import persistence.exception.DatabaseException;
  */
 public class ConcreteProcessService extends Observable implements ProcessService {
 
-	private static final URL FO_TEMPLATE_PATH = ConcreteProcessService.class.getResource("/fo_templates/xml2fo.xsl");
-	private static final Logger LOGGER = Logger.getLogger(ConcreteProcessService.class);
+    private static final Logger LOGGER = Logger.getLogger(ConcreteProcessService.class);
 
-	private ProcessDao processoDao;
+    private ProcessDao processoDao;
 
-	// Usuário para autorização -- Apache Shiro
-	private Subject currentUser;
+    // Usuário para autorização -- Apache Shiro
+    private Subject currentUser;
 
-	// Subsídios para geração de PDF -- Apache Xalan/FOP
-	private Transformer xmlToFoTransformer;
-	private FopFactory fopFactory;
-	private FOUserAgent foUserAgent;
+    private XmlToPdfBinary xmlToPdfBinary;
 
-	public ConcreteProcessService(DaoFactory daoFactory) {
-		processoDao = daoFactory.getProcessDao();
+    public ConcreteProcessService(DaoFactory daoFactory, XmlToPdfBinary xmlToPdfBinary) {
+	processoDao = daoFactory.getProcessDao();
+	this.xmlToPdfBinary = xmlToPdfBinary;
 
-		// Inicilização do Apache Shiro -- utiliza o resources/shiro.ini
-		IniRealm iniRealm = new IniRealm("classpath:shiro.ini");
-		SecurityManager secutiryManager = new DefaultSecurityManager(iniRealm);
-		SecurityUtils.setSecurityManager(secutiryManager);
-		currentUser = SecurityUtils.getSubject();
+	// Inicilização do Apache Shiro -- utiliza o resources/shiro.ini
+	IniRealm iniRealm = new IniRealm("classpath:shiro.ini");
+	SecurityManager secutiryManager = new DefaultSecurityManager(iniRealm);
+	SecurityUtils.setSecurityManager(secutiryManager);
+	currentUser = SecurityUtils.getSubject();
+    }
 
-		xmlToFoTransformer = generateTransformer();
-		fopFactory = generateFopFactory();
-		foUserAgent = generateFOUserAgent();
+    @Override
+    public void save(Process process) throws ValidationException, DatabaseException {
+
+
+	processoDao.save(process);
+	this.notifyObservers();
+    }
+
+    @Override
+    public void update(Process process) throws DatabaseException {
+	processoDao.update(process);
+	this.notifyObservers();			
+    }
+
+    @Override
+    public void delete(Process process, String admUser, String password) throws DatabaseException {
+
+	if (!this.currentUser.isAuthenticated()) {
+	    UsernamePasswordToken token = new UsernamePasswordToken(admUser, password);
+	    token.setRememberMe(true);
+
+	    currentUser.login(token); // Joga uma AuthenticationException
 	}
 
-	@Override
-	public void save(Process process) throws ValidationException, DatabaseException {
-	
-
-		processoDao.save(process);
-		this.notifyObservers();
+	if (currentUser.hasRole("admin")) {
+	    processoDao.delete(process);
+	    this.notifyObservers();
 	}
 
-	@Override
-	public void update(Process process) throws DatabaseException {
-		processoDao.update(process);
-		this.notifyObservers();			
+	currentUser.logout();
+    }
+
+    @Override
+    public List<Process> searchAll(Search searchData) throws ValidationException, DatabaseException {
+	searchData.validate();
+	return processoDao.searchAll(searchData);
+    }
+
+    @Override
+    public List<Process> pullList() throws ValidationException, DatabaseException{
+	return processoDao.getAllProcessesByPriority();
+    }
+
+    @Override
+    public byte[] getPdf(Process process) {
+	String xml = process.toXml();
+	String timedXml = appendCurrentTimeToXml(xml);
+	return xmlToPdfBinary.transform(timedXml);
+    }
+
+    private String appendCurrentTimeToXml(String xml) {
+
+	String newXml;
+
+	try (
+		StringReader xmlReader = new StringReader(xml);
+		StringWriter xmlWriter = new StringWriter();
+		) {
+
+	    // Transforma o String em Document
+	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	    DocumentBuilder db = dbf.newDocumentBuilder();
+	    InputSource inputSource = new InputSource();
+	    inputSource.setCharacterStream(xmlReader);
+	    Document xmlDoc = db.parse(inputSource);
+
+	    // Pega o tempo atual e gera uma string formatada
+	    LocalDateTime now = LocalDateTime.now();
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
+	    String formatedTime = now.format(formatter);
+
+	    // Cria um novo Elemento com o Texto desejado 
+	    Text text = xmlDoc.createTextNode(formatedTime);
+	    Element element = xmlDoc.createElement("current-time");
+	    element.appendChild(text);
+
+	    // Coloca o novo elemento no XML
+	    xmlDoc.getChildNodes().item(0).appendChild(element);
+
+	    // Converte de Documento para String
+	    TransformerFactory tf = TransformerFactory.newInstance();
+	    Transformer transformer = tf.newTransformer();
+	    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+	    transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+	    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+	    transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+	    transformer.transform(new DOMSource(xmlDoc), new StreamResult(xmlWriter));
+
+	    newXml = xmlWriter.toString();
+
+	} catch(Exception e) {
+	    LOGGER.error(e.getMessage(), e);
+	    newXml = null;
 	}
-
-	@Override
-	public void delete(Process process, String admUser, String password) throws DatabaseException {
-
-		if (!this.currentUser.isAuthenticated()) {
-			UsernamePasswordToken token = new UsernamePasswordToken(admUser, password);
-			token.setRememberMe(true);
-
-			currentUser.login(token); // Joga uma AuthenticationException
-		}
-
-		if (currentUser.hasRole("admin")) {
-			processoDao.delete(process);
-			this.notifyObservers();
-		}
-
-		currentUser.logout();
-	}
-
-	@Override
-	public List<Process> searchAll(Search searchData) throws ValidationException, DatabaseException {
-		searchData.validate();
-		return processoDao.searchAll(searchData);
-	}
-	
-	@Override
-	public List<Process> pullList() throws ValidationException, DatabaseException{
-		return processoDao.getAllProcessesByPriority();
-	}
-
-	@Override
-	public byte[] getPdf(Process process) {
-
-		String xml = process.toXml();
-		String timedXml = appendCurrentTimeToXml(xml);
-		String fo = xml2FoTransform(timedXml);
-		return fo2PdfTransform(fo);
-	}
-
-	
-
-	private String xml2FoTransform(String xml) {
-
-		String fo = null;
-
-		if (xml != null) {
-			try (
-					StringReader sr = new StringReader(xml);
-					StringWriter sw = new StringWriter();
-				) {
-				// Faz a conversão de XML para XSL:FO
-				if (this.xmlToFoTransformer != null) {
-
-					StreamSource xmlSource = new StreamSource(sr); 
-					StreamResult foResult = new StreamResult(sw);
-					this.xmlToFoTransformer.transform(xmlSource, foResult);
-					// Pega a string gerada
-					fo = sw.toString();
-				}
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
-			}
-		}
-
-		return fo;
-	}
-
-	private String appendCurrentTimeToXml(String xml) {
-
-		String newXml;
-
-		try (
-				StringReader xmlReader = new StringReader(xml);
-				StringWriter xmlWriter = new StringWriter();
-				) {
-
-			// Transforma o String em Document
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			InputSource inputSource = new InputSource();
-			inputSource.setCharacterStream(xmlReader);
-			Document xmlDoc = db.parse(inputSource);
-
-			// Pega o tempo atual e gera uma string formatada
-			LocalDateTime now = LocalDateTime.now();
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
-	        String formatedTime = now.format(formatter);
-			
-			// Cria um novo Elemento com o Texto desejado 
-			Text text = xmlDoc.createTextNode(formatedTime);
-			Element element = xmlDoc.createElement("current-time");
-			element.appendChild(text);
-
-			// Coloca o novo elemento no XML
-			xmlDoc.getChildNodes().item(0).appendChild(element);
-
-			// Converte de Documento para String
-			TransformerFactory tf = TransformerFactory.newInstance();
-			Transformer transformer = tf.newTransformer();
-			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-			transformer.transform(new DOMSource(xmlDoc), new StreamResult(xmlWriter));
-
-			newXml = xmlWriter.toString();
-
-		} catch(Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			newXml = null;
-		}
-		return newXml;
-	}
-
-	private byte[] fo2PdfTransform(String fo) {
-
-		byte[] pdfData;
-
-		try (
-				StringReader sourceReader = new StringReader(fo);
-				ByteArrayOutputStream resultStream = new ByteArrayOutputStream();
-				
-				) {
-			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, this.foUserAgent, resultStream);
-
-			// Configura um transformador utilizando as configurações padrão
-			TransformerFactory factory = TransformerFactory.newInstance();
-			Transformer transformer = factory.newTransformer();
-
-			StreamSource src = new StreamSource(sourceReader);
-			// O resultado é processaso pelo FOP para geração do PDF
-			SAXResult res = new SAXResult(fop.getDefaultHandler());
-
-			// Executa a transformação
-			transformer.transform(src, res);
-
-			InputStream auxStream = new ByteArrayInputStream(resultStream.toByteArray());
-
-			pdfData = IOUtils.toByteArray(auxStream);
-
-		} catch (FOPException | TransformerException | IOException e) {
-			LOGGER.error(e.getMessage(), e);
-			pdfData = new byte[0];	
-		}
-
-
-		return pdfData;
-	}
-
-	private Transformer generateTransformer() {
-
-		try {
-			TransformerFactory tf = TransformerFactory.newInstance();
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			dbf.setNamespaceAware(true);
-
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document xslDoc = db.parse(FO_TEMPLATE_PATH.openStream());
-			DOMSource xslSource = new DOMSource(xslDoc);
-
-			return tf.newTransformer(xslSource);
-		}
-		catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			return null;
-		}
-	}
-
-	private FopFactory generateFopFactory() {
-
-		FopFactory newFopFactory = null;
-
-		String path = FO_TEMPLATE_PATH.getPath();
-		String filePath = "file://" + path.substring(0, path.lastIndexOf("/fo_templates/xml2fo.xsl"));
-
-		File config = new File("src/main/resources/fop.xconf");
-
-		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-			// Lê o arquivo de configuração do FOP e seta o campo <base> para a pasta "resources"
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document fopConfDoc = db.parse(config);
-			Element element = (Element) fopConfDoc.getElementsByTagName("base").item(0);
-			element.setTextContent(filePath);
-
-			// Transforma o w3c.Document em InputStream
-			DOMSource xmlSource = new DOMSource(fopConfDoc);
-			StreamResult outputTarget = new StreamResult(outputStream);
-			TransformerFactory.newInstance().newTransformer().transform(xmlSource, outputTarget);
-			InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-
-			// Gera a fábrica com o arquivo de configuração
-			newFopFactory = FopFactory.newInstance(new URI(filePath), inputStream);
-			inputStream.close();
-
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-		}
-
-		return newFopFactory;
-	}
-
-	private FOUserAgent generateFOUserAgent() {
-		FOUserAgent newFOUserAgent = null;
-
-		if (this.fopFactory != null) {
-			newFOUserAgent = fopFactory.newFOUserAgent();
-			// Configurações do FOUserAgente -- basicamente seta as propriedades do PDF
-			newFOUserAgent.setTitle("Certidão");
-			newFOUserAgent.setAuthor("Subsistema Integrado de Atenção à Saúde do Servidor - SIASS");
-			newFOUserAgent.setSubject("Situação de Processo");
-			newFOUserAgent.setCreator("DocManager");
-		}
-		return newFOUserAgent;
-	}
+	return newXml;
+    }
 }

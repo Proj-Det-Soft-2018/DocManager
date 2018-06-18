@@ -10,7 +10,7 @@ public interface Process {
 	Long getId();
 
 	void setId(Long processId);
-
+	
 	String toXml();
 	
 	public void validate() throws ValidationException;
