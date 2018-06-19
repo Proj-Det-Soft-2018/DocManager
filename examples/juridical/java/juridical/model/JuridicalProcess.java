@@ -18,7 +18,11 @@ import business.model.Organization;
 import business.model.Process;
 import business.model.Situation;
 import business.model.Subject;
+import health.model.HealthInterested;
+import health.model.HealthOrganization;
 import health.model.HealthProcess;
+import health.model.HealthSituation;
+import health.model.HealthSubject;
 
 public class JuridicalProcess implements Process {
 	private static Logger LOGGER = Logger.getLogger(HealthProcess.class);
@@ -29,8 +33,8 @@ public class JuridicalProcess implements Process {
 	private Subject judge; //Ta bizarro
 	private Organization court;
 	private Situation situation;
-	private String lawyerName;
-	private String inventoriedName;
+	private Lawyer lawyer;
+	private Inventoried inventoried;
 	private String observation;
 	private LocalDateTime registrationDate; //Hora registro do processo no banco
 
@@ -44,14 +48,14 @@ public class JuridicalProcess implements Process {
 
 	public JuridicalProcess(String number, Interested inventorian, 
 			Organization court, Subject judge, Situation situation, 
-			String lawyerName, String inventoriedName, String observation) {
+			Lawyer lawyer, Inventoried inventoried, String observation) {
 		this.number = number;
 		this.inventorian = inventorian;
 		this.court = court;
 		this.judge = judge;
 		this.situation = situation;
-		this.lawyerName = lawyerName;
-		this.inventoriedName = inventoriedName;
+		this.lawyer = lawyer;
+		this.inventoried = inventoried;
 		this.observation = observation;
 	}
 
@@ -142,36 +146,34 @@ public class JuridicalProcess implements Process {
 		this.court = court;
 	}
 
+	/**
+	 * @return the lawyer
+	 */
+	public Lawyer getLawyer() {
+		return lawyer;
+	}
+
+	/**
+	 * @param lawyer the lawyer to set
+	 */
+	public void setLawyer(Lawyer lawyer) {
+		this.lawyer = lawyer;
+	}
+
+	/**
+	 * @return the inventoried
+	 */
+	public Inventoried getInventoried() {
+		return inventoried;
+	}
+
+	/**
+	 * @param inventoried the inventoried to set
+	 */
+	public void setInventoried(Inventoried inventoried) {
+		this.inventoried = inventoried;
+	}
 	
-	
-	/**
-	 * @return the lawyerName
-	 */
-	public String getLawyerName() {
-		return lawyerName;
-	}
-
-	/**
-	 * @param lawyerName the lawyerName to set
-	 */
-	public void setLawyerName(String lawyerName) {
-		this.lawyerName = lawyerName;
-	}
-
-	/**
-	 * @return the inventoriedName
-	 */
-	public String getInventoriedName() {
-		return inventoriedName;
-	}
-
-	/**
-	 * @param inventoriedName the inventoriedName to set
-	 */
-	public void setInventoriedName(String inventoriedName) {
-		this.inventoriedName = inventoriedName;
-	}
-
 	/* (non-Javadoc)
 	 * @see business.model.Process#getSituationString()
 	 */
@@ -277,22 +279,14 @@ public class JuridicalProcess implements Process {
 			failureMsg.append("O campo Inventariante é obrigatório.\n\n");
 		}
 		
-		if(this.lawyerName == null || this.lawyerName.isEmpty()) {
+		if(this.lawyer == null) {
 			failure = true;
-			failureMsg.append("O campo Nome do Advogado não pode ser vazio.\n\n");
-		}
-		else if(!this.lawyerName.matches("[a-zA-Z\\s]+")) {
-			failure = true;
-			failureMsg.append("O campo Nome do Advogado deve conter apenas letras.\n\n");
+			failureMsg.append("O campo Advogado é obrigatório.\n\n");
 		}
 		
-		if(this.inventoriedName == null || this.inventoriedName.isEmpty()) {
+		if(this.inventoried == null) {
 			failure = true;
-			failureMsg.append("O campo Nome do Inventariado não pode ser vazio.\n\n");
-		}
-		else if(!this.inventoriedName.matches("[a-zA-Z\\s]+")) {
-			failure = true;
-			failureMsg.append("O campo Nome do Inventariado deve conter apenas letras.\n\n");
+			failureMsg.append("O campo Inventariado é obrigatório.\n\n");
 		}
 
 		if(this.court == JuridicalOrganization.NULL) {
