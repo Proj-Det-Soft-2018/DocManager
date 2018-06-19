@@ -109,7 +109,8 @@ public class JuridicalInterestedDaoJDBC implements InterestedDao {
 						resultSet.getLong("id"),
 						resultSet.getString("nome"),
 						resultSet.getString("cpf"),
-						resultSet.getString("contato"));
+						resultSet.getString("contato"),
+						resultSet.getString("email"));
 
 			}
 

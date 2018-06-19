@@ -16,13 +16,15 @@ import business.model.Interested;
 public class JuridicalInterested implements Interested {
 	private Long id;
 	private String name;
+	private int idade;
 	private String cpf;
 	private String contact;
 	private String email;
 	
-	public JuridicalInterested(Long id, String nome, String cpf, String contato, String email) {
+	public JuridicalInterested(Long id, String nome, int idade, String cpf, String contato, String email) {
 		this.id = id;
 		this.name = nome;
+		this.idade = idade;
 		this.cpf = cpf;
 		this.contact = contato;
 		this.email = email;
@@ -59,7 +61,14 @@ public class JuridicalInterested implements Interested {
 	public String getName() {
 		return name;
 	}
+	
+	public int getIdade() {
+		return idade;
+	}
 
+	public void setIdade(int idade) {
+		this.idade = idade;
+	}
 
 	/* (non-Javadoc)
 	 * @see business.model.Interested#setName(java.lang.String)
