@@ -18,18 +18,21 @@ public class JuridicalInterested implements Interested {
 	private String name;
 	private String cpf;
 	private String contact;
+	private String email;
 	
-	public JuridicalInterested(Long id, String nome, String cpf, String contato) {
+	public JuridicalInterested(Long id, String nome, String cpf, String contato, String email) {
 		this.id = id;
 		this.name = nome;
 		this.cpf = cpf;
 		this.contact = contato;
+		this.email = email;
 	}
 	
-	public JuridicalInterested(String nome, String cpf, String contato) {
+	public JuridicalInterested(String nome, String cpf, String contato, String email) {
 		this.name = nome;
 		this.cpf = cpf;
 		this.contact = contato;
+		this.email = email;
 	}
 	
 	/* (non-Javadoc)
@@ -111,7 +114,14 @@ public class JuridicalInterested implements Interested {
 	public void setContact(String contact){
 		this.contact = contact;
 	}
-
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	/* (non-Javadoc)
 	 * @see business.model.Interested#validate()
@@ -134,6 +144,9 @@ public class JuridicalInterested implements Interested {
 			failure = true;
 			failureMsg.append("O contato inserido está incompleto.\n\n");
 		}
+		
+    	//TODO fazer validação do email
+
 		
 		if(failure) {
 			failureMsg.delete(failureMsg.length() - 2, failureMsg.length());
