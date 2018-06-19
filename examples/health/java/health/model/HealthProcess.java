@@ -28,9 +28,9 @@ import business.model.Subject;
 @XmlRootElement(name="process")
 @XmlSeeAlso(HealthInterested.class)
 public class HealthProcess implements Process {
-	
-	private static final Logger logger = Logger.getLogger(HealthProcess.class);
-	
+
+	private static final Logger LOGGER = Logger.getLogger(HealthProcess.class);
+
 	private Long id;
 	private boolean oficio;
 	private String number;
@@ -52,7 +52,7 @@ public class HealthProcess implements Process {
 		this.number = number;
 		this.observation = observation;
 	}
-	
+
 	public HealthProcess(boolean tipoOficio, String number, Interested interested, Organization originEntity, Subject subject, Situation situation, String observation) {
 		this.oficio = tipoOficio;
 		this.number = number;
@@ -94,7 +94,7 @@ public class HealthProcess implements Process {
 	public void setTipoOficio(boolean oficio) {
 		this.oficio = oficio;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getType()
 	 */
@@ -115,7 +115,7 @@ public class HealthProcess implements Process {
 			return this.number.replaceAll("(\\d{5})(\\d{6})(\\d{4})(\\d{2})", "$1.$2/$3-$4");
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getNumber()
 	 */
@@ -130,7 +130,7 @@ public class HealthProcess implements Process {
 	public void setNumber(String number){
 		this.number = number;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getIntersted()
 	 */
@@ -146,7 +146,7 @@ public class HealthProcess implements Process {
 		this.interested = interested;
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getSubjectString()
 	 */
@@ -154,7 +154,7 @@ public class HealthProcess implements Process {
 	public String getSubjectString() {
 		return subject.getDescription();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getSubject()
 	 */
@@ -168,7 +168,7 @@ public class HealthProcess implements Process {
 	public void setSubjectById(int subjectId){
 		this.subject = HealthSubject.getSubjectById(subjectId);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getOriginEntityString()
 	 */
@@ -176,21 +176,21 @@ public class HealthProcess implements Process {
 	public String getOriginEntityString(){
 		return originEntity.getFullName();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getOriginEntity()
 	 */
 	public Organization getOriginEntity() {
 		return originEntity;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#setOriginEntityById(int)
 	 */
 	public void setOriginEntityById(int originEntityId){
 		this.originEntity = HealthOrganization.getOrganizationById(originEntityId);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getSituationString()
 	 */
@@ -198,7 +198,7 @@ public class HealthProcess implements Process {
 	public String getSituationString() {
 		return situation.getDescription();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getSituation()
 	 */
@@ -212,7 +212,7 @@ public class HealthProcess implements Process {
 	public void setSituationById(int situationId){
 		this.situation = HealthSituation.getSituationById(situationId);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getObservation()
 	 */
@@ -235,7 +235,7 @@ public class HealthProcess implements Process {
 	public void setRegistrationDate(LocalDateTime registrationDate) {
 		this.registrationDate = registrationDate;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getDispatchDate()
 	 */
@@ -255,47 +255,47 @@ public class HealthProcess implements Process {
 			throw new ValidationException("Verifique a Data e a Hora do seu computador.");
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#toXml()
 	 */
 	@Override
 	public String toXml() {
-		
+
 		StringWriter stringWriter = new StringWriter();
 		String xml = null;
-		
+
 		try {
 			// Conversão do Objeto para um XML
 			JAXBContext jaxbContext = JAXBContext.newInstance(this.getClass());
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
 			jaxbMarshaller.marshal(this, stringWriter);
-			
+
 			xml = stringWriter.toString();
 		} catch (JAXBException e) {
 			// TODO Mandar uma exception para o controller
-		    //ExceptionAlert.show("Não foi possível converter o objeto para XML!");
-			logger.error(e.getMessage(), e);
+			//ExceptionAlert.show("Não foi possível converter o objeto para XML!");
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			// Fecha o reader e o writer
 			try {
 				stringWriter.close();
 			} catch (IOException e) {
-			    // TODO Mandar uma exception para o controller
+				// TODO Mandar uma exception para o controller
 				//ExceptionAlert.show("Não foi possível encerrar os processos!");
-				logger.fatal(e.getMessage(), e);
+				LOGGER.fatal(e.getMessage(), e);
 			}
 		}
 		return xml;
 	}
-	
+
 	@Override
 	public void validate() throws ValidationException {
-		
+
 		StringBuilder failureMsg = new StringBuilder();
 		boolean failure = false;
-		
+
 		if(this.oficio == true) {
 			if(number.length() < 8) {
 				failure = true;
@@ -314,27 +314,27 @@ public class HealthProcess implements Process {
 				failureMsg.append("O número digitado é inválido.\n\n");
 			}
 		}
-		
+
 		if (this.interested == null) {
-		    failure = true;
-            failureMsg.append("O campo Interessado é obrigatório.\n\n");
+			failure = true;
+			failureMsg.append("O campo Interessado é obrigatório.\n\n");
 		}
-		
+
 		if(this.originEntity == HealthOrganization.NULL) {
 			failure = true;
 			failureMsg.append("O campo Orgão é obrigatório.\n\n");
 		}
-		
+
 		if(this.subject == HealthSubject.NULL) {
 			failure = true;
 			failureMsg.append("Campo assunto é obrigatório.\n\n");
 		}
-		
+
 		if(this.situation == HealthSituation.NULL) {
 			failure = true;
 			failureMsg.append("O campo Situação é obrigatório.\n\n");
 		}
-		
+
 		if(failure) {
 			failureMsg.delete(failureMsg.length() - 2, failureMsg.length());
 			throw new ValidationException(failureMsg.toString());
