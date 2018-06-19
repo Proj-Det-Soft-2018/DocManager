@@ -18,14 +18,10 @@ import business.model.Organization;
 import business.model.Process;
 import business.model.Situation;
 import business.model.Subject;
-import health.model.HealthInterested;
-import health.model.HealthOrganization;
-import health.model.HealthProcess;
-import health.model.HealthSituation;
-import health.model.HealthSubject;
+
 
 public class JuridicalProcess implements Process {
-	private static Logger LOGGER = Logger.getLogger(HealthProcess.class);
+	private static Logger LOGGER = Logger.getLogger(JuridicalProcess.class);
 
 	private Long id;
 	private String number;
