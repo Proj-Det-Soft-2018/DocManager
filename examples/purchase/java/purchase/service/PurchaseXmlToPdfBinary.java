@@ -6,12 +6,11 @@ import org.apache.log4j.Logger;
 
 import business.service.ConcreteProcessService;
 import business.service.XmlToPdfBinary;
-import health.service.HealthXmlToPdfBinary;
 
 public class PurchaseXmlToPdfBinary extends XmlToPdfBinary {
 	
 	private static final URL FO_TEMPLATE_PATH = ConcreteProcessService.class.getResource("/fo_templates/purchase_xml2fo.xsl");
-	private static final Logger LOGGER = Logger.getLogger(HealthXmlToPdfBinary.class);
+	private static final Logger LOGGER = Logger.getLogger(PurchaseXmlToPdfBinary.class);
 	
 	public PurchaseXmlToPdfBinary() {
 		super(LOGGER);
