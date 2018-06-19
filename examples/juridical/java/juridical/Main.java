@@ -1,4 +1,4 @@
-package juridiral;
+package juridical;
 
 public class Main {
 
