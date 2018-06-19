@@ -48,7 +48,7 @@
 						<Label text="Nome Resp.*:" GridPane.rowIndex="2" />
 						<Label text="CPF Respons.*:" GridPane.rowIndex="3" />
 						<Label text="Contato:" GridPane.rowIndex="4" />
-						<Label fx:id="lblTxtCpf" GridPane.columnIndex="1" />
+						<Label fx:id="lblCnpj" GridPane.columnIndex="1" />
 						<TextField fx:id="txtBusinessName" GridPane.columnIndex="1"
 							GridPane.rowIndex="1" />
 						<TextField fx:id="txtLiableName" GridPane.columnIndex="1"

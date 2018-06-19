@@ -56,7 +56,7 @@ public class PurchaseInterested implements Interested {
 	}
 
 	@XmlElement(name="liable-cpf")
-	public String getFormatedCpf() {
+	public String getFormatedLiableCpf() {
 		return liableCpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
 	}
 
