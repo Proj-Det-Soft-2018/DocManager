@@ -5,9 +5,18 @@ import javax.xml.bind.annotation.XmlElement;
 import business.exception.ValidationException;
 
 public class Lawyer {
+	private Long id;
 	private String name;
 	private String oab;
 	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Lawyer(String name, String oab) {
 		super();
 		this.name = name;

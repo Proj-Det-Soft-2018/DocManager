@@ -40,7 +40,7 @@ public class Inventoried implements Interested {
 		this.name = nome;
 		this.cpf = cpf;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		this.dateOfDeath = LocalDate.parse(dateOfDeath, formatter);
+		this.dateOfDeath = LocalDate.parse(dateOfDeath.toString(), formatter);
 	}
 	
 	/* (non-Javadoc)

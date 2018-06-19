@@ -89,6 +89,35 @@ public class PurchaseInterested implements Interested {
 
 	@Override
 	public void validate() throws ValidationException {
-		// TODO Auto-generated method stub
+		StringBuilder failureMsg = new StringBuilder();
+		boolean failure = false;
+		
+		if(this.businessName == null || this.businessName.isEmpty()) {
+			failure = true;
+			failureMsg.append("O campo Razão Social não pode ser vazio.\n\n");
+		}
+		else if(!this.businessName.matches("[a-zA-Z\\s]+")) {
+			failure = true;
+			failureMsg.append("O campo Razão Social deve conter apenas letras.\n\n");
+		}
+		
+		if(this.liableName == null || this.liableName.isEmpty()) {
+			failure = true;
+			failureMsg.append("O campo Nome não pode ser vazio.\n\n");
+		}
+		else if(!this.liableName.matches("[a-zA-Z\\s]+")) {
+			failure = true;
+			failureMsg.append("O campo Nome deve conter apenas letras.\n\n");
+		}
+		
+		if(this.contact == null || (!this.contact.isEmpty() && this.contact.length() < 10)){
+			failure = true;
+			failureMsg.append("O contato inserido está incompleto.\n\n");
+		}
+		
+		if(failure) {
+			failureMsg.delete(failureMsg.length() - 2, failureMsg.length());
+			throw new ValidationException(failureMsg.toString());
+		}
 	}
 }

@@ -78,7 +78,7 @@ public class PurchaseProcess implements Process {
 	public void setInterested(Interested interested) {
 		this.interested = interested;
 	}
-	
+
 	public Subject getSubject() {
 		return subject;
 	}
@@ -168,7 +168,39 @@ public class PurchaseProcess implements Process {
 
 	@Override
 	public void validate() throws ValidationException {
-		// TODO Auto-generated method stub
+		StringBuilder failureMsg = new StringBuilder();
+		boolean failure = false;
+		
+
+		if(!(number.length() == 17) || !(number.matches("[0-9]+"))) {
+			failure = true;
+			failureMsg.append("O número digitado é inválido.\n\n");
+		}
+
+		if (this.interested == null) {
+			failure = true;
+			failureMsg.append("O campo Interessado é obrigatório.\n\n");
+		}
+
+		if(this.originEntity == PurchaseOrganization.NULL) {
+			failure = true;
+			failureMsg.append("O campo Orgão é obrigatório.\n\n");
+		}
+
+		if(this.subject == PurchaseSubject.NULL) {
+			failure = true;
+			failureMsg.append("Campo assunto é obrigatório.\n\n");
+		}
+
+		if(this.situation == PurchaseSituation.NULL) {
+			failure = true;
+			failureMsg.append("O campo Situação é obrigatório.\n\n");
+		}
+
+		if(failure) {
+			failureMsg.delete(failureMsg.length() - 2, failureMsg.length());
+			throw new ValidationException(failureMsg.toString());
+		}
 
 	}
 

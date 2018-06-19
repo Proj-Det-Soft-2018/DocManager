@@ -44,10 +44,8 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 			statement.setLong(3, juridicalProcess.getJudge().getId());
 			statement.setInt(4, juridicalProcess.getSituation().getId());
 			statement.setInt(5, juridicalProcess.getCourt().getId());
-			//TODO implementar lawyer
-			//statement.setInt(6, juridicalProcess.getLawyer().getId());
-			//TODO implementar inventoried
-			//statement.setLong(7, juridicalProcess.getInventoried().getId());
+			statement.setLong(6, juridicalProcess.getLawyer().getId());
+			statement.setLong(7, juridicalProcess.getInventoried().getId());
 			statement.setString(8, juridicalProcess.getObservation());
 
 			//Definindo data de entrada no banco de dados
@@ -91,10 +89,8 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 			statement.setInt(3, juridicalProcess.getJudge().getId());
 			statement.setInt(4, juridicalProcess.getSituation().getId());
 			statement.setInt(5, juridicalProcess.getCourt().getId());
-			//TODO implementar lawyer
-			//statement.setLong(6, juridicalProcess.getLawyer().getId());
-			//TODO implementar inventoried
-			//statement.getLong(7, juridicalProcess.getInventoried().getId());
+			statement.setLong(6, juridicalProcess.getLawyer().getId());
+			statement.setLong(7, juridicalProcess.getInventoried().getId());
 			statement.setString(8, juridicalProcess.getObservation());
 
 			//setando id do processo a ser modificado
@@ -134,18 +130,18 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 	@Override
 	public List<Process> getAllProcessesByPriority() throws DatabaseException {
 		//TODO ordem de busca
-				int situationId = JuridicalSituation.NULL.getId();
-				String sql = "WHERE situacao != "+situationId+
-						" ORDER BY data_entrada ASC" +
-						" LIMIT 50";
-				List<Process> intermediaryList = pullProcessList(sql);
-				if (intermediaryList.size() < 50) {
-					sql = "WHERE situacao = "+situationId+
-							" ORDER BY data_entrada DESC"+
-							" LIMIT "+(50 - intermediaryList.size());
-					intermediaryList.addAll(pullProcessList(sql));
-				}
-				return intermediaryList;
+		int situationId = JuridicalSituation.NULL.getId();
+		String sql = "WHERE situacao != "+situationId+
+				" ORDER BY data_entrada ASC" +
+				" LIMIT 50";
+		List<Process> intermediaryList = pullProcessList(sql);
+		if (intermediaryList.size() < 50) {
+			sql = "WHERE situacao = "+situationId+
+					" ORDER BY data_entrada DESC"+
+					" LIMIT "+(50 - intermediaryList.size());
+			intermediaryList.addAll(pullProcessList(sql));
+		}
+		return intermediaryList;
 	}
 
 	@Override
@@ -156,46 +152,45 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 
 	@Override
 	public List<Process> searchAll(Search searchData) throws DatabaseException {
-		
+
 		JuridicalProcessSearch search = (JuridicalProcessSearch) searchData;
 		StringBuilder sql = new StringBuilder("WHERE ");
 		final String AND = " AND ";
 		//TODO implementar juridicalprocesssearch
-		/*
+		
 		String number = search.getNumber();
 		if (number != null && !number.equalsIgnoreCase("")) {
 			sql.append("numero LIKE '"+number+"' AND ");
 		}
-		
-		String name = search.getName();
+
+		String name = search.getInventorian();
 		if (name != null && !name.equalsIgnoreCase("")) {
 			sql.append("nome LIKE '%"+name+"%' AND ");
 		}
-		
+
 		String cpf = search.getCpf();
 		if (cpf != null && !cpf.equalsIgnoreCase("")) {
 			sql.append("cpf= '"+cpf+"' AND ");
 		}
-		
-		int organizationId = search.getOrganizationId();
+
+		int organizationId = search.getCourtId();
 		if (organizationId != 0) {
 			sql.append("orgao_origem="+organizationId+AND);
 		}
-		
-		int subjectId = search.getSubjectId();
+
+		int subjectId = search.getJudgeId();
 		if (subjectId != 0) {
 			sql.append("assunto="+subjectId+AND);
 		}
-		
+
 		int situationId = search.getSituationId();
 		if (situationId != 0) {
 			sql.append("situacao="+situationId);
 		} else {
 			sql.delete(sql.lastIndexOf(AND), sql.length());
 		}
-		//*/
 		return this.pullProcessList(sql.toString());
-		
+
 	}
 
 	private List<Process> pullProcessList(String whereStament) throws DatabaseException {
@@ -262,13 +257,13 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 					LocalDateTime dispatchDate = jdbcDispatchStamp.toLocalDateTime();
 					process.setDispatchDate(dispatchDate);
 				}
-				*/
+				 */
 				processList.add(process);
 
 			}
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível buscar o processo no Banco.", e);
-		//} catch (ValidationException e) {
+			//} catch (ValidationException e) {
 			//throw new DatabaseException("Banco corrompido!", e);
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
