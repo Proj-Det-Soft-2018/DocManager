@@ -46,12 +46,9 @@ public class JuridicalProcess implements Process {
 			Organization court, Subject judge, Situation situation, 
 			Lawyer lawyer, Inventoried inventoried, String observation) {
 		this.number = number;
-		this.inventorian = inventorian;
 		this.court = court;
 		this.judge = judge;
 		this.situation = situation;
-		this.lawyer = lawyer;
-		this.inventoried = inventoried;
 		this.observation = observation;
 	}
 

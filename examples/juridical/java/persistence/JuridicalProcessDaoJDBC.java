@@ -15,7 +15,10 @@ import business.exception.ValidationException;
 import business.model.Interested;
 import business.model.Process;
 import business.model.Search;
+import juridical.model.Inventoried;
 import juridical.model.JuridicalInterested;
+import juridical.model.JuridicalJudge;
+import juridical.model.JuridicalOrganization;
 import juridical.model.JuridicalProcess;
 import juridical.model.JuridicalProcessSearch;
 import juridical.model.JuridicalSituation;
@@ -198,6 +201,7 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
+		//TODO JOIN NAS PROVAVEIS NOVAS TABELAS
 		String query = "SELECT * "
 				+ "FROM processos p "
 				+ "INNER JOIN interessados i "
@@ -221,25 +225,22 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 						resultSet.getString("nome"),
 						resultSet.getString("cpf"),
 						resultSet.getString("contato"));
+				
+				//TODO ajustar nome nas tabelas
+				Inventoried inventoried = new Inventoried(
+						resultSet.getString("nome"),
+						resultSet.getString("cpf"),
+						resultSet.getDate("data_obito").toString());
 
 				//criando o objeto Processo
 				JuridicalProcess process = new JuridicalProcess();
-				//TODO criar os setbyid
-				/*
-				resultSet.getString("numero"),
-				resultSet.getLong("id_interessado"),
-				resultSet.getInt("orgao_origem"),
-				resultSet.getInt("assunto"),
-				resultSet.getInt("situacao"),
-				resultSet.getInt("id_advogado"),
-				resultSet.getInt("id_inventariado"),
-				resultSet.getString("observacao"));
-				process.setInterested(interested);
-
-				//falta resolver unidade destino /orgao_saida, se vai ter ou não
-				process.setSubjectById(resultSet.getInt("assunto"));
-				process.setOriginEntityById(resultSet.getInt("orgao_origem"));
-				process.setSituationById(resultSet.getInt("situacao"));
+				process.setNumber(resultSet.getString("numero"));
+				process.setCourt(JuridicalOrganization.getOrganizationById(resultSet.getInt("orgao_origem")));
+				process.setJudge(JuridicalJudge.getSubjectById(resultSet.getInt("assunto")));
+				process.setSituation(JuridicalSituation.getSituationById(resultSet.getInt("situacao")));
+				process.setObservation(resultSet.getString("observacao"));
+				process.setInventorian(interested);
+				process.setInventoried(inventoried);
 
 
 				//Convertendo data entrada de java.sql.Date para LocalDateTime
@@ -249,22 +250,11 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 					LocalDateTime registrationDate = jdbcRegistrationStamp.toLocalDateTime();
 					process.setRegistrationDate(registrationDate);
 				}
-
-				//Convertendo data Saida de java.sql.Date para LocalDateTime
-				Date jdbcDispatchDate = resultSet.getDate("data_saida");
-				if(jdbcDispatchDate != null) {
-					Timestamp jdbcDispatchStamp = new Timestamp(resultSet.getDate("data_saida").getTime());
-					LocalDateTime dispatchDate = jdbcDispatchStamp.toLocalDateTime();
-					process.setDispatchDate(dispatchDate);
-				}
-				 */
 				processList.add(process);
 
 			}
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível buscar o processo no Banco.", e);
-			//} catch (ValidationException e) {
-			//throw new DatabaseException("Banco corrompido!", e);
 		}finally {
 			ConnectionFactory.closeConnection(connection, statement, resultSet);
 		}
