@@ -15,7 +15,7 @@ import business.exception.ValidationException;
 import business.model.Interested;
 import business.model.Process;
 import business.model.Search;
-import juridical.model.Inventoried;
+import health.persistence.ConnectionFactory;
 import juridical.model.JuridicalInterested;
 import juridical.model.JuridicalJudge;
 import juridical.model.JuridicalOrganization;
@@ -47,8 +47,8 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 			statement.setLong(3, juridicalProcess.getJudge().getId());
 			statement.setInt(4, juridicalProcess.getSituation().getId());
 			statement.setInt(5, juridicalProcess.getCourt().getId());
-			statement.setLong(6, juridicalProcess.getLawyer().getId());
-			statement.setLong(7, juridicalProcess.getInventoried().getId());
+			statement.setString(6, juridicalProcess.getLawyerName());
+			statement.setString(7, juridicalProcess.getInventoriedName());
 			statement.setString(8, juridicalProcess.getObservation());
 
 			//Definindo data de entrada no banco de dados
@@ -92,8 +92,8 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 			statement.setInt(3, juridicalProcess.getJudge().getId());
 			statement.setInt(4, juridicalProcess.getSituation().getId());
 			statement.setInt(5, juridicalProcess.getCourt().getId());
-			statement.setLong(6, juridicalProcess.getLawyer().getId());
-			statement.setLong(7, juridicalProcess.getInventoried().getId());
+			statement.setString(6, juridicalProcess.getLawyerName());
+			statement.setString(7, juridicalProcess.getInventoriedName());
 			statement.setString(8, juridicalProcess.getObservation());
 
 			//setando id do processo a ser modificado
@@ -201,7 +201,6 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
-		//TODO JOIN NAS PROVAVEIS NOVAS TABELAS
 		String query = "SELECT * "
 				+ "FROM processos p "
 				+ "INNER JOIN interessados i "
@@ -226,12 +225,6 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 						resultSet.getString("cpf"),
 						resultSet.getString("contato"));
 				
-				//TODO ajustar nome nas tabelas
-				Inventoried inventoried = new Inventoried(
-						resultSet.getString("nome"),
-						resultSet.getString("cpf"),
-						resultSet.getDate("data_obito").toString());
-
 				//criando o objeto Processo
 				JuridicalProcess process = new JuridicalProcess();
 				process.setNumber(resultSet.getString("numero"));
@@ -240,7 +233,8 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 				process.setSituation(JuridicalSituation.getSituationById(resultSet.getInt("situacao")));
 				process.setObservation(resultSet.getString("observacao"));
 				process.setInventorian(interested);
-				process.setInventoried(inventoried);
+				process.setInventoriedName(resultSet.getString("inventoried"));
+				process.setLawyerName(resultSet.getString("lawyer"));
 
 
 				//Convertendo data entrada de java.sql.Date para LocalDateTime

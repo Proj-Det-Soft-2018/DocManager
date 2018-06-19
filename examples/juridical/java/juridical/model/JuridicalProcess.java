@@ -33,6 +33,8 @@ public class JuridicalProcess implements Process {
 	private String inventoriedName;
 	private String observation;
 	private LocalDateTime registrationDate; //Hora registro do processo no banco
+	
+	public JuridicalProcess() {	}
 
 	public JuridicalProcess(Long id, String number,  String observation) {
 		this.id = id;
@@ -47,8 +49,8 @@ public class JuridicalProcess implements Process {
 		this.court = court;
 		this.judge = judge;
 		this.situation = situation;
-		this.lawyer = lawyer;
-		this.inventoried = inventoried;
+		this.lawyerName = lawyerName;
+		this.inventoriedName = inventoriedName;
 		this.observation = observation;
 	}
 
@@ -160,6 +162,9 @@ public class JuridicalProcess implements Process {
 		return inventoriedName;
 	}
 
+	public void setInventoriedName(String inventoriedName) {
+		this.inventoriedName = inventoriedName;
+	}
 
 	/* (non-Javadoc)
 	 * @see business.model.Process#getSituationString()
