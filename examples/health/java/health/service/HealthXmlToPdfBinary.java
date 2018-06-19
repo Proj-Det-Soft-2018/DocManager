@@ -24,8 +24,6 @@ public class HealthXmlToPdfBinary extends XmlToPdfBinary {
 	@Override
 	protected String getXslFolderPath() {
 		String path = FO_TEMPLATE_PATH.getPath();
-		String folderPath = "file://" + path.substring(0, path.lastIndexOf("/fo_templates/xml2fo.xsl"));
-		return folderPath;
+		return "file://" + path.substring(0, path.lastIndexOf("/fo_templates/xml2fo.xsl"));
 	}
-
 }

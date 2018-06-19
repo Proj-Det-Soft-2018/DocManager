@@ -18,10 +18,10 @@ import business.model.Organization;
 import business.model.Process;
 import business.model.Situation;
 import business.model.Subject;
-import health.model.HealthProcess;
+
 
 public class JuridicalProcess implements Process {
-	private static Logger LOGGER = Logger.getLogger(HealthProcess.class);
+	private static Logger LOGGER = Logger.getLogger(JuridicalProcess.class);
 
 	private Long id;
 	private String number;
@@ -44,12 +44,11 @@ public class JuridicalProcess implements Process {
 			Organization court, Subject judge, Situation situation, 
 			String lawyerName, String inventoriedName, String observation) {
 		this.number = number;
-		this.inventorian = inventorian;
 		this.court = court;
 		this.judge = judge;
 		this.situation = situation;
-		this.lawyerName = lawyerName;
-		this.inventoriedName = inventoriedName;
+		this.lawyer = lawyer;
+		this.inventoried = inventoried;
 		this.observation = observation;
 	}
 
