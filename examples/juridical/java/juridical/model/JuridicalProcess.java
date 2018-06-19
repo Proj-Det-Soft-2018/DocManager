@@ -18,11 +18,7 @@ import business.model.Organization;
 import business.model.Process;
 import business.model.Situation;
 import business.model.Subject;
-import health.model.HealthInterested;
-import health.model.HealthOrganization;
 import health.model.HealthProcess;
-import health.model.HealthSituation;
-import health.model.HealthSubject;
 
 public class JuridicalProcess implements Process {
 	private static Logger LOGGER = Logger.getLogger(HealthProcess.class);
@@ -33,13 +29,11 @@ public class JuridicalProcess implements Process {
 	private Subject judge; //Ta bizarro
 	private Organization court;
 	private Situation situation;
-	private Lawyer lawyer;
-	private Inventoried inventoried;
+	private String lawyerName;
+	private String inventoriedName;
 	private String observation;
 	private LocalDateTime registrationDate; //Hora registro do processo no banco
 
-	public JuridicalProcess() {}
-	
 	public JuridicalProcess(Long id, String number,  String observation) {
 		this.id = id;
 		this.number = number;
@@ -48,18 +42,18 @@ public class JuridicalProcess implements Process {
 
 	public JuridicalProcess(String number, Interested inventorian, 
 			Organization court, Subject judge, Situation situation, 
-			Lawyer lawyer, Inventoried inventoried, String observation) {
+			String lawyerName, String inventoriedName, String observation) {
 		this.number = number;
 		this.inventorian = inventorian;
 		this.court = court;
 		this.judge = judge;
 		this.situation = situation;
-		this.lawyer = lawyer;
-		this.inventoried = inventoried;
+		this.lawyerName = lawyerName;
+		this.inventoriedName = inventoriedName;
 		this.observation = observation;
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getId()
 	 */
@@ -76,7 +70,7 @@ public class JuridicalProcess implements Process {
 	public void setId(Long processId) {
 		this.id = processId;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getFormattedNumber()
 	 */
@@ -99,7 +93,7 @@ public class JuridicalProcess implements Process {
 	public void setNumber(String number){
 		this.number = number;
 	}
-	
+
 	/**
 	 * @return the inventorian
 	 */
@@ -147,33 +141,27 @@ public class JuridicalProcess implements Process {
 	}
 
 	/**
-	 * @return the lawyer
+	 * @return the lawyerName
 	 */
-	public Lawyer getLawyer() {
-		return lawyer;
+	public String getLawyerName() {
+		return lawyerName;
 	}
 
 	/**
-	 * @param lawyer the lawyer to set
+	 * @param lawyerName the lawyerName to set
 	 */
-	public void setLawyer(Lawyer lawyer) {
-		this.lawyer = lawyer;
+	public void setLawyerName(String lawyerName) {
+		this.lawyerName = lawyerName;
 	}
 
 	/**
-	 * @return the inventoried
+	 * @return the inventoriedName
 	 */
-	public Inventoried getInventoried() {
-		return inventoried;
+	public String getInventoriedName() {
+		return inventoriedName;
 	}
 
-	/**
-	 * @param inventoried the inventoried to set
-	 */
-	public void setInventoried(Inventoried inventoried) {
-		this.inventoried = inventoried;
-	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getSituationString()
 	 */
@@ -181,14 +169,14 @@ public class JuridicalProcess implements Process {
 	public String getSituationString() {
 		return situation.getDescription();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getSituation()
 	 */
 	public Situation getSituation() {
 		return situation;
 	}
-	
+
 	/**
 	 * @param situation the situation to set
 	 */
@@ -196,7 +184,7 @@ public class JuridicalProcess implements Process {
 		this.situation = situation;
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see business.model.Process#getObservation()
 	 */
@@ -204,7 +192,7 @@ public class JuridicalProcess implements Process {
 	public String getObservation() {
 		return observation;
 	}
-	
+
 	/**
 	 * @param observation the observation to set
 	 */
@@ -267,27 +255,32 @@ public class JuridicalProcess implements Process {
 		StringBuilder failureMsg = new StringBuilder();
 		boolean failure = false;
 
-		
+
 		if(!(number.length() == 17) || !(number.matches("[0-9]+"))) {
 			failure = true;
 			failureMsg.append("O número do processo digitado é inválido.\n\n");
 		}
-		
 
-		if (this.inventorian == null) {
+
+		if(this.lawyerName == null || this.lawyerName.isEmpty()) {
 			failure = true;
-			failureMsg.append("O campo Inventariante é obrigatório.\n\n");
+			failureMsg.append("O campo Nome do Advogado não pode ser vazio.\n\n");
 		}
-		
-		if(this.lawyer == null) {
+		else if(!this.lawyerName.matches("[a-zA-Z\\s]+")) {
 			failure = true;
-			failureMsg.append("O campo Advogado é obrigatório.\n\n");
+			failureMsg.append("O campo Nome do Advogado deve conter apenas letras.\n\n");
 		}
-		
-		if(this.inventoried == null) {
+
+		if(this.inventoriedName == null || this.inventoriedName.isEmpty()) {
 			failure = true;
-			failureMsg.append("O campo Inventariado é obrigatório.\n\n");
+			failureMsg.append("O campo Nome do Inventariado não pode ser vazio.\n\n");
 		}
+		else if(!this.inventoriedName.matches("[a-zA-Z\\s]+")) {
+			failure = true;
+			failureMsg.append("O campo Nome do Inventariado deve conter apenas letras.\n\n");
+		}
+
+
 
 		if(this.court == JuridicalOrganization.NULL) {
 			failure = true;
