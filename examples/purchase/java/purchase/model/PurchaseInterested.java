@@ -56,7 +56,7 @@ public class PurchaseInterested implements Interested {
 	}
 
 	@XmlElement(name="liable-cpf")
-	public String getFormatedCpf() {
+	public String getFormatedLiableCpf() {
 		return liableCpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
 	}
 
@@ -101,13 +101,17 @@ public class PurchaseInterested implements Interested {
 			failureMsg.append("O campo Razão Social deve conter apenas letras.\n\n");
 		}
 		
+		if(liableCpf == null || liableCpf.length() != 11) {
+            throw new ValidationException("O campo cpf do responsável não pode ser vazio.\n\n");
+        }
+		
 		if(this.liableName == null || this.liableName.isEmpty()) {
 			failure = true;
-			failureMsg.append("O campo Nome não pode ser vazio.\n\n");
+			failureMsg.append("O campo Nome do Responsável não pode ser vazio.\n\n");
 		}
 		else if(!this.liableName.matches("[a-zA-Z\\s]+")) {
 			failure = true;
-			failureMsg.append("O campo Nome deve conter apenas letras.\n\n");
+			failureMsg.append("O campo Nome do Responsável deve conter apenas letras.\n\n");
 		}
 		
 		if(this.contact == null || (!this.contact.isEmpty() && this.contact.length() < 10)){

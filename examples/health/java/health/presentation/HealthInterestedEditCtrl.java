@@ -60,7 +60,11 @@ public class HealthInterestedEditCtrl extends InterestedEditCtrl {
 	
 	@Override
 	protected Interested mountInterested() {
-		return new HealthInterested(txtName.getText(), ((HealthInterested)super.interested).getCpf(), txtContact.plainTextProperty().getValue());
+		return new HealthInterested(
+				txtName.getText(),
+				((HealthInterested)super.interested).getCpf(),
+				txtContact.plainTextProperty().getValue()
+				);
 	}
 
 	@Override

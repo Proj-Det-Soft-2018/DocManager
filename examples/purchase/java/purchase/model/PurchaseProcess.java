@@ -151,7 +151,6 @@ public class PurchaseProcess implements Process {
 			xml = stringWriter.toString();
 		} catch (JAXBException e) {
 			// TODO Mandar uma exception para o controller
-			//ExceptionAlert.show("Não foi possível converter o objeto para XML!");
 			LOGGER.error(e.getMessage(), e);
 		} finally {
 			// Fecha o reader e o writer
@@ -159,7 +158,6 @@ public class PurchaseProcess implements Process {
 				stringWriter.close();
 			} catch (IOException e) {
 				// TODO Mandar uma exception para o controller
-				//ExceptionAlert.show("Não foi possível encerrar os processos!");
 				LOGGER.fatal(e.getMessage(), e);
 			}
 		}
@@ -170,13 +168,17 @@ public class PurchaseProcess implements Process {
 	public void validate() throws ValidationException {
 		StringBuilder failureMsg = new StringBuilder();
 		boolean failure = false;
-		
 
-		if(!(number.length() == 17) || !(number.matches("[0-9]+"))) {
-			failure = true;
-			failureMsg.append("O número digitado é inválido.\n\n");
+		if( number.length() != 17 || !(number.matches("[0-9]+"))) {
+				failure = true;
+				failureMsg.append("O número digitado é inválido.\n\n");
 		}
-
+		
+		if (description == null || description.isEmpty()) {
+			failure = true;
+			failureMsg.append("O campo Descrição é obrigatório.\n\n");
+		}
+		
 		if (this.interested == null) {
 			failure = true;
 			failureMsg.append("O campo Interessado é obrigatório.\n\n");
@@ -184,12 +186,12 @@ public class PurchaseProcess implements Process {
 
 		if(this.originEntity == PurchaseOrganization.NULL) {
 			failure = true;
-			failureMsg.append("O campo Orgão é obrigatório.\n\n");
+			failureMsg.append("O campo Unidade de Origem é obrigatório.\n\n");
 		}
 
 		if(this.subject == PurchaseSubject.NULL) {
 			failure = true;
-			failureMsg.append("Campo assunto é obrigatório.\n\n");
+			failureMsg.append("Campo Tipo de Material é obrigatório.\n\n");
 		}
 
 		if(this.situation == PurchaseSituation.NULL) {
