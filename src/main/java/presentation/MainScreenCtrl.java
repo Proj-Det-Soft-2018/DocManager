@@ -69,7 +69,7 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 			primaryStage.show();
 		} catch (IOException e) {
 			ExceptionAlert.show("Não foi possível gerar a tela!", primaryStage.sceneProperty().get().getWindow());
-			Logger.getLogger(HealthMainScreenCtrl.class).error(e.getMessage(), e);
+			Logger.getLogger(MainScreenCtrl.class).error(e.getMessage(), e);
 		}
 	}
 	
