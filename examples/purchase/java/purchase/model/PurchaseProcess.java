@@ -78,6 +78,10 @@ public class PurchaseProcess implements Process {
 	public void setInterested(Interested interested) {
 		this.interested = interested;
 	}
+	
+	public Subject getSubject() {
+		return subject;
+	}
 
 	@XmlElement(name="subject")
 	public String getSubjectString() {
