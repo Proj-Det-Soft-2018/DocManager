@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="1030.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
 	<padding>
 		<Insets bottom="15.0" left="15.0" right="15.0" top="20.0" />
 	</padding>
@@ -23,11 +23,11 @@
 				<Label layoutX="25.0" layoutY="27.0" styleClass="painel-titulo" stylesheets="@../fx_css/styles.css" text="Processos / Ofícios" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
 				<TableView fx:id="tabProcesses" layoutX="94.0" layoutY="60.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="15.0">
 					<columns>
-						<TableColumn fx:id="tabColumnType" editable="false" prefWidth="75.0" style="-fx-alignment: CENTER" text="Tipo" />
-						<TableColumn fx:id="tabColumnNumber" editable="false" prefWidth="196.0" style="-fx-alignment: CENTER" text="Número" />
-						<TableColumn fx:id="tabColumnInterested" editable="false" prefWidth="270.0" style="-fx-alignment: CENTER" text="Nome Interessado" />
-						<TableColumn fx:id="tabColumnSituation" editable="false" prefWidth="160.0" style="-fx-alignment: CENTER" text="Situação" />
-            <TableColumn fx:id="tabColumnRegDate" editable="false" prefWidth="95.0" style="-fx-alignment: CENTER" text="Entrada" />
+						<TableColumn fx:id="tabColumnNumber" editable="false" prefWidth="176.0" style="-fx-alignment: CENTER" text="Número" />
+						<TableColumn fx:id="tabColumnOriginEntity" editable="false" prefWidth="244.0" style="-fx-alignment: CENTER" text="Unidade Origem" />
+                  <TableColumn fx:id="tabColumnInterestedCnpj" editable="false" prefWidth="143.0" style="-fx-alignment: CENTER" text="CNPJ Fornecedor" />
+						<TableColumn fx:id="tabColumnSituation" editable="false" prefWidth="165.0" style="-fx-alignment: CENTER" text="Situação" />
+            <TableColumn fx:id="tabColumnRegDate" editable="false" prefWidth="89.0" style="-fx-alignment: CENTER" text="Entrada" />
 					</columns>
 				</TableView>
 			</children>
