@@ -8,36 +8,58 @@ import java.net.URL;
 import org.apache.log4j.Logger;
 
 import business.service.ProcessService;
-import health.presentation.HealthMainScreenCtrl;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.fxml.FXML;
+import javafx.scene.control.TableColumn;
+import juridical.model.JuridicalInterested;
+import juridical.model.JuridicalProcess;
+import presentation.utils.DateUtil;
 
 /**
  * @author clah
  *
  */
 public class JuridicalMainScreenCtrl extends MainScreenCtrl {
-	private static final Logger LOGGER = Logger.getLogger(HealthMainScreenCtrl.class);
+	
+	private static final URL FXML_PATH = JuridicalMainScreenCtrl.class.getResource("/visions/juridical_main_screen.fxml");
+	private static final Logger LOGGER = Logger.getLogger(JuridicalMainScreenCtrl.class);
+	
+	@FXML
+	private TableColumn<JuridicalProcess, String> tabColNumber;
+	
+	@FXML
+	private TableColumn<JuridicalProcess, String> tabColInterested;
+	
+	@FXML
+	private TableColumn<JuridicalProcess, String> tabColVara;
+
+	@FXML
+	private TableColumn<JuridicalProcess, String> tabColSituation;
+	
+	@FXML
+	private TableColumn<JuridicalProcess, String> tabColRegDate;
 	
 	protected JuridicalMainScreenCtrl(ProcessService processService, ControllerFactory controllerFactory) {
 		super(processService, controllerFactory, LOGGER);
-		
 	}
 
-	/* (non-Javadoc)
-	 * @see presentation.MainScreenCtrl#configureColumns()
-	 */
 	@Override
 	protected void configureColumns() {
-		// TODO Auto-generated method stub
-
+		tabColNumber.setCellValueFactory(
+				content -> new ReadOnlyStringWrapper(content.getValue().getFormattedNumber()));
+		tabColInterested.setCellValueFactory(
+				content -> new ReadOnlyStringWrapper(((JuridicalInterested)content.getValue().getInventorian()).getName()));
+		tabColVara.setCellValueFactory(
+				content -> new ReadOnlyStringWrapper(content.getValue().getCourt().getInitials()));
+		tabColSituation.setCellValueFactory(
+				content -> new ReadOnlyStringWrapper(content.getValue().getSituation().getDescription()));
+		tabColRegDate.setCellValueFactory(
+		        content -> new ReadOnlyStringWrapper(DateUtil.format(content.getValue().getRegistrationDate())));
 	}
 
-	/* (non-Javadoc)
-	 * @see presentation.MainScreenCtrl#getFxmlPath()
-	 */
 	@Override
 	public URL getFxmlPath() {
-		// TODO Auto-generated method stub
-		return null;
+		return FXML_PATH;
 	}
 
 }
