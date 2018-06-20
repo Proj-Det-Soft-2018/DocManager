@@ -23,6 +23,7 @@ import juridical.model.JuridicalProcess;
 import juridical.model.JuridicalProcessSearch;
 import juridical.model.JuridicalSituation;
 import persistence.exception.DatabaseException;
+import purchase.persistence.ConnectionFactory;
 
 public class JuridicalProcessDaoJDBC implements ProcessDao {
 

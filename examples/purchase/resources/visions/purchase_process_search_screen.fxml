@@ -115,12 +115,12 @@
 						<TableColumn fx:id="tabColNumber" editable="false"
 							prefWidth="182.0" style="-fx-alignment: CENTER" text="Número" />
 						<TableColumn fx:id="tabColOriginEntity" editable="false"
-							prefWidth="269.0" style="-fx-alignment: CENTER" text="Nome Interessado" />
+							prefWidth="269.0" style="-fx-alignment: CENTER" text="Unidade Origem" />
 						<TableColumn fx:id="tabColCnpj" editable="false"
 							prefWidth="116.0" style="-fx-alignment: CENTER" text="CNPJ Fornec." />
 						<TableColumn fx:id="tabColSituation" editable="false"
 							prefWidth="125.0" style="-fx-alignment: CENTER" text="Situação" />
-						<TableColumn fx:id="tabColumnRegDate" editable="false"
+						<TableColumn fx:id="tabColRegDate" editable="false"
 							prefWidth="95.0" style="-fx-alignment: CENTER" text="Entrada" />
 					</columns>
 				</TableView>

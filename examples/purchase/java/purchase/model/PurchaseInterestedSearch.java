@@ -14,11 +14,11 @@ public class PurchaseInterestedSearch implements Search {
         }
     }
 
-    public String getCpf() {
+    public String getCnpj() {
         return cnpj;
     }
 
-    public void setCpf(String cnpj) {
+    public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
 }

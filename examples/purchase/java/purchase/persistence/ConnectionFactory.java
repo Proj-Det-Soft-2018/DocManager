@@ -1,7 +1,7 @@
 /**
  * 
  */
-package persistence;
+package purchase.persistence;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,9 +14,9 @@ import persistence.exception.DatabaseException;
 public class ConnectionFactory {
 	
 	public static Connection getConnection() throws DatabaseException {
-		String driver = "jdbc:mysql://localhost/purchase";
+		String driver = "jdbc:mysql://localhost/docmanager";
 		String user = "root";
-		String pass = "allan";
+		String pass = System.getenv("DATABASE_PASSWORD");
 		
 		try {
 			return DriverManager.getConnection(driver,user,pass);

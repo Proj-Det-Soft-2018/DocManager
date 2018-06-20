@@ -10,6 +10,7 @@ import business.model.Search;
 import juridical.model.JuridicalInterested;
 import juridical.model.JuridicalInterestedSearch;
 import persistence.exception.DatabaseException;
+import purchase.persistence.ConnectionFactory;
 
 public class JuridicalInterestedDaoJDBC implements InterestedDao {
 

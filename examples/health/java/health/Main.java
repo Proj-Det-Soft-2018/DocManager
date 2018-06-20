@@ -47,12 +47,12 @@ public class Main extends Application {
 				HealthSubject.getAll(),
 				HealthSituation.getAll());
 
-		ControllerFactory hcf = new HealthControllerFactory(
+		ControllerFactory controllerFactory = new HealthControllerFactory(
 				processService,
 				interestedService,
 				listService,
 				statisticService);
 
-		MainScreenCtrl.showMainScreen(primaryStage, hcf.createMainScreenCtrl());
+		MainScreenCtrl.showMainScreen(primaryStage, controllerFactory.createMainScreenCtrl());
 	}
 }

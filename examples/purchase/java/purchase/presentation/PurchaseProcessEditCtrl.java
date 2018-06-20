@@ -136,7 +136,7 @@ public class PurchaseProcessEditCtrl extends ProcessEditCtrl {
 	@Override
 	protected Search mountSearch() {
         PurchaseInterestedSearch search = new PurchaseInterestedSearch();
-        search.setCpf(txtCnpjInterested.plainTextProperty().getValue());
+        search.setCnpj(txtCnpjInterested.plainTextProperty().getValue());
         return search; 
     }
 

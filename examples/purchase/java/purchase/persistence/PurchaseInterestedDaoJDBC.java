@@ -1,4 +1,4 @@
-package persistence;
+package purchase.persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,26 +7,29 @@ import java.sql.SQLException;
 
 import business.model.Interested;
 import business.model.Search;
+import persistence.InterestedDao;
 import persistence.exception.DatabaseException;
 import purchase.model.PurchaseInterested;
+import purchase.model.PurchaseInterestedSearch;
 
 public class PurchaseInterestedDaoJDBC implements InterestedDao{
 
 	public void save(Interested interested) throws DatabaseException {
 		PurchaseInterested purchaseInterested = (PurchaseInterested)interested;
-		String sql = "INSERT INTO fornecedores " +
-				"(cnpj,nome,cpf,contato)" +
-				" VALUES (?,?,?,?)";
+		String sql = "INSERT INTO interessados_compra " +
+				"(cnpj, razao,nome_resp,cpf_resp,contato)" +
+				" VALUES (?,?,?,?,?)";
 
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
 			connection = ConnectionFactory.getConnection();
 			statement = connection.prepareStatement(sql);
-			statement.setString(1, purchaseInterested.getCnpj());
-			statement.setString(2,purchaseInterested.getLiableName());
-			statement.setString(3,purchaseInterested.getLiableCpf());
-			statement.setString(4,purchaseInterested.getContact());
+			statement.setString(1,purchaseInterested.getCnpj());
+			statement.setString(2,purchaseInterested.getBusinessName());
+			statement.setString(3,purchaseInterested.getLiableName());
+			statement.setString(4,purchaseInterested.getLiableCpf());
+			statement.setString(5,purchaseInterested.getContact());
 
 			statement.executeUpdate();
 
@@ -41,8 +44,8 @@ public class PurchaseInterestedDaoJDBC implements InterestedDao{
 
 	public void update(Interested interested) throws DatabaseException {
 		PurchaseInterested purchaseInterested = (PurchaseInterested)interested;
-		String sql = "UPDATE fornecedores " +
-				"SET cnpj=?, nome=?, cpj=? contato=? " +
+		String sql = "UPDATE interessados_compra " +
+				"SET cnpj=?, razao=?, nome_resp=?, cpf_resp=?, contato=? " +
 				"WHERE id=?";
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -51,10 +54,11 @@ public class PurchaseInterestedDaoJDBC implements InterestedDao{
 			statement = connection.prepareStatement(sql);
 
 			statement.setString(1, purchaseInterested.getCnpj());
-			statement.setString(2, purchaseInterested.getLiableName());
-			statement.setString(3, purchaseInterested.getLiableCpf());
-			statement.setString(4, purchaseInterested.getContact());
-			statement.setLong(5, purchaseInterested.getId());
+			statement.setString(2, purchaseInterested.getBusinessName());
+			statement.setString(3, purchaseInterested.getLiableName());
+			statement.setString(4, purchaseInterested.getLiableCpf());
+			statement.setString(5, purchaseInterested.getContact());
+			statement.setLong(6, purchaseInterested.getId());
 
 			statement.executeUpdate();
 
@@ -71,7 +75,7 @@ public class PurchaseInterestedDaoJDBC implements InterestedDao{
 		PreparedStatement statement = null;
 		try {
 			connection = ConnectionFactory.getConnection();
-			statement = connection.prepareStatement("DELETE FROM fornecedores WHERE id=?");
+			statement = connection.prepareStatement("DELETE FROM interessados_compra WHERE id=?");
 			statement.setLong(1, interested.getId());
 			statement.executeUpdate();
 
@@ -83,7 +87,7 @@ public class PurchaseInterestedDaoJDBC implements InterestedDao{
 	}
 
 	public Interested search(Search searchData) throws DatabaseException {
-		PurchaseInterested search = (PurchaseInterested) searchData;
+		PurchaseInterestedSearch search = (PurchaseInterestedSearch) searchData;
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
@@ -91,7 +95,7 @@ public class PurchaseInterestedDaoJDBC implements InterestedDao{
 		try {
 			connection = ConnectionFactory.getConnection();
 
-			statement = connection.prepareStatement("SELECT * FROM fornecedores WHERE cnpj=?");
+			statement = connection.prepareStatement("SELECT * FROM interessados_compra WHERE cnpj=?");
 			statement.setString(1, search.getCnpj());
 
 			resultSet = statement.executeQuery();
@@ -104,11 +108,10 @@ public class PurchaseInterestedDaoJDBC implements InterestedDao{
 				interested = new PurchaseInterested();
 				interested.setId(resultSet.getLong("id"));
 				interested.setCnpj(resultSet.getString("cnpj"));
-				interested.setBusinessName(resultSet.getString("nome"));
-				interested.setLiableCpf(resultSet.getString("cpf"));
+				interested.setBusinessName(resultSet.getString("razao"));
+				interested.setLiableName(resultSet.getString("nome_resp"));
+				interested.setLiableCpf(resultSet.getString("cpf_resp"));
 				interested.setContact(resultSet.getString("contato"));
-
-
 			}
 
 			return interested;

@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import presentation.utils.widget.MaskedTextField?>
 <?import presentation.utils.widget.MaskedContactTextField?>
 
 <VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
