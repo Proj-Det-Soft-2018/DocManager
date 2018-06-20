@@ -1,4 +1,4 @@
-package persistence;
+package juridical.persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,20 +7,19 @@ import java.sql.SQLException;
 
 import business.model.Interested;
 import business.model.Search;
-import health.persistence.ConnectionFactory;
 import juridical.model.JuridicalInterested;
 import juridical.model.JuridicalInterestedSearch;
+import persistence.InterestedDao;
 import persistence.exception.DatabaseException;
-import purchase.persistence.ConnectionFactory;
 
 public class JuridicalInterestedDaoJDBC implements InterestedDao {
 
 	@Override
 	public void save(Interested interested) throws DatabaseException {
 		JuridicalInterested juridicalInterested = (JuridicalInterested)interested;
-		String sql = "INSERT INTO interessados " +
-				"(nome,cpf,contato)" +
-				" VALUES (?,?,?)";
+		String sql = "INSERT INTO inventariante " +
+				"(nome,cpf,contato,idade,email)" +
+				" VALUES (?,?,?,?,?)";
 
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -30,6 +29,8 @@ public class JuridicalInterestedDaoJDBC implements InterestedDao {
 			statement.setString(1,juridicalInterested.getName());
 			statement.setString(2,juridicalInterested.getCpf());
 			statement.setString(3,juridicalInterested.getContact());
+			statement.setInt(4,juridicalInterested.getIdade());
+			statement.setString(5,juridicalInterested.getEmail());
 
 			statement.executeUpdate();
 
@@ -45,8 +46,8 @@ public class JuridicalInterestedDaoJDBC implements InterestedDao {
 	@Override
 	public void update(Interested interested) throws DatabaseException {
 		JuridicalInterested juridicalInterested = (JuridicalInterested)interested;
-		String sql = "UPDATE interessados " +
-				"SET nome=?, cpf=?, contato=? " +
+		String sql = "UPDATE inventariante " +
+				"SET nome=?, cpf=?, contato=?, idade=?, email=? " +
 				"WHERE id=?";
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -57,7 +58,9 @@ public class JuridicalInterestedDaoJDBC implements InterestedDao {
 			statement.setString(1, juridicalInterested.getName());
 			statement.setString(2, juridicalInterested.getCpf());
 			statement.setString(3, juridicalInterested.getContact());
-			statement.setLong(4, juridicalInterested.getId());
+			statement.setInt(4, juridicalInterested.getIdade());
+			statement.setString(5, juridicalInterested.getEmail());
+			statement.setLong(6, juridicalInterested.getId());
 
 			statement.executeUpdate();
 
@@ -75,14 +78,14 @@ public class JuridicalInterestedDaoJDBC implements InterestedDao {
 		PreparedStatement statement = null;
 		try {
 			connection = ConnectionFactory.getConnection();
-			statement = connection.prepareStatement("DELETE FROM interessados WHERE id=?");
+			statement = connection.prepareStatement("DELETE FROM inventariante WHERE id=?");
 			statement.setLong(1, interested.getId());
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
 			throw new DatabaseException("Não foi possível deletar o processo do Banco de Dados.", e);
 		}finally {
-			ConnectionFactory.closeConnection(connection, statement);
+			juridical.persistence.ConnectionFactory.closeConnection(connection, statement);
 		}
 
 	}
@@ -97,22 +100,22 @@ public class JuridicalInterestedDaoJDBC implements InterestedDao {
 		try {
 			connection = ConnectionFactory.getConnection();
 
-			statement = connection.prepareStatement("SELECT * FROM interessados WHERE cpf=?");
+			statement = connection.prepareStatement("SELECT * FROM inventariante WHERE cpf=?");
 			statement.setString(1, search.getCpf());
 
 			resultSet = statement.executeQuery();
 
-			Interested interested = null;
+			JuridicalInterested interested = null;
 
 			if(resultSet.next()) {
 				//criando o objeto Interessado
-				interested = new JuridicalInterested(
-						resultSet.getLong("id"),
-						resultSet.getString("nome"),
-						resultSet.getString("cpf"),
-						resultSet.getString("contato"),
-						resultSet.getString("email"));
-
+				interested = new JuridicalInterested();
+				interested.setId(resultSet.getLong("id"));
+				interested.setName(resultSet.getString("nome"));
+				interested.setCpf(resultSet.getString("cpf"));
+				interested.setIdade(resultSet.getInt("idade"));
+				interested.setContact(resultSet.getString("contato"));
+				interested.setEmail(resultSet.getString("email"));
 			}
 
 			return interested;

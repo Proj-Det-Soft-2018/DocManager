@@ -1,12 +1,17 @@
 /**
  * 
  */
-package presentation;
+package juridical.presentation;
 
 import business.service.InterestedService;
 import business.service.ListService;
 import business.service.ProcessService;
 import business.service.StatisticService;
+import presentation.ControllerFactory;
+import presentation.InterestedEditCtrl;
+import presentation.MainScreenCtrl;
+import presentation.ProcessEditCtrl;
+import presentation.SearchScreenCtrl;
 
 /**
  * @author clah

@@ -136,7 +136,7 @@
 							prefWidth="105.0" style="-fx-alignment: CENTER" text="Vara" />
 						<TableColumn fx:id="tabColSituation" editable="false"
 							prefWidth="125.0" style="-fx-alignment: CENTER" text="Situação" />
-						<TableColumn fx:id="tabColumnRegDate" editable="false"
+						<TableColumn fx:id="tabColRegDate" editable="false"
 							prefWidth="95.0" style="-fx-alignment: CENTER" text="Entrada" />
 					</columns>
 				</TableView>

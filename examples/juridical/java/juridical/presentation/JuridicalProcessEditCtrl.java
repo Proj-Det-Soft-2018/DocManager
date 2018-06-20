@@ -1,4 +1,4 @@
-package presentation;
+package juridical.presentation;
 
 import java.net.URL;
 
@@ -21,9 +21,10 @@ import javafx.scene.layout.HBox;
 import juridical.model.JuridicalInterested;
 import juridical.model.JuridicalInterestedSearch;
 import juridical.model.JuridicalProcess;
+import juridical.model.JuridicalSituation;
+import presentation.ControllerFactory;
+import presentation.ProcessEditCtrl;
 import presentation.utils.widget.MaskedTextField;
-import purchase.model.PurchaseProcess;
-import purchase.model.PurchaseSituation;
 
 public class JuridicalProcessEditCtrl extends ProcessEditCtrl {
 	private static final URL FXML_PATH = JuridicalProcessEditCtrl.class.getResource("/visions/juridical_process_edit_screen.fxml");
@@ -118,9 +119,9 @@ public class JuridicalProcessEditCtrl extends ProcessEditCtrl {
     
         ObservableList<String> obsListaSituacoes = cbSituation.getItems();
         if(originalProcess != null) {
-            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(((PurchaseProcess)super.originalProcess).getSituation()));
+            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(((JuridicalProcess)super.originalProcess).getSituation()));
         }else {
-            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(PurchaseSituation.NULL));
+            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(JuridicalSituation.NULL));
         }
         cbSituation.getSelectionModel().select(0);
     }
@@ -141,8 +142,8 @@ public class JuridicalProcessEditCtrl extends ProcessEditCtrl {
 
 	@Override
 	protected void fillInterestedField() {
-		JuridicalInterested purchaseInterested = (JuridicalInterested) super.interested;
-        txtCpfInterested.setPlainText(purchaseInterested.getCpf());
+		JuridicalInterested juridicalInterested = (JuridicalInterested) super.interested;
+        txtCpfInterested.setPlainText(juridicalInterested.getCpf());
         txtCpfInterested.setDisable(true);
 
         if (hBoxInteressado.getChildren().contains(btnBuscarInteressado)) {
@@ -156,10 +157,10 @@ public class JuridicalProcessEditCtrl extends ProcessEditCtrl {
             hBoxInteressado.getChildren().addAll(btnEditarInteressado, btnLimparInteressado);
         }
 
-        lblName.setText(purchaseInterested.getName());
-        lblAge.setText(""+purchaseInterested.getIdade());
-        lblEmail.setText(purchaseInterested.getEmail());
-        String contact = purchaseInterested.getFormatedContact();
+        lblName.setText(juridicalInterested.getName());
+        lblAge.setText(""+juridicalInterested.getIdade());
+        lblEmail.setText(juridicalInterested.getEmail());
+        String contact = juridicalInterested.getFormatedContact();
         if (contact != null && contact.length() != 0) { 
             lblContact.setText(contact);
         } else {
@@ -182,7 +183,7 @@ public class JuridicalProcessEditCtrl extends ProcessEditCtrl {
 
 	@Override
 	protected Process mountProcess() {
-		JuridicalProcess process = new JuridicalProcess();
+		JuridicalProcess process = (JuridicalProcess)super.originalProcess;
 		process.setNumber(txtNumber.plainTextProperty().getValue());
 		process.setInventorian(super.interested);
 		process.setInventoriedName(txtInventoried.getText());

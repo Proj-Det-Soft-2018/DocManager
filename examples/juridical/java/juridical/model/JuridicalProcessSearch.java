@@ -18,11 +18,13 @@ public class JuridicalProcessSearch implements Search {
         boolean invalidNumber = (number == null || number.isEmpty());
         boolean invalidName = (inventorian == null || inventorian.isEmpty());
         boolean invalidCpf = (cpf == null || cpf.isEmpty());
+        boolean invalidInventaried = (inventaried == null || inventaried.isEmpty());
+        boolean invalidLawyer = (lawyer == null || lawyer.isEmpty());
         boolean invalidSituation = (situationId == 0);
         boolean invalidOrganization = (courtId == 0);
         boolean invalidSubject = (judgeId == 0);
 
-        if(invalidNumber && invalidName && invalidCpf && invalidSituation && invalidOrganization && invalidSubject) {
+        if(invalidNumber && invalidName && invalidCpf && invalidInventaried && invalidLawyer && invalidSituation && invalidOrganization && invalidSubject) {
             throw new ValidationException("Não foram inseridos valores para busca!");
         }
     }

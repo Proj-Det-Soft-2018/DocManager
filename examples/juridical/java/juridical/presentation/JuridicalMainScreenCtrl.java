@@ -1,7 +1,7 @@
 /**
  * 
  */
-package presentation;
+package juridical.presentation;
 
 import java.net.URL;
 
@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import juridical.model.JuridicalInterested;
 import juridical.model.JuridicalProcess;
+import presentation.ControllerFactory;
+import presentation.MainScreenCtrl;
 import presentation.utils.DateUtil;
 
 /**

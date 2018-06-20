@@ -11,8 +11,6 @@ public class JuridicalInterestedSearch implements Search {
     @Override
     public void validate() throws ValidationException {
     	boolean invalidCpf = (cpf == null || cpf.isEmpty() || cpf.length() != 11);
-    	boolean invalidEmail = (email == null || email.isEmpty());
-    	//TODO fazer validação do email?
     	if(invalidCpf) {
             throw new ValidationException("O CPF buscado está incompleto!");
         }

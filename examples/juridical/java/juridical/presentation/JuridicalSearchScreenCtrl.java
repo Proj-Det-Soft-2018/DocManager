@@ -1,4 +1,4 @@
-package presentation;
+package juridical.presentation;
 
 import java.net.URL;
 import java.util.Objects;
@@ -8,8 +8,6 @@ import org.apache.log4j.Logger;
 import business.model.Search;
 import business.service.ListService;
 import business.service.ProcessService;
-import health.model.HealthProcess;
-import health.presentation.HealthSearchScreenCtrl;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -23,10 +21,10 @@ import javafx.scene.layout.VBox;
 import juridical.model.JuridicalInterested;
 import juridical.model.JuridicalProcess;
 import juridical.model.JuridicalProcessSearch;
+import presentation.ControllerFactory;
+import presentation.SearchScreenCtrl;
 import presentation.utils.DateUtil;
-import presentation.utils.widget.DynamicMaskTextField;
 import presentation.utils.widget.MaskedTextField;
-import purchase.model.PurchaseProcessSearch;
 
 public class JuridicalSearchScreenCtrl extends SearchScreenCtrl {
 
@@ -226,7 +224,7 @@ public class JuridicalSearchScreenCtrl extends SearchScreenCtrl {
         String name = (checkInterested.isSelected() && radioNome.isSelected())? txtName.getText() : "";
         String cpf = (checkInterested.isSelected() && radioCpf.isSelected())? mTxtCpf.getPlainText() : "";
         String inventaried = checkInventaried.isSelected()? txtInventaried.getText() : "";
-        String lawyer = checkInterested.isSelected()? txtLawyer.getText() : "";
+        String lawyer = checkLawyer.isSelected()? txtLawyer.getText() : "";
         int idCourt = checkCourt.isSelected()? cbCourt.getSelectionModel().getSelectedIndex() : 0;
         int idJudge = checkJudge.isSelected()? cbJudge.getSelectionModel().getSelectedIndex() : 0;
         int idSituation = checkSituation.isSelected()? cbSituation.getSelectionModel().getSelectedIndex() : 0;

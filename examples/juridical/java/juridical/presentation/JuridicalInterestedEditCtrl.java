@@ -1,4 +1,4 @@
-package presentation;
+package juridical.presentation;
 
 import java.net.URL;
 
@@ -6,16 +6,14 @@ import org.apache.log4j.Logger;
 
 import business.model.Interested;
 import business.service.InterestedService;
-import health.presentation.HealthInterestedEditCtrl;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import juridical.model.JuridicalInterested;
-import juridical.model.JuridicalProcess;
+import presentation.InterestedEditCtrl;
 import presentation.utils.widget.MaskedContactTextField;
-import purchase.model.PurchaseInterested;
 
 public class JuridicalInterestedEditCtrl extends InterestedEditCtrl {
 	private static final Logger LOGGER = Logger.getLogger(JuridicalInterestedEditCtrl.class);
@@ -45,7 +43,7 @@ public class JuridicalInterestedEditCtrl extends InterestedEditCtrl {
 
 	@Override
 	protected void populeForm() {
-		lblCpf.setText(((PurchaseInterested)super.interested).getFormatedCnpj());
+		lblCpf.setText(((JuridicalInterested)super.interested).getFormatedCpf());
 
 		if (super.interested.getId() != null) {
 			JuridicalInterested juridicalInterested = (JuridicalInterested)super.interested;
@@ -62,7 +60,7 @@ public class JuridicalInterestedEditCtrl extends InterestedEditCtrl {
 	@Override
 	protected Interested mountInterested() {
 		JuridicalInterested interested = new JuridicalInterested();
-		interested.setCpf(lblCpf.getText());
+		interested.setCpf(((JuridicalInterested)super.interested).getCpf());
 		interested.setName(txtName.getText());
 		interested.setIdade(Integer.parseInt(txtAge.getText()));
 		interested.setEmail(txtEmail.getText());

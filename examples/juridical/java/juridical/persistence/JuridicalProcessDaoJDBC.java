@@ -1,4 +1,4 @@
-package persistence;
+package juridical.persistence;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -23,8 +23,8 @@ import juridical.model.JuridicalOrganization;
 import juridical.model.JuridicalProcess;
 import juridical.model.JuridicalProcessSearch;
 import juridical.model.JuridicalSituation;
+import persistence.ProcessDao;
 import persistence.exception.DatabaseException;
-import purchase.persistence.ConnectionFactory;
 
 public class JuridicalProcessDaoJDBC implements ProcessDao {
 
@@ -166,6 +166,16 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 		if (cpf != null && !cpf.equalsIgnoreCase("")) {
 			sql.append("cpf= '"+cpf+"' AND ");
 		}
+		
+		String lawyer = search.getLawyer();
+		if (lawyer != null && !lawyer.equalsIgnoreCase("")) {
+			sql.append("advogado LIKE '"+lawyer+"' AND ");
+		}
+		
+		String inventoried = search.getInventaried();
+		if (inventoried != null && !inventoried.equalsIgnoreCase("")) {
+			sql.append("inventatiado LIKE '"+cpf+"' AND ");
+		}
 
 		int organizationId = search.getCourtId();
 		if (organizationId != 0) {
@@ -194,7 +204,7 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 		ResultSet resultSet = null;
 		String query = "SELECT * "
 				+ "FROM inventario p "
-				+ "INNER JOIN interessados i "
+				+ "INNER JOIN inventariante i "
 				+ "ON p.inventariante_id=i.id "
 				+ whereStament;
 
@@ -237,6 +247,7 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 					LocalDateTime registrationDate = jdbcRegistrationStamp.toLocalDateTime();
 					process.setRegistrationDate(registrationDate);
 				}
+				
 				processList.add(process);
 
 			}
