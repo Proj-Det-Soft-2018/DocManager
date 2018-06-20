@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<!--?import presentation.utils.widget.MaskedTextField?-->
+<!-- ?import presentation.utils.widget.MaskedTextField? -->
 
 <VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
 	minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0"
@@ -66,7 +66,8 @@
 											text="Ofício" toggleGroup="$tgProcessoOficio" />
 									</children>
 								</HBox>
-								<TextField fx:id="mTxtProcessoNum" maxWidth="520.0" />
+								<TextField
+									fx:id="mTxtProcessoNum" maxWidth="520.0" />
 							</children>
 						</VBox>
 						<CheckBox fx:id="checkInteressado" mnemonicParsing="false"
