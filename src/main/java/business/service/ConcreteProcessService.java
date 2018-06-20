@@ -49,11 +49,11 @@ public class ConcreteProcessService extends Observable implements ProcessService
     // Usuário para autorização -- Apache Shiro
     private Subject currentUser;
 
-    private XmlToPdfBinary xmlToPdfBinary;
+    private XmlToPdfAdapter xmlToPdfAdapter;
 
-    public ConcreteProcessService(DaoFactory daoFactory, XmlToPdfBinary xmlToPdfBinary) {
+    public ConcreteProcessService(DaoFactory daoFactory, XmlToPdfAdapter xmlToPdfAdapter) {
 	processoDao = daoFactory.getProcessDao();
-	this.xmlToPdfBinary = xmlToPdfBinary;
+	this.xmlToPdfAdapter = xmlToPdfAdapter;
 
 	// Inicilização do Apache Shiro -- utiliza o resources/shiro.ini
 	IniRealm iniRealm = new IniRealm("classpath:shiro.ini");
@@ -109,7 +109,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
     public byte[] getPdf(Process process) {
 	String xml = process.toXml();
 	String timedXml = appendCurrentTimeToXml(xml);
-	return xmlToPdfBinary.transform(timedXml);
+	return xmlToPdfAdapter.transform(timedXml);
     }
 
     private String appendCurrentTimeToXml(String xml) {

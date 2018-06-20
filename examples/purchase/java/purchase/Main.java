@@ -8,7 +8,8 @@ import business.service.InterestedService;
 import business.service.ListService;
 import business.service.ProcessService;
 import business.service.StatisticService;
-import business.service.XmlToPdfBinary;
+import business.service.XmlToPdfAdapter;
+import business.service.XmlToPdfConcreteAdapter;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import persistence.DaoFactory;
@@ -19,7 +20,6 @@ import purchase.model.PurchaseSituation;
 import purchase.model.PurchaseSubject;
 import purchase.persistence.DaoFactoryJDBC;
 import purchase.presentation.PurchaseControllerFactory;
-import purchase.service.PurchaseXmlToPdfBinary;
 
 public class Main extends Application {
 
@@ -31,8 +31,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 
 		DaoFactory daoFactory = new DaoFactoryJDBC(); 
-		XmlToPdfBinary xmlToPdfBinary = new PurchaseXmlToPdfBinary();
-		ProcessService processService = new ConcreteProcessService(daoFactory, xmlToPdfBinary);
+		XmlToPdfAdapter xmlToPdfAdapter = new XmlToPdfConcreteAdapter();
+		ProcessService processService = new ConcreteProcessService(daoFactory, xmlToPdfAdapter);
 		InterestedService interestedService = new ConcreteInterestedService(daoFactory);
 		StatisticService statisticService = new ConcreteStatisticService(daoFactory);
 
