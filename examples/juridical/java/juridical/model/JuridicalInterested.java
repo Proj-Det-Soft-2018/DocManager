@@ -21,6 +21,8 @@ public class JuridicalInterested implements Interested {
 	private String contact;
 	private String email;
 	
+	public JuridicalInterested() {};
+	
 	public JuridicalInterested(Long id, String nome, int idade, String cpf, String contato, String email) {
 		this.id = id;
 		this.name = nome;

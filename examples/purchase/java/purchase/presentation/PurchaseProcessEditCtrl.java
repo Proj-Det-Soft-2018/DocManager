@@ -76,9 +76,6 @@ public class PurchaseProcessEditCtrl extends ProcessEditCtrl {
     private TextArea txtObservations;
 
     @FXML
-    private Button btnCancelar;
-
-    @FXML
     private Button btnCadastrar;
 
     public PurchaseProcessEditCtrl(ListService listService, ProcessService processService,

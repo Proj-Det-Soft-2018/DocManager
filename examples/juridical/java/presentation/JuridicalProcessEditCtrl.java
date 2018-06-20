@@ -10,56 +10,194 @@ import business.model.Search;
 import business.service.InterestedService;
 import business.service.ListService;
 import business.service.ProcessService;
-import health.presentation.HealthProcessEditCtrl;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import juridical.model.JuridicalInterested;
+import juridical.model.JuridicalInterestedSearch;
+import juridical.model.JuridicalProcess;
+import presentation.utils.widget.MaskedTextField;
+import purchase.model.PurchaseProcess;
+import purchase.model.PurchaseSituation;
 
 public class JuridicalProcessEditCtrl extends ProcessEditCtrl {
-    private static final Logger LOGGER = Logger.getLogger(JuridicalProcessEditCtrl.class);
+	private static final URL FXML_PATH = JuridicalProcessEditCtrl.class.getResource("/visions/juridical_process_edit_screen.fxml");
+	private static final Logger LOGGER = Logger.getLogger(JuridicalProcessEditCtrl.class);
+	
+    private ListService listService;
+
+    @FXML
+    private MaskedTextField txtNumber;
+
+    @FXML
+    private HBox hBoxInteressado;
+    
+    @FXML
+    private Label lblCpfInteressado;
+
+    @FXML
+    private MaskedTextField txtCpfInterested;
+
+    @FXML
+    private Button btnBuscarInteressado;
+
+    @FXML
+    private Label lblName;
+
+    @FXML
+    private Label lblAge;
+    
+    @FXML
+    private Label lblEmail;
+
+    @FXML
+    private Label lblContact;
+    
+    @FXML
+    private TextField txtInventoried;
+    
+    @FXML
+    private TextField txtLawyer;
+    
+    @FXML
+    private ChoiceBox<String> cbCourt;
+
+    @FXML
+    private ChoiceBox<String> cbJudge;
+
+    @FXML
+    private ChoiceBox<String> cbSituation;
+
+    @FXML
+    private TextArea txtObservations;
+
+    @FXML
+    private Button btnCadastrar;
 
 	protected JuridicalProcessEditCtrl(ListService listService, ProcessService processService,
             InterestedService interestedService, ControllerFactory controllerFactory) {
 		super(processService, interestedService, controllerFactory, LOGGER);
+		this.listService = listService;
 	}
 
 	@Override
 	protected void initializeForm() {
-		// TODO Auto-generated method stub
+		fillChoiceBoxes();
+        if (super.originalProcess != null) {
+            JuridicalProcess juridicalProcess = (JuridicalProcess)super.originalProcess;
+            btnCadastrar.setText("Atualizar");
 
+            txtNumber.setPlainText(juridicalProcess.getNumber());
+            txtNumber.setDisable(true);
+            
+            super.interested = juridicalProcess.getInventorian();
+            fillInterestedField();
+            
+            txtInventoried.setText(juridicalProcess.getInventoriedName());
+            txtLawyer.setText(juridicalProcess.getLawyerName());
+            cbCourt.getSelectionModel().select(juridicalProcess.getCourt().getId());
+            cbJudge.getSelectionModel().select(juridicalProcess.getJudge().getId());
+            cbSituation.getSelectionModel().select(juridicalProcess.getSituationString());
+            txtObservations.setText(juridicalProcess.getObservation());
+        }
 	}
+	
+	private void fillChoiceBoxes() {
+        ObservableList<String> obsListaOrgaos = cbCourt.getItems();
+        obsListaOrgaos.addAll(listService.getOrganizationsList());
+        cbCourt.getSelectionModel().select(0);
+    
+        ObservableList<String> obsListaAssuntos = cbJudge.getItems();
+        obsListaAssuntos.addAll(listService.getSubjectsDescritionList());
+        cbJudge.getSelectionModel().select(0);
+    
+        ObservableList<String> obsListaSituacoes = cbSituation.getItems();
+        if(originalProcess != null) {
+            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(((PurchaseProcess)super.originalProcess).getSituation()));
+        }else {
+            obsListaSituacoes.addAll(listService.getSituationsListByCurrentSituation(PurchaseSituation.NULL));
+        }
+        cbSituation.getSelectionModel().select(0);
+    }
 
 	@Override
 	protected Interested createInterested() {
-		// TODO Auto-generated method stub
-		return null;
+		JuridicalInterested interested = new JuridicalInterested();
+        interested.setCpf(txtCpfInterested.plainTextProperty().getValue());
+        return interested;
 	}
 
 	@Override
 	protected Search mountSearch() {
-		// TODO Auto-generated method stub
-		return null;
+		JuridicalInterestedSearch search = new JuridicalInterestedSearch();
+        search.setCpf(txtCpfInterested.plainTextProperty().getValue());
+        return search;
 	}
 
 	@Override
 	protected void fillInterestedField() {
-		// TODO Auto-generated method stub
+		JuridicalInterested purchaseInterested = (JuridicalInterested) super.interested;
+        txtCpfInterested.setPlainText(purchaseInterested.getCpf());
+        txtCpfInterested.setDisable(true);
+
+        if (hBoxInteressado.getChildren().contains(btnBuscarInteressado)) {
+            hBoxInteressado.getChildren().remove(btnBuscarInteressado);
+
+            Button btnEditarInteressado = new Button("Editar");
+            btnEditarInteressado.setOnAction(evento -> super.showInterestedEditScreen());
+            Button btnLimparInteressado = new Button("Limpar");
+            btnLimparInteressado.setOnAction(evento -> super.clearInterested());
+
+            hBoxInteressado.getChildren().addAll(btnEditarInteressado, btnLimparInteressado);
+        }
+
+        lblName.setText(purchaseInterested.getName());
+        lblAge.setText(""+purchaseInterested.getIdade());
+        lblEmail.setText(purchaseInterested.getEmail());
+        String contact = purchaseInterested.getFormatedContact();
+        if (contact != null && contact.length() != 0) { 
+            lblContact.setText(contact);
+        } else {
+        	lblContact.setText("");
+        }
 
 	}
 
 	@Override
 	protected void clearInterestedField() {
-		// TODO Auto-generated method stub
-
+		hBoxInteressado.getChildren().clear();
+        hBoxInteressado.getChildren().addAll(lblCpfInteressado, txtCpfInterested, btnBuscarInteressado);
+        txtCpfInterested.setDisable(false);
+        txtCpfInterested.clear();
+        lblName.setText("");
+        lblAge.setText("");
+        lblEmail.setText("");
+        lblContact.setText("");
 	}
 
 	@Override
 	protected Process mountProcess() {
-		// TODO Auto-generated method stub
-		return null;
+		JuridicalProcess process = new JuridicalProcess();
+		process.setNumber(txtNumber.plainTextProperty().getValue());
+		process.setInventorian(super.interested);
+		process.setInventoriedName(txtInventoried.getText());
+		process.setLawyerName(txtLawyer.getText());
+        process.setCourtById(cbCourt.getSelectionModel().getSelectedIndex());
+        process.setJudgeById(cbJudge.getSelectionModel().getSelectedIndex());
+        process.setSituationById(listService.getSituationsDescritionList()
+        		.indexOf(cbSituation.getSelectionModel().getSelectedItem()));
+        process.setObservation(txtObservations.getText());
+        return process;
 	}
 
 	@Override
 	public URL getFxmlPath() {
-		// TODO Auto-generated method stub
-		return null;
+		return FXML_PATH;
 	}
 
 }

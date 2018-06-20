@@ -124,6 +124,10 @@ public class JuridicalProcess implements Process {
 	public void setJudge(Subject judge) {
 		this.judge = judge;
 	}
+	
+	public void setJudgeById(int id) {
+		this.judge = JuridicalJudge.getSubjectById(id);
+	}
 
 
 	/**
@@ -139,6 +143,10 @@ public class JuridicalProcess implements Process {
 	 */
 	public void setCourt(Organization court) {
 		this.court = court;
+	}
+	
+	public void setCourtById(int id) {
+		this.court = JuridicalOrganization.getOrganizationById(id);
 	}
 
 	/**
@@ -166,17 +174,11 @@ public class JuridicalProcess implements Process {
 		this.inventoriedName = inventoriedName;
 	}
 
-	/* (non-Javadoc)
-	 * @see business.model.Process#getSituationString()
-	 */
 	@XmlElement(name="situation")
 	public String getSituationString() {
 		return situation.getDescription();
 	}
 
-	/* (non-Javadoc)
-	 * @see business.model.Process#getSituation()
-	 */
 	public Situation getSituation() {
 		return situation;
 	}
@@ -187,11 +189,11 @@ public class JuridicalProcess implements Process {
 	public void setSituation(Situation situation) {
 		this.situation = situation;
 	}
+	
+	public void setSituationById(int id) {
+		this.situation = JuridicalSituation.getSituationById(id);
+	}
 
-
-	/* (non-Javadoc)
-	 * @see business.model.Process#getObservation()
-	 */
 	@XmlElement(name="observation")
 	public String getObservation() {
 		return observation;
@@ -204,24 +206,15 @@ public class JuridicalProcess implements Process {
 		this.observation = observation;
 	}
 
-	/* (non-Javadoc)
-	 * @see business.model.Process#getRegistrationDate()
-	 */
 	@XmlElement(name="entry-date")
 	public LocalDateTime getRegistrationDate() {
 		return registrationDate;
 	}
 
-	/* (non-Javadoc)
-	 * @see business.model.Process#setRegistrationDate(java.time.LocalDateTime)
-	 */
 	public void setRegistrationDate(LocalDateTime registrationDate) {
 		this.registrationDate = registrationDate;
 	}
 
-	/* (non-Javadoc)
-	 * @see business.model.Process#toXml()
-	 */
 	@Override
 	public String toXml() {
 
