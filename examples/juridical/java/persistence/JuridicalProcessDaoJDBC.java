@@ -175,6 +175,16 @@ public class JuridicalProcessDaoJDBC implements ProcessDao {
 		if (cpf != null && !cpf.equalsIgnoreCase("")) {
 			sql.append("cpf= '"+cpf+"' AND ");
 		}
+		
+		String lawyer = search.getLawyerName();
+        if (lawyer != null && !lawyer.equalsIgnoreCase("")) {
+            sql.append("advogado= '"+lawyer+"' AND ");
+        }
+        
+        String inventoried = search.getInventoriedName();
+        if (inventoried != null && !inventoried.equalsIgnoreCase("")) {
+            sql.append("inventariado= '"+cpf+"' AND ");
+        }
 
 		int organizationId = search.getCourtId();
 		if (organizationId != 0) {

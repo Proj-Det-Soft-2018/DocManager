@@ -7,6 +7,8 @@ public class JuridicalProcessSearch implements Search {
 	private String number;
     private String inventorian;
     private String cpf; 
+    private String lawyerName;
+    private String inventoriedName;
     private int situationId;
     private int courtId;
     private int judgeId;
@@ -16,11 +18,14 @@ public class JuridicalProcessSearch implements Search {
         boolean invalidNumber = (number == null || number.isEmpty());
         boolean invalidName = (inventorian == null || inventorian.isEmpty());
         boolean invalidCpf = (cpf == null || cpf.isEmpty());
+        boolean invalidLawyer = (lawyerName == null || lawyerName.isEmpty());
+        boolean invalidInventoried = (inventoriedName == null || inventoriedName.isEmpty());
         boolean invalidSituation = (situationId == 0);
         boolean invalidOrganization = (courtId == 0);
         boolean invalidSubject = (judgeId == 0);
 
-        if(invalidNumber && invalidName && invalidCpf && invalidSituation && invalidOrganization && invalidSubject) {
+        if(invalidNumber && invalidName && invalidCpf && invalidSituation 
+            && invalidOrganization && invalidSubject && invalidLawyer && invalidInventoried) {
             throw new ValidationException("Não foram inseridos valores para busca!");
         }
     }
@@ -67,7 +72,25 @@ public class JuridicalProcessSearch implements Search {
 		this.cpf = cpf;
 	}
 
-	/**
+	
+	
+	public String getLawyerName() {
+    return lawyerName;
+  }
+
+  public void setLawyerName(String lawyerName) {
+    this.lawyerName = lawyerName;
+  }
+
+  public String getInventoriedName() {
+    return inventoriedName;
+  }
+
+  public void setInventoriedName(String inventoriedName) {
+    this.inventoriedName = inventoriedName;
+  }
+
+  /**
 	 * @return the situationId
 	 */
 	public int getSituationId() {
