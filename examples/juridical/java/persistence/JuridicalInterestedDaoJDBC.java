@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import business.model.Interested;
 import business.model.Search;
+import health.persistence.ConnectionFactory;
 import juridical.model.JuridicalInterested;
 import juridical.model.JuridicalInterestedSearch;
 import persistence.exception.DatabaseException;
@@ -109,7 +110,8 @@ public class JuridicalInterestedDaoJDBC implements InterestedDao {
 						resultSet.getLong("id"),
 						resultSet.getString("nome"),
 						resultSet.getString("cpf"),
-						resultSet.getString("contato"));
+						resultSet.getString("contato"),
+						resultSet.getString("email"));
 
 			}
 
