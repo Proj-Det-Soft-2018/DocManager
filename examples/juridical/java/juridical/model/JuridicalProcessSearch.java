@@ -6,6 +6,8 @@ import business.model.Search;
 public class JuridicalProcessSearch implements Search {
 	private String number;
     private String inventorian;
+    private String inventaried;
+    private String lawyer;
     private String cpf; 
     private int situationId;
     private int courtId;
@@ -51,6 +53,22 @@ public class JuridicalProcessSearch implements Search {
 	 */
 	public void setInventorian(String inventorian) {
 		this.inventorian = inventorian;
+	}
+
+	public String getInventaried() {
+		return inventaried;
+	}
+
+	public void setInventaried(String inventaried) {
+		this.inventaried = inventaried;
+	}
+
+	public String getLawyer() {
+		return lawyer;
+	}
+
+	public void setLawyer(String lawyer) {
+		this.lawyer = lawyer;
 	}
 
 	/**

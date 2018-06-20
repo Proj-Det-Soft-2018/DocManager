@@ -16,17 +16,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<!--?import presentation.utils.widget.MaskedTextField?-->
+<?import presentation.utils.widget.MaskedTextField?>
 
 <VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="721.0"
 	prefWidth="810.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
 	<padding>
 		<Insets bottom="10.0" left="10.0" right="10.0" top="15.0" />
 	</padding>
 	<children>
-		<VBox minHeight="-Infinity" prefHeight="275.0" spacing="8.0"
-			styleClass="painel-borda" stylesheets="@../fx_css/styles.css">
+		<VBox minHeight="-Infinity" prefHeight="311.0" prefWidth="790.0"
+			spacing="8.0" styleClass="painel-borda" stylesheets="@../fx_css/styles.css">
 			<children>
 				<Label styleClass="painel-titulo" stylesheets="@../fx_css/styles.css"
 					text="Campos para a Busca" />
@@ -45,32 +45,24 @@
 							vgrow="SOMETIMES" />
 						<RowConstraints minHeight="10.0" prefHeight="30.0"
 							vgrow="SOMETIMES" />
+						<RowConstraints minHeight="10.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
+						<RowConstraints minHeight="10.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
 					</rowConstraints>
 					<VBox.margin>
 						<Insets bottom="15.0" left="15.0" right="15.0" />
 					</VBox.margin>
 					<children>
-						<CheckBox fx:id="checkNumero" mnemonicParsing="false"
+						<CheckBox fx:id="checkNumber" mnemonicParsing="false"
 							text="Número:" />
 						<VBox fx:id="vbNumero" spacing="8.0" GridPane.columnIndex="1">
 							<children>
-								<HBox spacing="20.0">
-									<children>
-										<RadioButton fx:id="radioProcesso"
-											mnemonicParsing="false" selected="true" text="Processo">
-											<toggleGroup>
-												<ToggleGroup fx:id="tgProcessoOficio" />
-											</toggleGroup>
-										</RadioButton>
-										<RadioButton fx:id="radioOficio" mnemonicParsing="false"
-											text="Ofício" toggleGroup="$tgProcessoOficio" />
-									</children>
-								</HBox>
-								<TextField fx:id="mTxtProcessoNum" maxWidth="520.0" />
+								<MaskedTextField mask="#####.######/####-##" fx:id="mTxtNumber" maxWidth="520.0" />
 							</children>
 						</VBox>
-						<CheckBox fx:id="checkInteressado" mnemonicParsing="false"
-							text="Interessado:" GridPane.rowIndex="1" />
+						<CheckBox fx:id="checkInterested" mnemonicParsing="false"
+							text="Inventariante:" GridPane.rowIndex="1" />
 						<VBox fx:id="vbInteressado" spacing="8.0"
 							GridPane.columnIndex="1" GridPane.rowIndex="1">
 							<children>
@@ -86,21 +78,30 @@
 											text="CPF" toggleGroup="$tgNomeCpf" />
 									</children>
 								</HBox>
-								<TextField fx:id="txtNome" maxWidth="520.0" />
+								<TextField fx:id="txtName" maxWidth="520.0" />
 							</children>
 						</VBox>
-						<CheckBox fx:id="checkOrgao" mnemonicParsing="false"
-							text="Orgão Origem:" GridPane.rowIndex="2" />
-						<ChoiceBox fx:id="choiceOrgao" maxWidth="520.0"
-							GridPane.columnIndex="1" GridPane.rowIndex="2" />
-						<CheckBox fx:id="checkAssunto" mnemonicParsing="false"
-							text="Assunto:" GridPane.rowIndex="3" />
-						<ChoiceBox fx:id="choiceAssunto" maxWidth="520.0"
+						<CheckBox fx:id="checkCourt" mnemonicParsing="false"
+							text="Vara:" GridPane.rowIndex="4" />
+						<ChoiceBox fx:id="cbCourt" maxWidth="520.0"
+							GridPane.columnIndex="1" GridPane.rowIndex="4" />
+						<CheckBox fx:id="checkJudge" mnemonicParsing="false"
+							text="Juiz:" GridPane.rowIndex="5" />
+						<ChoiceBox fx:id="cbJudge" maxWidth="520.0"
+							GridPane.columnIndex="1" GridPane.rowIndex="5" />
+						<CheckBox fx:id="checkSituation" mnemonicParsing="false"
+							text="Situação:" GridPane.rowIndex="6" />
+						<ChoiceBox fx:id="cbSituation" GridPane.columnIndex="1"
+							GridPane.rowIndex="6" />
+						<CheckBox fx:id="checkInventaried" mnemonicParsing="false"
+							text="Inventariado:" GridPane.rowIndex="2" />
+						<CheckBox fx:id="checkLawyer" mnemonicParsing="false"
+							text="Advogado:" GridPane.rowIndex="3" />
+						<TextField fx:id="txtLawyer" maxWidth="520.0"
 							GridPane.columnIndex="1" GridPane.rowIndex="3" />
-						<CheckBox fx:id="checkSituacao" mnemonicParsing="false"
-							text="Situação:" GridPane.rowIndex="4" />
-						<ChoiceBox fx:id="choiceSituacao" GridPane.columnIndex="1"
-							GridPane.rowIndex="4" />
+						<TextField fx:id="txtInventaried" layoutX="146.0"
+							layoutY="107.0" maxWidth="520.0" GridPane.columnIndex="1"
+							GridPane.rowIndex="2" />
 					</children>
 				</GridPane>
 			</children>
@@ -127,16 +128,16 @@
 					AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="15.0"
 					AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
 					<columns>
-						<TableColumn fx:id="tabColTipo" editable="false"
-							prefWidth="75.0" style="-fx-alignment: CENTER" text="Tipo" />
-						<TableColumn fx:id="tabColNumero" editable="false"
-							prefWidth="195.0" style="-fx-alignment: CENTER" text="Número" />
-						<TableColumn fx:id="tabColInteressado" editable="false"
-							prefWidth="256.0" style="-fx-alignment: CENTER" text="Nome Interessado" />
-						<TableColumn fx:id="tabColSituacao" editable="false"
+						<TableColumn fx:id="tabColNumber" editable="false"
+							prefWidth="175.0" style="-fx-alignment: CENTER" text="Número" />
+						<TableColumn fx:id="tabColInterested" editable="false"
+							prefWidth="246.0" style="-fx-alignment: CENTER" text="Inventariante" />
+						<TableColumn fx:id="tabColCourt" editable="false"
+							prefWidth="105.0" style="-fx-alignment: CENTER" text="Vara" />
+						<TableColumn fx:id="tabColSituation" editable="false"
 							prefWidth="125.0" style="-fx-alignment: CENTER" text="Situação" />
 						<TableColumn fx:id="tabColumnRegDate" editable="false"
-						  prefWidth="95.0" style="-fx-alignment: CENTER" text="Entrada" />
+							prefWidth="95.0" style="-fx-alignment: CENTER" text="Entrada" />
 					</columns>
 				</TableView>
 				<HBox layoutX="21.0" layoutY="302.0" spacing="10.0"
@@ -147,8 +148,8 @@
 							mnemonicParsing="false" onAction="#criarTelaEdicao" prefWidth="100.0"
 							text="Ver/Editar" />
 						<Button fx:id="btnCertidaoPdf" disable="true"
-							mnemonicParsing="false" onAction="#criarTelaPdf"
-							prefWidth="130.0" text="Certidão PDF" />
+							mnemonicParsing="false" onAction="#criarTelaPdf" prefWidth="130.0"
+							text="Certidão PDF" />
 						<Button fx:id="btnApagar" disable="true" mnemonicParsing="false"
 							onAction="#criarDialogAdmPassword" prefWidth="80.0" text="Apagar" />
 					</children>

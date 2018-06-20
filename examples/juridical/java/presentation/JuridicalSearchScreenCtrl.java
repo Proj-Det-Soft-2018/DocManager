@@ -1,6 +1,7 @@
 package presentation;
 
 import java.net.URL;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 
@@ -9,6 +10,7 @@ import business.service.ListService;
 import business.service.ProcessService;
 import health.model.HealthProcess;
 import health.presentation.HealthSearchScreenCtrl;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -18,50 +20,49 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+import juridical.model.JuridicalInterested;
+import juridical.model.JuridicalProcess;
+import juridical.model.JuridicalProcessSearch;
+import presentation.utils.DateUtil;
 import presentation.utils.widget.DynamicMaskTextField;
 import presentation.utils.widget.MaskedTextField;
+import purchase.model.PurchaseProcessSearch;
 
 public class JuridicalSearchScreenCtrl extends SearchScreenCtrl {
-	
-	private static final URL FXML_PATH = HealthSearchScreenCtrl.class.getResource("/visions/juridical_process_search_screen.fxml");
-	private static final Logger LOGGER = Logger.getLogger(HealthSearchScreenCtrl.class);
-	
+
+	private static final URL FXML_PATH = JuridicalSearchScreenCtrl.class.getResource("/visions/juridical_process_search_screen.fxml");
+	private static final Logger LOGGER = Logger.getLogger(JuridicalSearchScreenCtrl.class);
+
 	private ListService listService;
-	
+
 	private MaskedTextField mTxtCpf;
-	
-	@FXML
-	private VBox vbNumero;
 
 	@FXML
 	private VBox vbInteressado;
 
 	@FXML
-	private CheckBox checkNumero;
+	private CheckBox checkNumber;
 
 	@FXML
-	private CheckBox checkInteressado;
+	private CheckBox checkInterested;
 
 	@FXML
-	private CheckBox checkOrgao;
+	private CheckBox checkInventaried;
 
 	@FXML
-	private CheckBox checkAssunto;
+	private CheckBox checkLawyer;
 
 	@FXML
-	private CheckBox checkSituacao;
+	private CheckBox checkCourt;
 
 	@FXML
-	private ToggleGroup tgProcessoOficio;
+	private CheckBox checkJudge;
+
+	@FXML
+	private CheckBox checkSituation;
 
 	@FXML
 	private ToggleGroup tgNomeCpf;
-
-	@FXML
-	private RadioButton radioProcesso;
-
-	@FXML
-	private RadioButton radioOficio;
 
 	@FXML
 	private RadioButton radioNome;
@@ -70,110 +71,196 @@ public class JuridicalSearchScreenCtrl extends SearchScreenCtrl {
 	private RadioButton radioCpf;
 
 	@FXML
-	private MaskedTextField mTxtProcessoNum;
+	private MaskedTextField mTxtNumber;
 
 	@FXML
-	private TextField txtNome;
+	private TextField txtName;
 
 	@FXML
-	private ChoiceBox<String> choiceOrgao;
+	private TextField txtInventaried;
 
 	@FXML
-	private ChoiceBox<String> choiceAssunto;
+	private TextField txtLawyer;
 
 	@FXML
-	private ChoiceBox<String> choiceSituacao;
+	private ChoiceBox<String> cbCourt;
 
 	@FXML
-	private TableColumn<HealthProcess, String> tabColTipo;
+	private ChoiceBox<String> cbJudge;
 
 	@FXML
-	private TableColumn<HealthProcess, String> tabColNumero;
+	private ChoiceBox<String> cbSituation;
 
 	@FXML
-	private TableColumn<HealthProcess, String> tabColInteressado;
+	private TableColumn<JuridicalProcess, String> tabColNumber;
 
 	@FXML
-	private TableColumn<HealthProcess, String> tabColSituacao;
+	private TableColumn<JuridicalProcess, String> tabColInterested;
 
-    @FXML
-    private TableColumn<HealthProcess, String> tabColumnRegDate;
-    
-    
-	
+	@FXML
+	private TableColumn<JuridicalProcess, String> tabColCourt;
+
+	@FXML
+	private TableColumn<JuridicalProcess, String> tabColSituation;
+
+	@FXML
+	private TableColumn<JuridicalProcess, String> tabColRegDate;
+
+
 	public JuridicalSearchScreenCtrl(ProcessService processService, ListService listService,
-	        ControllerFactory controllerFactory) {
+			ControllerFactory controllerFactory) {
 		super(controllerFactory, processService, LOGGER);
 		this.listService = listService;
-        
-        /* Inicializa os campos de CPF                     */
-        mTxtCpf = new MaskedTextField("###.###.###-##");
-        mTxtCpf.setMaxWidth(520.0);
-        
+
+		/* Inicializa os campos de CPF                     */
+		mTxtCpf = new MaskedTextField("###.###.###-##");
+		mTxtCpf.setMaxWidth(520.0);
+
 	}
-	
+
 	@FXML
 	private void limparFormulario() {
-		checkNumero.setSelected(false);
-		checkInteressado.setSelected(false);
-		checkOrgao.setSelected(false);
-		checkAssunto.setSelected(false);
-		checkSituacao.setSelected(false);
-		radioProcesso.setSelected(true);
+		checkNumber.setSelected(false);
+		checkInterested.setSelected(false);
+		checkInventaried.setSelected(false);
+		checkLawyer.setSelected(false);
+		checkCourt.setSelected(false);
+		checkJudge.setSelected(false);
+		checkSituation.setSelected(false);
 		radioNome.setSelected(true);
-		choiceOrgao.getSelectionModel().select(0);
-		choiceAssunto.getSelectionModel().select(0);
-		choiceSituacao.getSelectionModel().select(0);
-		txtNome.clear();
-		mTxtProcessoNum.clear();
+		cbCourt.getSelectionModel().select(0);
+		cbJudge.getSelectionModel().select(0);
+		cbSituation.getSelectionModel().select(0);
+		txtName.clear();
+		mTxtNumber.clear();
 		mTxtCpf.clear();
+		txtInventaried.clear();
+		txtLawyer.clear();
 	}
-	
+
 	@Override
 	protected void configureForm() {
 		preencherChoiceBoxes();
-		//configurarRadioButtons();
-		//configurarChoiceBoxOrgao();
-//		configurarChoiceBoxAssunto();
-//		configurarChoiceBoxSituacao();
-//		configurarCheckBoxCourt();
-//		configurarTextFieldsNumeroProcesso();
-//		configurarTextFieldsInteressado();
+		configRadioButtons();
+		configChoiceBoxes();
+		configTextFields();
 
 	}
 
-	
-
 	private void preencherChoiceBoxes() {
-		ObservableList<String> obsListaOrgaos = choiceOrgao.getItems();
+		ObservableList<String> obsListaOrgaos = cbCourt.getItems();
 		obsListaOrgaos.addAll(listService.getOrganizationsList());
-		choiceOrgao.getSelectionModel().select(0);
+		cbCourt.getSelectionModel().select(0);
 
-		ObservableList<String> obsListaAssuntos = choiceAssunto.getItems();
+		ObservableList<String> obsListaAssuntos = cbJudge.getItems();
 		obsListaAssuntos.addAll(listService.getSubjectsDescritionList());
-		choiceAssunto.getSelectionModel().select(0);
+		cbJudge.getSelectionModel().select(0);
 
-		ObservableList<String> obsListaSituacoes = choiceSituacao.getItems();
+		ObservableList<String> obsListaSituacoes = cbSituation.getItems();
 		obsListaSituacoes.addAll(listService.getSituationsDescritionList());
-		choiceSituacao.getSelectionModel().select(0);
+		cbSituation.getSelectionModel().select(0);
+	}
+
+	private void configRadioButtons() {
+		this.tgNomeCpf.selectedToggleProperty().addListener(
+				(observavel, valorAnterior, novoValor) -> {
+					if(Objects.equals(novoValor, radioNome)) {
+						vbInteressado.getChildren().remove(mTxtCpf);
+						vbInteressado.getChildren().add(txtName);
+					} else {
+						vbInteressado.getChildren().remove(txtName);
+						vbInteressado.getChildren().add(mTxtCpf);
+					}
+				});
+	}
+
+	private void configChoiceBoxes() {
+		cbCourt.getSelectionModel().selectedIndexProperty().addListener(
+				(observableValue, oldValue, newValue) -> { 
+					if (newValue.intValue() != 0) {
+						checkCourt.setSelected(true);
+					}
+				});
+		cbJudge.getSelectionModel().selectedIndexProperty().addListener(
+				(observableValue, oldValue, newValue) -> {
+					if (newValue.intValue() != 0)
+						checkJudge.setSelected(true);
+				});
+		cbSituation.getSelectionModel().selectedIndexProperty().addListener(
+				(observableValue, oldValue, newValue) -> {
+					if (newValue.intValue() != 0)
+						checkSituation.setSelected(true);
+				});
+	}
+
+	private void configTextFields() {
+		mTxtNumber.focusedProperty().addListener(
+				(observableValue, oldValue, newValue) -> {
+					if (!newValue && !mTxtNumber.getPlainText().isEmpty()) {
+						checkNumber.setSelected(true);
+					}
+				});
+		txtName.focusedProperty().addListener(
+				(observableValue, oldValue, newValue) -> {
+					if (!newValue && !txtName.getText().isEmpty())
+						checkInterested.setSelected(true);
+				});
+		mTxtCpf.focusedProperty().addListener(
+				(observableValue, oldValue, newValue) -> {
+					if (!newValue && !mTxtCpf.getPlainText().isEmpty())
+						checkInterested.setSelected(true);
+				});
+		txtInventaried.focusedProperty().addListener((observableValue, oldValue, newValue) -> {
+					if (!newValue && !txtInventaried.getText().isEmpty())
+						checkInventaried.setSelected(true);
+				});
+		txtLawyer.focusedProperty().addListener((observableValue, oldValue, newValue) -> {
+					if (!newValue && !txtLawyer.getText().isEmpty())
+						checkLawyer.setSelected(true);
+				});
 	}
 
 	@Override
 	protected Search mountSearch() {
-		// TODO Auto-generated method stub
-		return null;
+		String number = (checkNumber.isSelected())? mTxtNumber.getPlainText() : "";
+        String name = (checkInterested.isSelected() && radioNome.isSelected())? txtName.getText() : "";
+        String cpf = (checkInterested.isSelected() && radioCpf.isSelected())? mTxtCpf.getPlainText() : "";
+        String inventaried = checkInventaried.isSelected()? txtInventaried.getText() : "";
+        String lawyer = checkInterested.isSelected()? txtLawyer.getText() : "";
+        int idCourt = checkCourt.isSelected()? cbCourt.getSelectionModel().getSelectedIndex() : 0;
+        int idJudge = checkJudge.isSelected()? cbJudge.getSelectionModel().getSelectedIndex() : 0;
+        int idSituation = checkSituation.isSelected()? cbSituation.getSelectionModel().getSelectedIndex() : 0;
+        
+        JuridicalProcessSearch search = new JuridicalProcessSearch();
+        search.setNumber(number);
+        search.setInventorian(name);
+        search.setCpf(cpf);
+        search.setInventaried(inventaried);
+        search.setLawyer(lawyer);
+        search.setCourtId(idCourt);
+        search.setJudgeId(idJudge);
+        search.setSituationId(idSituation);
+        
+        return search;
 	}
 
 	@Override
 	protected void configureColumns() {
-		// TODO Auto-generated method stub
-
+		tabColNumber.setCellValueFactory(
+				content -> new ReadOnlyStringWrapper(content.getValue().getFormattedNumber()));
+		tabColInterested.setCellValueFactory(
+				content -> new ReadOnlyStringWrapper(((JuridicalInterested)content.getValue().getInventorian()).getName()));
+		tabColCourt.setCellValueFactory(
+				content -> new ReadOnlyStringWrapper(content.getValue().getCourt().getInitials()));
+		tabColSituation.setCellValueFactory(
+				content -> new ReadOnlyStringWrapper(content.getValue().getSituation().getDescription()));
+		tabColRegDate.setCellValueFactory(
+				content -> new ReadOnlyStringWrapper(DateUtil.format(content.getValue().getRegistrationDate())));
 	}
 
 	@Override
 	public URL getFxmlPath() {
-		// TODO Auto-generated method stub
-		return null;
+		return FXML_PATH;
 	}
 
 }

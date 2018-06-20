@@ -13,37 +13,47 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import juridical.model.JuridicalInterested;
+import juridical.model.JuridicalProcess;
 import presentation.utils.widget.MaskedContactTextField;
+import purchase.model.PurchaseInterested;
 
 public class JuridicalInterestedEditCtrl extends InterestedEditCtrl {
 	private static final Logger LOGGER = Logger.getLogger(JuridicalInterestedEditCtrl.class);
-	private static final URL FXML_PATH = HealthInterestedEditCtrl.class.getResource("/visions/juridical_interested_edit_screen.fxml");
-	
+	private static final URL FXML_PATH = JuridicalInterestedEditCtrl.class.getResource("/visions/juridical_interested_edit_screen.fxml");
+
 	@FXML
 	private Label lblAlert;
-	
+
 	@FXML
-	private Label lblTxtCpf;
-	
+	private Label lblCpf;
+
 	@FXML
 	private TextField txtName;
-	
+
+	@FXML
+	private TextField txtAge;
+
+	@FXML
+	private TextField txtEmail;
+
 	@FXML
 	private MaskedContactTextField txtContact;
-	
+
 	protected JuridicalInterestedEditCtrl(InterestedService interestedService) {
 		super(interestedService, LOGGER);
 	}
 
 	@Override
 	protected void populeForm() {
-		lblTxtCpf.setText(((JuridicalInterested)interested).getFormatedCpf());
-		
-		if (interested.getId() != null) {
-			JuridicalInterested juridicalInterested = (JuridicalInterested) interested;
+		lblCpf.setText(((PurchaseInterested)super.interested).getFormatedCnpj());
+
+		if (super.interested.getId() != null) {
+			JuridicalInterested juridicalInterested = (JuridicalInterested)super.interested;
 			super.root.getChildren().remove(lblAlert);
-			
+
 			txtName.setText(juridicalInterested.getName());
+			txtAge.setText(""+juridicalInterested.getIdade());
+			txtEmail.setText(juridicalInterested.getEmail());
 			txtContact.setContactPlainText(juridicalInterested.getContact());
 		}
 
@@ -51,15 +61,22 @@ public class JuridicalInterestedEditCtrl extends InterestedEditCtrl {
 
 	@Override
 	protected Interested mountInterested() {
-		return new JuridicalInterested(txtName.getText(), ((JuridicalInterested)super.interested).getCpf(), txtContact.plainTextProperty().getValue());
+		JuridicalInterested interested = new JuridicalInterested();
+		interested.setCpf(lblCpf.getText());
+		interested.setName(txtName.getText());
+		interested.setIdade(Integer.parseInt(txtAge.getText()));
+		interested.setEmail(txtEmail.getText());
+		interested.setContact(txtContact.plainTextProperty().getValue());
+
+		return interested;
 	}
 
 	@Override
 	protected Scene dimensionScene(Parent rootParent) {
 		if (interested.getId() == null) {
-			return new Scene(rootParent, 400, 260);
+			return new Scene(rootParent, 400, 330);
 		} else {
-			return new Scene(rootParent, 400, 230);
+			return new Scene(rootParent, 400, 300);
 		}
 	}
 
