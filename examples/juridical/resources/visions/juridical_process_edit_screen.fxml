@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import presentation.utils.widget.MaskedTextField?>
+<!--?import presentation.utils.widget.MaskedTextField?-->
 
 <VBox fx:id="root" prefHeight="540.0" prefWidth="720.0" spacing="15.0"
 	xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
@@ -47,7 +47,7 @@
 				<HBox alignment="CENTER_LEFT" spacing="5.0">
 					<children>
 						<Label fx:id="lblNumProcesso" text="Número*:" />
-						<MaskedTextField mask="#####.######/####-##" fx:id="txtNumProcesso" nodeOrientation="LEFT_TO_RIGHT"
+						<TextField fx:id="txtNumProcesso" nodeOrientation="LEFT_TO_RIGHT"
 							prefHeight="26.0" prefWidth="240.0" />
 					</children>
 				</HBox>
@@ -64,11 +64,11 @@
 							spacing="10.0">
 							<children>
 								<Label fx:id="lblCpfInteressado" text="CPF:" />
-								<MaskedTextField mask="###.###.###-##" fx:id="txtCpfInteressado">
+								<TextField fx:id="txtCpfInteressado">
 									<HBox.margin>
 										<Insets left="-5.0" />
 									</HBox.margin>
-								</MaskedTextField>
+								</TextField>
 								<Button fx:id="btnBuscarInteressado" onAction="#searchInterestedByUniqueKey" mnemonicParsing="false" text="Buscar">
 									<HBox.margin>
 										<Insets />
