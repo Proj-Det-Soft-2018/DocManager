@@ -1,19 +1,18 @@
 package business.model;
 
 import business.exception.ValidationException;
-
+/**
+ * Representação de um Interessado em um Processo
+ */
 public interface Interested {
 
-	/**
-	 * @return the id
-	 */
 	Long getId();
 
-	/**
-	 * @param id the id to set
-	 */
 	void setId(Long id);
-	
+	/**
+	 * Método que realiza a validação do Interessado
+	 * @throws ValidationException
+	 */
 	public void validate() throws ValidationException;
 
 }

@@ -3,9 +3,8 @@
  */
 package persistence;
 
-/**
- * @author clah
- *
+/*
+ * Interface para uma fábrica de Daos
  */
 public interface DaoFactory {
 	

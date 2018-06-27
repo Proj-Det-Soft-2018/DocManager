@@ -1,18 +1,24 @@
 package business.model;
 
 import business.exception.ValidationException;
-
+/**
+ * Representação de um Processo
+ */
 public interface Process {
 
-	/**
-	 * @return the id
-	 */
 	Long getId();
 
 	void setId(Long processId);
 	
+	/**
+	 * Transforma o Objeto Processo em um arquivo Xml
+	 * @return Arquivo XML como String
+	 */
 	String toXml();
-	
+	/**
+	 * Realiza a validação da classe Process
+	 * @throws ValidationException
+	 */
 	public void validate() throws ValidationException;
 
 }
