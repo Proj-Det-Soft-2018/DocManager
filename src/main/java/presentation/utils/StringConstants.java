@@ -1,5 +1,11 @@
 package presentation.utils;
 
+/**
+ * Classe de enumeração para referencia às constantes {@code String} utilizadas pelas classes
+ * controladores do pacote {@code presentation}.  
+ * 
+ * @author hugo
+ */
 public enum StringConstants {
 	TITLE_APPLICATION ("DocManager"),
 	TITLE_PDF_VIEWER_SCREEN ("Certidão"),

@@ -37,7 +37,7 @@ public class HealthInterestedEditCtrl extends InterestedEditCtrl {
 	}
 	
 	@Override
-	protected Scene dimensionScene(Parent rootParent) {
+	protected Scene getDimensionedScene(Parent rootParent) {
 		if (interested.getId() == null) {
 			return new Scene(rootParent, 400, 260);
 		} else {

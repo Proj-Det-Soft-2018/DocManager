@@ -53,7 +53,7 @@ public abstract class SearchScreenCtrl implements Initializable, Observer {
 	@FXML
 	private Button btnApagar;
 	
-	public static void showProcessEditScreen(Window ownerWindow, SearchScreenCtrl controller) {
+	public static void showSearchScreen(Window ownerWindow, SearchScreenCtrl controller) {
         try {
             FXMLLoader loader = new FXMLLoader(controller.getFxmlPath());
             loader.setController(controller);
