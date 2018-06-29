@@ -25,11 +25,9 @@ public class DateUtil {
   /**
    * Método que recebe um objeto {@code LocalDateTime} e retorna uma string formatada no padrão
    * "{@code dd/MM/yy}" para a data armazenada.
-   *  
-   * @param date
-   *    Objeto {@code LocalDateTime} com a data que se quer converter.
-   * @return
-   *    {@code String} formatada ou {@code null} caso entrada também o seja.
+   * 
+   * @param date Objeto {@code LocalDateTime} com a data que se quer converter.
+   * @return {@code String} formatada ou {@code null} caso entrada também o seja.
    */
   public static String format(LocalDateTime date) {
     if (date != null) {
@@ -42,10 +40,8 @@ public class DateUtil {
    * Método de conversão de uma {@code String} que obedeça o padrão "{@code dd/MM/yy}" em um objeto
    * {@code LocalDateTime} com a data desejada.
    * 
-   * @param dateString
-   *    {@code String} com a data desejada.
-   * @return
-   *    {@code LocalDateTime} com a data ou {@code null} para as entradas mau formatadas.
+   * @param dateString {@code String} com a data desejada.
+   * @return {@code LocalDateTime} com a data ou {@code null} para as entradas mau formatadas.
    */
   public static LocalDateTime parse(String dateString) {
     try {

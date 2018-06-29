@@ -3,14 +3,13 @@ package business.service;
 import business.model.Organization;
 import business.model.Situation;
 import business.model.Subject;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Classe que concretiza a interface ListService, responsável por gerenciar serviços referente
- * a listas de organizações, situações e assuntos.
- *   
+ * Classe que concretiza a interface ListService, responsável por gerenciar serviços referente a
+ * listas de organizações, situações e assuntos.
+ * 
  * @author clah - clahzita@gmail.com
  * @since 01.06.2018
  *
@@ -33,12 +32,13 @@ public class ConcreteListService implements ListService {
   /**
    * Constrói uma instância de ConcreteListService em que iniciliaza listas de organizações,
    * situações e assuntos.
+   * 
    * @param organizationsList Lista com todas as organizações.
    * @param subjectsList Lista com todos os assuntos.
    * @param situationsList Lista com todas as situações.
    */
-  public ConcreteListService(List<Organization> organizationsList,
-      List<Subject> subjectsList, List<Situation> situationsList) {
+  public ConcreteListService(List<Organization> organizationsList, List<Subject> subjectsList,
+      List<Situation> situationsList) {
     organizationsInitialsList = new ArrayList<>();
     organizationsExtendedList = new ArrayList<>();
     subjectsDescritionList = new ArrayList<>();
@@ -53,8 +53,8 @@ public class ConcreteListService implements ListService {
 
     organizationsList.forEach(organization -> {
       organizationsInitialsList.add(organization.getInitials());
-      organizationsExtendedList.add(organization.getInitials()
-          + " - " + organization.getFullName());
+      organizationsExtendedList
+          .add(organization.getInitials() + " - " + organization.getFullName());
     });
 
     subjectsList.forEach(subject -> {

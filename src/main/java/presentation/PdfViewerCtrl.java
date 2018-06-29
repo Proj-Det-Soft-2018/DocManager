@@ -6,10 +6,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Base64;
 import java.util.ResourceBundle;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-
 import business.model.Process;
 import business.service.ProcessService;
 import javafx.concurrent.Worker;
@@ -37,7 +35,8 @@ import presentation.utils.widget.ExceptionAlert;
 public class PdfViewerCtrl implements Initializable {
 
   private static final Logger LOGGER = Logger.getLogger(PdfViewerCtrl.class);
-  private static final URL FXML_PATH = PdfViewerCtrl.class.getResource("/visions/pdf_viewer_screen.fxml");
+  private static final URL FXML_PATH =
+      PdfViewerCtrl.class.getResource("/visions/pdf_viewer_screen.fxml");
 
   private ProcessService processService;
   /**
@@ -55,12 +54,9 @@ public class PdfViewerCtrl implements Initializable {
    * Método estático para exibição da tela de visualização da certidão em Pdf. Caso ocorra algum
    * erro na montagem da tela este método exibirá um um {@code ExceptionAlert}.
    * 
-   * @param ownerWindow
-   *    Tela que chamou este método.
-   * @param controller
-   *    Controlador do dialog.
-   * @param process
-   *    Processo selecionado para geração da certidão.
+   * @param ownerWindow Tela que chamou este método.
+   * @param controller Controlador do dialog.
+   * @param process Processo selecionado para geração da certidão.
    */
   public static void showPdfViewer(Window ownerWindow, PdfViewerCtrl controller, Process process) {
     try {
@@ -73,7 +69,8 @@ public class PdfViewerCtrl implements Initializable {
       pdfViewerScreen.setTitle(StringConstants.TITLE_PDF_VIEWER_SCREEN.getText());
       pdfViewerScreen.initModality(Modality.WINDOW_MODAL);
       pdfViewerScreen.initOwner(ownerWindow);
-      pdfViewerScreen.setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
+      pdfViewerScreen
+          .setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
 
       pdfViewerScreen.show();
     } catch (IOException e) {
@@ -84,8 +81,7 @@ public class PdfViewerCtrl implements Initializable {
   /**
    * Construtor para objetos {@code PdfViewerCtrl}.
    * 
-   * @param processService
-   *    Serviço de processos.
+   * @param processService Serviço de processos.
    */
   public PdfViewerCtrl(ProcessService processService) {
     this.processService = processService;
@@ -94,14 +90,15 @@ public class PdfViewerCtrl implements Initializable {
   /**
    * Método para geração do binário do documento do processo fornecido por parâmetro.
    * 
-   * @param targetProcess
-   *    Processo que se deseja gerar a certidão
+   * @param targetProcess Processo que se deseja gerar a certidão
    */
   private void setProcessPdf(Process targetProcess) {
     pdfData = processService.getPdf(targetProcess);
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see javafx.fxml.Initializable#initialize(java.net.URL, java.util.ResourceBundle)
    */
   @Override
@@ -142,26 +139,28 @@ public class PdfViewerCtrl implements Initializable {
   }
 
   /**
-   * Método para execução do evento do botão "Salvar". Este método cria uma nova janela com o 
+   * Método para execução do evento do botão "Salvar". Este método cria uma nova janela com o
    * {@code javafx.stage.FileChooser} para geração de um arquivo ({@code java.io.File} de destino.
    */
   @FXML
   private void savePdfFile() {
     FileChooser fileChooser = new FileChooser();
 
-    //Set extension filter for text files
-    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("arquivos PDF (*.pdf)", "*.pdf");
+    // Set extension filter for text files
+    FileChooser.ExtensionFilter extFilter =
+        new FileChooser.ExtensionFilter("arquivos PDF (*.pdf)", "*.pdf");
     fileChooser.getExtensionFilters().add(extFilter);
     fileChooser.setTitle(StringConstants.TITTLE_PDF_SAVE_SCREEN.getText());
     fileChooser.setInitialFileName("Certidão.pdf");
 
-    //Show save file dialog
+    // Show save file dialog
     File outputFile = fileChooser.showSaveDialog(root.getScene().getWindow());
 
     if (outputFile != null) {
       // Testa a extenção do arquivo de destino e troca, quando necessário
       if (!FilenameUtils.getExtension(outputFile.getName()).equalsIgnoreCase("pdf")) {
-        outputFile = new File(outputFile.getParentFile(), FilenameUtils.getBaseName(outputFile.getName())+".pdf");
+        outputFile = new File(outputFile.getParentFile(),
+            FilenameUtils.getBaseName(outputFile.getName()) + ".pdf");
       }
       savePdfToFile(outputFile);
       closeWindow();
@@ -169,7 +168,7 @@ public class PdfViewerCtrl implements Initializable {
   }
 
   /**
-   * Carrega o binário do documento Pdf no visualizador do {@code javafx.scene.web.WebView}. 
+   * Carrega o binário do documento Pdf no visualizador do {@code javafx.scene.web.WebView}.
    */
   private void loadPdfFile() {
     String pdfBase64 = Base64.getEncoder().encodeToString(pdfData);
@@ -179,8 +178,7 @@ public class PdfViewerCtrl implements Initializable {
   /**
    * Salva as informações do binário do documento Pdf no arquivo ({@code java.io.File}) fornecido.
    * 
-   * @param outputFile
-   *    Arquivo de destino.
+   * @param outputFile Arquivo de destino.
    */
   private void savePdfToFile(File outputFile) {
     try (FileOutputStream fos = new FileOutputStream(outputFile)) {

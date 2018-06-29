@@ -2,14 +2,14 @@ package business.service;
 
 import java.util.ArrayList;
 import java.util.Map;
-
 import persistence.DaoFactory;
 import persistence.ProcessDao;
 import persistence.exception.DatabaseException;
 
 /**
- * Classe que concretiza a interface StatisticService, responsável por gerenciar serviços de 
+ * Classe que concretiza a interface StatisticService, responsável por gerenciar serviços de
  * gráficos estatísticos dos processos.
+ * 
  * @author clah
  * @since 04.20.2018
  */
@@ -19,6 +19,7 @@ public class ConcreteStatisticService implements StatisticService {
 
   /**
    * Constrói uma instância com uma fábrica de DAO que instancia o atributo processoDao.
+   * 
    * @param daoFactory Fábrica de objetos de controle de banco de dados.
    */
   public ConcreteStatisticService(DaoFactory daoFactory) {

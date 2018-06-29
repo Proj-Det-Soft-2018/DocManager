@@ -8,11 +8,12 @@ import java.util.List;
 public interface Situation {
 
   String getDescription();
-  
+
   int getId();
-  
+
   /**
    * Consultar as situações possíveis de acordo com a situação atual.
+   * 
    * @return Uma lista de inteiros referente as possíveis situações que poderão ser escolhidas a
    *         partir da atual situação.
    */

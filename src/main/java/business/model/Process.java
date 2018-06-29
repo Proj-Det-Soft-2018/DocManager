@@ -13,12 +13,14 @@ public interface Process {
 
   /**
    * Transforma o Objeto Processo em um arquivo Xml.
+   * 
    * @return Arquivo XML como String
    */
   String toXml();
-  
+
   /**
    * Realiza a validação da classe Process.
+   * 
    * @throws ValidationException Exceção lançada por problemas de validação do processo.
    */
   public void validate() throws ValidationException;

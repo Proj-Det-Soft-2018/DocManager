@@ -2,16 +2,13 @@ package presentation;
 
 import java.io.IOException;
 import java.net.URL;
-
 import org.apache.log4j.Logger;
 import org.apache.shiro.authc.AuthenticationException;
-
 import persistence.exception.DatabaseException;
 import presentation.utils.StringConstants;
 import presentation.utils.widget.ExceptionAlert;
 import business.model.Process;
 import business.service.ProcessService;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -33,8 +30,8 @@ import javafx.stage.Window;
  */
 public class DeleteDialogCtrl {
 
-  private static final URL FXML_PATH = DeleteDialogCtrl.class
-      .getResource("/visions/delete_dialog.fxml");
+  private static final URL FXML_PATH =
+      DeleteDialogCtrl.class.getResource("/visions/delete_dialog.fxml");
   private static final Logger LOGGER = Logger.getLogger(DeleteDialogCtrl.class);
 
   /**
@@ -42,7 +39,7 @@ public class DeleteDialogCtrl {
    */
   private Process process;
   private ProcessService processService;
-  
+
   @FXML
   private VBox root;
 
@@ -61,15 +58,12 @@ public class DeleteDialogCtrl {
   /**
    * Método estático para exibição o dialog de confirmação de deleção.
    * 
-   * @param ownerWindow
-   *    Tela que chamou este método.
-   * @param controller
-   *    Controlador do dialog.
-   * @param process
-   *    Processo selecionado para deleção.
+   * @param ownerWindow Tela que chamou este método.
+   * @param controller Controlador do dialog.
+   * @param process Processo selecionado para deleção.
    */
   public static void showDeleteDialog(Window ownerWindow, DeleteDialogCtrl controller,
-      Process process){
+      Process process) {
     try {
       FXMLLoader loader = new FXMLLoader(FXML_PATH);
       controller.setProcess(process);
@@ -80,8 +74,8 @@ public class DeleteDialogCtrl {
       deleteDialogStage.setTitle(StringConstants.TITLE_DELETE_DIALOG.getText());
       deleteDialogStage.initModality(Modality.WINDOW_MODAL);
       deleteDialogStage.initOwner(ownerWindow);
-      deleteDialogStage.setScene(new Scene(rootParent, rootParent.prefWidth(-1),
-          rootParent.prefHeight(-1)));
+      deleteDialogStage
+          .setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
 
       deleteDialogStage.show();
     } catch (IOException e) {
@@ -92,8 +86,7 @@ public class DeleteDialogCtrl {
   /**
    * Construtor para objetos {@code DeleteDialogCtrl}.
    * 
-   * @param processService
-   *    Serviço de processos.
+   * @param processService Serviço de processos.
    */
   public DeleteDialogCtrl(ProcessService processService) {
     this.processService = processService;
@@ -118,14 +111,13 @@ public class DeleteDialogCtrl {
       processService.delete(process, user, password);
       this.closeWindow();
     } catch (AuthenticationException ae) {
-      Stage selfStage = (Stage)root.getScene().getWindow();
+      Stage selfStage = (Stage) root.getScene().getWindow();
       selfStage.setHeight(250);
       Label errorLabel = new Label(StringConstants.ERROR_PASSWORD.getText());
       errorLabel.setTextFill(Color.RED);
       this.root.getChildren().add(0, errorLabel);
     } catch (DatabaseException e) {
-      ExceptionAlert.show("ERRO! Contate o administrador do sistema.",
-          root.getScene().getWindow());
+      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
       LOGGER.error(e.getMessage(), e);
     }
   }

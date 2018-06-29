@@ -6,14 +6,11 @@ import business.service.ProcessService;
 import persistence.exception.DatabaseException;
 import presentation.utils.StringConstants;
 import presentation.utils.widget.ExceptionAlert;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import org.apache.log4j.Logger;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,21 +23,21 @@ import javafx.stage.Stage;
 
 /**
  * Classe abstrata para controlador da tela principal. Como é um dos pontos flexíveis do framework,
- * o desenvolvedor deve implementar seus métodos abstratos para obter um controlador para a tela
- * que exibe os botões de navegação e tabela de escolha dos processos.
+ * o desenvolvedor deve implementar seus métodos abstratos para obter um controlador para a tela que
+ * exibe os botões de navegação e tabela de escolha dos processos.
  * 
  * @author hugotho
  */
 public abstract class MainScreenCtrl implements Initializable, Observer {
-  
+
   private final Logger logger;
   private ProcessService processService;
   /**
-   * Fábrica utilizada para criação dos controladores das telas que são acessadas pela tela 
+   * Fábrica utilizada para criação dos controladores das telas que são acessadas pela tela
    * principal.
    */
   private ControllerFactory controllerFactory;
-  
+
   protected Process selectedProcess;
 
   @FXML
@@ -60,15 +57,14 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
 
   @FXML
   protected TableView<Process> tabProcesses;
-  
+
   /**
    * Método estático para exibição da tela principal. Caso ocorra algum erro na montagem da tela
    * este método exibirá um um {@code ExceptionAlert}.
    * 
-   * @param primaryStage
-   *    Placo inicial obtivo através do parâmetro do método start da aplicação JavaFX
-   * @param controller
-   *    Controlador da tela.
+   * @param primaryStage Placo inicial obtivo através do parâmetro do método start da aplicação
+   *        JavaFX
+   * @param controller Controlador da tela.
    */
   public static void showMainScreen(Stage primaryStage, MainScreenCtrl controller) {
 
@@ -76,33 +72,35 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
     loader.setController(controller);
     try {
       Parent rootParent = loader.load();
-      primaryStage.setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
+      primaryStage
+          .setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
       primaryStage.setTitle(StringConstants.TITLE_APPLICATION.getText());
       primaryStage.show();
     } catch (IOException e) {
       Logger.getLogger(MainScreenCtrl.class).error(e.getMessage(), e);
-      ExceptionAlert.show("Não foi possível gerar a tela!", primaryStage.sceneProperty().get().getWindow());
+      ExceptionAlert.show("Não foi possível gerar a tela!",
+          primaryStage.sceneProperty().get().getWindow());
     }
   }
 
   /**
    * Construtor que deve ser chamado pelas classes que extendam {@code InterestedEditCtrl}.
    * 
-   * @param processService
-   *    Serviço de processos
-   * @param controllerFactory
-   *    Fábrica de controladores
-   * @param logger
-   *    {@code org.apache.log4j.Logger} para efetuação de logs.
+   * @param processService Serviço de processos
+   * @param controllerFactory Fábrica de controladores
+   * @param logger {@code org.apache.log4j.Logger} para efetuação de logs.
    */
-  protected MainScreenCtrl(ProcessService processService, ControllerFactory controllerFactory, Logger logger) {
+  protected MainScreenCtrl(ProcessService processService, ControllerFactory controllerFactory,
+      Logger logger) {
     this.processService = processService;
     this.controllerFactory = controllerFactory;
     this.logger = logger;
     this.selectedProcess = null;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see javafx.fxml.Initializable#initialize(java.net.URL, java.util.ResourceBundle)
    */
   @Override
@@ -112,7 +110,9 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
     updateTable();
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see business.service.Observer#update()
    */
   @Override
@@ -125,12 +125,12 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
    */
   private void configureTable() {
     // eventHandle para detectar o processo selecionado
-    tabProcesses.getSelectionModel().selectedItemProperty().addListener(
-        (observable, oldValue, newValue) -> {
+    tabProcesses.getSelectionModel().selectedItemProperty()
+        .addListener((observable, oldValue, newValue) -> {
           selectedProcess = newValue;
-          btnEdit.setDisable(newValue!=null? false : true);
-          btnPdfDoc.setDisable(newValue!=null? false : true);
-          btnDelete.setDisable(newValue!=null? false : true);
+          btnEdit.setDisable(newValue != null ? false : true);
+          btnPdfDoc.setDisable(newValue != null ? false : true);
+          btnDelete.setDisable(newValue != null ? false : true);
         });
     // chama o método abstrato para configurar as colunas
     configureColumns();
@@ -147,7 +147,7 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
   }
 
   /**
-   * Método para execução do evento de clique no botão "Ver/Editar", consiste em mostrar a tela de 
+   * Método para execução do evento de clique no botão "Ver/Editar", consiste em mostrar a tela de
    * edição de processos para um processo existente selecionado na tabela.
    */
   @FXML
@@ -163,12 +163,12 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
   @FXML
   private void showDeleteDialog() {
     DeleteDialogCtrl.showDeleteDialog(root.getScene().getWindow(),
-        controllerFactory.createDeleteDialogCtrl(),	selectedProcess);
+        controllerFactory.createDeleteDialogCtrl(), selectedProcess);
   }
 
   /**
-   * Método para execução do evento de clique no botão "Certidão Pdf", consiste em mostrar a tela
-   * de visualização de Pdf com o arquivo preparado com o processo selecionado.
+   * Método para execução do evento de clique no botão "Certidão Pdf", consiste em mostrar a tela de
+   * visualização de Pdf com o arquivo preparado com o processo selecionado.
    */
   @FXML
   private void showPdfViewer() {
@@ -177,7 +177,7 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
   }
 
   /**
-   * Método para execução do evento de clique no botão "Buscar", consiste em mostrar a tela de 
+   * Método para execução do evento de clique no botão "Buscar", consiste em mostrar a tela de
    * busca.
    */
   @FXML
@@ -187,7 +187,7 @@ public abstract class MainScreenCtrl implements Initializable, Observer {
   }
 
   /**
-   * Método para execução do evento de clique no botão "Estatísticas", consiste em mostrar a tela de 
+   * Método para execução do evento de clique no botão "Estatísticas", consiste em mostrar a tela de
    * estatísticas do sistema.
    */
   @FXML

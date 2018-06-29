@@ -9,7 +9,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URL;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -19,7 +18,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
@@ -32,8 +30,8 @@ import org.w3c.dom.Element;
 
 public class XmlToPdfConcreteAdapter implements XmlToPdfAdapter {
 
-  private static final URL FO_TEMPLATE_PATH = XmlToPdfConcreteAdapter.class
-      .getResource("/fo_templates/xml2fo.xsl");
+  private static final URL FO_TEMPLATE_PATH =
+      XmlToPdfConcreteAdapter.class.getResource("/fo_templates/xml2fo.xsl");
   private static final Logger LOGGER = Logger.getLogger(XmlToPdfConcreteAdapter.class);
 
   // Subsídios para geração de PDF -- Apache Xalan/FOP
@@ -123,14 +121,11 @@ public class XmlToPdfConcreteAdapter implements XmlToPdfAdapter {
     String fo = null;
 
     if (xml != null) {
-      try (
-          StringReader sr = new StringReader(xml);
-          StringWriter sw = new StringWriter();
-          ) {
+      try (StringReader sr = new StringReader(xml); StringWriter sw = new StringWriter();) {
         // Faz a conversão de XML para XSL:FO
         if (this.xmlToFoTransformer != null) {
 
-          StreamSource xmlSource = new StreamSource(sr); 
+          StreamSource xmlSource = new StreamSource(sr);
           StreamResult foResult = new StreamResult(sw);
           this.xmlToFoTransformer.transform(xmlSource, foResult);
           // Pega a string gerada
@@ -148,11 +143,10 @@ public class XmlToPdfConcreteAdapter implements XmlToPdfAdapter {
 
     byte[] pdfData;
 
-    try (
-        StringReader sourceReader = new StringReader(fo);
+    try (StringReader sourceReader = new StringReader(fo);
         ByteArrayOutputStream resultStream = new ByteArrayOutputStream();
 
-        ) {
+    ) {
       Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, this.foUserAgent, resultStream);
 
       // Configura um transformador utilizando as configurações padrão
@@ -172,7 +166,7 @@ public class XmlToPdfConcreteAdapter implements XmlToPdfAdapter {
 
     } catch (FOPException | TransformerException | IOException e) {
       LOGGER.error(e.getMessage(), e);
-      pdfData = new byte[0];	
+      pdfData = new byte[0];
     }
 
 

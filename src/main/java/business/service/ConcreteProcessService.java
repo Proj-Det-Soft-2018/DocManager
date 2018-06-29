@@ -3,13 +3,11 @@ package business.service;
 import business.exception.ValidationException;
 import business.model.Process;
 import business.model.Search;
-
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -17,7 +15,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -29,14 +26,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
-
 import persistence.DaoFactory;
 import persistence.ProcessDao;
 import persistence.exception.DatabaseException;
 
 /**
- * Classe que concretiza a interface ProcessService, responsável por gerenciar serviços referente 
+ * Classe que concretiza a interface ProcessService, responsável por gerenciar serviços referente
  * aos processos.
+ * 
  * @author clarissa - clahzita@gmail.com
  * @since 24/03/2018
  */
@@ -51,14 +48,14 @@ public class ConcreteProcessService extends Observable implements ProcessService
    */
   private Subject currentUser;
 
-  //TODO documentar o xmlToPdfAdapter
+  // TODO documentar o xmlToPdfAdapter
   private XmlToPdfAdapter xmlToPdfAdapter;
 
-  
+
   /**
-   * Constrói uma instância de ConcreteProcessService, em que recebe uma fábrica de DAO e um 
-   * objeto XmlToPdfAdapter.
-   * inicializa o Apache Shiro.
+   * Constrói uma instância de ConcreteProcessService, em que recebe uma fábrica de DAO e um objeto
+   * XmlToPdfAdapter. inicializa o Apache Shiro.
+   * 
    * @param daoFactory Fábrica de objetos de controle de banco de dados.
    * @param xmlToPdfAdapter //TODO documentar o xmlToPdfAdapter
    */
@@ -125,6 +122,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
 
   /**
    * Adiciona a data e hora atual na string xml para ser impresso no documento pdf.
+   * 
    * @param xml A antiga xml em que deverá ser colocada a informação de data e hora atual.
    * @return A nova xml com a data e hora atual.
    */
@@ -132,10 +130,8 @@ public class ConcreteProcessService extends Observable implements ProcessService
 
     String newXml;
 
-    try (
-        StringReader xmlReader = new StringReader(xml);
-        StringWriter xmlWriter = new StringWriter();
-        ) {
+    try (StringReader xmlReader = new StringReader(xml);
+        StringWriter xmlWriter = new StringWriter();) {
 
       // Transforma o String em Document
       DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -149,7 +145,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
       String formatedTime = now.format(formatter);
 
-      // Cria um novo Elemento com o Texto desejado 
+      // Cria um novo Elemento com o Texto desejado
       Text text = xmlDoc.createTextNode(formatedTime);
       Element element = xmlDoc.createElement("current-time");
       element.appendChild(text);

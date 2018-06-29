@@ -11,9 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import org.apache.log4j.Logger;
-
 import java.util.ResourceBundle;
 import business.service.ListService;
 import business.service.StatisticService;
@@ -44,265 +42,266 @@ import presentation.utils.widget.ExceptionAlert;
  */
 public class StatisticsScreenCtrl implements Initializable {
 
-	private static final URL FXML_PATH = PdfViewerCtrl.class.getResource("/visions/statistics_screen.fxml");
-	private static final Logger LOGGER = Logger.getLogger(StatisticsScreenCtrl.class);
+  private static final URL FXML_PATH =
+      PdfViewerCtrl.class.getResource("/visions/statistics_screen.fxml");
+  private static final Logger LOGGER = Logger.getLogger(StatisticsScreenCtrl.class);
 
-	private StatisticService statisticService;
-	private ListService listService;
-	
-	private ObservableList<String> monthsObsList = FXCollections.observableArrayList();
-	private ObservableList<String> lastTwelveMonthsObsList = FXCollections.observableArrayList();
+  private StatisticService statisticService;
+  private ListService listService;
 
-	@FXML
-	private Node root;
+  private ObservableList<String> monthsObsList = FXCollections.observableArrayList();
+  private ObservableList<String> lastTwelveMonthsObsList = FXCollections.observableArrayList();
 
-	//First Tab
-	@FXML
-	private BarChart<String, Number> bcPerMonthYear;
-	@FXML
-	private CategoryAxis categoryAxisMonthYear;
+  @FXML
+  private Node root;
 
-	//Second tab
-	@FXML
-	private BarChart<String, Number> bcLastTwelveMonths;
-	@FXML
-	private CategoryAxis categoryAxisLastYear;
+  // First Tab
+  @FXML
+  private BarChart<String, Number> bcPerMonthYear;
+  @FXML
+  private CategoryAxis categoryAxisMonthYear;
 
-	//Third tab
-	@FXML
-	private PieChart pieChart;
-	
-	public StatisticsScreenCtrl(StatisticService statisticService, ListService listService) {
-		this.statisticService = statisticService;
-		this.listService = listService;
-	}
-	
-	public static void showStatisticsScreen(Window ownerWindow, StatisticsScreenCtrl controller) {
-		try {
-			FXMLLoader loader = new FXMLLoader(FXML_PATH);
-			loader.setController(controller);
-			Parent rootParent = loader.load();
+  // Second tab
+  @FXML
+  private BarChart<String, Number> bcLastTwelveMonths;
+  @FXML
+  private CategoryAxis categoryAxisLastYear;
 
-			Stage statisticsScreen = new Stage();
-			statisticsScreen.setTitle(StringConstants.TITLE_STATISTICS_SCREEN.getText());
-			statisticsScreen.initModality(Modality.WINDOW_MODAL);
-			statisticsScreen.initOwner(ownerWindow);
-			statisticsScreen.setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
-			
-			statisticsScreen.show();
-		} catch (IOException e) {
-			ExceptionAlert.show("Não foi possível gerar a tela!", ownerWindow);
-			LOGGER.error(e.getMessage(), e);
-		}
-	}
+  // Third tab
+  @FXML
+  private PieChart pieChart;
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		createChartQntPerMonthAndYear();
-		createChartQntLastYear();
-		createPieChartSubject();
-	}
+  public StatisticsScreenCtrl(StatisticService statisticService, ListService listService) {
+    this.statisticService = statisticService;
+    this.listService = listService;
+  }
 
-	private void createChartQntPerMonthAndYear(){
-		/* Converte o array em uma lista e adiciona em nossa ObservableList de meses.*/
-		monthsObsList.addAll(Arrays.asList(Month.getAll()));
-		/* Associa os nomes de mês como categorias para o eixo horizontal. */        
-		categoryAxisMonthYear.setCategories(monthsObsList);
+  public static void showStatisticsScreen(Window ownerWindow, StatisticsScreenCtrl controller) {
+    try {
+      FXMLLoader loader = new FXMLLoader(FXML_PATH);
+      loader.setController(controller);
+      Parent rootParent = loader.load();
 
-		Map<Integer, ArrayList<Integer>> qntPerMonthData = null;
-		try {
-			qntPerMonthData = statisticService.quantityProcessPerMonthYear();
-		} catch (DatabaseException e) {
-			ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
-			LOGGER.error(e.getMessage(), e);
-		}
+      Stage statisticsScreen = new Stage();
+      statisticsScreen.setTitle(StringConstants.TITLE_STATISTICS_SCREEN.getText());
+      statisticsScreen.initModality(Modality.WINDOW_MODAL);
+      statisticsScreen.initOwner(ownerWindow);
+      statisticsScreen
+          .setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
 
-		if(qntPerMonthData == null || qntPerMonthData.isEmpty()) {
-			//TODO fazer um alert e tratar
-		} else {
-			for (Entry<Integer, ArrayList<Integer>> itemData : qntPerMonthData.entrySet()) {
-				XYChart.Series<String, Number> series = new XYChart.Series<>();
-				series.setName(itemData.getKey().toString());
-				for (int i = 0; i < itemData.getValue().size(); i = i + 2) {
-					String month;
-					Number quantity;
-					month = Month.getName((int) itemData.getValue().get(i));
-					quantity = itemData.getValue().get(i + 1);
-					series.getData().add(new XYChart.Data<>(month, quantity));
-				}
-				bcPerMonthYear.getData().add(series);
-			}
-		}
-	}
+      statisticsScreen.show();
+    } catch (IOException e) {
+      ExceptionAlert.show("Não foi possível gerar a tela!", ownerWindow);
+      LOGGER.error(e.getMessage(), e);
+    }
+  }
 
-	private void createChartQntLastYear() {
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+    createChartQntPerMonthAndYear();
+    createChartQntLastYear();
+    createPieChartSubject();
+  }
 
-		// Converte o array em uma lista e adiciona em nossa ObservableList de meses.
-		lastTwelveMonthsObsList.addAll(this.getMonthList(Calendar.getInstance()));
-		// Associa os nomes de mês como categorias para o eixo horizontal.        
-		categoryAxisLastYear.setCategories(lastTwelveMonthsObsList);
+  private void createChartQntPerMonthAndYear() {
+    /* Converte o array em uma lista e adiciona em nossa ObservableList de meses. */
+    monthsObsList.addAll(Arrays.asList(Month.getAll()));
+    /* Associa os nomes de mês como categorias para o eixo horizontal. */
+    categoryAxisMonthYear.setCategories(monthsObsList);
 
-		Map<Integer, ArrayList<Integer>> dados = null;
-		try {
-			dados = statisticService.quantityProcessFromLastYear();
-		} catch (DatabaseException e) {
-			ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
-			LOGGER.error(e.getMessage(), e);
-		}
+    Map<Integer, ArrayList<Integer>> qntPerMonthData = null;
+    try {
+      qntPerMonthData = statisticService.quantityProcessPerMonthYear();
+    } catch (DatabaseException e) {
+      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
+      LOGGER.error(e.getMessage(), e);
+    }
 
-		if(dados == null || dados.isEmpty()) {
-			//TODO fazer um alert e tratar
-		} else {
-	
-			for (Entry<Integer, ArrayList<Integer>> itemData : dados.entrySet()) {
-				XYChart.Series<String, Number> series = new XYChart.Series<>();
-				series.setName(itemData.getKey().toString());
-				for (int i = 0; i < itemData.getValue().size(); i = i + 2) {
-					String month;
-					Number quantity;
-					month = Month.getName((int) itemData.getValue().get(i));
-					quantity = itemData.getValue().get(i + 1);
-					series.getData().add(new XYChart.Data<>(month, quantity));
-				}
-				bcLastTwelveMonths.getData().add(series);
-			}
-		}
+    if (qntPerMonthData == null || qntPerMonthData.isEmpty()) {
+      // TODO fazer um alert e tratar
+    } else {
+      for (Entry<Integer, ArrayList<Integer>> itemData : qntPerMonthData.entrySet()) {
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName(itemData.getKey().toString());
+        for (int i = 0; i < itemData.getValue().size(); i = i + 2) {
+          String month;
+          Number quantity;
+          month = Month.getName((int) itemData.getValue().get(i));
+          quantity = itemData.getValue().get(i + 1);
+          series.getData().add(new XYChart.Data<>(month, quantity));
+        }
+        bcPerMonthYear.getData().add(series);
+      }
+    }
+  }
 
-	}
+  private void createChartQntLastYear() {
 
-	private List<String> getMonthList(Calendar currentDate){
-		List<String> monthList = new ArrayList<>();
+    // Converte o array em uma lista e adiciona em nossa ObservableList de meses.
+    lastTwelveMonthsObsList.addAll(this.getMonthList(Calendar.getInstance()));
+    // Associa os nomes de mês como categorias para o eixo horizontal.
+    categoryAxisLastYear.setCategories(lastTwelveMonthsObsList);
 
-		Deque<String> temporaryMonthDeque = new LinkedList<>();
+    Map<Integer, ArrayList<Integer>> dados = null;
+    try {
+      dados = statisticService.quantityProcessFromLastYear();
+    } catch (DatabaseException e) {
+      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
+      LOGGER.error(e.getMessage(), e);
+    }
 
-		//Add the current month value in the stack
-		int currentMonthValue = currentDate.get(Calendar.MONTH);
-		temporaryMonthDeque.push(Month.getName(currentMonthValue+1));
+    if (dados == null || dados.isEmpty()) {
+      // TODO fazer um alert e tratar
+    } else {
 
-		//Add the other 11 months
-		for (int i = 0; i < 11; i++) {
-			currentDate.add(Calendar.MONTH,-1);
-			int monthValue = currentDate.get(Calendar.MONTH);
-			temporaryMonthDeque.push(Month.getName(monthValue+1));
-		}
+      for (Entry<Integer, ArrayList<Integer>> itemData : dados.entrySet()) {
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName(itemData.getKey().toString());
+        for (int i = 0; i < itemData.getValue().size(); i = i + 2) {
+          String month;
+          Number quantity;
+          month = Month.getName((int) itemData.getValue().get(i));
+          quantity = itemData.getValue().get(i + 1);
+          series.getData().add(new XYChart.Data<>(month, quantity));
+        }
+        bcLastTwelveMonths.getData().add(series);
+      }
+    }
 
-		//Add in a list in the correct order
-		for (int i = 0; i < 12; i++) {
-			monthList.add(temporaryMonthDeque.pop());
-		}
-		
-		return monthList;
-	}
+  }
 
-	@FXML
-	private void createPieChartSituation() {
-		try {
-			pieChart.getData().clear(); //Clean data chart
-			Map<Integer, Integer> dados = statisticService.quantityProcessPerSituation();
-			this.createPieChart("Situação",dados);
-		} catch (DatabaseException e) {
-			ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
-			LOGGER.error(e.getMessage(), e);
-		}
-	}
+  private List<String> getMonthList(Calendar currentDate) {
+    List<String> monthList = new ArrayList<>();
 
-	@FXML
-	private void createPieChartOrganization() {
-		try {
-			pieChart.getData().clear(); //Clean data chart
-			Map<Integer, Integer> dados = statisticService.quantityProcessPerOrganization();
-			this.createPieChart("Órgão",dados);
-		} catch (DatabaseException e) {
-			ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
-			LOGGER.error(e.getMessage(), e);
-		}
-	}
+    Deque<String> temporaryMonthDeque = new LinkedList<>();
 
-	@FXML
-	private void createPieChartSubject() {
-		try {
-			pieChart.getData().clear(); //Clean data chart
-			Map<Integer, Integer> data = statisticService.quantityProcessPerSubject();
-			this.createPieChart("Assunto",data);
-		} catch (DatabaseException e) {
-			ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
-			LOGGER.error(e.getMessage(), e);
-		}
-	}
+    // Add the current month value in the stack
+    int currentMonthValue = currentDate.get(Calendar.MONTH);
+    temporaryMonthDeque.push(Month.getName(currentMonthValue + 1));
 
-	@FXML
-	private void closeWindow() {
-		Stage janela = (Stage) root.getScene().getWindow();
-		if (janela != null)
-			janela.close();
-	}
+    // Add the other 11 months
+    for (int i = 0; i < 11; i++) {
+      currentDate.add(Calendar.MONTH, -1);
+      int monthValue = currentDate.get(Calendar.MONTH);
+      temporaryMonthDeque.push(Month.getName(monthValue + 1));
+    }
+
+    // Add in a list in the correct order
+    for (int i = 0; i < 12; i++) {
+      monthList.add(temporaryMonthDeque.pop());
+    }
+
+    return monthList;
+  }
+
+  @FXML
+  private void createPieChartSituation() {
+    try {
+      pieChart.getData().clear(); // Clean data chart
+      Map<Integer, Integer> dados = statisticService.quantityProcessPerSituation();
+      this.createPieChart("Situação", dados);
+    } catch (DatabaseException e) {
+      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
+      LOGGER.error(e.getMessage(), e);
+    }
+  }
+
+  @FXML
+  private void createPieChartOrganization() {
+    try {
+      pieChart.getData().clear(); // Clean data chart
+      Map<Integer, Integer> dados = statisticService.quantityProcessPerOrganization();
+      this.createPieChart("Órgão", dados);
+    } catch (DatabaseException e) {
+      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
+      LOGGER.error(e.getMessage(), e);
+    }
+  }
+
+  @FXML
+  private void createPieChartSubject() {
+    try {
+      pieChart.getData().clear(); // Clean data chart
+      Map<Integer, Integer> data = statisticService.quantityProcessPerSubject();
+      this.createPieChart("Assunto", data);
+    } catch (DatabaseException e) {
+      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
+      LOGGER.error(e.getMessage(), e);
+    }
+  }
+
+  @FXML
+  private void closeWindow() {
+    Stage janela = (Stage) root.getScene().getWindow();
+    if (janela != null)
+      janela.close();
+  }
 
 
-	private void createPieChart(String category, Map<Integer, Integer> data) {
-		if(data == null || data.isEmpty()) {
-			//TODO fazer um alert e tratar
-		} else {
-			pieChart.setLabelsVisible(false);
-			pieChart.setTitle("Quantidade de Processos por "+category);
-	
-			Iterator<Entry<Integer, Integer>> it = data.entrySet().iterator();
-			while (it.hasNext()) {
-				Map.Entry<Integer, Integer> pair = it.next();
-	
-				int categoryId = Integer.parseInt( pair.getKey().toString() );
-				String categoryName = this.getCategoryNameById(categoryId, category);
-				double quantity = Double.parseDouble(pair.getValue().toString());
-	
-				Data slice = new PieChart.Data(categoryName,quantity);
-				pieChart.getData().add(slice);
-	
-				it.remove(); // avoids a ConcurrentModificationException
-			}
-	
-			pieChart.getData().forEach(this::installTooltip);
-		}
-	}
+  private void createPieChart(String category, Map<Integer, Integer> data) {
+    if (data == null || data.isEmpty()) {
+      // TODO fazer um alert e tratar
+    } else {
+      pieChart.setLabelsVisible(false);
+      pieChart.setTitle("Quantidade de Processos por " + category);
 
-	private String getCategoryNameById(int categoryId, String category) {
-		if(category.equalsIgnoreCase("Situação")){
-			return listService.getSituationDescritionById(categoryId);
-		}else if(category.equalsIgnoreCase("Órgão")){
-			return listService.getOrganizationInitialsById(categoryId);
-		}else if(category.equalsIgnoreCase("Assunto")) {
-			return listService.getSujectShortDescritionById(categoryId);
-		}else {
-			return null;
-		}
-	}
-	
-	//http://acodigo.blogspot.com.br/2017/08/piechart-javafx.html
-	public void installTooltip(PieChart.Data pcData) {
+      Iterator<Entry<Integer, Integer>> it = data.entrySet().iterator();
+      while (it.hasNext()) {
+        Map.Entry<Integer, Integer> pair = it.next();
 
-		String message = String.format("%s : %s", pcData.getName(), (int)pcData.getPieValue());
+        int categoryId = Integer.parseInt(pair.getKey().toString());
+        String categoryName = this.getCategoryNameById(categoryId, category);
+        double quantity = Double.parseDouble(pair.getValue().toString());
 
-		Tooltip tolltip = new Tooltip(message);
-		tolltip.setStyle("-fx-background-color: gray; -fx-text-fill: whitesmoke;");
+        Data slice = new PieChart.Data(categoryName, quantity);
+        pieChart.getData().add(slice);
 
-		Tooltip.install(pcData.getNode(), tolltip);
-	}
+        it.remove(); // avoids a ConcurrentModificationException
+      }
 
-	protected static class Month {
-		private static String[] names = {
-				"Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
-				"Jul", "Ago", "Set", "Out", "Nov", "Dez"};
+      pieChart.getData().forEach(this::installTooltip);
+    }
+  }
 
-		private Month() {}
+  private String getCategoryNameById(int categoryId, String category) {
+    if (category.equalsIgnoreCase("Situação")) {
+      return listService.getSituationDescritionById(categoryId);
+    } else if (category.equalsIgnoreCase("Órgão")) {
+      return listService.getOrganizationInitialsById(categoryId);
+    } else if (category.equalsIgnoreCase("Assunto")) {
+      return listService.getSujectShortDescritionById(categoryId);
+    } else {
+      return null;
+    }
+  }
 
-		protected static String getName(int order) {
-			if (order > 0 && order <= 12) {
-				return names[order -1];
-			} else {
-				return null;
-			}
-		}
+  // http://acodigo.blogspot.com.br/2017/08/piechart-javafx.html
+  public void installTooltip(PieChart.Data pcData) {
 
-		protected static String[] getAll() {
-			return names;
-		}
-	}
+    String message = String.format("%s : %s", pcData.getName(), (int) pcData.getPieValue());
+
+    Tooltip tolltip = new Tooltip(message);
+    tolltip.setStyle("-fx-background-color: gray; -fx-text-fill: whitesmoke;");
+
+    Tooltip.install(pcData.getNode(), tolltip);
+  }
+
+  protected static class Month {
+    private static String[] names =
+        {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
+
+    private Month() {}
+
+    protected static String getName(int order) {
+      if (order > 0 && order <= 12) {
+        return names[order - 1];
+      } else {
+        return null;
+      }
+    }
+
+    protected static String[] getAll() {
+      return names;
+    }
+  }
 }

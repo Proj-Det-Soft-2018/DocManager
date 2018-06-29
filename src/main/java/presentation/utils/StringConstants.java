@@ -27,6 +27,6 @@ public enum StringConstants {
 	}
 
 	public String getText() {
-		return text;
-	}
+    return text;
+  }
 }

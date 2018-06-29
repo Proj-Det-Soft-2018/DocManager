@@ -6,6 +6,6 @@ package business.service;
  */
 public interface Observer {
 
-  /*Atualiza o estado dos observadores. */
+  /* Atualiza o estado dos observadores. */
   public void update();
 }
