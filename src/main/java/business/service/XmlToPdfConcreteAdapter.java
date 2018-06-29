@@ -32,150 +32,150 @@ import org.w3c.dom.Element;
 
 public class XmlToPdfConcreteAdapter implements XmlToPdfAdapter {
 
-	private static final URL FO_TEMPLATE_PATH = XmlToPdfConcreteAdapter.class.getResource("/fo_templates/xml2fo.xsl");
-	private static final Logger LOGGER = Logger.getLogger(XmlToPdfConcreteAdapter.class);
+  private static final URL FO_TEMPLATE_PATH = XmlToPdfConcreteAdapter.class
+      .getResource("/fo_templates/xml2fo.xsl");
+  private static final Logger LOGGER = Logger.getLogger(XmlToPdfConcreteAdapter.class);
 
-	// Subsídios para geração de PDF -- Apache Xalan/FOP
-	private Transformer xmlToFoTransformer;
-	private FopFactory fopFactory;
-	private FOUserAgent foUserAgent;
+  // Subsídios para geração de PDF -- Apache Xalan/FOP
+  private Transformer xmlToFoTransformer;
+  private FopFactory fopFactory;
+  private FOUserAgent foUserAgent;
 
-	public XmlToPdfConcreteAdapter() {
-		xmlToFoTransformer = generateTransformer();
-		fopFactory = generateFopFactory();
-		foUserAgent = generateFOUserAgent();
-	}
+  public XmlToPdfConcreteAdapter() {
+    xmlToFoTransformer = generateTransformer();
+    fopFactory = generateFopFactory();
+    foUserAgent = generateFOUserAgent();
+  }
 
-	private Transformer generateTransformer() {
+  private Transformer generateTransformer() {
 
-		try {
-			TransformerFactory tf = TransformerFactory.newInstance();
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			dbf.setNamespaceAware(true);
+    try {
+      TransformerFactory tf = TransformerFactory.newInstance();
+      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+      dbf.setNamespaceAware(true);
 
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document xslDoc = db.parse(FO_TEMPLATE_PATH.openStream());
-			DOMSource xslSource = new DOMSource(xslDoc);
+      DocumentBuilder db = dbf.newDocumentBuilder();
+      Document xslDoc = db.parse(FO_TEMPLATE_PATH.openStream());
+      DOMSource xslSource = new DOMSource(xslDoc);
 
-			return tf.newTransformer(xslSource);
-		}
-		catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-			return null;
-		}
-	}
+      return tf.newTransformer(xslSource);
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage(), e);
+      return null;
+    }
+  }
 
-	private FopFactory generateFopFactory() {
+  private FopFactory generateFopFactory() {
 
-		FopFactory newFopFactory = null;
-		String path = FO_TEMPLATE_PATH.getPath();
-		String folderPath = "file://" + path.substring(0, path.lastIndexOf("/fo_templates/xml2fo.xsl"));
+    FopFactory newFopFactory = null;
+    String path = FO_TEMPLATE_PATH.getPath();
+    String folderPath = "file://" + path.substring(0, path.lastIndexOf("/fo_templates/xml2fo.xsl"));
 
-		File config = new File("src/main/resources/fop.xconf");
+    File config = new File("src/main/resources/fop.xconf");
 
-		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-			// Lê o arquivo de configuração do FOP e seta o campo <base> para a pasta "resources"
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document fopConfDoc = db.parse(config);
-			Element element = (Element) fopConfDoc.getElementsByTagName("base").item(0);
-			element.setTextContent(folderPath);
+    try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+      // Lê o arquivo de configuração do FOP e seta o campo <base> para a pasta "resources"
+      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+      DocumentBuilder db = dbf.newDocumentBuilder();
+      Document fopConfDoc = db.parse(config);
+      Element element = (Element) fopConfDoc.getElementsByTagName("base").item(0);
+      element.setTextContent(folderPath);
 
-			// Transforma o w3c.Document em InputStream
-			DOMSource xmlSource = new DOMSource(fopConfDoc);
-			StreamResult outputTarget = new StreamResult(outputStream);
-			TransformerFactory.newInstance().newTransformer().transform(xmlSource, outputTarget);
-			InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+      // Transforma o w3c.Document em InputStream
+      DOMSource xmlSource = new DOMSource(fopConfDoc);
+      StreamResult outputTarget = new StreamResult(outputStream);
+      TransformerFactory.newInstance().newTransformer().transform(xmlSource, outputTarget);
+      InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
 
-			// Gera a fábrica com o arquivo de configuração
-			newFopFactory = FopFactory.newInstance(new URI(folderPath), inputStream);
-			inputStream.close();
+      // Gera a fábrica com o arquivo de configuração
+      newFopFactory = FopFactory.newInstance(new URI(folderPath), inputStream);
+      inputStream.close();
 
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage(), e);
-		}
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage(), e);
+    }
 
-		return newFopFactory;
-	}
+    return newFopFactory;
+  }
 
-	private FOUserAgent generateFOUserAgent() {
-		FOUserAgent newFOUserAgent = null;
+  private FOUserAgent generateFOUserAgent() {
+    FOUserAgent newFOUserAgent = null;
 
-		if (this.fopFactory != null) {
-			newFOUserAgent = fopFactory.newFOUserAgent();
-			// Configurações do FOUserAgente -- basicamente seta as propriedades do PDF
-			newFOUserAgent.setTitle("Certidão");
-			newFOUserAgent.setAuthor("Subsistema Integrado de Atenção à Saúde do Servidor - SIASS");
-			newFOUserAgent.setSubject("Situação de Processo");
-			newFOUserAgent.setCreator("DocManager");
-		}
-		return newFOUserAgent;
-	}
+    if (this.fopFactory != null) {
+      newFOUserAgent = fopFactory.newFOUserAgent();
+      // Configurações do FOUserAgente -- basicamente seta as propriedades do PDF
+      newFOUserAgent.setTitle("Certidão");
+      newFOUserAgent.setAuthor("Subsistema Integrado de Atenção à Saúde do Servidor - SIASS");
+      newFOUserAgent.setSubject("Situação de Processo");
+      newFOUserAgent.setCreator("DocManager");
+    }
+    return newFOUserAgent;
+  }
 
-	@Override
-	public byte[] transform(String xml) {
-		String fo = xmlToFoTransform(xml);
-		return foToPdfTransform(fo);
-	}
+  @Override
+  public byte[] transform(String xml) {
+    String fo = xmlToFoTransform(xml);
+    return foToPdfTransform(fo);
+  }
 
-	private String xmlToFoTransform(String xml) {
+  private String xmlToFoTransform(String xml) {
 
-		String fo = null;
+    String fo = null;
 
-		if (xml != null) {
-			try (
-					StringReader sr = new StringReader(xml);
-					StringWriter sw = new StringWriter();
-					) {
-				// Faz a conversão de XML para XSL:FO
-				if (this.xmlToFoTransformer != null) {
+    if (xml != null) {
+      try (
+          StringReader sr = new StringReader(xml);
+          StringWriter sw = new StringWriter();
+          ) {
+        // Faz a conversão de XML para XSL:FO
+        if (this.xmlToFoTransformer != null) {
 
-					StreamSource xmlSource = new StreamSource(sr); 
-					StreamResult foResult = new StreamResult(sw);
-					this.xmlToFoTransformer.transform(xmlSource, foResult);
-					// Pega a string gerada
-					fo = sw.toString();
-				}
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
-			}
-		}
+          StreamSource xmlSource = new StreamSource(sr); 
+          StreamResult foResult = new StreamResult(sw);
+          this.xmlToFoTransformer.transform(xmlSource, foResult);
+          // Pega a string gerada
+          fo = sw.toString();
+        }
+      } catch (Exception e) {
+        LOGGER.error(e.getMessage(), e);
+      }
+    }
 
-		return fo;
-	}
+    return fo;
+  }
 
-	private byte[] foToPdfTransform(String fo) {
+  private byte[] foToPdfTransform(String fo) {
 
-		byte[] pdfData;
+    byte[] pdfData;
 
-		try (
-				StringReader sourceReader = new StringReader(fo);
-				ByteArrayOutputStream resultStream = new ByteArrayOutputStream();
+    try (
+        StringReader sourceReader = new StringReader(fo);
+        ByteArrayOutputStream resultStream = new ByteArrayOutputStream();
 
-				) {
-			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, this.foUserAgent, resultStream);
+        ) {
+      Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, this.foUserAgent, resultStream);
 
-			// Configura um transformador utilizando as configurações padrão
-			TransformerFactory factory = TransformerFactory.newInstance();
-			Transformer transformer = factory.newTransformer();
+      // Configura um transformador utilizando as configurações padrão
+      TransformerFactory factory = TransformerFactory.newInstance();
+      Transformer transformer = factory.newTransformer();
 
-			StreamSource src = new StreamSource(sourceReader);
-			// O resultado é processaso pelo FOP para geração do PDF
-			SAXResult res = new SAXResult(fop.getDefaultHandler());
+      StreamSource src = new StreamSource(sourceReader);
+      // O resultado é processaso pelo FOP para geração do PDF
+      SAXResult res = new SAXResult(fop.getDefaultHandler());
 
-			// Executa a transformação
-			transformer.transform(src, res);
+      // Executa a transformação
+      transformer.transform(src, res);
 
-			InputStream auxStream = new ByteArrayInputStream(resultStream.toByteArray());
+      InputStream auxStream = new ByteArrayInputStream(resultStream.toByteArray());
 
-			pdfData = IOUtils.toByteArray(auxStream);
+      pdfData = IOUtils.toByteArray(auxStream);
 
-		} catch (FOPException | TransformerException | IOException e) {
-			LOGGER.error(e.getMessage(), e);
-			pdfData = new byte[0];	
-		}
+    } catch (FOPException | TransformerException | IOException e) {
+      LOGGER.error(e.getMessage(), e);
+      pdfData = new byte[0];	
+    }
 
 
-		return pdfData;
-	}
+    return pdfData;
+  }
 }

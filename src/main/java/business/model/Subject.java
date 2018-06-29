@@ -1,10 +1,13 @@
 package business.model;
-/*
- * Representação de um Assunto de um Processo
+
+/**
+ * Representação de um Assunto de um processo.
  */
 public interface Subject {
-	
-	String getDescription();
-	String getShortDescription();
-	int getId(); 
+
+  String getDescription();
+  
+  String getShortDescription();
+  
+  int getId(); 
 }

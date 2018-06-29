@@ -1,7 +1,8 @@
-/**
- * 
- */
 package business.service;
+
+import business.exception.ValidationException;
+import business.model.Process;
+import business.model.Search;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -29,133 +30,148 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 
-import business.exception.ValidationException;
-import business.model.Process;
-import business.model.Search;
 import persistence.DaoFactory;
 import persistence.ProcessDao;
 import persistence.exception.DatabaseException;
 
 /**
- * @author clah
- *@since 24/03/2018
+ * Classe que concretiza a interface ProcessService, responsável por gerenciar serviços referente 
+ * aos processos.
+ * @author clarissa - clahzita@gmail.com
+ * @since 24/03/2018
  */
 public class ConcreteProcessService extends Observable implements ProcessService {
 
-    private static final Logger LOGGER = Logger.getLogger(ConcreteProcessService.class);
+  private static final Logger LOGGER = Logger.getLogger(ConcreteProcessService.class);
 
-    private ProcessDao processoDao;
+  private ProcessDao processoDao;
 
-    // Usuário para autorização -- Apache Shiro
-    private Subject currentUser;
+  /**
+   * Usuário utilizado na autorização de exclusão de processos no Apache Shiro.
+   */
+  private Subject currentUser;
 
-    private XmlToPdfAdapter xmlToPdfAdapter;
+  //TODO documentar o xmlToPdfAdapter
+  private XmlToPdfAdapter xmlToPdfAdapter;
 
-    public ConcreteProcessService(DaoFactory daoFactory, XmlToPdfAdapter xmlToPdfAdapter) {
-	processoDao = daoFactory.getProcessDao();
-	this.xmlToPdfAdapter = xmlToPdfAdapter;
+  
+  /**
+   * Constrói uma instância de ConcreteProcessService, em que recebe uma fábrica de DAO e um 
+   * objeto XmlToPdfAdapter.
+   * inicializa o Apache Shiro.
+   * @param daoFactory Fábrica de objetos de controle de banco de dados.
+   * @param xmlToPdfAdapter //TODO documentar o xmlToPdfAdapter
+   */
+  public ConcreteProcessService(DaoFactory daoFactory, XmlToPdfAdapter xmlToPdfAdapter) {
+    processoDao = daoFactory.getProcessDao();
+    this.xmlToPdfAdapter = xmlToPdfAdapter;
 
-	// Inicilização do Apache Shiro -- utiliza o resources/shiro.ini
-	IniRealm iniRealm = new IniRealm("classpath:shiro.ini");
-	SecurityManager secutiryManager = new DefaultSecurityManager(iniRealm);
-	SecurityUtils.setSecurityManager(secutiryManager);
-	currentUser = SecurityUtils.getSubject();
+    // Inicilização do Apache Shiro -- utiliza o resources/shiro.ini
+    IniRealm iniRealm = new IniRealm("classpath:shiro.ini");
+    SecurityManager secutiryManager = new DefaultSecurityManager(iniRealm);
+    SecurityUtils.setSecurityManager(secutiryManager);
+    currentUser = SecurityUtils.getSubject();
+  }
+
+  @Override
+  public void save(Process process) throws ValidationException, DatabaseException {
+
+
+    processoDao.save(process);
+    this.notifyObservers();
+  }
+
+  @Override
+  public void update(Process process) throws DatabaseException {
+    processoDao.update(process);
+    this.notifyObservers();
+  }
+
+  @Override
+  public void delete(Process process, String admUser, String password) throws DatabaseException {
+
+    if (!this.currentUser.isAuthenticated()) {
+      UsernamePasswordToken token = new UsernamePasswordToken(admUser, password);
+      token.setRememberMe(true);
+
+      currentUser.login(token); // Joga uma AuthenticationException
     }
 
-    @Override
-    public void save(Process process) throws ValidationException, DatabaseException {
-
-
-	processoDao.save(process);
-	this.notifyObservers();
+    if (currentUser.hasRole("admin")) {
+      processoDao.delete(process);
+      this.notifyObservers();
     }
 
-    @Override
-    public void update(Process process) throws DatabaseException {
-	processoDao.update(process);
-	this.notifyObservers();			
+    currentUser.logout();
+  }
+
+  @Override
+  public List<Process> searchAll(Search searchData) throws ValidationException, DatabaseException {
+    searchData.validate();
+    return processoDao.searchAll(searchData);
+  }
+
+  @Override
+  public List<Process> pullList() throws DatabaseException {
+    return processoDao.getAllProcessesByPriority();
+  }
+
+  @Override
+  public byte[] getPdf(Process process) {
+    String xml = process.toXml();
+    String timedXml = appendCurrentTimeToXml(xml);
+    return xmlToPdfAdapter.transform(timedXml);
+  }
+
+  /**
+   * Adiciona a data e hora atual na string xml para ser impresso no documento pdf.
+   * @param xml A antiga xml em que deverá ser colocada a informação de data e hora atual.
+   * @return A nova xml com a data e hora atual.
+   */
+  private String appendCurrentTimeToXml(String xml) {
+
+    String newXml;
+
+    try (
+        StringReader xmlReader = new StringReader(xml);
+        StringWriter xmlWriter = new StringWriter();
+        ) {
+
+      // Transforma o String em Document
+      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+      DocumentBuilder db = dbf.newDocumentBuilder();
+      InputSource inputSource = new InputSource();
+      inputSource.setCharacterStream(xmlReader);
+      Document xmlDoc = db.parse(inputSource);
+
+      // Pega o tempo atual e gera uma string formatada
+      LocalDateTime now = LocalDateTime.now();
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
+      String formatedTime = now.format(formatter);
+
+      // Cria um novo Elemento com o Texto desejado 
+      Text text = xmlDoc.createTextNode(formatedTime);
+      Element element = xmlDoc.createElement("current-time");
+      element.appendChild(text);
+
+      // Coloca o novo elemento no XML
+      xmlDoc.getChildNodes().item(0).appendChild(element);
+
+      // Converte de Documento para String
+      TransformerFactory tf = TransformerFactory.newInstance();
+      Transformer transformer = tf.newTransformer();
+      transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+      transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+      transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+      transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+      transformer.transform(new DOMSource(xmlDoc), new StreamResult(xmlWriter));
+
+      newXml = xmlWriter.toString();
+
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage(), e);
+      newXml = null;
     }
-
-    @Override
-    public void delete(Process process, String admUser, String password) throws DatabaseException {
-
-	if (!this.currentUser.isAuthenticated()) {
-	    UsernamePasswordToken token = new UsernamePasswordToken(admUser, password);
-	    token.setRememberMe(true);
-
-	    currentUser.login(token); // Joga uma AuthenticationException
-	}
-
-	if (currentUser.hasRole("admin")) {
-	    processoDao.delete(process);
-	    this.notifyObservers();
-	}
-
-	currentUser.logout();
-    }
-
-    @Override
-    public List<Process> searchAll(Search searchData) throws ValidationException, DatabaseException {
-	searchData.validate();
-	return processoDao.searchAll(searchData);
-    }
-
-    @Override
-    public List<Process> pullList() throws ValidationException, DatabaseException{
-	return processoDao.getAllProcessesByPriority();
-    }
-
-    @Override
-    public byte[] getPdf(Process process) {
-	String xml = process.toXml();
-	String timedXml = appendCurrentTimeToXml(xml);
-	return xmlToPdfAdapter.transform(timedXml);
-    }
-
-    private String appendCurrentTimeToXml(String xml) {
-
-	String newXml;
-
-	try (
-		StringReader xmlReader = new StringReader(xml);
-		StringWriter xmlWriter = new StringWriter();
-		) {
-
-	    // Transforma o String em Document
-	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-	    DocumentBuilder db = dbf.newDocumentBuilder();
-	    InputSource inputSource = new InputSource();
-	    inputSource.setCharacterStream(xmlReader);
-	    Document xmlDoc = db.parse(inputSource);
-
-	    // Pega o tempo atual e gera uma string formatada
-	    LocalDateTime now = LocalDateTime.now();
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
-	    String formatedTime = now.format(formatter);
-
-	    // Cria um novo Elemento com o Texto desejado 
-	    Text text = xmlDoc.createTextNode(formatedTime);
-	    Element element = xmlDoc.createElement("current-time");
-	    element.appendChild(text);
-
-	    // Coloca o novo elemento no XML
-	    xmlDoc.getChildNodes().item(0).appendChild(element);
-
-	    // Converte de Documento para String
-	    TransformerFactory tf = TransformerFactory.newInstance();
-	    Transformer transformer = tf.newTransformer();
-	    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-	    transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-	    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-	    transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-	    transformer.transform(new DOMSource(xmlDoc), new StreamResult(xmlWriter));
-
-	    newXml = xmlWriter.toString();
-
-	} catch(Exception e) {
-	    LOGGER.error(e.getMessage(), e);
-	    newXml = null;
-	}
-	return newXml;
-    }
+    return newXml;
+  }
 }
