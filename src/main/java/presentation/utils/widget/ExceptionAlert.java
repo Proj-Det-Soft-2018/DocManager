@@ -6,7 +6,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.stage.Window;
-/*
+/**
  * Classe Utilizada para exibir alertas relacionados a erros no programa
  */
 public class ExceptionAlert {

@@ -10,6 +10,7 @@ import business.model.Search;
 import business.service.InterestedService;
 import business.service.ListService;
 import business.service.ProcessService;
+import health.presentation.widget.MaskedTextField;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -24,7 +25,6 @@ import juridical.model.JuridicalProcess;
 import juridical.model.JuridicalSituation;
 import presentation.ControllerFactory;
 import presentation.ProcessEditCtrl;
-import presentation.utils.widget.MaskedTextField;
 
 public class JuridicalProcessEditCtrl extends ProcessEditCtrl {
 	private static final URL FXML_PATH = JuridicalProcessEditCtrl.class.getResource("/visions/juridical_process_edit_screen.fxml");

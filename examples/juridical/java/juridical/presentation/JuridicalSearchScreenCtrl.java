@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import business.model.Search;
 import business.service.ListService;
 import business.service.ProcessService;
+import health.presentation.widget.MaskedTextField;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,7 +25,6 @@ import juridical.model.JuridicalProcessSearch;
 import presentation.ControllerFactory;
 import presentation.SearchScreenCtrl;
 import presentation.utils.DateUtil;
-import presentation.utils.widget.MaskedTextField;
 
 public class JuridicalSearchScreenCtrl extends SearchScreenCtrl {
 

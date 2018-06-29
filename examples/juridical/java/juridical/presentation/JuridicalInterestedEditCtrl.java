@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import business.model.Interested;
 import business.service.InterestedService;
+import health.presentation.widget.MaskedContactTextField;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import juridical.model.JuridicalInterested;
 import presentation.InterestedEditCtrl;
-import presentation.utils.widget.MaskedContactTextField;
 
 public class JuridicalInterestedEditCtrl extends InterestedEditCtrl {
 	private static final Logger LOGGER = Logger.getLogger(JuridicalInterestedEditCtrl.class);

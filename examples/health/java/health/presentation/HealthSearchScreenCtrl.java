@@ -10,13 +10,12 @@ import business.service.ProcessService;
 import health.model.HealthInterested;
 import health.model.HealthProcess;
 import health.model.HealthProcessSearch;
+import health.presentation.widget.DynamicMaskTextField;
+import health.presentation.widget.MaskedTextField;
 import business.service.ListService;
 import presentation.ControllerFactory;
 import presentation.SearchScreenCtrl;
 import presentation.utils.DateUtil;
-import presentation.utils.widget.DynamicMaskTextField;
-import presentation.utils.widget.MaskedTextField;
-
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
