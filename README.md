@@ -7,6 +7,8 @@ O objetivo deste sistema é gerenciar os processos em uma unidade de assistênci
 ## Começando
 As seguintes instruções vão orientar sobre o que é necessário para ter este projeto funcionando em sua versão de desenvolvimento.
 
+### Guia de Estilos.
+As regras de estilo utilizadas neste projeto foram as encontradas em [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html).
 
 ### Pré-requisitos
 
@@ -44,6 +46,13 @@ No Linux Ubuntu sua instalação pode ser obtida pelos repositórios oficiais, u
 * **SceneBuilder 2.0:** ferramenta para edição de arquivos .fxml utilizados pelo JavaFX.
 	Pode ser adquirido na página oficinal de [download](www.oracle.com/technetwork/java/javafxscenebuilder-1x-archive-2199384.html) da Oracle.
 
+* **Eclipse Checkstyle Plug-in 8.10.0**: Pluggin para checagem estática de estilo.
+	Para sua instalação, na ferramenta Eclipse: 
+1. Na aba **Help** clique em **Eclipse Marketplace...**
+2. Busque por "checkstyle" e selecione o plug-in para a instalação.
+
+* **JUnit 4.1**: Framework de execução de testes unitários, que já está instalada na IDE Eclipse. 
+
 ### Instalação
 Para utilização do DocManager é necessaria a criação do banco "docmanager" no banco. Para tanto, no Ubuntu:
 1. abra o Terminal e execute o comando para abrir o **MySQL**:
@@ -74,16 +83,22 @@ Agora na ferramenta Eclipse:
 10. Clique em **Run** e aguarde a compilação do *Maven*.
 11. Se sua **JRE System Library** estiver como [J2ME-1.5] (Padrão) no *Package Explorer*, clique com o botão direito sobre ele e escolha **Properties**. Na tela aberta escolha *JavaSE-1.8* como **Execution environment**
 
-Para executar o programa no Eclipse é necessário configurar a variável de ambiente também para o **Java Aplication**, para tanto, também nas **Run Configurations...**
+Para executar alguma das aplicações de exemplo no Eclipse é necessário configurar as pastas de recursos e a variável de ambiente para o **Java Aplication**. Para tanto:
+12. No **Package Explorer**, clique com o botão direito nas pastas **examples/[exemplo]/java** e vá em **Build Path** > **Use as Source Folder**.
+13. Repita o procedimento para a pasta **examples/[exemplo]/resources**.
 
-12.  Crie uma nova **Java Aplication**
-13. Na aba **Main**, selecione o *Workspace* do *DocManager* como *Base Directory* e em *Main Class:* **Main**
-14. Na aba **Environment** e crie a variável *DATABASE_PASSWORD* com sua senha de ***root*** do banco como *Value*.
-15. Clique em **Run** e veja a aplicação rodar :)
+Agora, novamente nas **Run Configurations...**
+14.  Crie uma nova **Java Aplication**
+15. Na aba **Main**, selecione o *Workspace* do *DocManager* como *Base Directory* e em *Main Class:* **[exemplo].Main**
+16. Na aba **Classpath**, clique em **User Entries** e aperte o botão **Advanced...**
+17. Selecione **Add Folders**, clique em **Ok** e na proxima tela escolha a pasta de recursos da aplicação escolhida.
+18. Na aba **Environment** e crie a variável *DATABASE_PASSWORD* com sua senha de ***root*** do banco como *Value*.
 
 ## Este projeto utiliza
 
 * [Apache Shiro](https://shiro.apache.org/) - Framework de Segurança
+* [Apache Xalan](https://xalan.apache.org/) - Transformação de XML para XSL:FO
+* [Apache FOP](https://xmlgraphics.apache.org/fop/) - Geração de documentos PDF a partir de XSL:FO
 * [Flyway](https://flywaydb.org/) - Ferramenta de Migração de Banco de Dados
 * [Maven](https://maven.apache.org/) - Gerenciamento de Dependências
 

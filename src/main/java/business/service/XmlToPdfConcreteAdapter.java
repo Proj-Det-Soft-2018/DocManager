@@ -28,6 +28,13 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+/**
+ * Classe que implementa a interface {@code XmlToPdfAdapter} e utiliza o transformador Apache FOP.
+ * @author hugo
+ *
+ * {@link https://xmlgraphics.apache.org/fop/}
+ * @see XmlToPdfAdapter
+ */
 public class XmlToPdfConcreteAdapter implements XmlToPdfAdapter {
 
   private static final URL FO_TEMPLATE_PATH =
@@ -39,12 +46,23 @@ public class XmlToPdfConcreteAdapter implements XmlToPdfAdapter {
   private FopFactory fopFactory;
   private FOUserAgent foUserAgent;
 
+  /**
+   * Construtor da classe {@code XmlToPdfConcreteAdapter}. Nele há a configuração do transformador
+   * Apache FOP.
+   * 
+   * {@link https://xmlgraphics.apache.org/fop/}
+   */
   public XmlToPdfConcreteAdapter() {
     xmlToFoTransformer = generateTransformer();
     fopFactory = generateFopFactory();
     foUserAgent = generateFOUserAgent();
   }
 
+  /**
+   * Gera o transformador, configurando-o com o template fornecido pela aplicação cliente.
+   * 
+   * @return Transformator
+   */
   private Transformer generateTransformer() {
 
     try {
@@ -63,6 +81,12 @@ public class XmlToPdfConcreteAdapter implements XmlToPdfAdapter {
     }
   }
 
+  
+  /**
+   * Gera a fábrica do transformador FOP configurando com o .conf disponível na pasta de recursos
+   * 
+   * @return Fábrica FOP configurada
+   */
   private FopFactory generateFopFactory() {
 
     FopFactory newFopFactory = null;
@@ -96,6 +120,12 @@ public class XmlToPdfConcreteAdapter implements XmlToPdfAdapter {
     return newFopFactory;
   }
 
+  /**
+   * Gera um {@code FOUserAgent} configurado com as informações da aplicação. Estas informações es-
+   * tarão disponíveis nas propriedades do arquivo Pdf.
+   * 
+   * @return FOUserAgent definido para o framework
+   */
   private FOUserAgent generateFOUserAgent() {
     FOUserAgent newFOUserAgent = null;
 
@@ -103,19 +133,28 @@ public class XmlToPdfConcreteAdapter implements XmlToPdfAdapter {
       newFOUserAgent = fopFactory.newFOUserAgent();
       // Configurações do FOUserAgente -- basicamente seta as propriedades do PDF
       newFOUserAgent.setTitle("Certidão");
-      newFOUserAgent.setAuthor("Subsistema Integrado de Atenção à Saúde do Servidor - SIASS");
+      newFOUserAgent.setAuthor("Equipe Docmanager");
       newFOUserAgent.setSubject("Situação de Processo");
       newFOUserAgent.setCreator("DocManager");
     }
     return newFOUserAgent;
   }
 
+  /* (non-Javadoc)
+   * @see business.service.XmlToPdfAdapter#transform(java.lang.String)
+   */
   @Override
   public byte[] transform(String xml) {
     String fo = xmlToFoTransform(xml);
     return foToPdfTransform(fo);
   }
 
+  /**
+   * Realiza a primeira transformação, de xml para xsl:fo (que é basicamente um xml com stylesheet)
+   * 
+   * @param xml XML com as informações do processo
+   * @return XSL:FO com o template do documento
+   */
   private String xmlToFoTransform(String xml) {
 
     String fo = null;
@@ -139,6 +178,13 @@ public class XmlToPdfConcreteAdapter implements XmlToPdfAdapter {
     return fo;
   }
 
+  /**
+   * Realiza a segunda tranformação, transformanto, por fim o XSL:FO em documento PDF em formato bi-
+   * nário.
+   * 
+   * @param fo XSL:FO do documento.
+   * @return Binário PDF
+   */
   private byte[] foToPdfTransform(String fo) {
 
     byte[] pdfData;
