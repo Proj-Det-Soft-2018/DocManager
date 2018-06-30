@@ -7,7 +7,7 @@ O objetivo deste sistema é gerenciar os processos em uma unidade de assistênci
 ## Começando
 As seguintes instruções vão orientar sobre o que é necessário para ter este projeto funcionando em sua versão de desenvolvimento.
 
-### Guia de Estilos.
+### Guia de Estilo
 As regras de estilo utilizadas neste projeto foram as encontradas em [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html).
 
 ### Pré-requisitos
@@ -34,7 +34,15 @@ No Linux Ubuntu sua instalação pode ser obtida pelos repositórios oficiais, u
 	```
 * **Eclipse:** este projeto está sendo desenvolvido utilizando esta IDE (em sua versão Oxigen) que está disponível para [download](https://www.eclipse.org/downloads/)  em seu site oficial.
 
+* **JUnit 4.1**: Framework de execução de testes unitários, que já está instalada na IDE Eclipse. 
+
 ### Ferramentas Indicadas
+
+* **Eclipse Checkstyle Plug-in 8.10.0**: Pluggin para checagem estática de estilo.
+	Para sua instalação, na ferramenta Eclipse: 
+1. Na aba **Help** clique em **Eclipse Marketplace...**
+2. Busque por "checkstyle" e selecione o plug-in para a instalação.
+
 * **e(fx)clipse:** pluggin do eclipse com ferramentas para desenvolvimento com JavaFX.
 	Para sua instalação, na ferramenta Eclipse: 
 1. Na aba **Help** clique em **Install New Software...**
@@ -45,13 +53,6 @@ No Linux Ubuntu sua instalação pode ser obtida pelos repositórios oficiais, u
 	
 * **SceneBuilder 2.0:** ferramenta para edição de arquivos .fxml utilizados pelo JavaFX.
 	Pode ser adquirido na página oficinal de [download](www.oracle.com/technetwork/java/javafxscenebuilder-1x-archive-2199384.html) da Oracle.
-
-* **Eclipse Checkstyle Plug-in 8.10.0**: Pluggin para checagem estática de estilo.
-	Para sua instalação, na ferramenta Eclipse: 
-1. Na aba **Help** clique em **Eclipse Marketplace...**
-2. Busque por "checkstyle" e selecione o plug-in para a instalação.
-
-* **JUnit 4.1**: Framework de execução de testes unitários, que já está instalada na IDE Eclipse. 
 
 ### Instalação
 Para utilização do DocManager é necessaria a criação do banco "docmanager" no banco. Para tanto, no Ubuntu:
