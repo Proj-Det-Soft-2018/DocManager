@@ -101,9 +101,10 @@ public abstract class InterestedEditCtrl implements Initializable {
 
   /**
    * Método para execução do evento do botão de confirmação de edição. Nele, obtên-se os dados
-   * inseridos no formulários e faz-se a tentativa de deleção, fechando a tela em caso de
-   * confirmação ou exi- bindo um alert genérico em caso de usuário ou senha errado ou um
-   * {@code ExceptionAlert} em caso de falha no banco.
+   * inseridos no formulários, monta um interessado e faz-se a tentativa de salvar no banco, fechan-
+   * do a tela em caso de confirmação ou exibindo um {@code ExceptionAlert} caso de usuário cometa
+   * algum erro no preenchimento do objeto ou um genérico {@code ExceptionAlert} em caso de falha no
+   * banco.
    */
   @FXML
   private void save() {

@@ -92,7 +92,7 @@
 		</VBox>
 		<HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
 			<children>
-				<Button mnemonicParsing="false" onAction="#fecharJanela"
+				<Button mnemonicParsing="false" onAction="#closeWindow"
 					prefWidth="80.0" text="Voltar" />
 				<Button mnemonicParsing="false" onAction="#limparFormulario"
 					prefWidth="80.0" text="Limpar" />
@@ -129,13 +129,13 @@
 					AnchorPane.rightAnchor="15.0">
 					<children>
 						<Button fx:id="btnVerEditar" disable="true"
-							mnemonicParsing="false" onAction="#criarTelaEdicao" prefWidth="100.0"
+							mnemonicParsing="false" onAction="#showProcessEditScreen" prefWidth="100.0"
 							text="Ver/Editar" />
 						<Button fx:id="btnCertidaoPdf" disable="true"
-							mnemonicParsing="false" onAction="#criarTelaPdf" prefWidth="130.0"
+							mnemonicParsing="false" onAction="#showPdfViewer" prefWidth="130.0"
 							text="Certidão PDF" />
 						<Button fx:id="btnApagar" disable="true" mnemonicParsing="false"
-							onAction="#criarDialogAdmPassword" prefWidth="80.0" text="Apagar" />
+							onAction="#showDeleteDialog" prefWidth="80.0" text="Apagar" />
 					</children>
 				</HBox>
 			</children>

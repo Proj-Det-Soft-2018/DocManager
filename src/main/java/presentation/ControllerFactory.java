@@ -78,7 +78,7 @@ public abstract class ControllerFactory {
    * @return Novo controlador para tela de estatísticas.
    */
   public StatisticsScreenCtrl createStatisticsScreenCtrl() {
-    return new StatisticsScreenCtrl(statisticService, listService);
+    return new StatisticsScreenCtrl(statisticService, processService, listService);
   }
 
   /**

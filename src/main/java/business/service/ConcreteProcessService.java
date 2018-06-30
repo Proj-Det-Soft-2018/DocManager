@@ -48,7 +48,9 @@ public class ConcreteProcessService extends Observable implements ProcessService
    */
   private Subject currentUser;
 
-  // TODO documentar o xmlToPdfAdapter
+  /**
+   * Adaptador para transformação de sequencias de Xml em documentos Pdf.
+   */
   private XmlToPdfAdapter xmlToPdfAdapter;
 
 
@@ -57,7 +59,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
    * XmlToPdfAdapter. inicializa o Apache Shiro.
    * 
    * @param daoFactory Fábrica de objetos de controle de banco de dados.
-   * @param xmlToPdfAdapter //TODO documentar o xmlToPdfAdapter
+   * @param xmlToPdfAdapter Adaptador para transformação de sequencias de Xml em documentos Pdf.
    */
   public ConcreteProcessService(DaoFactory daoFactory, XmlToPdfAdapter xmlToPdfAdapter) {
     processoDao = daoFactory.getProcessDao();
@@ -72,14 +74,14 @@ public class ConcreteProcessService extends Observable implements ProcessService
 
   @Override
   public void save(Process process) throws ValidationException, DatabaseException {
-
-
+    process.validate();
     processoDao.save(process);
     this.notifyObservers();
   }
 
   @Override
-  public void update(Process process) throws DatabaseException {
+  public void update(Process process) throws ValidationException DatabaseException {
+    process.validate();
     processoDao.update(process);
     this.notifyObservers();
   }

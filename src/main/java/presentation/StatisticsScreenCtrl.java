@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 import java.util.ResourceBundle;
 import business.service.ListService;
+import business.service.ProcessService;
 import business.service.StatisticService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,8 +38,11 @@ import presentation.utils.StringConstants;
 import presentation.utils.widget.ExceptionAlert;
 
 /**
+ * Classe controladora da tela de estatísticas dos processos salvos no sistema. Este controlador 
+ * gera a estatística do número de processos realizados no ultimo ano, a sua distribuição pelos me-
+ * ses do ano e sua contagem de acordo com os classificadores fornecidos pela aplicação. 
+ * 
  * @author clah
- * @since 04.20.2018
  */
 public class StatisticsScreenCtrl implements Initializable {
 
@@ -47,6 +51,7 @@ public class StatisticsScreenCtrl implements Initializable {
   private static final Logger LOGGER = Logger.getLogger(StatisticsScreenCtrl.class);
 
   private StatisticService statisticService;
+  private ProcessService processService;
   private ListService listService;
 
   private ObservableList<String> monthsObsList = FXCollections.observableArrayList();
@@ -71,11 +76,31 @@ public class StatisticsScreenCtrl implements Initializable {
   @FXML
   private PieChart pieChart;
 
-  public StatisticsScreenCtrl(StatisticService statisticService, ListService listService) {
+  /**
+   * Construtor para objetos da classe {@code StatisticsScreenCtrl}.
+   * 
+   * @param statisticService Serviço que oferece as contagens
+   * @param processService Serviço de processos para avaliar se há processos no banco
+   * @param listService Serviço de listas para categorização
+   */
+  public StatisticsScreenCtrl(StatisticService statisticService, ProcessService processService,
+      ListService listService) {
     this.statisticService = statisticService;
+    this.processService = processService;
     this.listService = listService;
   }
 
+  /**
+   * Método estático para exibição da tela de estatísticas de objetos que implementem a interface
+   * {@code Process}. Caso ocorra algum erro na montagem da tela o método exibirá um um
+   * {@code ExceptionAlert}.
+   * 
+   * @param ownerWindow Tela que chamou este método.
+   * @param controller Controlador da tela.
+   * 
+   * @see business.model.Process
+   * @see presentation.utils.widget.ExceptionAlert
+   */
   public static void showStatisticsScreen(Window ownerWindow, StatisticsScreenCtrl controller) {
     try {
       FXMLLoader loader = new FXMLLoader(FXML_PATH);
@@ -87,7 +112,7 @@ public class StatisticsScreenCtrl implements Initializable {
       statisticsScreen.initModality(Modality.WINDOW_MODAL);
       statisticsScreen.initOwner(ownerWindow);
       statisticsScreen
-          .setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
+      .setScene(new Scene(rootParent, rootParent.prefWidth(-1), rootParent.prefHeight(-1)));
 
       statisticsScreen.show();
     } catch (IOException e) {
@@ -96,13 +121,29 @@ public class StatisticsScreenCtrl implements Initializable {
     }
   }
 
+  /* (non-Javadoc)
+   * @see javafx.fxml.Initializable#initialize(java.net.URL, java.util.ResourceBundle)
+   */
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    createChartQntPerMonthAndYear();
-    createChartQntLastYear();
-    createPieChartSubject();
+    try {
+      if (processService.pullList().size() != 0) {
+        createChartQntPerMonthAndYear();
+        createChartQntLastYear();
+        createPieChartSubject();
+      } else {
+        ExceptionAlert.show("Não há dados para as estatísticas", root.getScene().getWindow());
+      }
+    } catch (DatabaseException e) {
+      LOGGER.error(e.getMessage(), e);
+      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
+    }
   }
 
+  /**
+   * Cria um gráfico de barras distribuíndo a criação de objetos que implementam {@code Process}
+   * pelos meses e anos.
+   */
   private void createChartQntPerMonthAndYear() {
     /* Converte o array em uma lista e adiciona em nossa ObservableList de meses. */
     monthsObsList.addAll(Arrays.asList(Month.getAll()));
@@ -113,13 +154,11 @@ public class StatisticsScreenCtrl implements Initializable {
     try {
       qntPerMonthData = statisticService.quantityProcessPerMonthYear();
     } catch (DatabaseException e) {
-      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
       LOGGER.error(e.getMessage(), e);
+      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
     }
 
-    if (qntPerMonthData == null || qntPerMonthData.isEmpty()) {
-      // TODO fazer um alert e tratar
-    } else {
+    if (qntPerMonthData != null && !qntPerMonthData.isEmpty()) {
       for (Entry<Integer, ArrayList<Integer>> itemData : qntPerMonthData.entrySet()) {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName(itemData.getKey().toString());
@@ -135,6 +174,9 @@ public class StatisticsScreenCtrl implements Initializable {
     }
   }
 
+  /**
+   * Cria um gráfico de barras mostrando a contagem de processos para cada um dos 12 últimos meses.
+   */
   private void createChartQntLastYear() {
 
     // Converte o array em uma lista e adiciona em nossa ObservableList de meses.
@@ -146,14 +188,11 @@ public class StatisticsScreenCtrl implements Initializable {
     try {
       dados = statisticService.quantityProcessFromLastYear();
     } catch (DatabaseException e) {
-      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
       LOGGER.error(e.getMessage(), e);
+      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
     }
 
-    if (dados == null || dados.isEmpty()) {
-      // TODO fazer um alert e tratar
-    } else {
-
+    if (dados != null && !dados.isEmpty()) {
       for (Entry<Integer, ArrayList<Integer>> itemData : dados.entrySet()) {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName(itemData.getKey().toString());
@@ -170,6 +209,12 @@ public class StatisticsScreenCtrl implements Initializable {
 
   }
 
+  /**
+   * Adiquire a lista dos doze últimos meses a partir da data atual.
+   * 
+   * @param currentDate Data atual
+   * @return Lista com os nomes dos últimos 12 meses.
+   */
   private List<String> getMonthList(Calendar currentDate) {
     List<String> monthList = new ArrayList<>();
 
@@ -194,6 +239,10 @@ public class StatisticsScreenCtrl implements Initializable {
     return monthList;
   }
 
+  /**
+   * Método para execução do evento de clique no botão rádio "Situação". Mostra um gráfico em pizza
+   * com as contagens dos processos distribuídos por situação.
+   */
   @FXML
   private void createPieChartSituation() {
     try {
@@ -201,11 +250,15 @@ public class StatisticsScreenCtrl implements Initializable {
       Map<Integer, Integer> dados = statisticService.quantityProcessPerSituation();
       this.createPieChart("Situação", dados);
     } catch (DatabaseException e) {
-      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
       LOGGER.error(e.getMessage(), e);
+      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
     }
   }
 
+  /**
+   * Método para execução do evento de clique no botão rádio "Orgão". Mostra um gráfico em pizza
+   * com as contagens dos processos distribuídos por orgão.
+   */
   @FXML
   private void createPieChartOrganization() {
     try {
@@ -213,11 +266,15 @@ public class StatisticsScreenCtrl implements Initializable {
       Map<Integer, Integer> dados = statisticService.quantityProcessPerOrganization();
       this.createPieChart("Órgão", dados);
     } catch (DatabaseException e) {
-      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
       LOGGER.error(e.getMessage(), e);
+      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
     }
   }
 
+  /**
+   * Método para execução do evento de clique no botão rádio "Assunto". Mostra um gráfico em pizza
+   * com as contagens dos processos distribuídos por assunto.
+   */
   @FXML
   private void createPieChartSubject() {
     try {
@@ -225,11 +282,14 @@ public class StatisticsScreenCtrl implements Initializable {
       Map<Integer, Integer> data = statisticService.quantityProcessPerSubject();
       this.createPieChart("Assunto", data);
     } catch (DatabaseException e) {
-      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
       LOGGER.error(e.getMessage(), e);
+      ExceptionAlert.show("ERRO! Contate o administrador do sistema.", root.getScene().getWindow());
     }
   }
 
+  /**
+   * Método para execução do evento do botão de voltar. Fecha a tela.
+   */
   @FXML
   private void closeWindow() {
     Stage janela = (Stage) root.getScene().getWindow();
@@ -238,10 +298,14 @@ public class StatisticsScreenCtrl implements Initializable {
   }
 
 
+  /**
+   * Cria um gráfico de pizza a partir da categoria e dados fornecidos.
+   * 
+   * @param category Rótulo da categoria
+   * @param data Dados
+   */
   private void createPieChart(String category, Map<Integer, Integer> data) {
-    if (data == null || data.isEmpty()) {
-      // TODO fazer um alert e tratar
-    } else {
+    if (data != null && !data.isEmpty()) {
       pieChart.setLabelsVisible(false);
       pieChart.setTitle("Quantidade de Processos por " + category);
 
@@ -263,6 +327,13 @@ public class StatisticsScreenCtrl implements Initializable {
     }
   }
 
+  /**
+   * Obtem o nome de um elemento da categoria
+   * 
+   * @param categoryId Id do elemento.
+   * @param category Nome da categoria
+   * @return Nome do ememento
+   */
   private String getCategoryNameById(int categoryId, String category) {
     if (category.equalsIgnoreCase("Situação")) {
       return listService.getSituationDescritionById(categoryId);
@@ -275,7 +346,12 @@ public class StatisticsScreenCtrl implements Initializable {
     }
   }
 
-  // http://acodigo.blogspot.com.br/2017/08/piechart-javafx.html
+  /**
+   * Define tooltips para as fatias do gráfico de pizza.
+   * @param pcData Dado do gráfico.
+   * 
+   * {@link http://acodigo.blogspot.com.br/2017/08/piechart-javafx.html}
+   */
   public void installTooltip(PieChart.Data pcData) {
 
     String message = String.format("%s : %s", pcData.getName(), (int) pcData.getPieValue());
@@ -286,13 +362,18 @@ public class StatisticsScreenCtrl implements Initializable {
     Tooltip.install(pcData.getNode(), tolltip);
   }
 
-  protected static class Month {
+  /**
+   * Classe estática interna para obtenção dos nomes abreviados dos meses do ano. 
+   * 
+   * @author hugo
+   */
+  private static class Month {
     private static String[] names =
-        {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
+      {"Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
 
     private Month() {}
 
-    protected static String getName(int order) {
+    private static String getName(int order) {
       if (order > 0 && order <= 12) {
         return names[order - 1];
       } else {
@@ -300,7 +381,7 @@ public class StatisticsScreenCtrl implements Initializable {
       }
     }
 
-    protected static String[] getAll() {
+    private static String[] getAll() {
       return names;
     }
   }

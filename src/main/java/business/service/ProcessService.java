@@ -36,10 +36,11 @@ public interface ProcessService {
    * Atualiza os dados do processo no banco de dados após validação de regars de negócio.
    * 
    * @param process Processo que deverá ser atualizado no banco de dados.
+   * @throws ValidationException Exceção lançada por problemas de validação do processo.
    * @throws DatabaseException Exceção lançada por inconsistência quando tenta atualizar processo no
    *         banco de dados.
    */
-  public void update(Process process) throws DatabaseException;
+  public void update(Process process) throws ValidationException, DatabaseException;
 
   /**
    * Exclui o processo no banco de dados.
@@ -63,7 +64,13 @@ public interface ProcessService {
    */
   public List<Process> searchAll(Search searchData) throws ValidationException, DatabaseException;
 
-  // TODO documentar
+  /**
+   * Obtém um binário com o documento Pdf gerado a partir do processo fornecido por parâmetro.
+   * 
+   * @param process Processo para geração do Pdf.
+   * 
+   * @return Binário do Pdf.
+   */
   public byte[] getPdf(Process process);
 
   /**
