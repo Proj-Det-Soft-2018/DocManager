@@ -80,7 +80,7 @@ public class ConcreteProcessService extends Observable implements ProcessService
   }
 
   @Override
-  public void update(Process process) throws ValidationException DatabaseException {
+  public void update(Process process) throws ValidationException, DatabaseException {
     process.validate();
     processoDao.update(process);
     this.notifyObservers();
